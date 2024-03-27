@@ -1,12 +1,16 @@
 # -*- coding: utf-8 -*-
 module DryFlowsheet
 
+import Base: +
+import Base: -
+import Base: *
+import Base: /
+import DryMaterials: enthalpy
+
 using DocStringExtensions: FIELDS
 using Unitful: uconvert, ustrip, @u_str
-
 using DryMaterials: AbstractMaterial
 using DryMaterials: issolid, isliquid, isgas
-using DryMaterials: enthalpy
 
 "Array of materials to include in a stream."
 struct StreamPipeline
