@@ -10,13 +10,12 @@ begin
 	push!(LOAD_PATH, joinpath(@__DIR__, ".."))
 	using WallyToolbox
 
-	using DryConstants: GAS_CONSTANT, P_REF, T_REF
 	using DryMaterials: PureWater, PureAir, PureMineral
 	using DryFlowsheet: MaterialStream, EnergyStream
 end
 
 # ╔═╡ 299a3f06-5893-4b3d-beb8-c9770b0430f1
-# methods(Base.:+)
+P_REF
 
 # ╔═╡ e3579a9b-1d01-4959-b03e-de5cbcd2a291
 EnergyStream(10) + EnergyStream(30)
