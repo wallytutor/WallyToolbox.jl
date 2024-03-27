@@ -8,9 +8,21 @@ import Base: /
 import DryMaterials: enthalpy
 
 using DocStringExtensions: FIELDS
+using Roots: find_zero
 using Unitful: uconvert, ustrip, @u_str
+
+using DryConstants: T_REF
 using DryMaterials: AbstractMaterial
 using DryMaterials: issolid, isliquid, isgas
+
+export StreamPipeline
+export MaterialStream
+export EnergyStream
+export TransportPipeline
+export SolidsSeparator
+export CooledCrushingMill
+export transport_pipe
+export cooled_crushing
 
 "Array of materials to include in a stream."
 struct StreamPipeline
@@ -505,7 +517,7 @@ function Base.:+(s::MaterialStream, e::EnergyStream)
     end
 
     # # Find new temperature starting from current temperature.
-    T = find_zero(f, TREF)
+    T = find_zero(f, T_REF)
 
     # Create resulting stream.
     return MaterialStream(s.ṁ, T, s.P, s.Y, s.pipeline)
