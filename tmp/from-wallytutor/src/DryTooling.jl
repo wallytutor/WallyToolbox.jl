@@ -11,16 +11,6 @@ begin # module DryTooling (core)
     using YAML
 end # module DryTooling (core)
 
-module Cantera
-    using Libdl
-    using Logging
-    using Printf
-
-    include("Cantera/core.jl")
-    include("Cantera/pointers.jl")
-    include("Cantera/interfaces.jl")
-end
-
 # XXX
 include("tmp.jl")
 
