@@ -93,7 +93,7 @@ end
 
 makedocs(; sitename, authors, format, modules, plugins, pages, clean = true)
 
-deploydocs(; repo = repo, devbranch = "main")
+deploydocs(; repo = "github.com/$(user)/$(sitename).git")
 
 ##############################################################################
 # THE END
