@@ -2,7 +2,7 @@
 
 julia_version = "1.10.1"
 manifest_format = "2.0"
-project_hash = "86498443abd203753402feebd36f4237b78f6ae6"
+project_hash = "0213876a2468f9efdb5816383c370fba2e73a1fe"
 
 [[deps.ADTypes]]
 git-tree-sha1 = "016833eb52ba2d6bea9fcb50ca295980e728ee24"
@@ -2126,6 +2126,12 @@ version = "3.8.3"
     Symbolics = "0c5d862f-8b57-4792-8d23-62f2024744c7"
     Zygote = "e88e6eb3-aa80-5325-afca-941959d7151f"
 
+[[deps.NumericalIntegration]]
+deps = ["InteractiveUtils", "LinearAlgebra", "Logging", "Test"]
+git-tree-sha1 = "71a5bf35469ec57e1bfdeec7dbb5757e51949bbb"
+uuid = "e7bfaba1-d571-5449-8927-abc22e82249b"
+version = "0.2.0"
+
 [[deps.Observables]]
 git-tree-sha1 = "7438a59546cf62428fc9d1bc94729146d37a7225"
 uuid = "510215fc-4207-5dde-b226-833fc4488ee2"
@@ -2461,6 +2467,11 @@ version = "1.4.3"
 git-tree-sha1 = "632eb4abab3449ab30c5e1afaa874f0b98b586e4"
 uuid = "8162dcfd-2161-5ef2-ae6c-7681170c5f98"
 version = "0.2.0"
+
+[[deps.PrettyPrinting]]
+git-tree-sha1 = "142ee93724a9c5d04d78df7006670a93ed1b244e"
+uuid = "54e16d92-306c-5ea0-a30b-337be88ac337"
+version = "0.4.2"
 
 [[deps.PrettyTables]]
 deps = ["Crayons", "LaTeXStrings", "Markdown", "PrecompileTools", "Printf", "Reexport", "StringManipulation", "Tables"]
@@ -3317,7 +3328,7 @@ uuid = "a44049a8-05dd-5a78-86c9-5fde0876e88c"
 version = "1.3.243+0"
 
 [[deps.WallyToolbox]]
-deps = ["CSV", "CUDA", "CairoMakie", "CommonSolve", "DataFrames", "DelimitedFiles", "DifferentialEquations", "Distributions", "DocStringExtensions", "ExtendableGrids", "Flux", "HDF5", "Interpolations", "Ipopt", "JLD2", "JuMP", "LaTeXStrings", "Latexify", "Libdl", "LightXML", "LinearAlgebra", "Logging", "Luxor", "ModelingToolkit", "NaturalSort", "Plots", "Pluto", "PlutoUI", "Polynomials", "Printf", "ProgressMeter", "Psychro", "Random", "Reexport", "Revise", "Roots", "Statistics", "StatsBase", "SteamTables", "SumTypes", "Symbolics", "Trapz", "Unitful", "YAML", "cuDNN"]
+deps = ["BenchmarkTools", "CSV", "CUDA", "CairoMakie", "CommonSolve", "DataFrames", "DelimitedFiles", "DifferentialEquations", "Distributions", "DocStringExtensions", "ExtendableGrids", "Flux", "HDF5", "Interpolations", "Ipopt", "JLD2", "JuMP", "LaTeXStrings", "Latexify", "Libdl", "LightXML", "LinearAlgebra", "Logging", "Luxor", "ModelingToolkit", "NaturalSort", "NumericalIntegration", "Plots", "Pluto", "PlutoUI", "Polynomials", "PrettyPrinting", "Printf", "ProgressMeter", "Psychro", "Random", "Reexport", "Revise", "Roots", "Statistics", "StatsBase", "SteamTables", "SumTypes", "Symbolics", "Trapz", "Unitful", "YAML", "cuDNN"]
 path = ".."
 uuid = "969721ee-ac18-4660-9a9a-9ed720f93b3b"
 version = "0.1.0"

@@ -2,7 +2,7 @@
 
 julia_version = "1.10.1"
 manifest_format = "2.0"
-project_hash = "aa40df391343477c67256f2b12be80ad030257dd"
+project_hash = "80fa455943edaff81546cba037740157c9c30a43"
 
 [[deps.ADTypes]]
 git-tree-sha1 = "016833eb52ba2d6bea9fcb50ca295980e728ee24"
@@ -2056,6 +2056,12 @@ version = "3.8.3"
     Symbolics = "0c5d862f-8b57-4792-8d23-62f2024744c7"
     Zygote = "e88e6eb3-aa80-5325-afca-941959d7151f"
 
+[[deps.NumericalIntegration]]
+deps = ["InteractiveUtils", "LinearAlgebra", "Logging", "Test"]
+git-tree-sha1 = "71a5bf35469ec57e1bfdeec7dbb5757e51949bbb"
+uuid = "e7bfaba1-d571-5449-8927-abc22e82249b"
+version = "0.2.0"
+
 [[deps.Observables]]
 git-tree-sha1 = "7438a59546cf62428fc9d1bc94729146d37a7225"
 uuid = "510215fc-4207-5dde-b226-833fc4488ee2"
@@ -2391,6 +2397,11 @@ version = "1.4.3"
 git-tree-sha1 = "632eb4abab3449ab30c5e1afaa874f0b98b586e4"
 uuid = "8162dcfd-2161-5ef2-ae6c-7681170c5f98"
 version = "0.2.0"
+
+[[deps.PrettyPrinting]]
+git-tree-sha1 = "142ee93724a9c5d04d78df7006670a93ed1b244e"
+uuid = "54e16d92-306c-5ea0-a30b-337be88ac337"
+version = "0.4.2"
 
 [[deps.PrettyTables]]
 deps = ["Crayons", "LaTeXStrings", "Markdown", "PrecompileTools", "Printf", "Reexport", "StringManipulation", "Tables"]
