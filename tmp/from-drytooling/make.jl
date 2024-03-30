@@ -21,8 +21,7 @@ cleanuptoml() = cp(this("TMP.toml"),     this("Project.toml"), force = true)
 "Temporarily add packages to development."
 function devpkgs()
     backuptoml()
-    for name in DRYTOOLING
-        Pkg.develop(path = this("../src/$(name).jl"))
+    for name in DRYTOOLING        Pkg.develop(path = this("../src/$(name).jl"))
     end
 end
 
