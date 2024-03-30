@@ -1,0 +1,4 @@
+name = "DryTooling"
+uuid = "0dff88b2-42f1-4682-ada6-3beed8c0a17c"
+authors = ["Walter Dal'Maz Silva <walter.dalmazsilva.manager@gmail.com>"]
+version = "0.1.0"

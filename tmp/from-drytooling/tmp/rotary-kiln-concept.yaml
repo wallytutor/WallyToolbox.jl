@@ -1,0 +1,61 @@
+# Data for model initialization
+
+material_shell:
+  transport:
+    type: MaterialTransportProperties
+    thermal_conductivity: (T) -> 50.0
+    emissivity: (T) -> 0.790
+
+material_refractory:
+  transport:
+    type: MaterialTransportProperties
+    thermal_conductivity: (T) -> 0.2475 * (1.0 + 5.85e-04 * T)
+    emissivity: (T) -> 0.850
+
+material_powder_bed:
+  density: 1460.0
+  repose_angle: 45.0
+  solid_filling: 0.61
+  particle_diam: 0.0025
+  molar_mass: 0.0600843
+  transport:
+    type: MaterialTransportProperties
+    thermal_conductivity: (T) -> 0.268
+    emissivity: (T) -> 0.900
+  thermo:
+    type: MaterialShomate
+    coefs_low:  [ -6.076591e+00,  2.516755e+02, -3.247964e+02,
+                   1.685604e+02,  2.548000e-03, -9.176893e+02,
+                  -2.796962e+01, -9.108568e+02 ]
+    coefs_high: [  5.875340e+01,  1.027925e+01, -1.313840e-01,
+                   2.521000e-02,  2.560100e-02, -9.293292e+02,
+                   1.058092e+02, -9.108568e+02 ]
+    change_temperature: 847.0
+
+rotary_kiln:
+  geom:
+    length:
+    diameter:
+    slope:
+    dam:
+
+    shell:
+      thickness: (z) -> 0
+      material:
+        transport:
+
+    refractory:
+      thickness: (z) -> 0
+      material:
+        transport:
+
+    coating:
+      thickness: (z) -> 0
+      material:
+        transport:
+
+  operation:
+    rotation_rate:
+    feed:
+      rate:
+      material:
