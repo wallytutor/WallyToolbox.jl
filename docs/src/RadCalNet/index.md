@@ -22,7 +22,7 @@ Below we display the quality of fitting of model. One must notice that fitting
 of emissivity still needs a few adjustments, while transmissivity is well
 predicted over the whole range.
 
-![Model testing](testing.png)
+![Model testing](media/testing.png)
 
 ## Usage
 
@@ -266,6 +266,28 @@ function plotgorogsabsorptivitydata(αdata, αgorog)
 
     p
 end
+
+datadir = @__DIR__
+
+εfig = joinpath(datadir, "media/emissivity.png")
+αfig = joinpath(datadir, "media/absorptivity.png")
+
+εfile = joinpath(datadir, "data/emissivity.csv")
+αfile = joinpath(datadir, "data/absorptivity.csv")
+
+if !isfile(εfig)
+    εdata = readdlm(εfile, ',', Float64, header = true)
+    εgorog = gorogsemissivitydata()
+    p = plotgorogsemissitivity(εdata, εgorog)
+    png(p, εfig)
+end
+
+if !isfile(αfig)
+    αdata = readdlm(αfile, ',', Float64, header = true)
+    αgorog = gorogsabsorptivitydata()
+    p = plotgorogsabsorptivitydata(αdata, αgorog)
+    png(p, αfig)
+end
 ```
 
 ### Verification agains Gorog's paper
@@ -273,19 +295,9 @@ end
 Below we compare computed values with those by Gorog et al. [Gorog1981a](@cite).
 Reference paper is found [here](https://doi.org/10.1007/BF02674758).
 
-```@example literature
-εfile = joinpath(@__DIR__, "data/emissivity.csv")
-εdata = readdlm(εfile, ',', Float64, header = true)
-εgorog = gorogsemissivitydata()
-plotgorogsemissitivity(εdata, εgorog)
-```
+![Emissivity](media/emissivity.png)
 
-```@example literature
-αfile = joinpath(@__DIR__, "data/absorptivity.csv")
-αdata = readdlm(αfile, ',', Float64, header = true)
-αgorog = gorogsabsorptivitydata()
-plotgorogsabsorptivitydata(αdata, αgorog)
-```
+![Absorptivity](media/absorptivity.png)
 
 At least qualitative agreement is found and orders of magnitude are right. On
 the other hand, using directly the model parameters from Tam [Tam2019](@cite) do
