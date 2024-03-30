@@ -1,0 +1,11 @@
+## Ignore database for now
+database.h5
+
+## Temporaries from RadCal
+*RADCAL.IN
+*RADCAL.OUT
+*TRANS_*.TEC
+
+## Intermediate model dumps
+# model.jld2
+# scaler.yaml

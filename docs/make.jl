@@ -23,6 +23,7 @@ using DryFlowsheet
 using DryMaterials
 using DryUtilities
 using OpenFOAM
+using RadCalNet
 
 ##############################################################################
 # THE CONFIGURATION
@@ -42,6 +43,7 @@ modules = [
     DryMaterials,
     DryUtilities,
     OpenFOAM,
+    RadCalNet,
 ]
 
 plugins  = [
@@ -77,6 +79,7 @@ pages = [
     ],
     
     "OpenFOAM" => "OpenFOAM/index.md",
+    "RadCalNet" => "RadCalNet/index.md",
 
     "Table of Contents" => "toc.md",
 

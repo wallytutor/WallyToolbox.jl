@@ -1,22 +1,29 @@
 module RadCalNet
 
+using cuDNN
+using CUDA
+using DelimitedFiles
+using DocStringExtensions
+using JLD2
+using Flux
+using HDF5
+using Plots
+using Printf
+using ProgressMeter
+using Statistics
+using StatsBase
+using YAML
+
 # XXX: this is the version of the trained model, not the package!
-MODELVERSION = "v1.0.0"
+const MODELVERSION::String = "v1.0.0"
+
+const RADCALROOT = joinpath(@__DIR__, "data/radcal/$(MODELVERSION)")
+const FILESCALER = joinpath(RADCALROOT, "scaler.yaml")
+const FILEMODEL  = joinpath(RADCALROOT, "model.jld2")
 
 ##############################################################################
 # Database
 ##############################################################################
-
-module Database
-
-using DelimitedFiles
-using HDF5
-using Plots
-using Printf
-
-export runradcalinput
-export createcustomdatabase
-export loaddatabase
 
 """
     runradcalinput(;
@@ -198,29 +205,34 @@ function loaddatabase(fname::String)
     end
 end
 
-end # (module Database)
+##############################################################################
+# Data sampler
+##############################################################################
+
+"""
+    datasampler!(X::Vector{Float64})::Tuple
+
+Custom sample space to generate entries with `createcustomdatabase`. This
+function contains the parameter space used for model training.
+"""
+function datasampler!(X::Vector{Float64})::Tuple
+    X[1] = rand(0.0:0.01:0.25)
+    X[2] = rand(0.0:0.01:0.30)
+    X[3] = rand(0.0:0.01:0.20)
+    X[end] = 1.0 - sum(X[1:3])
+
+    T = rand(300.0:10.0:2500.0)
+    L = rand(0.1:0.1:3.0)
+    P = rand(0.5:0.5:1.5)
+    FV = 0.0
+    TWALL = rand(300.0:10.0:2500.0)
+
+    return T, L, P, FV, TWALL
+end
 
 ##############################################################################
 # Modeling
 ##############################################################################
-
-module Modeling
-
-using cuDNN
-using CUDA
-using DelimitedFiles
-using DocStringExtensions
-using JLD2
-using Flux
-using HDF5
-using Plots
-using Printf
-using ProgressMeter
-using Statistics
-using StatsBase
-using YAML
-
-using RadCalNet.Database: loaddatabase
 
 # Do not even bother working without a GPU
 # @assert CUDA.functional()
@@ -488,19 +500,9 @@ function plottests(trainer::ModelTrainer; num::Int64)
                 margin=5Plots.mm)
 end
 
-end # (module Modeling)
-
 ##############################################################################
 # Main
 ##############################################################################
-
-using Flux
-using JLD2
-using .Modeling: defaultmodel, loadscaler
-
-const RADCALROOT = joinpath(@__DIR__, "data/radcal/$(MODELVERSION)")
-const FILESCALER = joinpath(RADCALROOT, "scaler.yaml")
-const FILEMODEL  = joinpath(RADCALROOT, "model.jld2")
 
 """
     getradcalnet(;
