@@ -3,12 +3,12 @@ module DryMaterials
 
 using Polynomials: Polynomial
 using SteamTables: SpecificV
-using DryConstants: M_AIR
 
-abstract type AbstractMaterial end
-abstract type AbstractLiquidMaterial <: AbstractMaterial end
-abstract type AbstractSolidMaterial <: AbstractMaterial end
-abstract type AbstractGasMaterial <: AbstractMaterial end
+using DryAbstract: AbstractMaterial
+using DryAbstract: AbstractSolidMaterial
+using DryAbstract: AbstractLiquidMaterial
+using DryAbstract: AbstractGasMaterial
+using DryConstants: M_AIR
 
 issolid(m::AbstractMaterial)  = m isa AbstractSolidMaterial
 isliquid(m::AbstractMaterial) = m isa AbstractLiquidMaterial

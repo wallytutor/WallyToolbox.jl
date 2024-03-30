@@ -76,7 +76,9 @@ pages = [
         
     ],
     
-    "OpenFOAM" => "OpenFOAM/index.md"
+    "OpenFOAM" => "OpenFOAM/index.md",
+
+    "Table of Contents" => "toc.md",
 
 ]
 

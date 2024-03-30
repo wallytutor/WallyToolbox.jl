@@ -1,10 +1,11 @@
 # Helpers
 
-The core packages of `WallyToolbox` ecosystem provide shared functionalities and types that are
-used in several other more specialized packages. This allows for standardization of interfaces, 
-employed quantities, and avoid boilerplate code. This page organizes everything to facilitate the
-understanding of the end-user. Knowing the base helper packages `DryConstants` and `DryUtilities`
-is key for proper usage of `WallyToolbox`.
+The core packages of `WallyToolbox` ecosystem provide shared functionalities and
+types that are used in several other more specialized packages. This allows for
+standardization of interfaces, employed quantities, and avoid boilerplate code.
+This page organizes everything to facilitate the understanding of the end-user.
+Knowing the base helper packages `DryConstants` and `DryUtilities` is key for
+proper usage of `WallyToolbox`.
 
 ## DryConstants
 
@@ -12,8 +13,27 @@ is key for proper usage of `WallyToolbox`.
 CurrentModule = DryConstants
 ```
 
-```@autodocs
-Modules = [ DryConstants ]
+### Physical constants
+
+```@docs
+DryConstants.GAS_CONSTANT
+DryConstants.STEFAN_BOLTZMANN
+```
+
+### Reference states
+
+```@docs
+DryConstants.T_REF
+DryConstants.P_REF
+DryConstants.C_REF
+```
+
+### Other constants
+
+```@docs
+DryConstants.ZERO_CELSIUS
+DryConstants.ONE_ATM
+DryConstants.M_AIR
 ```
 
 ## DryUtilities
@@ -254,6 +274,15 @@ DryUtilities.kg_h_to_nm3_h
 CurrentModule = DryAbstract
 ```
 
+### Fixed state materials
+
+```@docs
+DryAbstract.AbstractMaterial
+DryAbstract.AbstractSolidMaterial
+DryAbstract.AbstractLiquidMaterial
+DryAbstract.AbstractGasMaterial
+```
+
 ### Problem solving and physical models
 
 ```@docs
@@ -270,7 +299,6 @@ DryAbstract.AbstractTransportModel
 DryAbstract.AbstractSolidTransport
 DryAbstract.AbstractGasThermo
 DryAbstract.AbstractSolidThermo
-DryAbstract.AbstractSolidMaterial
 DryAbstract.AbstractMixtureSubstance
 DryAbstract.AbstractMixturePhase
 DryAbstract.AbstractKineticsMechanism
