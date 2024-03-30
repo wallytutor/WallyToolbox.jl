@@ -20,6 +20,7 @@ using WallyToolbox
 using DryAbstract
 using DryConstants
 using DryFlowsheet
+using DryGranular
 using DryMaterials
 using DryUtilities
 using OpenFOAM
@@ -40,6 +41,7 @@ modules = [
     DryAbstract,
     DryConstants,
     DryFlowsheet,
+    DryGranular,
     DryMaterials,
     DryUtilities,
     OpenFOAM,
@@ -73,6 +75,7 @@ pages = [
 
     "Dry Packages" => [
         "DryFlowsheet" => "DryFlowsheet/index.md",
+        "DryGranular"  => "DryGranular/index.md",
         "DryMaterials" => "DryMaterials/index.md",
         "Helpers"      => "helpers.md"
     ],
