@@ -1,0 +1,7 @@
+# Generated images
+*.svg
+
+# Local scripts
+*.bat
+*.ps1
+*.sh
