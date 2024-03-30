@@ -31,7 +31,7 @@ using RadCalNet
 
 name = "Walter Dal'Maz Silva"
 mail = "walter.dalmazsilva.manager@gmail.com"
-user = "WallyTutor"
+user = "wallytutor"
 sitename = "WallyToolbox.jl"
 repo = "https://github.com/$(user)/$(sitename)"
 authors = "$(name) <$(mail)> and contributors"
