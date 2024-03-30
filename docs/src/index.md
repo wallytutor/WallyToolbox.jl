@@ -1,19 +1,2 @@
-```@meta
-CurrentModule = DryConstants
-```
+# WallyToolbox
 
-## DryConstants
-
-```@autodocs
-Modules = [ DryConstants ]
-```
-
-## DryUtilities
-
-```@meta
-CurrentModule = DryUtilities
-```
-
-```@autodocs
-Modules = [ DryUtilities ]
-```

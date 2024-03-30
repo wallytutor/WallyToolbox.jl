@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 using Documenter
+using Documenter.DocMeta: setdocmeta!
 using DocumenterCitations
 
 ##############################################################################
@@ -35,10 +36,10 @@ authors = "$(name) <$(mail)> and contributors"
 
 modules = [
     DryConstants,
-    # DryFlowsheet,
-    # DryMaterials,
+    DryFlowsheet,
+    DryMaterials,
     DryUtilities,
-    # OpenFOAM,
+    OpenFOAM,
 ]
 
 plugins  = [
@@ -65,21 +66,27 @@ format = Documenter.HTML(;
 
 pages = [
     "Home" => "index.md",
+
+    "Dry Packages" => [
+        "DryFlowsheet" => "DryFlowsheet/index.md",
+        "DryMaterials" => "DryMaterials/index.md",
+        "Helpers"      => "helpers.md"
+        
+    ],
+    
+    "OpenFOAM" => "OpenFOAM/index.md"
+
 ]
 
 ##############################################################################
 # THE DOCUMENTATION
 ##############################################################################
 
-makedocs(;
-    sitename,
-    authors,
-    format,
-    modules,
-    plugins,
-    pages,
-    clean = true
-)
+for m in modules
+    setdocmeta!(m, :DocTestSetup, :(using m); warn = false, recursive = true)
+end
+
+makedocs(; sitename, authors, format, modules, plugins, pages, clean = true)
 
 deploydocs(; repo = repo, devbranch = "main")
 
