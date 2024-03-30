@@ -75,14 +75,12 @@ pages = [
         "DryFlowsheet" => "DryFlowsheet/index.md",
         "DryMaterials" => "DryMaterials/index.md",
         "Helpers"      => "helpers.md"
-        
     ],
     
-    "OpenFOAM" => "OpenFOAM/index.md",
-    "RadCalNet" => "RadCalNet/index.md",
-
+    "OpenFOAM"          => "OpenFOAM/index.md",
+    "RadCalNet"         => "RadCalNet/index.md",
     "Table of Contents" => "toc.md",
-
+    "References"        => "references/index.md",
 ]
 
 ##############################################################################

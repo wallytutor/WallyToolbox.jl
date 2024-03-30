@@ -3,9 +3,10 @@
 Radiation properties machine learning model trained on RadCal.
 
 In this project we use the re-implementation of
-[RadCal](https://github.com/firemodels/radcal) to generate data and train a
-machine learning model for the prediction of radiative properties, *i.e.*
-emissivity and transmissivity, of common combustion flue gases.
+[RadCal](https://github.com/firemodels/radcal) [Grosshandler1993](@cite) to
+generate data and train a machine learning model for the prediction of radiative
+properties, *i.e.* emissivity and transmissivity, of common combustion flue
+gases.
 
 This is done because for real-time calls of RADCAL might be computationally
 prohibitive, for instance in CFD applications. Thus, a neural network is trained
@@ -114,25 +115,24 @@ using WallyToolbox
 using RadCalNet
 
 function sampledatabase()
-    testname = "test.dat"
+    #XXX: documentation is run from root directory!
+    testname = joinpath(joinpath(@__DIR__, "src/RadCalNet/data/sample.dat"))
 
     # Provide a seed at start-up for *maybe* reproducible builds.
     Random.seed!(42)
 
-    RadCalNet.createcustomdatabase(;
-        sampler!   = RadCalNet.datasampler!,
-        repeats    = 3,
-        samplesize = 3,
-        cleanup    = true,
-        saveas     = testname,
-        override   = true
-    )
+    if !isfile(testname)
+        RadCalNet.createcustomdatabase(;
+            sampler!   = RadCalNet.datasampler!,
+            repeats    = 3,
+            samplesize = 3,
+            cleanup    = true,
+            saveas     = testname,
+            override   = true
+        )
+    end
 
-    A = RadCalNet.loaddatabase(testname)
-
-    isfile(testname) && rm(testname)
-
-    return A
+    return RadCalNet.loaddatabase(testname)
 end
 
 A = sampledatabase()[:, end-5:end]
@@ -155,9 +155,143 @@ A = sampledatabase()[:, end-5:end]
 
 - Broaden sample space over the whole RadCal composition spectrum.
 - Define data loading on GPU/CPU though a flag when recovering model.
-- Make `Float64` interface and/or compatibility.
 - Create database for testing outside of sampling points.
 - Improve model reload and organize a notebook for training.
+
+## Literature discussion
+
+```@setup literature
+using DelimitedFiles
+using HDF5
+using Plots
+using Printf
+
+using WallyToolbox
+import RadCalNet
+
+function gorogcomposition()
+    X = zeros(14)
+    X[1] = 0.2
+    X[2] = 0.2
+    X[end] = 1.0 - sum(X[1:2])
+    return X
+end
+
+function gorogsemissivitydata()
+    pr = collect(0.0:0.015:3.2)
+    Tg = [830.0, 1110.0, 1390.0]
+
+    X = gorogcomposition()
+    prod = Iterators.product(pr, Tg)
+    samplesize = length(pr) * length(Tg)
+    table = zeros(samplesize, 26)
+
+    for (k, (p, T)) in enumerate(prod)
+        table[k, 1:end] = RadCalNet.runradcalinput(;
+            X = X,
+            T = T,
+            L = p / sum(X[1:2]),
+            TWALL = 300.0,
+            FV = 1.0e-15
+        )
+    end
+
+    return table
+end
+
+function gorogsabsorptivitydata()
+    pr = collect(0.0:0.01:1.6)
+    Tw = [277.0, 555.0, 833.0]
+
+    X = gorogcomposition()
+    prod = Iterators.product(pr, Tw)
+    samplesize = length(pr) * length(Tw)
+    table = zeros(samplesize, 26)
+
+    for (k, (p, T)) in enumerate(prod)
+        table[k, 1:end] = RadCalNet.runradcalinput(;
+            X = X,
+            T = 1110.0,
+            L = p / sum(X[1:2]),
+            TWALL = T,
+            FV = 1.0e-15
+        )
+    end
+
+    return table
+end
+
+function plotgorogsemissitivity(εdata, εgorog)
+    p = plot(dpi = 100, legend = :topleft)
+    scatter!(p, εdata[1][:, 1], εdata[1][:, 2],
+             markerstrokewidth = 0.0, label = "Gorog")
+
+    for T in unique(εgorog[:, 4])
+        sel = εgorog[εgorog[:, 4] .== T, :]
+        pr = sum(sel[:, 8:9], dims = 2) .* sel[:, 5]
+        εg = sel[:, 24]
+        plot!(p, pr, εg, label = @sprintf("%4.0f K", T))
+    end
+
+    xlims!(p, 0.0, 3.2)
+    ylims!(p, 0.0, 0.7)
+    xticks!(p, 0.0:0.4:3.2)
+    yticks!(p, 0.0:0.1:0.7)
+
+    xlabel!(p, "Optical thickness [m-atm]")
+    ylabel!(p, "Emissivity")
+
+    p
+end
+
+function plotgorogsabsorptivitydata(αdata, αgorog)
+    p = plot(dpi = 100, legend = :topleft)
+    scatter!(p, αdata[1][:, 1], αdata[1][:, 2],
+             markerstrokewidth = 0.0, label = "Gorog")
+
+    for T in unique(αgorog[:, 3])
+        sel = αgorog[αgorog[:, 3] .== T, :]
+        pr = sum(sel[:, 8:9], dims = 2) .* sel[:, 5]
+        αg = 1.0 .- sel[:, end]
+        plot!(p, pr, αg, label = @sprintf("%4.0f K", T))
+    end
+
+    xlims!(p, 0.0, 1.6)
+    ylims!(p, 0.0, 1.0)
+    xticks!(p, 0.0:0.2:1.6)
+    yticks!(p, 0.0:0.2:1.0)
+
+    xlabel!(p, "Optical thickness [m-atm]")
+    ylabel!(p, "Absorptivity")
+
+    p
+end
+```
+
+### Verification agains Gorog's paper
+
+Below we compare computed values with those by Gorog et al. [Gorog1981a](@cite).
+Reference paper is found [here](https://doi.org/10.1007/BF02674758).
+
+```@example literature
+εfile = joinpath(@__DIR__, "data/emissivity.csv")
+εdata = readdlm(εfile, ',', Float64, header = true)
+εgorog = gorogsemissivitydata()
+plotgorogsemissitivity(εdata, εgorog)
+```
+
+```@example literature
+αfile = joinpath(@__DIR__, "data/absorptivity.csv")
+αdata = readdlm(αfile, ',', Float64, header = true)
+αgorog = gorogsabsorptivitydata()
+plotgorogsabsorptivitydata(αdata, αgorog)
+```
+
+At least qualitative agreement is found and orders of magnitude are right. On
+the other hand, using directly the model parameters from Tam [Tam2019](@cite) do
+not produce the expected results (not displayed, work in progress in this
+[draft](data/tam2019.jl)). It is not clear how the data is pre- and
+post-processed for use with their network.
 
 ## All interfaces
 
