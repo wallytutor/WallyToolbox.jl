@@ -2,7 +2,7 @@
 
 julia_version = "1.10.1"
 manifest_format = "2.0"
-project_hash = "dcfdbbde8261bd961b051a80880454bf2cc0e19d"
+project_hash = "ae56c51e2accfbdfa2d99de62643dc58ae6de2bf"
 
 [[deps.ADTypes]]
 git-tree-sha1 = "016833eb52ba2d6bea9fcb50ca295980e728ee24"
@@ -288,6 +288,12 @@ deps = ["Tokenize"]
 git-tree-sha1 = "b544d62417a99d091c569b95109bc9d8c223e9e3"
 uuid = "00ebfdb7-1f24-5e51-bd34-a7502290713f"
 version = "3.4.2"
+
+[[deps.CSV]]
+deps = ["CodecZlib", "Dates", "FilePathsBase", "InlineStrings", "Mmap", "Parsers", "PooledArrays", "PrecompileTools", "SentinelArrays", "Tables", "Unicode", "WeakRefStrings", "WorkerUtilities"]
+git-tree-sha1 = "a44910ceb69b0d44fe262dd451ab11ead3ed0be8"
+uuid = "336ed68f-0bac-5ca0-87d4-7b16caf5d00b"
+version = "0.10.13"
 
 [[deps.CUDA]]
 deps = ["AbstractFFTs", "Adapt", "BFloat16s", "CEnum", "CUDA_Driver_jll", "CUDA_Runtime_Discovery", "CUDA_Runtime_jll", "Crayons", "DataFrames", "ExprTools", "GPUArrays", "GPUCompiler", "KernelAbstractions", "LLVM", "LLVMLoopInfo", "LazyArtifacts", "Libdl", "LinearAlgebra", "Logging", "NVTX", "Preferences", "PrettyTables", "Printf", "Random", "Random123", "RandomNumbers", "Reexport", "Requires", "SparseArrays", "StaticArrays", "Statistics"]
@@ -735,6 +741,12 @@ git-tree-sha1 = "e3290f2d49e661fbd94046d7e3726ffcb2d41053"
 uuid = "5ae413db-bbd1-5e63-b57d-d24a61df00f5"
 version = "2.2.4+0"
 
+[[deps.ElasticArrays]]
+deps = ["Adapt"]
+git-tree-sha1 = "75e5697f521c9ab89816d3abeea806dfc5afb967"
+uuid = "fdbdab4c-e67f-52f5-8c3f-e7b388dad3d4"
+version = "1.2.12"
+
 [[deps.EnumX]]
 git-tree-sha1 = "bdb1942cd4c45e3c678fd11569d5cccd80976237"
 uuid = "4e289a0a-7415-4d19-859d-a7e5c4648b56"
@@ -793,6 +805,18 @@ version = "1.0.2"
 git-tree-sha1 = "5552cf384e4577c5dd2db57d7086a4a41747dbb9"
 uuid = "55351af7-c7e9-48d6-89ff-24e801d99491"
 version = "0.10.6"
+
+[[deps.ExtendableGrids]]
+deps = ["AbstractTrees", "Bijections", "Dates", "DocStringExtensions", "ElasticArrays", "InteractiveUtils", "LinearAlgebra", "Printf", "Random", "Requires", "SparseArrays", "StaticArrays", "StatsBase", "UUIDs", "WriteVTK"]
+git-tree-sha1 = "2980ec6834a4f31f5e675a5d48cdab2d13dacb91"
+uuid = "cfc395e8-590f-11e8-1f13-43a2532b2fa8"
+version = "1.4.1"
+
+    [deps.ExtendableGrids.extensions]
+    ExtendableGridsGmshExt = "Gmsh"
+
+    [deps.ExtendableGrids.weakdeps]
+    Gmsh = "705231aa-382f-11e9-3f0c-b7cb4346fdeb"
 
 [[deps.Extents]]
 git-tree-sha1 = "2140cd04483da90b2da7f99b2add0750504fc39c"
@@ -3269,6 +3293,11 @@ git-tree-sha1 = "ca0969166a028236229f63514992fc073799bb78"
 uuid = "41fe7b60-77ed-43a1-b4f0-825fd5a5650d"
 version = "0.2.0"
 
+[[deps.VTKBase]]
+git-tree-sha1 = "c2d0db3ef09f1942d08ea455a9e252594be5f3b6"
+uuid = "4004b06d-e244-455f-a6ce-a5f9919cc534"
+version = "1.0.1"
+
 [[deps.VectorizationBase]]
 deps = ["ArrayInterface", "CPUSummary", "HostCPUFeatures", "IfElse", "LayoutPointers", "Libdl", "LinearAlgebra", "SIMDTypes", "Static", "StaticArrayInterface"]
 git-tree-sha1 = "7209df901e6ed7489fe9b7aa3e46fb788e15db85"
@@ -3288,7 +3317,7 @@ uuid = "a44049a8-05dd-5a78-86c9-5fde0876e88c"
 version = "1.3.243+0"
 
 [[deps.WallyToolbox]]
-deps = ["CUDA", "CairoMakie", "CommonSolve", "DelimitedFiles", "DifferentialEquations", "Distributions", "DocStringExtensions", "Flux", "HDF5", "Ipopt", "JLD2", "JuMP", "LightXML", "LinearAlgebra", "Luxor", "ModelingToolkit", "NaturalSort", "Plots", "Pluto", "PlutoUI", "Polynomials", "Printf", "ProgressMeter", "Psychro", "Random", "Reexport", "Revise", "Roots", "Statistics", "StatsBase", "SteamTables", "SumTypes", "Symbolics", "Trapz", "Unitful", "YAML", "cuDNN"]
+deps = ["CSV", "CUDA", "CairoMakie", "CommonSolve", "DataFrames", "DelimitedFiles", "DifferentialEquations", "Distributions", "DocStringExtensions", "ExtendableGrids", "Flux", "HDF5", "Interpolations", "Ipopt", "JLD2", "JuMP", "LaTeXStrings", "Latexify", "Libdl", "LightXML", "LinearAlgebra", "Logging", "Luxor", "ModelingToolkit", "NaturalSort", "Plots", "Pluto", "PlutoUI", "Polynomials", "Printf", "ProgressMeter", "Psychro", "Random", "Reexport", "Revise", "Roots", "Statistics", "StatsBase", "SteamTables", "SumTypes", "Symbolics", "Trapz", "Unitful", "YAML", "cuDNN"]
 path = ".."
 uuid = "969721ee-ac18-4660-9a9a-9ed720f93b3b"
 version = "0.1.0"
@@ -3305,11 +3334,28 @@ git-tree-sha1 = "93f43ab61b16ddfb2fd3bb13b3ce241cafb0e6c9"
 uuid = "2381bf8a-dfd0-557d-9999-79630e7b1b91"
 version = "1.31.0+0"
 
+[[deps.WeakRefStrings]]
+deps = ["DataAPI", "InlineStrings", "Parsers"]
+git-tree-sha1 = "b1be2855ed9ed8eac54e5caff2afcdb442d52c23"
+uuid = "ea10d353-3f73-51f8-a26c-33c1cb351aa5"
+version = "1.4.2"
+
 [[deps.WoodburyMatrices]]
 deps = ["LinearAlgebra", "SparseArrays"]
 git-tree-sha1 = "c1a7aa6219628fcd757dede0ca95e245c5cd9511"
 uuid = "efce3f68-66dc-5838-9240-27a6d6f5f9b6"
 version = "1.0.0"
+
+[[deps.WorkerUtilities]]
+git-tree-sha1 = "cd1659ba0d57b71a464a29e64dbc67cfe83d54e7"
+uuid = "76eceee3-57b5-4d4a-8e66-0e911cebbf60"
+version = "1.6.1"
+
+[[deps.WriteVTK]]
+deps = ["Base64", "CodecZlib", "FillArrays", "LightXML", "TranscodingStreams", "VTKBase"]
+git-tree-sha1 = "17877c404fd20090e3998a66f6f44cf01e2b1e60"
+uuid = "64499a7a-5c06-52f2-abe2-ccb03c286192"
+version = "1.18.3"
 
 [[deps.XML2_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Libiconv_jll", "Zlib_jll"]
