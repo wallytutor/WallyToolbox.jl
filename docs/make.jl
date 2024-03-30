@@ -17,6 +17,7 @@ using DocumenterCitations
 using WallyToolbox
 
 # These contain the actual implementation of "package".
+using Cantera
 using DryAbstract
 using DryConstants
 using DryFlowsheet
@@ -38,6 +39,7 @@ repo = "https://github.com/$(user)/$(sitename)"
 authors = "$(name) <$(mail)> and contributors"
 
 modules = [
+    # Cantera,
     DryAbstract,
     DryConstants,
     DryFlowsheet,
@@ -80,6 +82,7 @@ pages = [
         "Helpers"      => "helpers.md"
     ],
     
+    "Cantera"           => "Cantera/index.md",
     "OpenFOAM"          => "OpenFOAM/index.md",
     "RadCalNet"         => "RadCalNet/index.md",
     "Table of Contents" => "toc.md",
