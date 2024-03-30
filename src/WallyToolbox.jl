@@ -12,4 +12,7 @@ using Reexport
 include(joinpath(@__DIR__, "DryConstants.jl"))
 @reexport using .DryConstants
 
+include(joinpath(@__DIR__, "DryUtilities.jl"))
+@reexport using .DryUtilities
+
 end # (module WallyToolbox)

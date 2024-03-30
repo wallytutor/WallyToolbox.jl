@@ -9,12 +9,20 @@ export GAS_CONSTANT
 const STEFAN_BOLTZMANN::Float64 = 5.670_374_419e-08
 export STEFAN_BOLTZMANN
 
+"Zero degrees Celsius in Kelvin [$(ZERO_CELSIUS) ``K``]."
+const ZERO_CELSIUS::Float64 = 273.15
+export ZERO_CELSIUS
+
+"Atmospheric pressure at sea level [$(ONE_ATM) ``Pa``]."
+const ONE_ATM::Float64 = 101325.0
+export ONE_ATM
+
 "Reference atmospheric pressure [Pa]."
-const P_REF::Float64 = 101325.0
+const P_REF::Float64 = ONE_ATM
 export P_REF
 
 "Normal atmospheric temperature [K]."
-const T_REF::Float64 = 273.15
+const T_REF::Float64 = ZERO_CELSIUS
 export T_REF
 
 "Normal state concentration [mol/m³]. "

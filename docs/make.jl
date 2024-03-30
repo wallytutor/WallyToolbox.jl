@@ -17,6 +17,7 @@ using DocumenterCitations
 using WallyToolbox
 
 # These contain the actual implementation of "package".
+using DryAbstract
 using DryConstants
 using DryFlowsheet
 using DryMaterials
@@ -35,6 +36,7 @@ repo = "https://github.com/$(user)/$(sitename)"
 authors = "$(name) <$(mail)> and contributors"
 
 modules = [
+    DryAbstract,
     DryConstants,
     DryFlowsheet,
     DryMaterials,
