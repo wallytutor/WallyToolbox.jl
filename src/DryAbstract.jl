@@ -13,6 +13,9 @@ abstract type AbstractSolidMaterial <: AbstractMaterial end
 "Base type for gas materials."
 abstract type AbstractGasMaterial <: AbstractMaterial end
 
+"Base type for any mineral material."
+abstract type AbstractSolidMineralPhase <: AbstractSolidMaterial end
+
 "Base type for linear algebra problems."
 abstract type AbstractMatrixProblem end
 

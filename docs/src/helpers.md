@@ -50,7 +50,13 @@ end
 
 ### Haskell-like array slicing
 
-Those who know Haskell probably started learning it by manipulating lists with `head` and `tail`. Those functionalities are not available in Julia *by default* and array slicing - with an ugly syntax - is required. Since this is done often in the fields of application of `DryTooling`, both [`head`](@ref) and [`tail`](@ref) together with a [`body`](@ref) functions are available in its core. They are simple wrapers over the `@view` macro and work with both iterable types and arrays. The following snippet illustrates their usage.
+Those who know Haskell probably started learning it by manipulating lists with
+`head` and `tail`. Those functionalities are not available in Julia *by default*
+and array slicing - with an ugly syntax - is required. Since this is done often
+in the fields of application of `DryTooling`, both [`head`](@ref) and
+[`tail`](@ref) together with a [`body`](@ref) functions are available in its
+core. They are simple wrapers over the `@view` macro and work with both iterable
+types and arrays. The following snippet illustrates their usage.
 
 ```jldoctest
 julia> v = collect(1:4);
@@ -65,7 +71,8 @@ julia> body(v) == [2; 3]
 true
 ```
 
-More examples are provided in the following documentation ahead of each of the functions.
+More examples are provided in the following documentation ahead of each of the
+functions.
 
 ```jldoctest
 julia> head(1:4)
@@ -112,7 +119,15 @@ DryUtilities.body
 
 ### Handling of discontinuous functions
 
-Discontinuous functions are all over in real world applications. Whether they handle discrete signals sent to controllers or represent a material property change in the solution domain of a heat transfer simulation, they are often represented by a single or a composition of [Heaviside step](https://en.wikipedia.org/wiki/Heaviside_step_function) functions. Again, because its implementation is pretty simple and optimization routines require a differentiable form of this function, `DryUtilities` implements [`heaviside`](@ref) and [`interval`](@ref) as proposed in this [StackOverflow answer](https://stackoverflow.com/a/27677532/11987084).
+Discontinuous functions are all over in real world applications. Whether they
+handle discrete signals sent to controllers or represent a material property
+change in the solution domain of a heat transfer simulation, they are often
+represented by a single or a composition of [Heaviside
+step](https://en.wikipedia.org/wiki/Heaviside_step_function) functions. Again,
+because its implementation is pretty simple and optimization routines require a
+differentiable form of this function, `DryUtilities` implements
+[`heaviside`](@ref) and [`interval`](@ref) as proposed in this [StackOverflow
+answer](https://stackoverflow.com/a/27677532/11987084).
 
 ```jldoctest
 julia> heaviside(-1) == 0
@@ -164,7 +179,12 @@ julia> interval(0:6; a = 2, b = 5)
 DryUtilities.interval
 ```
 
-As it is the case for representation of specific heats using NASA7/NASA9 or Shomate polynomials, functions defined by parts with an specific change point are also required in physical modeling. To this end, a stepwise function can be established with [`makestepwise1d`](@ref). If keyword `differentialble = true`, then the function makes use of the above [`interval`](@ref) and remains compatible with `ModelingToolkit`, for instance.
+As it is the case for representation of specific heats using NASA7/NASA9 or
+Shomate polynomials, functions defined by parts with an specific change point
+are also required in physical modeling. To this end, a stepwise function can be
+established with [`makestepwise1d`](@ref). If keyword `differentialble = true`,
+then the function makes use of the above [`interval`](@ref) and remains
+compatible with `ModelingToolkit`, for instance.
 
 ```jldoctest
 julia> f = makestepwise1d(x->x, x->x^2, 1.0; differentiable = true);
@@ -200,9 +220,11 @@ DryUtilities.makestepwise1d
 
 !!! danger
 
-    This section documents functions that are used in a very unstable context and might evolve in the next commits until an stable interface is established.
+    This section documents functions that are used in a very unstable context.
 
-Simple rounding is not enough. Getting values that are rounded close to a power of a given number and rounded to floor or ceil is often the case. This is standardized in `DryTooling` through [`closestpowerofx`](@ref):
+Simple rounding is not enough. Getting values that are rounded close to a power
+of a given number and rounded to floor or ceil is often the case. This is
+standardized in `DryTooling` through [`closestpowerofx`](@ref):
 
 ```jldoctest
 julia> closestpowerofx(10)
@@ -233,7 +255,9 @@ DryUtilities.closestpowerofx
 
 Below we illustrate the usage of [`axesunitscaler`](@ref).
 
-**NOTE:** this function is not yet stable. In the future it will instead return labels using symbols like `k`, `M`, `G`, etc., for the units through a flag provided by the user.
+**NOTE:** this function is not yet stable. In the future it will instead return
+labels using symbols like `k`, `M`, `G`, etc., for the units through a flag
+provided by the user.
 
 ```jldoctest
 julia> axesunitscaler(1)
@@ -254,7 +278,7 @@ DryUtilities.axesunitscaler
 
 !!! danger
 
-    This section documents functions that are used in a very unstable context and might evolve in the next commits until an stable interface is established.
+    This section documents functions that are used in a very unstable context.
 
 ```@docs
 DryUtilities.maxabsolutechange
@@ -266,6 +290,12 @@ DryUtilities.maxrelativechange
 ```@docs
 DryUtilities.nm3_h_to_kg_h
 DryUtilities.kg_h_to_nm3_h
+```
+
+### Others
+
+```@docs
+DryUtilities.defaultvalue
 ```
 
 ## Abstract types
@@ -281,6 +311,7 @@ DryAbstract.AbstractMaterial
 DryAbstract.AbstractSolidMaterial
 DryAbstract.AbstractLiquidMaterial
 DryAbstract.AbstractGasMaterial
+DryAbstract.AbstractSolidMineralPhase
 ```
 
 ### Problem solving and physical models

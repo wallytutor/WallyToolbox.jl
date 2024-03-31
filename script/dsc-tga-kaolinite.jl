@@ -25,12 +25,15 @@ begin
     using LinearAlgebra
     using ModelingToolkit
     using NumericalIntegration
+    using Polynomials
     using PlutoUI
     using PrettyPrinting
     using Printf: @sprintf
     using Symbolics: scalarize
     using Trapz: trapz
     using WallyToolbox
+
+    import DryMaterials as DM
 end
 
 # ╔═╡ 062e6786-9518-4420-9ae2-6182508a5fa8
@@ -50,10 +53,6 @@ md"""
 ## Tools
 """
 
-# ╔═╡ be5ee0fd-4a1d-4573-86b1-6d661d71e5f3
-"Ideal gas constant [``$(R)\\:J\\cdotp{}mol^{-1}\\cdotp{}K^{-1}``]"
-const R::Float64 = 8.31446261815324
-
 # ╔═╡ c05012fd-6647-48df-83ec-f7bf26686a87
 md"""
 ### Species properties
@@ -71,29 +70,19 @@ Final conversion of spinel into mullite and cristobalite is neglected here.
 Polynomials for specific heat are those of [Schieltz and Soliman (1964)](https://doi.org/10.1346/CCMN.1964.0130139), except for *spinel* phase for which at the time of the publication was unknown. A rough estimate of its value is provided by [Eskelinen *et al.* (2015)](https://doi.org/10.1002/aic.14903). Since this phase is the least relevant in the present study and the  order of magnitude seems correct, it is employed in the simulations.
 """
 
+# ╔═╡ 241f2150-c134-4951-b87d-d820727b8269
+"Materials for considered phases."
+const materials = [
+    DM.PureWater();
+    DM.getkaolinite();
+    DM.getmetakaolin();
+    DM.getspinel();
+    DM.getamorphoussilica();	
+]
+
 # ╔═╡ 5bc5d31b-9f3a-44e5-a271-12d9e8ffa7de
-"Molecular masses of considered species [``kg\\cdotp{}mol^{-1}``]"
-const Mₘ = [0.018; 0.2579; 0.2219; 0.38372; 0.06008]
-
-# ╔═╡ d4889873-74aa-451c-b70e-d79774b66f7a
-"Specific heat of liquid water [``J\\cdotp{}kg^{-1}\\cdotp{}K^{-1}``]"
-cp₁(T) = 4186.0
-
-# ╔═╡ 07e5e5ff-f377-4415-82a3-af4de98144e3
-"Specific heat of kaolinite [``J\\cdotp{}kg^{-1}\\cdotp{}K^{-1}``]"
-cp₂(T) = 932.347 + 0.572679 * T - 1.27676e7 / T^2
-
-# ╔═╡ 7bcff4b3-a016-4518-876f-a880fc7932c5
-"Specific heat metakaolin [``J\\cdotp{}kg^{-1}\\cdotp{}K^{-1}``]"
-cp₃(T) = 1034.30 + 0.165941 * T - 6.56221e6 / T^2
-
-# ╔═╡ 7eb3fc9b-0277-4e29-a21c-67d835c29acc
-"Specific heat of *spinel* [``J\\cdotp{}kg^{-1}\\cdotp{}K^{-1}``]"
-cp₄(T) = 930.0
-
-# ╔═╡ 157cac7f-62fc-44e4-b831-6a2f19e79e56
-"Specific heat of amorphous silica [``J\\cdotp{}kg^{-1}\\cdotp{}K^{-1}``]"
-cp₅(T) = 930.899 + 0.256032 * T - 2.40038e7 / T^2
+"Molecular masses of considered phases [``kg\\cdotp{}mol^{-1}``]"
+const Mₘ = map(DM.molecularmass, materials)
 
 # ╔═╡ 967579c7-252d-460c-a68d-c39dc9e2e0f0
 """
@@ -101,7 +90,7 @@ cp₅(T) = 930.899 + 0.256032 * T - 2.40038e7 / T^2
 
 Retrieve specific heat for all species
 """
-specificheat(T) = [cp₁(T); cp₂(T); cp₃(T); cp₄(T); cp₅(T)]
+specificheat(T) = map(m->DM.specificheat(m, T, P_REF), materials)
 
 # ╔═╡ 9d98242a-7487-447b-89a4-5b5acb957ff6
 """
@@ -244,7 +233,7 @@ const ΔH = [2.2582e+06; 8.9100e+05; -2.1290e+05]
 
 Evaluate rate constants [``s^{-1}``]
 """
-rateconstants(T) = A .* exp.(-Eₐ ./ (R * T))
+rateconstants(T) = A .* exp.(-Eₐ ./ (GAS_CONSTANT * T))
 
 # ╔═╡ 56a96fb0-a483-42cf-a4e4-2bd46d228e32
 md"""
@@ -596,14 +585,9 @@ Hope these notes provided you insights on DSC/TGA methods!
 # ╟─d54aad4f-5cfe-4ea3-a237-ba0ab8973721
 # ╟─8e43ead5-4099-469e-9d74-6aa1b3659988
 # ╟─276f19f0-9075-11ee-06f3-7d2f8111ed34
-# ╟─be5ee0fd-4a1d-4573-86b1-6d661d71e5f3
 # ╟─c05012fd-6647-48df-83ec-f7bf26686a87
+# ╟─241f2150-c134-4951-b87d-d820727b8269
 # ╟─5bc5d31b-9f3a-44e5-a271-12d9e8ffa7de
-# ╟─d4889873-74aa-451c-b70e-d79774b66f7a
-# ╟─07e5e5ff-f377-4415-82a3-af4de98144e3
-# ╟─7bcff4b3-a016-4518-876f-a880fc7932c5
-# ╟─7eb3fc9b-0277-4e29-a21c-67d835c29acc
-# ╟─157cac7f-62fc-44e4-b831-6a2f19e79e56
 # ╟─967579c7-252d-460c-a68d-c39dc9e2e0f0
 # ╟─9d98242a-7487-447b-89a4-5b5acb957ff6
 # ╟─e7f229d8-f3d6-46d8-ac75-77b29d1138b8
