@@ -86,7 +86,7 @@ pages = [
     "OpenFOAM"          => "OpenFOAM/index.md",
     "RadCalNet"         => "RadCalNet/index.md",
     "Table of Contents" => "toc.md",
-    "References"        => "references/index.md",
+    "References"        => "References/index.md",
     "Teaching"          => [
         "Basilisk" => "Teaching/Basilisk/Basilisk.md",
     ],
