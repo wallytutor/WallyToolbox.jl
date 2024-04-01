@@ -87,6 +87,9 @@ pages = [
     "RadCalNet"         => "RadCalNet/index.md",
     "Table of Contents" => "toc.md",
     "References"        => "references/index.md",
+    "Teaching"          => [
+        "Basilisk" => "Teaching/Basilisk/Basilisk.md",
+    ],
 ]
 
 ##############################################################################
