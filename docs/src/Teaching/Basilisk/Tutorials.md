@@ -17,10 +17,10 @@
 
 ### Brusselator
 
-| Reference | [Coupled reaction-diffusion equations](http://basilisk.fr/src/examples/brusselator.c) |
-| ---- | ---- |
-| Code | 03-Brusselator |
-| Notes | Solves the 2D [Brusselator](https://en.wikipedia.org/wiki/Brusselator), a theoretical autocatalytic reaction diffusion system. The set of parameters used in the study for the stable Turin points where the ones proposed by [[@Pena2001a]] **Interesting** material for preparing courses extending this to other oscillating systems can be found [here](https://web.archive.org/web/20170909182522/http://www.idea.wsu.edu/OscilChem/#Brusselator%20Model). |
+| Reference | [Coupled reaction-diffusion equations](http://basilisk.fr/src/examples/brusselator.c)                                                                                                                                                                                                                                                                                                                                                                                                 |
+| --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Code      | 03-Brusselator                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+| Notes     | Solves the 2D [Brusselator](https://en.wikipedia.org/wiki/Brusselator), a theoretical autocatalytic reaction diffusion system. The set of parameters used in the study for the stable Turin points where the ones proposed by ([[@Pena2001a]]) [Pena2001a](@cite). **Interesting** material for preparing courses extending this to other oscillating systems can be found [here](https://web.archive.org/web/20170909182522/http://www.idea.wsu.edu/OscilChem/#Brusselator%20Model). |
 
 ### Ginzburg-Landau
 
@@ -38,10 +38,10 @@
 
 ### Wavelet transform
 
-| Reference | [Wavelet transforms and filtering](http://basilisk.fr/src/examples/wavelet.c) |
-| ---- | ---- |
-| Code | 06-Wavelet-Transform |
-| Notes | Provides a tutorial on wavelet transform and associated filters. It is presented as the basis to understand mesh adaptation in Basilisk. Recommended reading of [[@Sweldens1998a]]. |
+| Reference | [Wavelet transforms and filtering](http://basilisk.fr/src/examples/wavelet.c)                                                                                                                                |
+| --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Code      | 06-Wavelet-Transform                                                                                                                                                                                         |
+| Notes     | Provides a tutorial on wavelet transform and associated filters. It is presented as the basis to understand mesh adaptation in Basilisk. Recommended reading of ([[@Sweldens1998a]]) [Sweldens1998a](@cite). |
 
 ## Navier-Stokes equation
 
@@ -61,10 +61,10 @@
 
 ### Vortex shedding
 
-| Reference | [Vortex shedding behind a sphere](http://basilisk.fr/src/examples/sphere.c) |
-| ---- | ---- |
-| Code | 09-Vortex-Shedding |
-| Notes | For [lambda2.h](http://basilisk.fr/src/lambda2.h) see Jeong ([[@Jeong1995a]]) |
+| Reference | [Vortex shedding behind a sphere](http://basilisk.fr/src/examples/sphere.c)                  |
+| --------- | -------------------------------------------------------------------------------------------- |
+| Code      | 09-Vortex-Shedding                                                                           |
+| Notes     | For [lambda2.h](http://basilisk.fr/src/lambda2.h) see ([[@Jeong1995a]]) [Jeong1995a](@cite). |
 
 ### Porous medium
 
