@@ -6,24 +6,29 @@ Basic component solvers:
 - [poisson.h](http://basilisk.fr/src/poisson.h)
 
  It is upon these that the Navier-Stokes equation can be assembled in:
-- [navier-stokes/stream.h](http://basilisk.fr/src/navier-stokes/stream.h)solves a 2D incompressible, constant density, constant viscosity Navier-Stokes equation formulated in the vorticity $\omega$. This is and advection-diffusion equation solved with a flux-based advection scheme in [advection.h](http://basilisk.fr/src/advection.h). Given its form, the stream function $\psi$ is solver through the [poisson.h](http://basilisk.fr/src/poisson.h) solver.
-- [navier-stokes/centered.h](http://basilisk.fr/src/navier-stokes/centered.h)
 
+| Header                                                                      | Description                                                                                                                                                                                                                                                                                                                                                                                   |
+| --------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [navier-stokes/stream.h](http://basilisk.fr/src/navier-stokes/stream.h)     | Solves a 2D incompressible, constant density, constant viscosity Navier-Stokes equation formulated in the vorticity $\omega$. This is and advection-diffusion equation solved with a flux-based advection scheme in [advection.h](http://basilisk.fr/src/advection.h). Given its form, the stream function $\psi$ is solver through the [poisson.h](http://basilisk.fr/src/poisson.h) solver. |
+| [navier-stokes/centered.h](http://basilisk.fr/src/navier-stokes/centered.h) |                                                                                                                                                                                                                                                                                                                                                                                               |
+| [navier-stokes/perfs.h](http://basilisk.fr/src/navier-stokes/perfs.h)       | Not a solver by itself, it supports other headers under the Navier-Stokes family to follow performance during solution.                                                                                                                                                                                                                                                                       |
+ 
 Other equations:
 - [saint-venant.h](http://basilisk.fr/src/saint-venant.h)
 ## Headers files
 
-| File | Usage |
-| ---- | ---- |
-| [common.h](http://basilisk.fr/src/common.h) |  |
-| [distance.h](http://basilisk.fr/src/distance.h) |  |
-| [embed.h](http://basilisk.fr/src/embed.h) | Allow the creation of general shape boundary conditions inside the domain. |
-| [fractions.h](http://basilisk.fr/src/fractions.h) |  |
-| [lambda2.h](http://basilisk.fr/src/lambda2.h) | Detection of vortex using the criteria by [[@Jeong1995a]]. |
-| [run.h](http://basilisk.fr/src/run.h) | A generic time loop which executes until termination (to be avoided!). |
-| [tracer.h](http://basilisk.fr/src/tracer.h) | Provides an event to integrate the advection of tracer elements. |
-| [utils.h](http://basilisk.fr/src/utils.h) |  |
-| [view.h](http://basilisk.fr/src/view.h) |  |
+| File                                              | Usage                                                                           |
+| ------------------------------------------------- | ------------------------------------------------------------------------------- |
+| [common.h](http://basilisk.fr/src/common.h)       |                                                                                 |
+| [distance.h](http://basilisk.fr/src/distance.h)   |                                                                                 |
+| [embed.h](http://basilisk.fr/src/embed.h)         | Allow the creation of general shape boundary conditions inside the domain.      |
+| [fractions.h](http://basilisk.fr/src/fractions.h) |                                                                                 |
+| [lambda2.h](http://basilisk.fr/src/lambda2.h)     | Detection of vortex using the criteria by ([[@Jeong1995a]]) [Jeong1995a](@cite) |
+| [run.h](http://basilisk.fr/src/run.h)             | A generic time loop which executes until termination (to be avoided!).          |
+| [tracer.h](http://basilisk.fr/src/tracer.h)       | Provides an event to integrate the advection of tracer elements.                |
+| [utils.h](http://basilisk.fr/src/utils.h)         |                                                                                 |
+| [view.h](http://basilisk.fr/src/view.h)           |                                                                                 |
+
 
 | File | Usage |
 | ---- | ---- |

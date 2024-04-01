@@ -3,10 +3,10 @@
 
 ### Basilisk basics
 
-| Reference | [Tutorial](http://basilisk.fr/Tutorial) |
-| ---- | ---- |
-| Code | 01-Tutorial-Basics |
-| Notes | Basilisk is a conceptual solver for investigating problems in a Cartesian domain.<br><br>Different steps of the simulations are set by `event`'s, which use a specific syntax do indicate whether they depend on a time or iteration condition. These steps might include setup of initial conditions, storage of intermediate results or solution, grid refinement, etc.<br><br>For iterating over arrays Basilisk provides a `foreach()`loop extending the C-language.<br><br>A standard `Makefile` is provided by Basilisk for managing common workflows.<br><br>Check the [tips](http://basilisk.fr/src/Tips). |
+| Reference | [Tutorial](http://basilisk.fr/Tutorial)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
+| --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Code      | 01-Tutorial-Basics                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| Notes     | Basilisk is a conceptual solver for investigating problems in a Cartesian domain.<br><br>Different steps of the simulations are set by `event`'s, which use a specific syntax do indicate whether they depend on a time or iteration condition. These steps might include setup of initial conditions, storage of intermediate results or solution, grid refinement, etc.<br><br>For iterating over arrays Basilisk provides a `foreach()`loop extending the C-language.<br><br>A standard `Makefile` is provided by Basilisk for managing common workflows.<br><br>Check the [tips](http://basilisk.fr/src/Tips). |
 
 ### Game of life
 
@@ -61,10 +61,10 @@
 
 ### Vortex shedding
 
-| Reference | [Vortex shedding behind a sphere](http://basilisk.fr/src/examples/sphere.c)                  |
-| --------- | -------------------------------------------------------------------------------------------- |
-| Code      | 09-Vortex-Shedding                                                                           |
-| Notes     | For [lambda2.h](http://basilisk.fr/src/lambda2.h) see ([[@Jeong1995a]]) [Jeong1995a](@cite). |
+| Reference | [Vortex shedding behind a sphere](http://basilisk.fr/src/examples/sphere.c)                                                                                                                                                                  |
+| --------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Code      | 09-Vortex-Shedding                                                                                                                                                                                                                           |
+| Notes     | Solution of Navier-Stokes equations in an adaptive domain embedding an sphere. Vortex detection is made with functionalities from [lambda2.h](http://basilisk.fr/src/lambda2.h) implemented following ([[@Jeong1995a]]) [Jeong1995a](@cite). |
 
 ### Porous medium
 
