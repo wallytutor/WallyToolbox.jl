@@ -1,4 +1,8 @@
+# Obsidian data
 .obsidian/app.json
 .obsidian/appearance.json
 .obsidian/graph.json
 .obsidian/workspace.json
+
+# Bibliography backup
+*.bib.sav
