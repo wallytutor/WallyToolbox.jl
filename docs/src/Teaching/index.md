@@ -8,8 +8,8 @@ Notes related to my learning and teaching interests in several fields related to
 
 ## Software
 
-- [Basilisk](Basilisk/Basilisk)
-- [OpenFOAM](OpenFOAM/index)
+- [Basilisk](Basilisk/Basilisk.md)
+- [OpenFOAM](OpenFOAM/index.md)
 
 ### OpenSmoke++
 

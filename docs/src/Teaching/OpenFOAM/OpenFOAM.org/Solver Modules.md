@@ -26,7 +26,7 @@ In OpenFOAM v11 solver module `multicomponentFluid` provides approaches for sett
 
 ### Built cases
 
-- [aachenBombSteady](../Cases/aachenBombSteady): this case was created as a tentative to simulate a steady spray combustion starting from *aachenBomb* tutorial but after several failures it became a case of its own. The case we have today was built bottom-up, from a simple flow in a box to the level of combustion, including several intermediate steps used to understand how the different options and models interacted. For now its name will remain like this in reference to where it started, but in the future I might come up with a better one.
+- [aachenBombSteady](../Cases/aachenBombSteady.md): this case was created as a tentative to simulate a steady spray combustion starting from *aachenBomb* tutorial but after several failures it became a case of its own. The case we have today was built bottom-up, from a simple flow in a box to the level of combustion, including several intermediate steps used to understand how the different options and models interacted. For now its name will remain like this in reference to where it started, but in the future I might come up with a better one.
 ## `incompressibleDenseParticleFluid`
 
 In OpenFOAM v11 solver module `incompressibleDenseParticleFluid` provides approaches for setting up a transient flow interacting with particles. It handles incompressible isothermal flows with fluid-particle interactions, including cases with dense packing of particles, such as packed beds or initialization of fluidized beds for solution with other approaches.

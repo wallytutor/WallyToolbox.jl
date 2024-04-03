@@ -18,9 +18,9 @@ Models inheriting from [`combustionModel`](https://cpp.openfoam.org/v11/classFoa
 
 In OpenFOAM, a *cloud* designate the injection of a secondary phase, generally solid particles or droplets, in a primary continuous carrier phase. The dictionary `cloudProperties` is identified in tutorials related to the following solver modules:
 
-- [`incompressibleDenseParticleFluid`](../incompressibleDenseParticleFluid/index)
+- `incompressibleDenseParticleFluid`
 - `incompressibleFluid`
-- [`multicomponentFluid`](aachenBombSteady.md)
+- `multicomponentFluid`
 - `multiRegion`
 
 The default version of the dictionary provided [here](https://github.com/OpenFOAM/OpenFOAM-11/blob/master/etc/caseDicts/solvers/lagrangian/cloudProperties) is not yet documented as of OpenFOAM v11 and does not contain any solver specific configurations, so the users must refer to the tutorial cases for setting up their studies.  A post-processing particle tracking function associated to the dictionary is provided [here (untested)](https://github.com/OpenFOAM/OpenFOAM-11/blob/master/etc/caseDicts/postProcessing/solvers/particles).
