@@ -1,5 +1,6 @@
 The goal of this material is to provide support to teaching introductory computational fluid mechanics with aid of [Basilisk](http://basilisk.fr/). The studies are based on commented [tutorials](Tutorials.md) and a documentation [guide](Documentation.md) extending what is already provided with the package.
 
+Before going over the tutorials, you need some [C knowledge](https://www.geeksforgeeks.org/c-programming-language/?ref=shm). In the future I intend to provide a synthetic version applied to Basilisk students only. For now, the referred one is pretty good.
 ## First steps
 
 The source code for the studies is provided [here](https://github.com/wallytutor/Basilisk). The repository keeps a copy of Basilisk at a version that will work with all modified tutorials. It may be eventually updated, but in that case functioning of tutorials will be tested. You will need to clone it then following the steps to [compile Basilisk](http://basilisk.fr/src/INSTALL) before starting. After building Basilisk, instead of adding variables to your environment, consider sourcing them temporarily with help of `source activate.sh` using the provided script.
