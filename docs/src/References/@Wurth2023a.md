@@ -5,6 +5,7 @@ year: 2023
 URL: https://doi.org/10.5445/IR/1000159290
 Drive: https://1drv.ms/b/s!Ar4x-UlrYAiZla5XEQtEiYnlp5ggtA?e=6TW8va
 ---
+
 - PINNs are alternative to SBO methods
 
 - Reference 6: one NN per output
@@ -13,7 +14,7 @@ Drive: https://1drv.ms/b/s!Ar4x-UlrYAiZla5XEQtEiYnlp5ggtA?e=6TW8va
 
 - NNs provide automatic jacobian and hessian evaluations, what can be used for great benefit of optimization algorithms
 
-- Implemented in SciANN [[@Haghighat2021sciann]] (wrapper to [[@Tensorflow2015Whitepaper]])
+- Implemented in SciANN [[@Haghighat2021sciann]] wrapper to [[@Tensorflow2015Whitepaper]]
 
 - Solves the diffusion equation
 

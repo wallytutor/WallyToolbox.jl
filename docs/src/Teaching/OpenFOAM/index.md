@@ -2,8 +2,8 @@
 
 ## Table of Contents
 
-- [Solver Modules](<Solver Modules>)
-- [Physical Models](<Physical Models>)
+- [Solver Modules](<OpenFOAM.org/Solver Modules.md>)
+- [Physical Models](<OpenFOAM.org/Physical Models.md>)
 
 ## Tips and reminders
 
