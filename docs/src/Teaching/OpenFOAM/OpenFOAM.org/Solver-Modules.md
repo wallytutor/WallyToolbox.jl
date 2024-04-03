@@ -2,6 +2,7 @@
 ## `multicomponentFluid`
 
 In OpenFOAM v11 solver module `multicomponentFluid` provides approaches for setting up the simulation of fluids with multiple species, including combustion.
+
 #### Tutorial cases
 
 - DLR_A_LTS
@@ -27,9 +28,11 @@ In OpenFOAM v11 solver module `multicomponentFluid` provides approaches for sett
 ### Built cases
 
 - [aachenBombSteady](../Cases/aachenBombSteady.md): this case was created as a tentative to simulate a steady spray combustion starting from *aachenBomb* tutorial but after several failures it became a case of its own. The case we have today was built bottom-up, from a simple flow in a box to the level of combustion, including several intermediate steps used to understand how the different options and models interacted. For now its name will remain like this in reference to where it started, but in the future I might come up with a better one.
+
 ## `incompressibleDenseParticleFluid`
 
 In OpenFOAM v11 solver module `incompressibleDenseParticleFluid` provides approaches for setting up a transient flow interacting with particles. It handles incompressible isothermal flows with fluid-particle interactions, including cases with dense packing of particles, such as packed beds or initialization of fluidized beds for solution with other approaches.
+
 ### Tutorial cases
 
 - Goldschmidt
@@ -37,6 +40,7 @@ In OpenFOAM v11 solver module `incompressibleDenseParticleFluid` provides approa
 - column
 - cyclone
 - injectionChannel
+
 ### Boundary fields
 
 Boundary fields in general are almost the same as any case in *pure fluid* simulations but transported quantities must be named by appending the name of the continuous phase specified in  `constant/physicalProperties` as `continuousPhaseName <phase>`. To make it simple let's call this phase `air` in what follows. Notice that pressure file name remains unchanged since it is not really *transported* as you don't have an equation in the form of Reynolds transport theorem for it.
@@ -52,6 +56,7 @@ outlet
 	value           uniform (0 0 0);
 }
 ```
+
 ### Creating `cloudProperties`
 
 Most default values in `solution` dictionary should be fine for typical fluid-particle applications, but for phase interaction it is important to configure `coupled` as `true` so that drag forces are applied to the particles and conversely, particles disturb the fluid. 
