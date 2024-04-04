@@ -256,85 +256,87 @@ struct CooledCrushingMill
     "Global heat transfer coefficient [W/K]."
     globalhtc::Union{Nothing, Float64}
 
-    function CooledCrushingMill(;
-            product,
-            coolant,
-            power,
-            model,
-            verbose = true,
-            kwargs...
-        )
-        ##########
-        # INITIAL
-        ##########
 
-        Δq = 0.0
+end
+
+function CooledCrushingMill(;
+        product,
+        coolant,
+        power,
+        model,
+        verbose = true,
+        kwargs...
+    )
+    ##########
+    # INITIAL
+    ##########
+
+    Δq = 0.0
+    loss = EnergyStream(Δq)
+    meal = product
+    ghtc = nothing
+
+    ##########
+    # MODEL
+    ##########
+
+    if model == :TARGET_COOLANT_TEMP
+        # Compute enthalpy change in cooling stream.
+        Δq = exchanged_heat(coolant, kwargs[:temp_out])
+
+        # Stream of energy to correct system temperature.
         loss = EnergyStream(Δq)
-        meal = product
-        ghtc = nothing
-        
-        ##########
-        # MODEL
-        ##########
 
-        if model == :TARGET_COOLANT_TEMP
-            # Compute enthalpy change in cooling stream.
-            Δq = exchanged_heat(coolant, kwargs[:temp_out])
-
-            # Stream of energy to correct system temperature.
-            loss = EnergyStream(Δq)
-
-            # Correct energy in both streams.
-            product += power - loss
-            coolant += loss
-        end
-
-        if model == :USING_GLOBAL_HTC
-            # Compute enthalpy change with coolant.
-            T∞ = 0.5*(kwargs[:temp_out] + coolant.T)
-            T₂ = 0.5*(kwargs[:temp_cru] + product.T)
-            ghtc = kwargs[:glob_htc]
-
-            # TODO add losses to environment through shell like in:
-            # 10.45*(T_ext - 0.5*(kwargs[:temp_env] + coolant.T))
-            
-            # The value must be the absolute intake by the coolant
-            # thus a minus sign in front of it.
-            Δq = -ghtc * (T∞ - T₂)
-
-            # Stream of energy to correct system temperature.
-            loss = EnergyStream(Δq)
-
-            # Correct energy in both streams.
-            product += power - loss
-            coolant += loss
-        end
-
-        ##########
-        # POST
-        ##########
-
-        verbose && begin
-            rounder(v) = round(v; digits = 1)
-            Q = rounder(ustrip(uconvert(u"kW", power.ḣ * u"W")))
-            p = rounder(ustrip(uconvert(u"kW", Δq * u"W")))
-            T = rounder(ustrip(uconvert(u"°C", product.T * u"K")))
-
-            @info """
-            CooledCrushingMill with model $(model)
-
-            Power applied to product stream...: $(Q) kW
-            Heat extracted by cooling system..: $(p) kW
-            Product stream final temperature..: $(T) °C
-            """
-        end
-
-        ##########
-        # NEW
-        ##########
-
-        return new(meal, product, coolant, power, loss, ghtc)
+        # Correct energy in both streams.
+        product += power - loss
+        coolant += loss
     end
+
+    if model == :USING_GLOBAL_HTC
+        # Compute enthalpy change with coolant.
+        T∞ = 0.5*(kwargs[:temp_out] + coolant.T)
+        T₂ = 0.5*(kwargs[:temp_cru] + product.T)
+        ghtc = kwargs[:glob_htc]
+
+        # TODO add losses to environment through shell like in:
+        # 10.45*(T_ext - 0.5*(kwargs[:temp_env] + coolant.T))
+        
+        # The value must be the absolute intake by the coolant
+        # thus a minus sign in front of it.
+        Δq = -ghtc * (T∞ - T₂)
+
+        # Stream of energy to correct system temperature.
+        loss = EnergyStream(Δq)
+
+        # Correct energy in both streams.
+        product += power - loss
+        coolant += loss
+    end
+
+    ##########
+    # POST
+    ##########
+
+    verbose && begin
+        rounder(v) = round(v; digits = 1)
+        Q = rounder(ustrip(uconvert(u"kW", power.ḣ * u"W")))
+        p = rounder(ustrip(uconvert(u"kW", Δq * u"W")))
+        T = rounder(ustrip(uconvert(u"°C", product.T * u"K")))
+
+        @info """
+        CooledCrushingMill with model $(model)
+
+        Power applied to product stream...: $(Q) kW
+        Heat extracted by cooling system..: $(p) kW
+        Product stream final temperature..: $(T) °C
+        """
+    end
+
+    ##########
+    # NEW
+    ##########
+
+    return CooledCrushingMill(meal, product, coolant, power, loss, ghtc)
 end
 
 #############################################################################

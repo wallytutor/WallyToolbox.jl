@@ -284,7 +284,6 @@ struct CooledCrusherUnits
         
         # Premix meal that is not iterated upon.
         meal_stream = clinker_stream
-        meal_stream += crusher_air_stream
         meal_stream += parasite_air_stream
 
         # Run iterative procedure till steady-state.
@@ -315,7 +314,7 @@ struct CooledCrusherUnits
             
             # Add crushing energy and cool down system.
             # TODO T_out_crush can be actually *computed*!
-            crusher, T_out_cool, T_out_crush = cooled_crushing(
+            mid_crusher, T_out_cool, T_out_crush = cooled_crushing(
                 product  = product,
                 coolant  = cooling_stream,
                 power    = milling_power,
@@ -324,6 +323,16 @@ struct CooledCrusherUnits
                 glob_htc = htc_cru
             )
 
+			# Mix crusher product with *dilution air*
+			crusher = CooledCrushingMill(
+				mid_crusher.rawmeal,
+				mid_crusher.product + crusher_air_stream,
+				mid_crusher.coolant,
+				mid_crusher.power,
+				mid_crusher.loss,
+				mid_crusher.globalhtc
+			)
+			
             # Loose some heat in vertical pipeline.
             rets = transport_pipe(crusher.product, T_in_sep, T_env, htc_sep)
             transport_sep, T_in_sep = rets
@@ -526,8 +535,8 @@ begin
             end
 
             let # Crushing air inlet.
-                p0 = Luxor.Point(-150, -50)
-                p1 = Luxor.Point(-150, 0)
+                p0 = Luxor.Point(110, -40)
+                p1 = Luxor.Point(110, 0)
                 Luxor.sethue(colorair)
                 Luxor.arrow(p0, p1)
                 Luxor.move(p0)
@@ -637,8 +646,8 @@ begin
                 radius = 2
                 Luxor.sethue("black")
                 Luxor.circle(Luxor.Point(-200, 0), radius; action = :fill)
-                Luxor.circle(Luxor.Point(-150, 0), radius; action = :fill)
                 Luxor.circle(Luxor.Point(-100, 0), radius; action = :fill)
+                Luxor.circle(Luxor.Point(110, 0), radius; action = :fill)
                 Luxor.circle(Luxor.Point(125, -70), radius; action = :fill)
                 Luxor.circle(Luxor.Point(230, -100), radius; action = :fill)
             end
@@ -713,7 +722,7 @@ begin
                          Luxor.Point(96,  -70);  valign, halign = :right)
 
                     Luxor.text("$(q_cru_air) Nm³/h (3)",
-                         Luxor.Point(-150, -60);  valign, halign = :center)
+                         Luxor.Point(100, -45);  valign, halign = :right)
 
                     Luxor.text("$(q_par_air) Nm³/h (2)",
                          Luxor.Point(-269, -50); valign, halign = :right)
@@ -803,16 +812,16 @@ end
 begin
     @info "Reference measured data"
 
-    const ϕ             = 31.5
+    const ϕ             = 77.64
     const ηseparator    = 47.65
 
     const T_env         = 5.0
-    const T_out_cool    = 93.0
+    const T_out_cool    = 75.0
     const T_in_sep      = 73.0
     const T_out_rec     = 39.0
 
     const q̇_tot_air     = 3600.0
-    const q̇_cru_air     = 1881
+    const q̇_cru_air     = 1881.0
     const q̇_sep_air     = 431.0
 
     const ṁ_clinker     = 820.0
