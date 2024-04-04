@@ -51,7 +51,7 @@ modules = [
 ]
 
 plugins  = [
-    CitationBibliography(joinpath(@__DIR__, "src/References/database.bib"))
+    CitationBibliography(joinpath(@__DIR__, "../data/bibtex/references.bib"))
 ]
 
 format = Documenter.HTML(;
