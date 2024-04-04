@@ -1,0 +1,233 @@
+$ ===========================================================================
+$ Database file written 2023-02-05
+$ Thermodynamic modeling of the Fe-Mn-Si-C-N system.
+$ ---------------------------------------------------------------------------
+
+$============================================================================
+$ ELEMENTS (from Dinsdale, SGTE data for pure elements)
+$============================================================================
+
+$Element     Standard state        mass [g/mol] enthalpy_298 entropy_298
+ELEMENT VA   VACUUM                0.00000E+00  0.000000E+00 0.00000E+00 !
+ELEMENT C    HEX_A9                1.20110E+01  1.054000E+03 5.74230E+00 !
+ELEMENT FE   BCC_A2                5.58470E+01  4.489000E+03 2.72800E+01 !
+ELEMENT MN   BCC_A12               5.49380E+01  4.995696E+03 3.22206E+01 !
+ELEMENT N    1/2_MOLE_N2(G)        1.40070E+01  4.335000E+03 9.57510E+01 !
+ELEMENT SI   DIA_A4                2.80855E+01  3.217000E+03 1.88100E+01 !
+
+$============================================================================
+$ SPECIES
+$============================================================================
+
+SPECIES N2 N2 !
+
+$============================================================================
+$ GENERAL
+$============================================================================
+
+TYPE_DEFINITION % SEQ *!
+DEFAULT_COMMAND DEF_SYS_ELEMENT VA !
+
+TYPE_DEFINITION & GES A_P_D BCC_A2 MAGNETIC -1.0 0.4 !
+PHASE BCC_A2 & 2 1 3 !
+CONSTITUENT BCC_A2 : FE%,MN,SI : C,N,VA : !
+
+TYPE_DEFINITION ( GES A_P_D FCC_A1 MAGNETIC -3.0 0.28 !
+PHASE FCC_A1 ( 2 1 1 !
+CONSTITUENT FCC_A1 : FE%,MN,SI : C,N,VA : !
+
+PHASE GAS % 1 1 !
+CONSTITUENT GAS : N2 : !
+
+$ Since a single element per sublattice, is this equivalent numerically
+$ to a stoichiometry phase declaration?
+PHASE MNSIN2 % 3 0.25 0.25 0.5 !
+CONSTITUENT MNSIN2  : MN : SI : N : !
+
+$============================================================================
+$ SER FUNCTIONS
+$============================================================================
+
+$ C
+$ -------------------------------------
+FUNCTION GHSERCC  273.00
+-988.25091-7.39898691*T+1.76583*T*LN(T)-0.01706952*T**2; 350.00  Y
+-17368.441+170.73*T-24.3*T*LN(T)-4.723E-4*T**2+2562600*T**(-1)
+-2.643E+8*T**(-2)+1.2E+10*T**(-3); 6000.00  N !
+
+$ Fe
+$ -------------------------------------
+FUNCTION GHSERFE  298.15
+1224.83+124.134*T-23.5143*T*LN(T)-4.39752E-3*T**2-0.0589269E-6*T**3
++77358.5*T**(-1); 1811 N !
+
+$ Mn
+$ -------------------------------------
+FUNCTION GHSERMN  273.00
+-8115.28+130.059*T-23.4582*T*LN(T)-7.34768E-3*T**2+69827.1*T**(-1);
+1519.00  Y  -28733.41+312.2648*T-48.0*T*LN(T)+1.656847E+30*T**(-9);
+6000.00  N !
+
+$ N
+$ -------------------------------------
+FUNCTION GHSERNN  273.00
+-3750.675-9.45425*T-12.7819*T*LN(T)-0.00176686*T**2
++2.680735E-09*T**3-32374*T**(-1); 950.00  Y
+-7358.85+17.2003*T-16.3699*T*LN(T)-6.5107E-04*T**2
++3.0097E-8*T**3+563070*T**(-1); 3350.00  Y
+-16392.8+50.26*T-20.4695*T*LN(T)+2.39754E-04*T**2
+-8.3331E-9*T**3+4596375*T**(-1); 6000.00  N !
+
+$ Si
+$ -------------------------------------
+FUNCTION GHSERSI  273.00
+-8162.609+137.236859*T-22.8317533*T*LN(T)-1.912904E-3*T**2
+-0.003552E-6*T**3+176667*T**(-1); 1687.00  Y -9457.642
++167.281367*T-27.196*T*LN(T)-4.2037E+30*T**(-9); 3600.00  N !
+
+$============================================================================
+$ OTHER FUNCTIONS
+$============================================================================
+
+FUNCTION GMNBCC  273.00
+-3235.3+127.85*T-23.7*T*LN(T)-0.00744271*T**2+60000*T**(-1); 1519.00  Y
+-23188.83+307.7043*T-48*T*LN(T)+1.265152E+30*T**(-9); 6000.00  N !
+
+FUNCTION FESIW1   273.00 +10476.27; 6000.00  N R002 !
+FUNCTION LFESIB0  273.00 -27809+11.62*T; 6000.00  N R002 !
+FUNCTION LFESIB1  273.00 -23088; 6000.00  N R002 !
+FUNCTION LFESIB2  273.00 +3890; 6000.00  N R002 !
+FUNCTION ETCFESI  273.00 +63; 6000.00  N R002 !
+
+$============================================================================
+$ PARAMETERS
+$============================================================================
+
+$ BCC
+$ -------------------------------------
+
+$ Endmember compounds with VA
+PARAMETER G(BCC_A2,FE:VA;0)  298.15 GHSERFE; 6000 N R001 !
+PARAMETER G(BCC_A2,MN:VA;0)  273.00 GMNBCC; 6000.00  N R002 !
+PARAMETER G(BCC_A2,SI:VA;0)  273.00 +47000-22.5*T+GHSERSI; 3600.00 N R002 !
+
+$ Endmember compounds with C
+PARAMETER G(BCC_A2,FE:C;0)   273.00 +322050+75.667*T+GHSERFE
+   +3*GHSERCC; 6000.00  N R002 !
+PARAMETER G(BCC_A2,MN:C;0)   273.00 +10000+30*T+GHSERMN
+   +3*GHSERCC; 6000.00  N R002 !
+PARAMETER G(BCC_A2,SI:C;0)   273.00 +369050-98.167*T+GHSERSI
+   +3*GHSERCC; 6000.00  N R002 !
+
+$ Endmember compounds with N
+PARAMETER G(BCC_A2,FE:N;0)   298.15 +93562+165.07*T
+   +GHSERFE+3*GHSERNN; 6000 N R001 !
+PARAMETER G(BCC_A2,MN:N;0)   273.00 -55600+606.648*T
+   -100.41*T*LN(T)+844897*T**(-1); 2500.00  N R002 !
+
+$ Binary interactions with VA
+PARAMETER L(BCC_A2,FE,MN:VA;0) 273.00 -2759+1.237*T; 6000.00 N R002 !
+PARAMETER L(BCC_A2,FE,SI:VA;0) 273.00 +4*LFESIB0-4*FESIW1; 6000.00  N R002 !
+PARAMETER L(BCC_A2,FE,SI:VA;1) 273.00 +4*LFESIB1; 6000.00  N R002 !
+PARAMETER L(BCC_A2,FE,SI:VA;2) 273.00 +16*LFESIB2; 6000.00  N R002 !
+PARAMETER L(BCC_A2,MN,SI:VA;0) 273.00 -89620.7+2.94097*T; 6000.00  N R002 !
+PARAMETER L(BCC_A2,MN,SI:VA;1) 273.00 -7500; 6000.00  N R002 !
+
+$ Binary interactions with C
+PARAMETER L(BCC_A2,FE,MN:C;0) 273.00 +34052-23.467*T; 6000.00  N R002 !
+PARAMETER L(BCC_A2,FE,SI:C;0) 273.00 +1000000-100*T; 6000.00  N R002 !
+PARAMETER L(BCC_A2,FE,SI:C;1) 273.00 -900000; 6000.00  N R002 !
+
+$ Binary interactions with N
+
+$ Binary interactions with C,VA
+PARAMETER L(BCC_A2,FE:C,VA;0) 273.00 -190*T; 6000.00  N R002 !
+
+$ Binary interactions with N,VA
+PARAMETER L(BCC_A2,MN:N,VA;0) 273.00 -185000; 6000.00  N R002 !
+
+$ Binary interactions with C,N
+
+$ Ternary interactions with VA
+PARAMETER L(BCC_A2,FE,MN,SI:VA;0) 273.00 -97474; 6000.00  N R002 !
+
+$ Ternary interactions with C
+
+$ Ternary interactions with C\N
+
+$ Magnetic contribution
+PARAMETER TC(BCC_A2,FE:VA;0)    298.15  1043; 6000  N R001 !
+PARAMETER BMAG(BCC_A2,FE:VA;0)  298.15  2.22; 6000  N R001 !
+PARAMETER TC(BCC_A2,MN:VA;0)    273.00 -580;  6000  N R002 !
+PARAMETER BMAGN(BCC_A2,MN:VA;0) 273.00 -0.27; 6000  N R002 !
+
+PARAMETER TC(BCC_A2,FE,MN:VA;0) 273.00 +123;  6000  N R002 !
+PARAMETER TC(BCC_A2,FE,SI:VA;1) 273.00 +8*ETCFESI; 6000  N R002 !
+
+PARAMETER TC(BCC_A2,FE:C;0)     273.00  1043; 6000  N R002 !
+PARAMETER BMAGN(BCC_A2,FE:C;0)  273.00  2.22; 6000  N R002 !
+
+PARAMETER TC(BCC_A2,FE:N;0)     298.15  1043; 6000  N R001 !
+PARAMETER BMAG(BCC_A2,FE:N;0)   298.15  2.22; 6000  N R001 !
+
+$ FCC
+$ -------------------------------------
+
+$ Endmember compounds with VA
+PARAMETER G(FCC_A1,FE:VA;0)  298.15 -1462.4+8.282*T-1.15*T*LN(T)
+    +0.00064*T**2+GHSERFE; 1811.00 Y -1713.815+0.94001*T
+    +0.4925095E+31*T**(-9)+GHSERFE; 6000 N R001 !
+PARAMETER G(FCC_A1,MN:VA;0) 273.00 -3439.3+131.884*T-24.5177*T*LN(T)
+    -0.006*T**2+69600*T**(-1); 1519.00  Y -26070.1+309.6664*T
+    -48*T*LN(T)+3.86196E+30*T**(-9); 6000.00  N R002 !
+PARAMETER G(FCC_A1,SI:VA;0) 273.00 +51000-21.8*T+GHSERSI; 3600 N R002 !
+
+$ Endmember compounds with C
+
+$ Endmember compounds with N
+PARAMETER G(FCC_A1,FE:N;0)  298.15  -37460+375.42*T-37.6*T*LN(T)
+   +GHSERFE+GHSERNN; 6000 N R001 !
+
+$ Binary interactions with VA
+
+$ Binary interactions with C
+
+$ Binary interactions with N
+
+$ Binary interactions with C,VA
+
+$ Binary interactions with N,VA
+PARAMETER L(FCC_A1,FE:N,VA;0)  298.15  -26150;   6000   N R001 !
+
+$ Binary interactions with C,N
+
+$ Ternary interactions with VA
+
+$ Ternary interactions with C
+
+$ Ternary interactions with C\N
+
+$ Magnetic contribution
+PARAMETER TC(FCC_A1,FE:VA;0)   298.15 -201;  6000 N R001 !
+PARAMETER BMAG(FCC_A1,FE:VA;0) 298.15 -2.10; 6000 N R001 !
+PARAMETER TC(FCC_A1,FE:N;0)    298.15 -201;  6000 N R001 !
+PARAMETER BMAG(FCC_A1,FE:N;0)  298.15 -2.10; 6000 N R001 !
+
+$ GAS
+$ -------------------------------------
+PARAMETER G(GAS,N2;0) 298.15 2*GHSERNN; 6000 N R001 !
+
+$ MNSIN2
+$ -------------------------------------
+PARAMETER G(MNSIN2,MN:SI:N;0)  273.00 0.25*GHSERMN+0.25*GHSERSI
++0.5*GHSERNN-86500+43*T; 6000.00  N R002!
+
+$============================================================================
+$ REFERENCES
+$============================================================================
+
+LIST_OF_REFERENCES
+ NUMBER  SOURCE
+ R001    'Frisk, 1991'
+ R002    'E. Povoden-Karadeniz, unpublished, 2012 (mc_fe_v2.060)'
+ !

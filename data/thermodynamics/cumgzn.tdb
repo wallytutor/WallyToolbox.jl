@@ -1,0 +1,264 @@
+$ ===========================================================================
+$ Database file written 2023-04-21
+$ ---------------------------------------------------------------------------
+
+DATABASE_INFO about the database
+Thermodynamic description of Cu-Mg-Ni and Cu-Mg-Zn systems
+Jyrki Miettinen, Calphad, vol. 32, issue 2, June 2008, pp. 389-398
+https://doi.org/10.1016/j.calphad.2008.03.005 !
+
+$ ===========================================================================
+$ ELEMENTS
+$ ---------------------------------------------------------------------------
+
+ELEMENT /-   ELECTRON_GAS              0.0000E+00  0.0000E+00  0.0000E+00 !
+ELEMENT VA   VACUUM                    0.0000E+00  0.0000E+00  0.0000E+00 !
+ELEMENT CU   FCC_A1                    6.3546E+01  5.0041E+03  3.3150E+01 !
+ELEMENT MG   HCP_A3                    2.4305E+01  4.9980E+03  3.2671E+01 !
+ELEMENT ZN   HCP_A3                    6.5390E+01  5.6568E+03  4.1631E+01 !
+
+$ ===========================================================================
+$ DEFINITIONS
+$ ---------------------------------------------------------------------------
+
+DEFINE_SYSTEM_DEFAULT ELEMENT 2 !
+DEFAULT_COMMAND DEF_SYS_ELEMENT VA /- !
+
+$ ===========================================================================
+$ GHSER
+$ ---------------------------------------------------------------------------
+
+FUNCTION GHSERCU  298.15
+  -7770.458+130.485235*T-24.112392*T*LN(T)-2.65684E-3*T**2+0.129223E-6*T**3
+  +52478*T**(-1); 1357.77 Y
+  -13542.026+183.803828*T-31.38*T*LN(T)+364.167E27*T**(-9);  3200.00 N !
+
+FUNCTION GHSERMG  298.15
+  -8367.34+143.675547*T-26.1849782*T*LN(T)+0.4858E-3*T**2-1.393669E-6*T**3
+  +78950*T**(-1); 923.00 Y
+  -14130.185+204.716215*T-34.3088*T*LN(T)+1038.192E25*T**(-9);  3000.00 N !
+ 
+FUNCTION GHSERZN  298.15
+  -7285.787+118.470069*T-23.701314*T*LN(T)-1.712034E-3*T**2-1.264963E-6*T**3;
+  692.677 Y
+  -11070.546+172.345644*T-31.38*T*LN(T)+470.47E24*T**(-9);  1700.00 N !
+
+$ ===========================================================================
+$ Other functions
+$ ---------------------------------------------------------------------------
+
+$ Cu
+$ -------------------------------------
+
+FUNCTION GBCCCU 298.15 4017-1.255*T+GHSERCU; 3200 N !
+FUNCTION GHCPCU 298.15 600+0.2*T+GHSERCU; 3200 N !
+FUNCTION GLIQCU 298.15 12964.735-9.511904*T-584.89E-23*T**7+GHSERCU;
+  1357.77 Y -46.545+173.881484*T-31.38*T*LN(T); 3200 N !
+
+$ Mg
+$ -------------------------------------
+
+FUNCTION GLIQMG 298.15 8202.243-8.83693*T-80.176E-21*T**7+GHSERMG;
+  923 Y -5439.869+195.324057*T-34.3088*T*LN(T);  3000.00 N !
+FUNCTION GFCCMG 298.15 2600-0.9*T+GHSERMG; 3000 N !
+FUNCTION GBCCMG 298.15 3100-2.1*T+GHSERMG; 3000 N !
+
+$ Zn
+$ -------------------------------------
+
+FUNCTION GHCPZN 298.15 2969.82-1.56968*T+GHSERZN; 1700 N !
+FUNCTION GLIQZN 298.15 7157.222-10.29305*T-358.949E-21*T**7+GHSERZN; 
+  692.677 Y -3620.385+161.60854*T-31.38*T*LN(T); 1700 N !
+FUNCTION GFCCZN 298.15 2969.82-1.56968*T+GHSERZN; 1700 N !
+FUNCTION GBCCZN 298.15 2886.96-2.5104*T+GHSERZN; 1700 N !
+
+$ Intermetallics
+$ -------------------------------------
+
+ FUNCTION GCU2MG 298.15 -9270-42.588*T+6.6537*T*LN(T)-0.005732*T**2;
+  3200 N REF2 !
+ FUNCTION GCUMG2 298.15 -9540+0.862*T;  3200  N REF2 !
+ FUNCTION GZN2MG 298.15 -11682.7+3.5356*T;   3200  N REF2 !
+
+$ ===========================================================================
+$ PHASES DEFINITIONS
+$ ---------------------------------------------------------------------------
+
+TYPE_DEFINITION % SEQ *!
+TYPE_DEFINITION F GES A_P_D FCC_A1 MAGNETIC -3.0 0.28 !
+TYPE_DEFINITION B GES A_P_D BCC_A2 MAGNETIC -1.0 0.40 !
+TYPE_DEFINITION H GES A_P_D HCP_A3 MAGNETIC -3.0 0.28 !
+
+PHASE LIQUID:L % 1  1.0  !
+CONSTITUENT LIQUID:L : CU,MG,ZN :  !
+
+PHASE FCC_A1 %F 2  1.0 1.0 !
+CONSTITUENT FCC_A1  : CU,MG,ZN : VA :  !
+
+PHASE BCC_A2 %B 2  1.0 3.0 !
+CONSTITUENT BCC_A2  : CU,MG,ZN : VA :  !
+
+PHASE HCP_A3 %H 2  1.0 0.5 !
+CONSTITUENT HCP_A3  : CU,MG,ZN : VA :  !
+
+PHASE HCP_ZN % 2  1.0 0.5 !
+CONSTITUENT HCP_ZN : CU,MG,ZN : VA : ! 
+
+PHASE GAMMA % 1  1.0 !
+CONSTITUENT GAMMA : CU,MG,ZN : !
+
+PHASE CU2MG_C15  %  2  2.0 1.0 !
+CONSTITUENT CU2MG_C15  : CU,ZN : MG :  !
+
+PHASE CUMG2  %  2  1.0 2.0 !
+CONSTITUENT CUMG2  : CU : MG :  !
+
+PHASE MG7ZN3  %  2  51.0 20.0 !
+CONSTITUENT MG7ZN3  : MG : ZN :  !
+
+PHASE MG1ZN1 %  2  12.0 13.0 !
+CONSTITUENT MG1ZN1  : MG : CU,ZN :  !
+
+PHASE MG2ZN3 %  2  2.0 3.0 !
+CONSTITUENT MG2ZN3  : MG : CU,ZN :  !
+
+PHASE MG1ZN2 %  2  1.0 2.0 !
+CONSTITUENT MGZN2  : MG : CU,ZN :  !
+
+PHASE MG2ZN11 %  2  2.0 11.0 !
+CONSTITUENT MG2ZN11  : MG : CU,ZN :  !
+
+$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
+PARAMETER G(LIQUID,CU;0) 298.15 GLIQCU#; 3200  N REF1 !
+PARAMETER G(LIQUID,MG;0) 298.15 GLIQMG#; 3000 N REF1 !
+PARAMETER G(LIQUID,ZN;0) 298.15 GLIQZN; 1700 N REF1 !
+PARAMETER L(LIQUID,CU,MG;0) 298.15 -35430+4.227*T; 3200 N REF2 !
+PARAMETER L(LIQUID,CU,MG;1) 298.15 -7454; 3200 N REF2 !
+PARAMETER L(LIQUID,CU,ZN;0) 298.15 -40696+12.653*T; 3200 N REF2 !
+PARAMETER L(LIQUID,CU,ZN;1) 298.15 +4403-6.554*T; 3200 N REF2 !
+PARAMETER L(LIQUID,CU,ZN;2) 298.15 +7818-3.254*T; 3200 N REF2 !
+PARAMETER L(LIQUID,MG,ZN;0) 298.15 -81440+518.251*T-64.7144*T*LN(T); 
+  3200 N REF2 !
+PARAMETER L(LIQUID,MG,ZN;1) 298.15 +2628+2.931*T; 3200 N REF2 !
+PARAMETER L(LIQUID,MG,ZN;2) 298.15 -1673; 3200 N REF2 !
+
+$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
+PARAMETER G(FCC_A1,CU:VA;0) 298.15 GHSERCU#; 3200 N REF1 !
+PARAMETER G(FCC_A1,MG:VA;0) 298.15 GFCCMG#; 3200 N REF1 !
+PARAMETER G(FCC_A1,ZN:VA;0) 298.15 GFCCZN#; 1700 N REF1 !
+PARAMETER L(FCC_A1,CU,MG:VA;0) 298.15 -23487+8.26*T;  3200 N REF2 !
+PARAMETER L(FCC_A1,CU,ZN:VA;0) 298.15 -42804+10.023*T; 3200 N REF2 !
+PARAMETER L(FCC_A1,CU,ZN:VA;1) 298.15 +2936-3.053*T; 3200 N REF2 !
+PARAMETER L(FCC_A1,CU,ZN:VA;2) 298.15 +9034-5.393*T; 3200 N REF2 !
+$ Not stable in binary Mg-Zn (parameters of HCP_A3 are used)
+PARAMETER L(FCC_A1,MG,ZN:VA;0) 298.15 -3680+7.624*T; 3200 N REF2 !
+PARAMETER L(FCC_A1,MG,ZN:VA;1) 298.15 -3823+8.026*T; 3200 N REF2 !
+PARAMETER L(FCC_A1,CU,MG,ZN:VA;0) 298.15 -15000; 3200 N REF2 !
+
+$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
+PARAMETER G(BCC_A2,CU:VA;0) 298.15 GBCCCU#; 3200 N REF1 !
+PARAMETER G(BCC_A2,MG:VA;0) 298.15 GBCCMG#; 3000 N REF1 !
+PARAMETER G(BCC_A2,ZN:VA;0) 298.15 GBCCZN#; 1700 N REF1 !
+$ Not stable in binary Cu-Mg
+PARAMETER L(BCC_A2,CU,MG:VA;0) 298.15 -6500; 3200   N REF2 !
+PARAMETER L(BCC_A2,CU,ZN:VA;0) 298.15 -51596+13.064*T; 3200 N REF2 !
+PARAMETER L(BCC_A2,CU,ZN:VA;1) 298.15 7562-6.454*T; 3200 N REF2 !
+PARAMETER L(BCC_A2,CU,ZN:VA;2) 298.15 30744-29.915*T; 3200 N REF2 !
+$ Not stable in binary Mg-Zn
+PARAMETER L(BCC_A2,MG,ZN:VA;0) 298.15 -10000; 3200 N REF2 !
+
+$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
+PARAMETER G(HCP_A3,CU:VA;0) 298.15 GHCPCU#; 3200 N REF1 !
+PARAMETER G(HCP_A3,MG:VA;0) 298.15 GHSERMG#; 3000 N REF1 !
+PARAMETER G(HCP_A3,ZN:VA;0) 298.15 GHCPZN#; 1700 N REF1 !
+PARAMETER L(HCP_A3,CU,MG:VA;0) 298.15  10000; 3200 N REF2 !
+PARAMETER L(HCP_A3,CU,ZN:VA;0) 298.15 -36475+4.896*T; 3200 N REF2 !
+PARAMETER L(HCP_A3,CU,ZN:VA;1) 298.15 24790-10.135*T; 3200 N REF2 !
+PARAMETER L(HCP_A3,MG,ZN:VA;0) 298.15 -3680+7.624*T; 3200 N REF2 !
+PARAMETER L(HCP_A3,MG,ZN:VA;1) 298.15 -3823+8.026*T; 3200 N REF2 !
+PARAMETER L(HCP_A3,CU,MG,ZN:VA;0) 298.15 -60000; 3200 N REF2 !
+
+$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
+PARAMETER G(HCP_ZN,CU:VA;0) 298.15 600+0.2*T+GHSERCU#; 3200 N REF1 !
+PARAMETER G(HCP_ZN,MG:VA;0) 298.15 100+GHSERMG#; 3000 N REF1 !
+PARAMETER G(HCP_ZN,ZN:VA;0) 298.15 GHSERZN; 1700 N REF1 !
+PARAMETER L(HCP_ZN,CU,MG:VA;0) 298.15 10000; 3200 N REF2 !
+PARAMETER L(HCP_ZN,CU,ZN:VA;0) 298.15 -14432-10.781*T; 3200 N REF2 !
+$ Same as HCP_A3
+PARAMETER L(HCP_ZN,MG,ZN:VA;0) 298.15 -3680+7.624*T; 3200 N REF2 !
+PARAMETER L(HCP_ZN,MG,ZN:VA;1) 298.15 -3823+8.026*T; 3200 N REF2 !
+
+$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
+PARAMETER G(GAMMA,CU;0) 298.15 10+GHSERCU#; 3200 N REF2 !
+PARAMETER G(GAMMA,MG;0) 298.15 10+GHSERMG#; 3200 N REF2 !
+PARAMETER G(GAMMA,ZN;0) 298.15 10+GHSERZN#; 3200 N REF2 !
+$ Gamma not stable in binary Cu-Mg
+PARAMETER L(GAMMA,CU,MG;0) 298.15 50000; 3200 N REF2 !
+PARAMETER L(GAMMA,CU,ZN;0) 298.15 -39470+9.436*T; 3200 N REF2 !
+PARAMETER L(GAMMA,CU,ZN;1) 298.15 36675-5.196*T; 3200 N REF2 !
+PARAMETER L(GAMMA,CU,ZN;2) 298.15 90163-32.62*T; 3200 N REF2 !
+$ Gamma not stable in binary Mg-Zn
+PARAMETER L(GAMMA,MG,ZN;0) 298.15 10000; 3200   N REF2 !
+PARAMETER L(GAMMA,CU,MG,ZN;0) 298.15 -130000; 3200   N REF2 !
+
+$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
+PARAMETER G(CU2MG_C15,CU:MG;0) 298.15 
+  0.6667*GHSERCU+0.3333*GHSERMG+GCU2MG#; 3200 N REF2 !
+PARAMETER G(CU2MG_C15,ZN:MG;0) 298.15
+  0.6667*GHSERZN+0.3333*GHSERMG+5000+GZN2MG#; 3200 N REF2 !
+PARAMETER L(CU2MG_C15,CU,ZN:MG;0) 298.15 -29000; 3200 N REF2 !
+PARAMETER L(CU2MG_C15,CU,ZN:MG;1) 298.15 13000; 3200 N REF2 !
+PARAMETER L(CU2MG_C15,CU,ZN:MG;2) 298.15 -2500; 3200 N REF2 !
+
+$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
+ PARAMETER G(CUMG2,CU:MG;0) 298.15 GCUMG2#; 3200 N REF2 !
+
+$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
+PARAMETER G(MG7ZN3,MG:ZN;0) 298.15 -4814.1+T; 3200 N REF2 !
+
+$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
+PARAMETER G(MG1ZN1,MG:CU;0) 298.15 0; 3200 N REF2 !
+PARAMETER G(MG1ZN1,MG:ZN;0) 298.15 -9590.4+3.1968*T; 3200 N REF2 !
+PARAMETER L(MG1ZN1,MG:CU,ZN;0) 298.15 -18000; 3200 N REF2 !
+
+$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
+PARAMETER G(MG2ZN3,MG:CU;0) 298.15 0; 3200 N REF2 !
+PARAMETER G(MG2ZN3,MG:ZN;0) 298.15 -11014.5+3.6715*T; 3200 N REF2 !
+PARAMETER L(MG2ZN3,MG:CU,ZN;0) 298.15 -20000; 3200 N REF2 !
+
+$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
+PARAMETER G(MG1ZN2,MG:CU;0) 298.15 5000+GCU2MG#; 3200 N REF2 !
+PARAMETER G(MG1ZN2,MG:ZN;0) 298.15 GZN2MG#; 3200 N REF2 !
+PARAMETER L(MG1ZN2,MG:CU,ZN;0) 298.15 -16000; 3200 N REF2 !
+
+$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
+PARAMETER G(MG2ZN11,MG:CU;0) 298.15 0; 3200 N REF2 !
+PARAMETER G(MG2ZN11,MG:ZN;0) 298.15 -5823.1+1.9432*T; 3200 N REF2 !
+PARAMETER L(MG2ZN11,MG:CU,ZN;0) 298.15 -26000; 3200 N REF2 !
+
+$ ===========================================================================
+$ REFERENCES
+$ ---------------------------------------------------------------------------
+
+LIST_OF_REFERENCES
+  NUMBER  SOURCE
+    REF1 'SGTE Unary Database version v5.0 - 2 June 2009'
+    REF2 'DOI:10.1016/j.calphad.2008.03.005'
+  !
+
+$ ===========================================================================
+$ EOF
+$ ---------------------------------------------------------------------------
