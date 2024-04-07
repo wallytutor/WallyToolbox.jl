@@ -15,20 +15,19 @@ Basic component solvers:
  
 Other equations:
 - [saint-venant.h](http://basilisk.fr/src/saint-venant.h)
-
 ## Headers files
 
-| File                                              | Usage                                                                           |
-| ------------------------------------------------- | ------------------------------------------------------------------------------- |
-| [common.h](http://basilisk.fr/src/common.h)       |                                                                                 |
-| [distance.h](http://basilisk.fr/src/distance.h)   |                                                                                 |
-| [embed.h](http://basilisk.fr/src/embed.h)         | Allow the creation of general shape boundary conditions inside the domain.      |
-| [fractions.h](http://basilisk.fr/src/fractions.h) |                                                                                 |
-| [lambda2.h](http://basilisk.fr/src/lambda2.h)     | Detection of vortex using the criteria by ([[@Jeong1995a]]) [Jeong1995a](@cite) |
-| [run.h](http://basilisk.fr/src/run.h)             | A generic time loop which executes until termination (to be avoided!).          |
-| [tracer.h](http://basilisk.fr/src/tracer.h)       | Provides an event to integrate the advection of tracer elements.                |
-| [utils.h](http://basilisk.fr/src/utils.h)         |                                                                                 |
-| [view.h](http://basilisk.fr/src/view.h)           |                                                                                 |
+| File                                              | Usage                                                                         |
+| ------------------------------------------------- | ----------------------------------------------------------------------------- |
+| [common.h](http://basilisk.fr/src/common.h)       |                                                                               |
+| [distance.h](http://basilisk.fr/src/distance.h)   |                                                                               |
+| [embed.h](http://basilisk.fr/src/embed.h)         | Allow the creation of general shape boundary conditions inside the domain.    |
+| [fractions.h](http://basilisk.fr/src/fractions.h) |                                                                               |
+| [lambda2.h](http://basilisk.fr/src/lambda2.h)     | Detection of vortex using the criteria by [[@Jeong1995a]] [Jeong1995a](@cite) |
+| [run.h](http://basilisk.fr/src/run.h)             | A generic time loop which executes until termination (to be avoided!).        |
+| [tracer.h](http://basilisk.fr/src/tracer.h)       | Provides an event to integrate the advection of tracer elements.              |
+| [utils.h](http://basilisk.fr/src/utils.h)         |                                                                               |
+| [view.h](http://basilisk.fr/src/view.h)           |                                                                               |
 
 
 | File                                                        | Usage |
