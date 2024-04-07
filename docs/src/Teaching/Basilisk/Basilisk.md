@@ -40,3 +40,8 @@ int main() {
 }
 ```
 
+## Parallel computing
+
+Currently I have not tried Basilisk in parallel (actually I did so a few years back but don't really remember the steps). Since there is no dedicated tutorial for going parallel, here are the notes I am taking for writing something in that sense:
+
+- Tutorial [isotropic.c](http://basilisk.fr/src/examples/isotropic.c) has notes on how to run parallel in some of its parent universities supercomputers. Probably some steps there might be recycled here.

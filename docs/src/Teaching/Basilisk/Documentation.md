@@ -15,6 +15,7 @@ Basic component solvers:
  
 Other equations:
 - [saint-venant.h](http://basilisk.fr/src/saint-venant.h)
+
 ## Headers files
 
 | File                                              | Usage                                                                           |
@@ -30,19 +31,22 @@ Other equations:
 | [view.h](http://basilisk.fr/src/view.h)           |                                                                                 |
 
 
-| File | Usage |
-| ---- | ---- |
-| [grid/cartesian.h](http://basilisk.fr/src/grid/cartesian.h) |  |
-| [grid/multigrid.h](http://basilisk.fr/src/grid/multigrid.h) |  |
-| [grid/octree.h](http://basilisk.fr/src/grid/octree.h) |  |
-| [grid/bitree.h](http://basilisk.fr/src/grid/bitree.h) |  |
+| File                                                        | Usage |
+| ----------------------------------------------------------- | ----- |
+| [grid/cartesian.h](http://basilisk.fr/src/grid/cartesian.h) |       |
+| [grid/multigrid.h](http://basilisk.fr/src/grid/multigrid.h) |       |
+| [grid/octree.h](http://basilisk.fr/src/grid/octree.h)       |       |
+| [grid/bitree.h](http://basilisk.fr/src/grid/bitree.h)       |       |
+
 ## Data types
 
 - `scalar`
 - `vector`
 - `face`
 - [`msgstats`](http://basilisk.fr/src/poisson.h#mgstats) convergence statistics of (multigrid?) solver.
+
 ## Functions
+
 | Function | Definition | Uses |
 | ---- | ---- | ---- |
 | `origin` | [common.h](http://basilisk.fr/src/common.h) | Set the origin of cartesian system. |
