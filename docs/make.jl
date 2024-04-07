@@ -50,9 +50,7 @@ modules = [
     RadCalNet,
 ]
 
-plugins  = [
-    CitationBibliography(joinpath(@__DIR__, "../data/bibtex/references.bib"))
-]
+bibtex = joinpath(@__DIR__, "../data/bibtex/references.bib")
 
 format = Documenter.HTML(;
     prettyurls = get(ENV, "CI", "false") == "true",
@@ -87,8 +85,11 @@ pages = [
     "RadCalNet"         => "RadCalNet/index.md",
     "Table of Contents" => "toc.md",
     "References"        => "References/index.md",
+
     "Teaching"          => [
-        "Basilisk" => "Teaching/Basilisk/Basilisk.md",
+        "Basilisk"         => "Teaching/Basilisk/Basilisk.md",
+        "OpenFOAM"         => "Teaching/OpenFOAM/index.md",
+        "Machine Learning" => "Teaching/Machine Learning/index.md",
     ],
 ]
 
@@ -99,6 +100,10 @@ pages = [
 for m in modules
     setdocmeta!(m, :DocTestSetup, :(using m); warn = false, recursive = true)
 end
+
+plugins  = [
+    CitationBibliography(bibtex)
+]
 
 makedocs(; sitename, authors, format, modules, plugins, pages, clean = true)
 
