@@ -28,6 +28,32 @@ using OpenFOAM
 using RadCalNet
 
 ##############################################################################
+# THE FUNCTIONS
+##############################################################################
+
+function get_format(; latex = false, user, sitename)
+    if (latex) 
+        return Documenter.LaTeX(;
+            platform = "tectonic",
+            tectonic = joinpath(@__DIR__, "tectonic.exe")
+        )
+    end
+
+    format = Documenter.HTML(;
+        prettyurls = get(ENV, "CI", "false") == "true",
+        canonical  = "https://$(user).github.io/$(sitename)",
+        repolink   = "https://github.com/$(user)/$(sitename)",
+        edit_link  = "main",
+        assets     = String[],
+    )
+
+    return format
+end
+
+"Generate a `repo` argument in the format expected by `deploydocs`."
+deployrepo(format) = last(split(format.repolink, "://")) * ".git"
+
+##############################################################################
 # THE CONFIGURATION
 ##############################################################################
 
@@ -35,8 +61,10 @@ name = "Walter Dal'Maz Silva"
 mail = "walter.dalmazsilva.manager@gmail.com"
 user = "wallytutor"
 sitename = "WallyToolbox.jl"
-repo = "https://github.com/$(user)/$(sitename)"
 authors = "$(name) <$(mail)> and contributors"
+clean = true
+draft = false
+latex = false
 
 modules = [
     # Cantera,
@@ -52,19 +80,7 @@ modules = [
 
 bibtex = joinpath(@__DIR__, "../data/bibtex/references.bib")
 
-format = Documenter.HTML(;
-    prettyurls = get(ENV, "CI", "false") == "true",
-    canonical  = "https://$(user).github.io/$(sitename)",
-    repolink   = repo,
-    edit_link  = "main",
-    assets     = String[],
-)
-
-# For local builds, needs to download tectonic.
-# format = Documenter.LaTeX(;
-#     platform = "tectonic",
-#     tectonic = joinpath(@__DIR__, "tectonic.exe")
-# )
+format = get_format(; latex, user, sitename)
 
 ##############################################################################
 # THE PAGES
@@ -105,9 +121,11 @@ plugins  = [
     CitationBibliography(bibtex)
 ]
 
-makedocs(; sitename, authors, format, modules, plugins, pages, clean = true)
+makedocs(; sitename, authors, format, modules, plugins, pages, clean, draft)
 
-deploydocs(; repo = "github.com/$(user)/$(sitename).git")
+if "DEPLOY_DOCS" in keys(ENV) && hasproperty(format, :repolink)
+    deploydocs(; repo = deployrepo(format))
+end
 
 ##############################################################################
 # THE END

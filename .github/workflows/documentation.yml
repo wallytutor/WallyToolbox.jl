@@ -28,5 +28,6 @@ jobs:
             println("Dependencies added!");'
       - name: Build and deploy
         env:
+          DEPLOY_DOCS: 'true'
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: julia --project=docs/ docs/make.jl
