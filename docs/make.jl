@@ -16,6 +16,9 @@ using DocumenterCitations
 # This comes first because it sources the modules.
 using WallyToolbox
 
+# This is not documented, but the helpers here.
+using WallyDocuments
+
 # These contain the actual implementation of "package".
 using Cantera
 using DryAbstract
@@ -26,32 +29,6 @@ using DryMaterials
 using DryUtilities
 using OpenFOAM
 using RadCalNet
-
-##############################################################################
-# THE FUNCTIONS
-##############################################################################
-
-function get_format(; latex = false, user, sitename)
-    if (latex) 
-        return Documenter.LaTeX(;
-            platform = "tectonic",
-            tectonic = joinpath(@__DIR__, "tectonic.exe")
-        )
-    end
-
-    format = Documenter.HTML(;
-        prettyurls = get(ENV, "CI", "false") == "true",
-        canonical  = "https://$(user).github.io/$(sitename)",
-        repolink   = "https://github.com/$(user)/$(sitename)",
-        edit_link  = "main",
-        assets     = String[],
-    )
-
-    return format
-end
-
-"Generate a `repo` argument in the format expected by `deploydocs`."
-deployrepo(format) = last(split(format.repolink, "://")) * ".git"
 
 ##############################################################################
 # THE CONFIGURATION
