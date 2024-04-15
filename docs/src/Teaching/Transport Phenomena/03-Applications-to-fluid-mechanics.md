@@ -1,5 +1,7 @@
 # Applications to fluid mechanics
 
+## Derivation of continuity equation
+
 Moving towards a fluid mechanics application, one often needs to express the *continuity* equation for the overall mass of the system and the flowing species.
 
 In this case, term $b$ of previous formulation is replaced by the mass density $\rho_{m}$ of the fluid. Flux is expressed as $\vec{F}_{m}=\vec{v}_{m}\rho_{m}$, where $\vec{v}_{m}$ is the mass averaged velocity. It is useful to introduce this quantity $\vec{v}_{m}$ because in many multi-species formulations it might become difficult to find a single velocity representing the fluid motion.
@@ -21,6 +23,8 @@ Since $\rho_{m}$ is constant, this simplifies to the so-called *incompressible f
 $$
 \nabla\vec{v}_{m}=0
 $$
+
+## Application to advection-diffusion-reaction
 
 Now assume a flow where chemical species $c_{i}$ are advected by the velocity $\vec{v}_{i}$ and diffuse following the negative of their gradient. The flux in this case is given as $F_{i} = c_{i}\vec{v}_{i}-D_{i}\nabla{}c_{i}$. Applying this to the equation of conservation of $c_{i}$ leads to
 

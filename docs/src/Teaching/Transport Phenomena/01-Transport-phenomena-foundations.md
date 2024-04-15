@@ -1,7 +1,6 @@
 # Models
 
-
-Theses notes intend to provide in a very concise way the mathematical fundamentals of transport phenomena. In this sense, they are devoted to generalities rather than specific closure models. 
+## Introduction
 
 Most physical phenomena are actually discrete processes (particles); many phenomena such as heat transfer are actual discrete vibrations in materials. Such systems are described by large systems of coupled ordinary differential equations (ODE's) which quickly become intractable and require numerical solution. Continuum approximations, *i.e.* an averaging process over a representative volume element (RVE), are used to generate a *single* partial differential equation (PDE) from *many* such ODE's. This transformation leads to the concept of *conservation equations*.
 
@@ -14,6 +13,8 @@ b &= \dfrac{\#}{volume}                 &\qquad\text{concentration}  \\
 B_{v} &= \dfrac{\#}{volume\cdotp{}time} &\qquad\text{production rate}
 \end{align}
 $$
+
+## General conservation equation
 
 The most general statement of conservation of this quantity $b$ writes then:
 
@@ -38,6 +39,8 @@ For a differential volume $dV$ the integrand must be identically zero, from whic
 $$
 \frac{\partial{}b}{\partial{}t} + \nabla\cdotp{\vec{F}} - B_{v} = 0
 $$
+
+## Conservation at system boundaries
 
 So far we have a PDE describing the conservation *inside* the RVE of the system being described. To be able to solve such a system we also need to provide a description of its interactions with its surroundings through the specification of *boundary conditions*.
 
