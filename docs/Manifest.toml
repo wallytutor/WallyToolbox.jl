@@ -1,8 +1,8 @@
 # This file is machine-generated - editing it directly is not advised
 
-julia_version = "1.10.1"
+julia_version = "1.10.2"
 manifest_format = "2.0"
-project_hash = "0213876a2468f9efdb5816383c370fba2e73a1fe"
+project_hash = "40b9b4acba159f4b483fe80858e10a9f443e3170"
 
 [[deps.ADTypes]]
 git-tree-sha1 = "016833eb52ba2d6bea9fcb50ca295980e728ee24"
@@ -2019,6 +2019,12 @@ git-tree-sha1 = "769c9175942d91ed9b83fa929eee4fe6a1d128ad"
 uuid = "102ac46a-7ee4-5c85-9060-abc95bfdeaa3"
 version = "0.5.4"
 
+[[deps.Mustache]]
+deps = ["Printf", "Tables"]
+git-tree-sha1 = "a7cefa21a2ff993bff0456bf7521f46fc077ddf1"
+uuid = "ffc61752-8dc7-55ee-8c37-f3e9cdd09e70"
+version = "1.0.19"
+
 [[deps.MutableArithmetics]]
 deps = ["LinearAlgebra", "SparseArrays", "Test"]
 git-tree-sha1 = "2d106538aebe1c165e16d277914e10c550e9d9b7"
@@ -3328,7 +3334,7 @@ uuid = "a44049a8-05dd-5a78-86c9-5fde0876e88c"
 version = "1.3.243+0"
 
 [[deps.WallyToolbox]]
-deps = ["BenchmarkTools", "CSV", "CUDA", "CairoMakie", "CommonSolve", "DataFrames", "DelimitedFiles", "DifferentialEquations", "Distributions", "DocStringExtensions", "ExtendableGrids", "Flux", "HDF5", "Interpolations", "Ipopt", "JLD2", "JuMP", "LaTeXStrings", "Latexify", "Libdl", "LightXML", "LinearAlgebra", "Logging", "Luxor", "ModelingToolkit", "NaturalSort", "NumericalIntegration", "Plots", "Pluto", "PlutoUI", "Polynomials", "PrettyPrinting", "Printf", "ProgressMeter", "Psychro", "Random", "Reexport", "Revise", "Roots", "Statistics", "StatsBase", "SteamTables", "SumTypes", "Symbolics", "Trapz", "Unitful", "YAML", "cuDNN"]
+deps = ["BenchmarkTools", "CSV", "CUDA", "CairoMakie", "CommonSolve", "DataFrames", "DelimitedFiles", "DifferentialEquations", "Distributions", "DocStringExtensions", "ExtendableGrids", "Flux", "HDF5", "Interpolations", "Ipopt", "JLD2", "JuMP", "LaTeXStrings", "Latexify", "Libdl", "LightXML", "LinearAlgebra", "Logging", "Luxor", "ModelingToolkit", "Mustache", "NaturalSort", "NumericalIntegration", "Plots", "Pluto", "PlutoUI", "Polynomials", "PrettyPrinting", "Printf", "ProgressMeter", "Psychro", "Random", "Reexport", "Revise", "Roots", "Statistics", "StatsBase", "SteamTables", "SumTypes", "Symbolics", "Trapz", "Unitful", "YAML", "cuDNN"]
 path = ".."
 uuid = "969721ee-ac18-4660-9a9a-9ed720f93b3b"
 version = "0.1.0"
