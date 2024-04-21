@@ -4,6 +4,7 @@
 
 - [Solver Modules](OpenFOAM.org/Solver-Modules.md)
 - [Physical Models](OpenFOAM.org/Physical-Models.md)
+- [Drag Models](OpenFOAM.org/Drag-Models.md)
 
 ## Tips and reminders
 

@@ -31,6 +31,11 @@ $$
 C_{D} = C_{D,sphere}(1+2.632y)
 $$
 
+> [!info] The `distortedSphereDrag` model is not available for MPPIC clouds and it is also not used anywhere in the tutorials or source code. For not it does not work yet apparently.
+
+
+
+
 
 
 
