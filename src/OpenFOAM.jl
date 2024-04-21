@@ -317,9 +317,9 @@ particles per parcels. This is inteded as a helper to create a `patchInjection`
 element in the `injectionModels` of `cloudProperties` file.
 """
 function parcels_per_second(;
-        mdot::Float64,
-        rhop::Float64,
-        diam::Float64,
+        ṁ::Float64,
+        ρ::Float64,
+        d::Float64,
         nParticle::Int64 = 1
     )
     # XXX: maybe generalize to supply particle mass through interface later so
@@ -327,10 +327,10 @@ function parcels_per_second(;
     # arbitrary particle geometries though.
 
     # Total number of particles per second corresponding to `mdot`.
-    np = mdot / spheremass(rhop, diam)
+    N = ṁ / spheremass(ρ, d)
 
     # Group `nd` particles in parcels of size `nParticles`.
-    return asint(np / nParticle)
+    return asint(N / nParticle)
 end
 
 "Compose table entries in typical OpenFOAM format."

@@ -18,11 +18,6 @@ We can verify the computation of number of parcels per second of sample case
 Notice that the value of `mdot` has been reversed engineered so that it matches the expected value.
 
 ```jldoctest
-julia> OpenFOAM.parcels_per_second(;
-    mdot = 0.2,
-    rhop = 1000.0,
-    diam = 650.0e-06,
-    nParticle = 1
-)
+julia> parcels_per_second(; ṁ = 0.2, ρ = 1000.0, d = 650.0e-06, nParticle = 1)
 1390885
 ```
