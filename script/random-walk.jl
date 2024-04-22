@@ -61,10 +61,11 @@ saveas = joinpath(@__DIR__, "random-walk.mp4")
 
         z = hypot(xn-xm, yn-ym)
 
-        bullet = rand()
+        bullet = rand(rng)
         threshold = p(z, K)
 
         if bullet < threshold
+            global xn, yn, A
             xn, yn = xm, ym
             A[xn+1, yn+1] += 1
             break
@@ -74,6 +75,7 @@ saveas = joinpath(@__DIR__, "random-walk.mp4")
     # hm[3].val = A / N
 
     if n_try == max_tries
+        global frozen
         frozen += 1
     end
 end
@@ -93,4 +95,4 @@ fig = with_theme() do
     f
 end
 
-save("test.png", fig)
+save("random-walk.png", fig)

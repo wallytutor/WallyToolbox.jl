@@ -1,5 +1,7 @@
 # Generated images
 *.svg
+*.png
+*.mp4
 
 # Local scripts
 *.bat
