@@ -67,10 +67,11 @@ pages = [
     "Home" => "index.md",
 
     "Dry Packages" => [
-        "DryFlowsheet" => "DryFlowsheet/index.md",
-        "DryGranular"  => "DryGranular/index.md",
-        "DryMaterials" => "DryMaterials/index.md",
-        "Helpers"      => "helpers.md"
+        "DryCombustion" => "DryCombustion/index.md",
+        "DryFlowsheet"  => "DryFlowsheet/index.md",
+        "DryGranular"   => "DryGranular/index.md",
+        "DryMaterials"  => "DryMaterials/index.md",
+        "Helpers"       => "helpers.md"
     ],
     
     "Cantera"           => "Cantera/index.md",
