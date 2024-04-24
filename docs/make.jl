@@ -47,7 +47,7 @@ latex = false
 modules = [
     # Cantera,
     DryAbstract,
-    DruCombustion,
+    DryCombustion,
     DryConstants,
     DryFlowsheet,
     DryGranular,
