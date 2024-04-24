@@ -4,6 +4,16 @@ module DryCombustion
 export hfo_enthalpy_net_bs2869
 
 """
+    hfo_specific_heat(T::Float64, S::Float64)::Float64
+
+Heavy fuel-oil specific heat estimation in terms of relative density
+``S`` as provided by Cragoe (1929). Temperature in kelvin.
+"""
+function hfo_specific_heat(T::Float64, S::Float64)::Float64
+    return 1000.0 * (1.683 + 0.00339T) / S
+end
+
+"""
     hfo_enthalpy_net_bs2869(;
         ρ::Float64,
         x::Float64,
@@ -11,7 +21,7 @@ export hfo_enthalpy_net_bs2869
         s::Float64
     )::Float64
 
-Heavy fuel oil net energy capacity accordinto to BS2869:1983. Value
+Heavy fuel-oil net energy capacity accordinto to BS2869:1983. Value
 is computed in [MJ/kg]. Parameters are given as:
 
 - `ρ`: HFO density at 15 °C, [kg/m³].

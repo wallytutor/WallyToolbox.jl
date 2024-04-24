@@ -10,6 +10,7 @@ end
 ## Heavy fuel-oils
 
 ```@docs
+DryCombustion.hfo_specific_heat
 DryCombustion.hfo_enthalpy_net_bs2869
 ```
 
