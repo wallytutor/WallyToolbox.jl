@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 module DryCombustion
 
+export hfo_specific_heat
 export hfo_enthalpy_net_bs2869
 
 """
