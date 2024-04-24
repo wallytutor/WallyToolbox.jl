@@ -26,3 +26,7 @@ This matter enters a intrinsically multiphysics domain and problem formulation n
 [[@Sanchez2023a]] studied the combustion of biomass with help of OpenFOAM with some semi-quantitative results within 13% from the measurements, what is already considered a very good agreement in the field.
 
 - [ ] Continue the research [here](https://www.jstage.jst.go.jp/result/journal/-char/en?cdjournal=jime&globalSearchKey=heavy+fuel+oil).
+
+## Combustion of heavy oil fuel
+
+[[@Lawn1987]]

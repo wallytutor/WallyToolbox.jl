@@ -8,9 +8,9 @@ Say we have a quantity $b$ such as it represents a number $\#$ concentration of 
 
 $$
 \begin{align}
-b &= \dfrac{\#}{volume}                 &\qquad\text{concentration}  \\
-\vec{F} &= \dfrac{\#}{area\cdotp{}time} &\qquad\text{flux density}   \\
-B_{v} &= \dfrac{\#}{volume\cdotp{}time} &\qquad\text{production rate}
+b &= \dfrac{\#}{\text{volume}}                 &\qquad\text{concentration}  \\
+\vec{F} &= \dfrac{\#}{\text{area}\cdotp{}\text{time}} &\qquad\text{flux density}   \\
+B_{v} &= \dfrac{\#}{\text{volume}\cdotp{}\text{time}} &\qquad\text{production rate}
 \end{align}
 $$
 

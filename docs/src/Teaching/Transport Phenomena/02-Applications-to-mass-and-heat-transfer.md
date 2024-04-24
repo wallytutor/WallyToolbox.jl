@@ -116,6 +116,31 @@ $$
 
 ### Concentrated mixtures
 
-On the other limit one finds the concentrated mixtures for which particle-particle interactions intervene on the probability distribution of motion and results obtained through *non-equilibrium thermodynamics* lead to a more complex law.
+On the other limit one finds the concentrated mixtures for which particle-particle interactions intervene on the probability distribution of motion and results obtained through *non-equilibrium thermodynamics* lead to a more complex law. Particle interactions may be simple collisions or involve more complex physics, such as electrodynamic forces; a direct solution through statistical approaches in this case quickly becomes intractable mathematically.
 
+$$
+\mu = \dfrac{\partial{}G}{\partial{}N}=\mu^{\theta}+k_{B}T\log(a)
+$$
+
+$$
+a=\gamma\tilde{c}\qquad\text{where}\qquad\tilde{c}=\dfrac{c}{c_{sat}}
+$$
+
+$$
+\begin{align}
+M &= \dfrac{\text{drift velocity}}{\text{force}}                 &\qquad\text{mobility}
+\end{align}
+$$
+
+$$
+\vec{F}=-Mc\nabla{}\mu=c\vec{v}_{drift}\qquad\text{where}\qquad{}\vec{v}_{drift} = -M\nabla\mu
+$$
+
+Einstein relation:
+
+$$
+M=\dfrac{D}{k_{B}T}
+$$
+
+> [!info] The development of *linear irreversible thermodynamics* (LIT) is found in ([[@Onsager1931]]) [Onsager1931](@cite) and the following ([[@Onsager1931a]]) [Onsager1931a](@cite).
 
