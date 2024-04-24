@@ -22,6 +22,7 @@ using WallyDocuments
 # These contain the actual implementation of "package".
 using Cantera
 using DryAbstract
+using DryCombustion
 using DryConstants
 using DryFlowsheet
 using DryGranular
@@ -46,6 +47,7 @@ latex = false
 modules = [
     # Cantera,
     DryAbstract,
+    DruCombustion,
     DryConstants,
     DryFlowsheet,
     DryGranular,
