@@ -118,7 +118,7 @@ $$
 
 On the other limit one finds the concentrated mixtures for which particle-particle interactions intervene on the probability distribution of motion and results obtained through *non-equilibrium thermodynamics* lead to a more complex law. Particle interactions may be simple collisions or involve more complex physics, such as electrodynamic forces; a direct solution through statistical approaches in this case quickly becomes intractable mathematically.
 
-In what follows we will derive the diffusion equation from the aforementioned thermodynamic principles. The chemical potential (for more see [this annex](A3-Thermodynamics-Concepts)) is defined as the *sensitivity* of Gibbs free energy $G$ with respect to the number of moles $N$ of a substance. Expressed in terms of activity $a$ we have:
+In what follows we will derive the diffusion equation from the aforementioned thermodynamic principles. The chemical potential (for more see [this annex](A3-Thermodynamics-Concepts.md)) is defined as the *sensitivity* of Gibbs free energy $G$ with respect to the number of moles $N$ of a substance. Expressed in terms of activity $a$ we have:
 
 $$
 \mu = \dfrac{\partial{}G}{\partial{}N}=\mu^{\theta}+k_{B}T\ln(a)

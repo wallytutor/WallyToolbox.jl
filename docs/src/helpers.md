@@ -43,7 +43,7 @@ CurrentModule = DryElements
 ```
 
 ```@autodocs
-Modules = [ DryFlowsheet ]
+Modules = [ DryElements ]
 ```
 
 ## DryUtilities
