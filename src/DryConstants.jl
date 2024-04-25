@@ -35,7 +35,7 @@ export C_REF
 const M_AIR::Float64 = 0.0289647
 export M_AIR
 
-""" Instantiation of stable elements table. """
+"Instantiation of stable elements table."
 const STABLE_ELEMENTS_TABLE = StableElementsTable()
 export STABLE_ELEMENTS_TABLE
 
