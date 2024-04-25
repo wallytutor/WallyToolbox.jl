@@ -118,44 +118,52 @@ $$
 
 On the other limit one finds the concentrated mixtures for which particle-particle interactions intervene on the probability distribution of motion and results obtained through *non-equilibrium thermodynamics* lead to a more complex law. Particle interactions may be simple collisions or involve more complex physics, such as electrodynamic forces; a direct solution through statistical approaches in this case quickly becomes intractable mathematically.
 
+In what follows we will derive the diffusion equation from the aforementioned thermodynamic principles. The chemical potential (for more see [this annex](A3-Thermodynamics-Concepts)) is defined as the *sensitivity* of Gibbs free energy $G$ with respect to the number of moles $N$ of a substance. Expressed in terms of activity $a$ we have:
+
 $$
 \mu = \dfrac{\partial{}G}{\partial{}N}=\mu^{\theta}+k_{B}T\ln(a)
 $$
+
+The activity of non-ideal solutions is itself a function of a relative concentration $\tilde{c}$ through a proportionality coefficient $\gamma$, the so-called activity coefficient, which by its turn can also be a function of composition. The reference concentration $c_{sat}$ to the definition of $\tilde{c}$ is the concentration at which a phase change happens; that said, the activity may be seen as a measure of the *tendency* towards phase change. This is all expressed as
 
 $$
 a=\gamma\tilde{c}\qquad\text{where}\qquad\tilde{c}=\dfrac{c}{c_{sat}}
 $$
 
-$$
-\begin{align}
-M &= \dfrac{\text{drift velocity}}{\text{force}}                 &\qquad\text{mobility}
-\end{align}
-$$
+
+Now let's Einstein relationship between mobility $M$ and the diffusivity $D$. Mobility is defined as the capacity a given force is able to produce a net drift velocity in the system; it is related to $D$ as
 
 $$
-\vec{F}=-Mc\nabla{}\mu=c\vec{v}_{drift}\qquad\text{where}\qquad{}\vec{v}_{drift} = -M\nabla\mu
+M = \dfrac{\text{drift velocity}}{\text{force}} =\dfrac{D}{k_{B}T}
 $$
 
-Einstein relation:
+From *linear irreversible thermodynamics* (LIT) we can express the flux as
 
 $$
-M=\dfrac{D}{k_{B}T}
+\vec{F}=-Mc\nabla{}\mu=\vec{v}_{drift}c\qquad\text{where}\qquad{}\vec{v}_{drift} = -M\nabla\mu
 $$
 
-> [!info] The development of *linear irreversible thermodynamics* (LIT) is found in ([[@Onsager1931]]) [Onsager1931](@cite) and the following ([[@Onsager1931a]]) [Onsager1931a](@cite).
+> [!info] The development of (LIT) is found in ([[@Onsager1931]]) [Onsager1931](@cite) and the following ([[@Onsager1931a]]) [Onsager1931a](@cite). Notice that the above paragraph needs more grounding, it has been thrown in the text as a truth without first-principles demonstration and that is against our goals here!
 
-Because $\log(\tilde{c})=\log(c)-\log(c_{sat})$ and $c_{sat}$ is a constant, then developing $\nabla\mu$ leads to:
+Because $\log(\tilde{c})=\log(c)-\log(c_{sat})$ and $c_{sat}$ is a constant, then developing $\nabla\mu$ leads to
 
 $$
 \nabla\mu = k_{B}T\left(\dfrac{1}{c}+\dfrac{1}{\gamma}\dfrac{\partial\gamma}{\partial{}c}\right)\nabla{}c
 $$
 
+Applying this result to the previous expression and reworking the terms leads to
+
 $$
 \vec{F}=-D\left(1 + \dfrac{c}{\gamma}\dfrac{\partial\gamma}{\partial{}c}\right)\nabla{}c=-D\left(1 + \dfrac{\partial\ln\gamma}{\partial\ln{}c}\right)\nabla{}c
 $$
+
+Here we can identify the chemical diffusivity by comparison with Fick's law as
 
 $$
 D_{chem} = -D\left(1 + \dfrac{\partial\ln\gamma}{\partial\ln{}c}\right)
 $$
 
 In the above expression, the second term in the sum is called the *thermodynamic factor*. In the limit of dilute system for which $\gamma=1$ we fall back to $D_{chem}=D$, showing that the concentrated mixture approach is a proper generalization of the previous model for diluted systems.
+
+## Application to diffusion in a lattice
+
