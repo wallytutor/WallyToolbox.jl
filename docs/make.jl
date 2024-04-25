@@ -24,6 +24,7 @@ using Cantera
 using DryAbstract
 using DryCombustion
 using DryConstants
+using DryElements
 using DryFlowsheet
 using DryGranular
 using DryMaterials
@@ -49,6 +50,7 @@ modules = [
     DryAbstract,
     DryCombustion,
     DryConstants,
+    DryElements,
     DryFlowsheet,
     DryGranular,
     DryMaterials,

@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 module DryConstants
 
+using DryElements: StableElementsTable
+
 "Ideal gas constant [J/(mol.K)]."
 const GAS_CONSTANT::Float64 = 8.314_462_618_153_24
 export GAS_CONSTANT
@@ -32,5 +34,9 @@ export C_REF
 "Air mean molecular mass [kg/mol]."
 const M_AIR::Float64 = 0.0289647
 export M_AIR
+
+""" Instantiation of stable elements table. """
+const STABLE_ELEMENTS_TABLE = StableElementsTable()
+export STABLE_ELEMENTS_TABLE
 
 end # (module DryConstants)

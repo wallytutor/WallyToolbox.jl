@@ -28,7 +28,9 @@ begin
     using PrettyPrinting
     using Printf: @sprintf
     using Trapz: trapz
+    
     using WallyToolbox
+    using DryConstants
 end
 
 # ╔═╡ ce8f4ea4-013c-4f73-9d0d-7c84cd29285d

@@ -31,8 +31,9 @@ begin
     using Printf: @sprintf
     using Symbolics: scalarize
     using Trapz: trapz
-    using WallyToolbox
 
+    using WallyToolbox
+    using DryConstants
     import DryMaterials as DM
 end
 

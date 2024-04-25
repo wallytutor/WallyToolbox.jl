@@ -36,6 +36,16 @@ DryConstants.ONE_ATM
 DryConstants.M_AIR
 ```
 
+## DryElements
+
+```@meta
+CurrentModule = DryElements
+```
+
+```@autodocs
+Modules = [ DryFlowsheet ]
+```
+
 ## DryUtilities
 
 ```@meta
