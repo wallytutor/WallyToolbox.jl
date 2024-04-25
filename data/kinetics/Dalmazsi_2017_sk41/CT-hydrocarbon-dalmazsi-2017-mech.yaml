@@ -733,6 +733,22 @@ species:
     polarizability: 1.76
     rotational-relaxation: 4.0
   note: '121286'
+- name: Cs
+  composition: {C: 1}
+  thermo:
+    model: NASA7
+    temperature-ranges: [300.0, 1000.0, 5000.0]
+    data:
+    - [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+    - [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  transport:
+    model: gas
+    geometry: linear
+    diameter: 3.621
+    well-depth: 97.53
+    polarizability: 1.76
+    rotational-relaxation: 4.0
+  note: 'DUMMY'
 
 reactions:
 - equation: H + H + M <=> H2 + M  # Reaction 1
