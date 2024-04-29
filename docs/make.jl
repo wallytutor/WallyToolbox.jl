@@ -95,6 +95,20 @@ pages = [
 ]
 
 ##############################################################################
+# PREPROCESS ALL
+##############################################################################
+
+# https://fredrikekre.github.io/Literate.jl/v2/customprocessing/
+# https://discourse.julialang.org/t/julia-within-obsidian-notes/102465
+#
+# TODO: generate src on the fly and pre-process all files:
+# for (root, _, files) in walkdir(joinpath(@__DIR__, "src"))
+#     for file in files
+#         endswith(file, ".md") && println(joinpath(root, file))
+#     end
+# end
+
+##############################################################################
 # THE DOCUMENTATION
 ##############################################################################
 
