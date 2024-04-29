@@ -7,10 +7,6 @@ DocTestSetup  = quote
 end
 ```
 
-## Theory guide
-
-
-
 ## Documentation
 
 ```@autodocs
