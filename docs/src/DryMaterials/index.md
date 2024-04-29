@@ -50,6 +50,19 @@ DryMaterials.shomateentropy
 
 ## Ongoing documentation
 
-```@autodocs
-Modules = [ DryMaterials ]
+```@docs
+DryMaterials.H_AIR
+DryMaterials.PureAir
+DryMaterials.PureMineral
+DryMaterials.PureWater
+DryMaterials.SolidMineralPhase
+DryMaterials.getshomatesilica
+DryMaterials.getamorphoussilica
+DryMaterials.getkaolinite
+DryMaterials.getmetakaolin
+DryMaterials.getspinel
+DryMaterials.enthalpy
+DryMaterials.specificheat
+DryMaterials.density
+DryMaterials.molecularmass
 ```

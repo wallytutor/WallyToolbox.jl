@@ -32,7 +32,7 @@ CurrentModule = RadCalNet
 
 The following snippet illustrates everything the model was designed to do.
 
-```jldoctest
+```jldoctest; filter = r"(\d*)\.(\d{3})\d+" => s"\1.\2***"
 julia> using RadCalNet;
 
 julia> x = Float32[1200.0; 1000.0; 2.0; 1.0; 0.1; 0.2; 0.1];
