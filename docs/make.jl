@@ -28,6 +28,7 @@ using DryElements
 using DryFlowsheet
 using DryGranular
 using DryMaterials
+using DryTransport
 using DryUtilities
 using OpenFOAM
 using RadCalNet
@@ -54,6 +55,7 @@ modules = [
     DryFlowsheet,
     DryGranular,
     DryMaterials,
+    DryTransport,
     DryUtilities,
     OpenFOAM,
     RadCalNet,
@@ -75,6 +77,7 @@ pages = [
         "DryFlowsheet"  => "DryFlowsheet/index.md",
         "DryGranular"   => "DryGranular/index.md",
         "DryMaterials"  => "DryMaterials/index.md",
+        "DryTransport"  => "DryTransport/index.md",
         "Helpers"       => "helpers.md"
     ],
     
