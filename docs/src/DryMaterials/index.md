@@ -51,18 +51,28 @@ DryMaterials.shomateentropy
 ## Ongoing documentation
 
 ```@docs
+DryMaterials.SolidMineralPhase
+DryMaterials.enthalpy
+DryMaterials.specificheat
+DryMaterials.density
+DryMaterials.molecularmass
+```
+
+## Hard-coded materials
+
+```@docs
 DryMaterials.H_AIR
 DryMaterials.PureAir
 DryMaterials.PureMineral
 DryMaterials.PureWater
-DryMaterials.SolidMineralPhase
+```
+
+## Temporary (moving to database)
+
+```@docs
 DryMaterials.getshomatesilica
 DryMaterials.getamorphoussilica
 DryMaterials.getkaolinite
 DryMaterials.getmetakaolin
 DryMaterials.getspinel
-DryMaterials.enthalpy
-DryMaterials.specificheat
-DryMaterials.density
-DryMaterials.molecularmass
 ```
