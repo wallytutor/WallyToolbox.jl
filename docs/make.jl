@@ -98,9 +98,14 @@ pages = [
 # PREPROCESS ALL
 ##############################################################################
 
-# https://fredrikekre.github.io/Literate.jl/v2/customprocessing/
-# https://discourse.julialang.org/t/julia-within-obsidian-notes/102465
-# TODO: generate src on the fly and pre-process all files:
+function preprocess(content)
+    # TODO increase robustness of solution.
+    # https://stackoverflow.com/questions/14182879
+    # https://tex.stackexchange.com/questions/621461
+    oldgroup = r"\$\$(?<named>[^$]*)\$\$"
+    newgroup = s"```math\g<named>```"
+    return replace(content, oldgroup => newgroup)
+end
 
 # Directories to ignore in search (in source roots only!).
 ignores = [".gitignore", ".obsidian"]
@@ -137,7 +142,12 @@ for (root, dirs, files) in walkdir(spath)
         @info("Processing $(apath)")
 
         if endswith(file, ".md")
-            # TODO: preprocess here
+            content = open(apath) do io
+                preprocess(read(io, String))
+            end
+            open(dpath, "w") do io
+                write(io, content)
+            end
         else
             cp(apath, dpath; force = true)
         end
@@ -148,19 +158,19 @@ end
 # THE DOCUMENTATION
 ##############################################################################
 
-# for m in modules
-#     setdocmeta!(m, :DocTestSetup, :(using m); warn = false, recursive = true)
-# end
+for m in modules
+    setdocmeta!(m, :DocTestSetup, :(using m); warn = false, recursive = true)
+end
 
-# plugins  = [
-#     CitationBibliography(bibtex)
-# ]
+plugins  = [
+    CitationBibliography(bibtex)
+]
 
-# makedocs(; sitename, authors, format, modules, plugins, pages, clean, draft)
+makedocs(; sitename, authors, format, modules, plugins, pages, clean, draft)
 
-# if "DEPLOY_DOCS" in keys(ENV) && hasproperty(format, :repolink)
-#     deploydocs(; repo = deployrepo(format))
-# end
+if "DEPLOY_DOCS" in keys(ENV) && hasproperty(format, :repolink)
+    deploydocs(; repo = deployrepo(format))
+end
 
 ##############################################################################
 # THE END
