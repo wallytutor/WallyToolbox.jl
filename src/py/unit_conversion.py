@@ -1,7 +1,11 @@
 # -*- coding: utf-8 -*-
 from typing import Optional
-import cantera as ct
 import numpy as np
+
+try:
+    import cantera as ct
+except ModuleNotFoundError as err:
+    print(f"FlowUnits will not be available: {err}")
 
 
 class FlowUnits:
@@ -23,7 +27,7 @@ class FlowUnits:
     T_NORMAL: float = 273.15
     P_NORMAL: float = 100_000.0
     T_STANDARD: float = 273.15
-    P_STANDARD: float = ct.one_atm
+    P_STANDARD: float = 101325.0
 
     @classmethod
     def normal_concentration(cls) -> float:
@@ -57,7 +61,7 @@ class FlowUnits:
             cls, 
             q: float,
             T_work: Optional[float] = 298.15,
-            P_work: Optional[float] = ct.one_atm,
+            P_work: Optional[float] = 101325.0,
             A_cross: Optional[float] = 1.0
         ) -> float:
         """ Convert laboratory gas flow in Scm³/min to mean speed in m/s.
