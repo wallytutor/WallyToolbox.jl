@@ -88,9 +88,10 @@ pages = [
     "References"        => "References/index.md",
 
     "Teaching"          => [
-        "Basilisk"         => "Teaching/Basilisk/Basilisk.md",
-        "OpenFOAM"         => "Teaching/OpenFOAM/index.md",
-        "Machine Learning" => "Teaching/Machine Learning/index.md",
+        "Machine Learning"    => "Teaching/Machine Learning/index.md",
+        "Transport Phenomena" => "Teaching/Transport Phenomena/index.md",
+        "Basilisk"            => "Teaching/Basilisk/Basilisk.md",
+        "OpenFOAM"            => "Teaching/OpenFOAM/index.md",
     ],
 ]
 
@@ -98,61 +99,9 @@ pages = [
 # PREPROCESS ALL
 ##############################################################################
 
-function preprocess(content)
-    # TODO increase robustness of solution.
-    # https://stackoverflow.com/questions/14182879
-    # https://tex.stackexchange.com/questions/621461
-    oldgroup = r"\$\$(?<named>[^$]*)\$\$"
-    newgroup = s"```math\g<named>```"
-    return replace(content, oldgroup => newgroup)
-end
-
-# Directories to ignore in search (in source roots only!).
-ignores = [".gitignore", ".obsidian"]
-
-# Path of documentation sources.
 spath = joinpath(@__DIR__, "src")
-
-# Path of generated files.
-wpath = joinpath(@__DIR__, "sandbox")
-
-# Ensure directory exists.
-!isdir(wpath) && mkpath(wpath)
-
-for (root, dirs, files) in walkdir(spath)
-    for file in files
-        # Absolute path of file in sources.
-        apath = joinpath(root, file)
-
-        # Relative path of file from source root.
-        rpath = relpath(apath, spath)
-
-        # Check if not in list of ignored paths.
-        any(p->startswith(rpath, p), ignores) && continue
-
-        # Destination path of processed file.
-        dpath = joinpath(wpath, rpath)
-
-        # Directory name of processed file.
-        fpath = dirname(dpath)
-
-        # Ensure directory exists.
-        !isdir(fpath) && mkpath(fpath)
-
-        @info("Processing $(apath)")
-
-        if endswith(file, ".md")
-            content = open(apath) do io
-                preprocess(read(io, String))
-            end
-            open(dpath, "w") do io
-                write(io, content)
-            end
-        else
-            cp(apath, dpath; force = true)
-        end
-    end
-end
+wpath = joinpath(@__DIR__, "tmp")
+julianizeequations(; spath, wpath)
 
 ##############################################################################
 # THE DOCUMENTATION
@@ -166,7 +115,8 @@ plugins  = [
     CitationBibliography(bibtex)
 ]
 
-makedocs(; sitename, authors, format, modules, plugins, pages, clean, draft)
+makedocs(; source = wpath,
+           sitename, authors, format, modules, plugins, pages, clean, draft)
 
 if "DEPLOY_DOCS" in keys(ENV) && hasproperty(format, :repolink)
     deploydocs(; repo = deployrepo(format))
