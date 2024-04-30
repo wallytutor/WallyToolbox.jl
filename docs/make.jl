@@ -100,31 +100,67 @@ pages = [
 
 # https://fredrikekre.github.io/Literate.jl/v2/customprocessing/
 # https://discourse.julialang.org/t/julia-within-obsidian-notes/102465
-#
 # TODO: generate src on the fly and pre-process all files:
-# for (root, _, files) in walkdir(joinpath(@__DIR__, "src"))
-#     for file in files
-#         endswith(file, ".md") && println(joinpath(root, file))
-#     end
-# end
+
+# Directories to ignore in search (in source roots only!).
+ignores = [".gitignore", ".obsidian"]
+
+# Path of documentation sources.
+spath = joinpath(@__DIR__, "src")
+
+# Path of generated files.
+wpath = joinpath(@__DIR__, "sandbox")
+
+# Ensure directory exists.
+!isdir(wpath) && mkpath(wpath)
+
+for (root, dirs, files) in walkdir(spath)
+    for file in files
+        # Absolute path of file in sources.
+        apath = joinpath(root, file)
+
+        # Relative path of file from source root.
+        rpath = relpath(apath, spath)
+
+        # Check if not in list of ignored paths.
+        any(p->startswith(rpath, p), ignores) && continue
+
+        # Destination path of processed file.
+        dpath = joinpath(wpath, rpath)
+
+        # Directory name of processed file.
+        fpath = dirname(dpath)
+
+        # Ensure directory exists.
+        !isdir(fpath) && mkpath(fpath)
+
+        @info("Processing $(apath)")
+
+        if endswith(file, ".md")
+            # TODO: preprocess here
+        else
+            cp(apath, dpath; force = true)
+        end
+    end
+end
 
 ##############################################################################
 # THE DOCUMENTATION
 ##############################################################################
 
-for m in modules
-    setdocmeta!(m, :DocTestSetup, :(using m); warn = false, recursive = true)
-end
+# for m in modules
+#     setdocmeta!(m, :DocTestSetup, :(using m); warn = false, recursive = true)
+# end
 
-plugins  = [
-    CitationBibliography(bibtex)
-]
+# plugins  = [
+#     CitationBibliography(bibtex)
+# ]
 
-makedocs(; sitename, authors, format, modules, plugins, pages, clean, draft)
+# makedocs(; sitename, authors, format, modules, plugins, pages, clean, draft)
 
-if "DEPLOY_DOCS" in keys(ENV) && hasproperty(format, :repolink)
-    deploydocs(; repo = deployrepo(format))
-end
+# if "DEPLOY_DOCS" in keys(ENV) && hasproperty(format, :repolink)
+#     deploydocs(; repo = deployrepo(format))
+# end
 
 ##############################################################################
 # THE END
