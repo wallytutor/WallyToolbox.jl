@@ -2,7 +2,7 @@
 
 julia_version = "1.10.1"
 manifest_format = "2.0"
-project_hash = "a09ce1a1b211be8b73d1664a2e2aae22011b6dea"
+project_hash = "16e503fb2b5c20e4e4b8ea2f38833dc079c740a9"
 
 [[deps.ADTypes]]
 git-tree-sha1 = "016833eb52ba2d6bea9fcb50ca295980e728ee24"
@@ -1156,6 +1156,18 @@ git-tree-sha1 = "53bb909d1151e57e2484c3d1b53e19552b887fb2"
 uuid = "42e2da0e-8278-4e71-bc24-59509adca0fe"
 version = "1.0.2"
 
+[[deps.Gumbo]]
+deps = ["AbstractTrees", "Gumbo_jll", "Libdl"]
+git-tree-sha1 = "a1a138dfbf9df5bace489c7a9d5196d6afdfa140"
+uuid = "708ec375-b3d6-5a57-a7ce-8257bf98657a"
+version = "0.8.2"
+
+[[deps.Gumbo_jll]]
+deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
+git-tree-sha1 = "29070dee9df18d9565276d68a596854b1764aa38"
+uuid = "528830af-5a63-567c-a44a-034ed33b8444"
+version = "0.10.2+0"
+
 [[deps.HDF5]]
 deps = ["Compat", "HDF5_jll", "Libdl", "MPIPreferences", "Mmap", "Preferences", "Printf", "Random", "Requires", "UUIDs"]
 git-tree-sha1 = "26407bd1c60129062cec9da63dc7d08251544d53"
@@ -1179,6 +1191,12 @@ deps = ["Base64", "CodecZlib", "ConcurrentUtilities", "Dates", "ExceptionUnwrapp
 git-tree-sha1 = "8e59b47b9dc525b70550ca082ce85bcd7f5477cd"
 uuid = "cd3eb016-35fb-5094-929b-558a96fad6f3"
 version = "1.10.5"
+
+[[deps.HarfBuzz_ICU_jll]]
+deps = ["Artifacts", "Cairo_jll", "Fontconfig_jll", "FreeType2_jll", "Glib_jll", "Graphite2_jll", "HarfBuzz_jll", "ICU_jll", "JLLWrappers", "Libdl", "Libffi_jll", "Pkg"]
+git-tree-sha1 = "6ccbc4fdf65c8197738c2d68cc55b74b19c97ac2"
+uuid = "655565e8-fb53-5cb3-b0cd-aec1ca0647ea"
+version = "2.8.1+0"
 
 [[deps.HarfBuzz_jll]]
 deps = ["Artifacts", "Cairo_jll", "Fontconfig_jll", "FreeType2_jll", "Glib_jll", "Graphite2_jll", "JLLWrappers", "Libdl", "Libffi_jll", "Pkg"]
@@ -1215,6 +1233,12 @@ deps = ["Tricks"]
 git-tree-sha1 = "7134810b1afce04bbc1045ca1985fbe81ce17653"
 uuid = "ac1192a8-f4b3-4bfe-ba22-af5b92cd3ab2"
 version = "0.9.5"
+
+[[deps.ICU_jll]]
+deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
+git-tree-sha1 = "20b6765a3016e1fca0c9c93c80d50061b94218b7"
+uuid = "a51ab1cf-af8e-5615-a023-bc2c838bba6b"
+version = "69.1.0+0"
 
 [[deps.IOCapture]]
 deps = ["Logging", "Random"]
@@ -2409,6 +2433,12 @@ deps = ["ExpressionExplorer", "InteractiveUtils", "Markdown"]
 git-tree-sha1 = "4bc5284f77d731196d3e97f23abb732ad6f2a6e4"
 uuid = "72656b73-756c-7461-726b-72656b6b696b"
 version = "1.0.4"
+
+[[deps.PlutoStaticHTML]]
+deps = ["AbstractTrees", "Base64", "Dates", "Gumbo", "LazyArtifacts", "Pkg", "Pluto", "PrecompileTools", "RelocatableFolders", "SHA", "TOML", "tectonic_jll"]
+git-tree-sha1 = "64b0a199284ef38cf6bbd02effb69d01a03763ea"
+uuid = "359b1769-a58e-495b-9770-312e911026ad"
+version = "6.0.21"
 
 [[deps.PlutoUI]]
 deps = ["AbstractPlutoDingetjes", "Base64", "ColorTypes", "Dates", "FixedPointNumbers", "Hyperscript", "HypertextLiteral", "IOCapture", "InteractiveUtils", "JSON", "Logging", "MIMEs", "Markdown", "Random", "Reexport", "URIs", "UUIDs"]
@@ -3721,6 +3751,12 @@ deps = ["Artifacts", "Hwloc_jll", "JLLWrappers", "Libdl", "PMIx_jll", "libevent_
 git-tree-sha1 = "5adb2d7a18a30280feb66cad6f1a1dfdca2dc7b0"
 uuid = "eb928a42-fffd-568d-ab9c-3f5d54fc65b9"
 version = "3.0.2+0"
+
+[[deps.tectonic_jll]]
+deps = ["Artifacts", "Fontconfig_jll", "FreeType2_jll", "Graphite2_jll", "HarfBuzz_ICU_jll", "HarfBuzz_jll", "ICU_jll", "JLLWrappers", "Libdl", "OpenSSL_jll", "Zlib_jll", "libpng_jll"]
+git-tree-sha1 = "34e306e658f1e566e03e53dd08991931a76b6be2"
+uuid = "d7dd28d6-a5e6-559c-9131-7eb760cdacc5"
+version = "0.14.1+0"
 
 [[deps.x264_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]

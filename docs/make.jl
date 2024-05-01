@@ -2,6 +2,7 @@
 using Documenter
 using Documenter.DocMeta: setdocmeta!
 using DocumenterCitations
+import PlutoStaticHTML
 
 ##############################################################################
 # THE DOCUMENTED *PACKAGES*

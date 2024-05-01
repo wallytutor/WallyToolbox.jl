@@ -23,7 +23,9 @@ function get_format(; latex = false, user, sitename)
         repolink   = "https://github.com/$(user)/$(sitename)",
         edit_link  = "main",
         assets     = String[],
-        # size_threshold_ignore = [ TODO ],
+        size_threshold_warn = 1_000_000,
+        size_threshold = 2_000_000,
+        example_size_threshold = 2_000_000
     )
 
     return format
