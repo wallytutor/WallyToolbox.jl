@@ -1,5 +1,9 @@
 # Kramers' model
 
+```@meta
+EditURL = "/WallyToolbox.jl/docs/src/DryGranular/kramers.md"
+```
+
 ```@setup kramers
 using CairoMakie
 using CSV

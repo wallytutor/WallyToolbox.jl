@@ -6,6 +6,7 @@ DocTestSetup  = quote
     using Statistics
     using DryGranular
 end
+EditURL = "/WallyToolbox.jl/docs/src/DryGranular/index.md"
 ```
 
 ## General porous media

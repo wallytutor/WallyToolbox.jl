@@ -1,5 +1,10 @@
 # RadCalNet
 
+```@meta
+CurrentModule = RadCalNet
+EditURL = "/WallyToolbox.jl/docs/src/RadCalNet/index.md"
+```
+    
 Radiation properties machine learning model trained on RadCal.
 
 In this project we use the re-implementation of
@@ -25,10 +30,6 @@ predicted over the whole range.
 ![Model testing](media/testing.png)
 
 ## Usage
-
-```@meta
-CurrentModule = RadCalNet
-```
 
 The following snippet illustrates everything the model was designed to do.
 
