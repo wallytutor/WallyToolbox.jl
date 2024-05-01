@@ -8,7 +8,7 @@
 	- All residuals are going down adequately, allowing us to move to the next step. 
 	- Calculation took approximately 10 seconds with 1 core.
 
-- [x] Previous case is copied and support to RAS $k-\varepsilon$ ([[@Launder1974]]) [Launder1974](@cite) is implemented:
+- [x] Previous case is copied and support to RAS $k-\varepsilon$ ([[@Launder1974]]) is implemented:
 	- With inclusion of turbulence the actual outlet velocity matches the expected value (that was unphysical in the previous simulation), validating the approach.
 	- Entry length is verified through velocity and turbulent viscosity, confirming the need to extend the domain for a proper development.
 	- The number of iterations was increased to 200 to ensure that everything has properly converged, reaching an extremely low residuals level for all variables.

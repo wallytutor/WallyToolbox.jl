@@ -76,7 +76,7 @@ These inherit from [HeatTransferModel](https://cpp.openfoam.org/v11/classFoam_1_
 | Type                                                                            | Description                                                                                                                                                    |
 | ------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | [NoHeatTransfer](https://cpp.openfoam.org/v11/classFoam_1_1NoHeatTransfer.html) | Dummy class for the `none` option.                                                                                                                             |
-| [RanzMarshall](https://cpp.openfoam.org/v11/classFoam_1_1RanzMarshall.html)     | The Ranz-Marshall ([[@Ranz1952]]) [Ranz1952](@cite) correlation for heat transfer. For a more recent review, see *e.g.* ([[@Aissa2015a]]) [Aissa2015a](@cite). |
+| [RanzMarshall](https://cpp.openfoam.org/v11/classFoam_1_1RanzMarshall.html)     | The Ranz-Marshall ([[@Ranz1952]]) correlation for heat transfer. For a more recent review, see *e.g.* ([[@Aissa2015a]]). |
 
 ## [MPPICCloud](https://cpp.openfoam.org/v11/classFoam_1_1MPPICCloud.html) models
 
@@ -96,7 +96,7 @@ These inherit from [PhaseChangeModel](https://cpp.openfoam.org/v11/classFoam_1_1
 | --------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
 | [NoPhaseChange](https://cpp.openfoam.org/v11/classFoam_1_1NoPhaseChange.html)                 | Dummy class for the `none` option.                                                                                         |
 | [LiquidEvaporation](https://cpp.openfoam.org/v11/classFoam_1_1LiquidEvaporation.html)         | Liquid evaporation model using ideal gas assumption.                                                                       |
-| [LiquidEvaporationBoil](https://cpp.openfoam.org/v11/classFoam_1_1LiquidEvaporationBoil.html) | Liquid evaporation model using ideal gas assumption and includes boiling model based on ([[@Zuo2000a]]) [Zuo2000a](@cite). |
+| [LiquidEvaporationBoil](https://cpp.openfoam.org/v11/classFoam_1_1LiquidEvaporationBoil.html) | Liquid evaporation model using ideal gas assumption and includes boiling model based on ([[@Zuo2000a]]). |
 
 ## [ReactingMultiphaseCloud](https://cpp.openfoam.org/v11/classFoam_1_1ReactingMultiphaseCloud.html) models
 

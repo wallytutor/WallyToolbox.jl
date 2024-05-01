@@ -112,7 +112,7 @@ $$
 $$
 
 
-> [!info] More about this in chapter 4 of ([[@Mehrer2007]]) [Mehrer2007](@cite).
+> [!info] More about this in chapter 4 of ([[@Mehrer2007]]).
 
 ### Concentrated mixtures
 
@@ -143,7 +143,7 @@ $$
 \vec{F}=-Mc\nabla{}\mu=\vec{v}_{drift}c\qquad\text{where}\qquad{}\vec{v}_{drift} = -M\nabla\mu
 $$
 
-> [!info] The development of (LIT) is found in ([[@Onsager1931]]) [Onsager1931](@cite) and the following ([[@Onsager1931a]]) [Onsager1931a](@cite). Notice that the above paragraph needs more grounding, it has been thrown in the text as a truth without first-principles demonstration and that is against our goals here!
+> [!info] The development of (LIT) is found in ([[@Onsager1931]]) and the following ([[@Onsager1931a]]). Notice that the above paragraph needs more grounding, it has been thrown in the text as a truth without first-principles demonstration and that is against our goals here!
 
 Because $\log(\tilde{c})=\log(c)-\log(c_{sat})$ and $c_{sat}$ is a constant, then developing $\nabla\mu$ leads to
 

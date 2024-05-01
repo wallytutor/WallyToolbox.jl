@@ -1,6 +1,6 @@
 ## Granular flows
 
-- **Parcel** is a computational particle unit that may be composed of several particles which are all identical sharing a state, which include velocity, size, temperature, etc. See ([[@ORourke2010]]) [ORourke2010](@cite) for details.
+- **Parcel** is a computational particle unit that may be composed of several particles which are all identical sharing a state, which include velocity, size, temperature, etc. See ([[@ORourke2010]]) for details.
 
 - **Cloud** is the term OpenFOAM uses to describe particle flows. Here we will use both `MPPICCloud` and`collidingCloud`, other types being available for reacting or multiphase solvers, such as `thermoCloud`.
 ## Technological
