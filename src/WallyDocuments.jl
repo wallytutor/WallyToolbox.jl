@@ -4,7 +4,7 @@ module WallyDocuments
 using Documenter
 using Documenter.DocMeta: setdocmeta!
 
-export get_format, deployrepo, julianizeequations
+export get_format, deployrepo, julianizemarkdown
 
 
 "Get format specified to generate docs."
@@ -35,18 +35,12 @@ deployrepo(format) = last(split(format.repolink, "://")) * ".git"
 
 
 "Convert equations from dollar to Julia ticks notation."
-function julianizeequations(;
+function julianizemarkdown(;
+        formatter::Function,
         spath::String,
         wpath::String,
         ignores::Vector{String} = [".gitignore", ".obsidian"]
     )
-    # TODO increase robustness of solution, especially getting new lines!
-    # If there are no new lines, then use simple double ticks.
-    # https://stackoverflow.com/questions/14182879
-    # https://tex.stackexchange.com/questions/621461
-    oldgroup = r"\$\$(?<named>[^$]*)\$\$"
-    newgroup = s"```math\n\g<named>\n```"
-
     # Ensure directory exists.
     !isdir(wpath) && mkpath(wpath)
 
@@ -72,10 +66,9 @@ function julianizeequations(;
             !isdir(fpath) && mkpath(fpath)
 
             # @info("Processing $(apath)")
-
             if endswith(file, ".md")
                 content = open(apath) do io
-                    replace(read(io, String), oldgroup => newgroup)
+                    formatter(read(io, String))
                 end
                 open(dpath, "w") do io
                     write(io, content)

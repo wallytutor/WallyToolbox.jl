@@ -99,9 +99,38 @@ pages = [
 # PREPROCESS ALL
 ##############################################################################
 
+# TODO increase robustness of solution, especially getting new lines!
+# If there are no new lines, then use simple double ticks.
+# https://stackoverflow.com/questions/14182879
+# https://tex.stackexchange.com/questions/621461
+
+function formatter(text)
+    function formatequations(text)
+        newgroup = s"```math\n\g<named>\n```"
+        oldgroup = r"\$\$(?<named>[^$]*)\$\$"
+        return replace(text, oldgroup => newgroup)
+    end
+    
+    function formatcitations(text)
+        # TODO get this working:
+        # path = replace("$(@__DIR__)/tmp/References", "\\" => "/", ":" => "")
+        # path = "tmp/References"
+        # link = "[\\g<named>]($(path)/@\\g<named>.md)"
+        # newgroup = SubstitutionString("$(link) [\\g<named>](@cite)")
+        newgroup = s"(\g<named>)[\g<named>](@cite)"
+        oldgroup = r"\(\[\[@(?<named>[A-Za-z0-9]+)\]\]\)"
+        return replace(text, oldgroup => newgroup)
+    end
+
+    text = formatequations(text)
+    text = formatcitations(text)
+
+    return text
+end
+
 spath = joinpath(@__DIR__, "src")
 wpath = joinpath(@__DIR__, "tmp")
-julianizeequations(; spath, wpath)
+julianizemarkdown(; formatter, spath, wpath)
 
 ##############################################################################
 # THE DOCUMENTATION
