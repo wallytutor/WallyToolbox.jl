@@ -22,7 +22,7 @@ SolidPolynomialProperties
 
 ### Shomate Model
 
-Solid materials properties are often reported according to the formalism of [Shomate1954](@cite). To be able to handle data under this format, the following structure is provided.
+Solid materials properties are often reported according to the formalism of ([[@Shomate1954]]). To be able to handle data under this format, the following structure is provided.
 
 ```@docs
 DryMaterials.SolidShomateProperties

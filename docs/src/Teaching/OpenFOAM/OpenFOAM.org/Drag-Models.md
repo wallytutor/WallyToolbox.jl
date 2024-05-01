@@ -23,7 +23,7 @@ $$
 \vec{F}=\dfrac{3}{4}\dfrac{m\mu(\hat{T})C_{D}^\prime}{\rho_{d}d^2}
 $$
 
-> [!todo] The code implementation already provides both $\mu(\hat{T})$ and $\mathrm{Re}_{d}$ computed to the drag model. Additional inspection on how these quantities are evaluated is required. Also note that [Amsden1989](@cite) provides the equations formulated in the radius, not diameter, what might generate some confusion.
+> [!todo] The code implementation already provides both $\mu(\hat{T})$ and $\mathrm{Re}_{d}$ computed to the drag model. Additional inspection on how these quantities are evaluated is required. Also note that ([[@Amsden1989]]) provides the equations formulated in the radius, not diameter, what might generate some confusion.
 
 This formulation is also used as part of [`distortedSphereDrag` implementation](https://github.com/OpenFOAM/OpenFOAM-11/blob/master/src/lagrangian/parcel/submodels/Momentum/ParticleForces/Drag/DistortedSphereDrag/DistortedSphereDragForce.C) , which makes use of the same $C_{D}$ now referred to as $C_{D,sphere}$ with a modified law accounting for particle distortion in the breakup mechanism of fuel sprays, as discussed by ([[@Liu1993]]). The updated drag coefficient is then expressed in terms of drop distortion $y$ from TAB (Taylor Analogy Breakup) model from ([[@Reitz1987]]).
 

@@ -8,7 +8,7 @@ EditURL = "/WallyToolbox.jl/docs/src/RadCalNet/index.md"
 Radiation properties machine learning model trained on RadCal.
 
 In this project we use the re-implementation of
-[RadCal](https://github.com/firemodels/radcal) [Grosshandler1993](@cite) to
+[RadCal](https://github.com/firemodels/radcal) ([[@Grosshandler1993]]) to
 generate data and train a machine learning model for the prediction of radiative
 properties, *i.e.* emissivity and transmissivity, of common combustion flue
 gases.
@@ -293,7 +293,7 @@ end
 
 ### Verification agains Gorog's paper
 
-Below we compare computed values with those by Gorog et al. [Gorog1981a](@cite).
+Below we compare computed values with those by ([[@Gorog1981a]]).
 Reference paper is found [here](https://doi.org/10.1007/BF02674758).
 
 ![Emissivity](media/emissivity.png)
@@ -301,7 +301,7 @@ Reference paper is found [here](https://doi.org/10.1007/BF02674758).
 ![Absorptivity](media/absorptivity.png)
 
 At least qualitative agreement is found and orders of magnitude are right. On
-the other hand, using directly the model parameters from Tam [Tam2019](@cite) do
+the other hand, using directly the model parameters from ([[@Tam2019]]) do
 not produce the expected results (not displayed, work in progress in this
 [draft](data/tam2019.jl)). It is not clear how the data is pre- and
 post-processed for use with their network.

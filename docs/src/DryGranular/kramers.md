@@ -310,7 +310,7 @@ end
 
 ## Sample reference case
 
-Here we make use of the current implementation to check if it correctly approximates the last example provided in reference paper from [Kramers1952](@cite). To minimize rounding errors causes by unit conversions, we provide the required functions to convert from imperial to international system in the solution process.
+Here we make use of the current implementation to check if it correctly approximates the last example provided in reference paper from [[@Kramers1952]]. To minimize rounding errors causes by unit conversions, we provide the required functions to convert from imperial to international system in the solution process.
 
 The next table summarizes the results. It is seen that the dimensionless numbers are well approximated. It must be emphasized that the reference estimates η̄ᵣ by a graphical method -- it was 1952 -- and the current value is considered a good enough approximation. Additionally, the equation was not integrated numerically as done here, but engineering relationships were used in the approximation. That said, the proper loading to be considered in our days is η̄ᵢ.
 

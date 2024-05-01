@@ -14,7 +14,7 @@ EditURL = "/WallyToolbox.jl/docs/src/DryGranular/index.md"
 Modeling of geometrical characteristics of porous beds is required for including
 both their thermal effect or role over chemistry in chemical reactors. A
 classical approach used in several commercial and open source tools is that of
-Gunn [Gunn1978](@cite). In what follows we develop the ideas that lead to an
+([[@Gunn1978]]). In what follows we develop the ideas that lead to an
 analogous model which is implemented by this structure.
 
 To build the model we will assume a reactor of constant rectangular
@@ -36,7 +36,7 @@ Since the differential ``d{A}={P}d{l}`` holds for the surface of a body over its
 length ``{l}``, one can divide the above expression by the reactor length to get
 the perimeter of particles in a cross-section. We can further divide by the
 cross-section area itself and find the *perimeter density* which is a more
-general result, and find the expression proposed by Gunn [Gunn1978](@cite). This
+general result, and find the expression proposed by ([[@Gunn1978]]). This
 result is summarized in the next equation where the subscript of particle size
 was dropped for generality.
 
@@ -49,7 +49,7 @@ can be related to the porosity through ``{N}\pi{R}^2={\phi}``. Because the above
 perimeter is shared between the fluid volume and solids, it holds that
 ``{N}2\pi{R}=P``. Using these expressions one can solve for the porosity
 channels characteristic *radius* ``{R}`` as given below, which is also a result
-reported by Gunn [Gunn1978](@cite).
+reported by ([[@Gunn1978]]).
 
 ```math
 {R}=\frac{{\phi}{l}}{3(1-{\phi})}
@@ -90,8 +90,7 @@ PackedBedPorosityDescriptor(
 
 ## Rotary kiln models
 
-In a rotary kiln as proposed by Kramers and Croockewite (1952)
-[Kramers1952](@cite). Its goal is to be used as a process support tool or to
+In a rotary kiln as proposed by ([[@Kramers1952]]). Its goal is to be used as a process support tool or to
 integrate more complex models requiring integration of the bed profile. In its
 classical statement, the bed height profile ``h(z)`` can be evaluated from
 *volume* of flowing material conservation through the following equations.
@@ -127,8 +126,7 @@ DryGranular.RotaryKilnBedSolution
 DryGranular.plotlinearkramersmodel
 ```
 
-Data in next example is an SI conversion of an example from Kramers and
-Croockewite (1952) [Kramers1952](@cite).
+Data in next example is an SI conversion of an example from ([[@Kramers1952]]).
 
 ```jldoctest
 julia> L = 13.715999999999998;  # Kiln length [m]

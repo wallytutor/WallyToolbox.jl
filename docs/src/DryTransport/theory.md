@@ -18,7 +18,7 @@ For computing the heating dynamics in a cylinder, using the definition of diverg
 \left(rk\frac{\partial{}T}{\partial{}r}\right)
 ```
 
-To proceed with the finite volume discretization we perform the integration of both sides of the equation over the relevant variables. The order of integration is chosen according to the nature of the derivative term, as discussed by Patankar [Patankar1980](@cite). Care must be taken in the definition of the space integration, which is non-trivial in cylindrical coordinates systems and must be carried over the differential volume ``dV``.
+To proceed with the finite volume discretization we perform the integration of both sides of the equation over the relevant variables. The order of integration is chosen according to the nature of the derivative term, as discussed by ([[@Patankar1980]]). Care must be taken in the definition of the space integration, which is non-trivial in cylindrical coordinates systems and must be carried over the differential volume ``dV``.
 
 ```math
 \int_{V}\int_{0}^{\tau}
