@@ -35,6 +35,8 @@ begin
     using WallyToolbox
     using DryConstants
     import DryMaterials as DM
+
+    CairoMakie.activate!(; type = "svg", visible = false)
 end
 
 # ╔═╡ 062e6786-9518-4420-9ae2-6182508a5fa8

@@ -5,7 +5,7 @@ CurrentModule = DryCombustion
 DocTestSetup  = quote
     using DryCombustion
 end
-_EditURL = "/WallyToolbox.jl/docs/src/DryCombustion/index.md"
+EditURL = "https://github.com/wallytutor/WallyToolbox.jl/blob/main/docs/src/DryCombustion/index.md"
 ```
 
 ## Heavy fuel-oils

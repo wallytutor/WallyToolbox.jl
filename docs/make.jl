@@ -8,7 +8,7 @@ import PlutoStaticHTML
 # THE DOCUMENTED *PACKAGES*
 ##############################################################################
 
-# XXX: I could not find a way that `dev` installs the dependencies of the 
+# XXX: I could not find a way that `dev` installs the dependencies of the
 # parent project, as it *LOGICALLY* should be the case. To be able to document
 # the following I was forced to add the same dependencies in the project file
 # docs/Project.toml, so when adding new dependencies to the parent, do not
@@ -33,6 +33,39 @@ using DryTransport
 using DryUtilities
 using OpenFOAM
 using RadCalNet
+
+##############################################################################
+# DRAFT
+##############################################################################
+
+# "Generate documentation for notebooks."
+# function docplutonotebooks(example_dir, notebooks;
+#                            distributed = true, force = true)
+#     notebookmd = [splitext(notebook)[1] * ".md" for notebook in notebooks]
+#     output_format = PlutoStaticHTML.documenter_output
+
+#     oopts = PlutoStaticHTML.OutputOptions(; append_build_context = false)
+#     bopts = PlutoStaticHTML.BuildOptions(example_dir; output_format)
+
+#     session = PlutoStaticHTML.Pluto.ServerSession()
+#     session.options.server.disable_writing_notebook_files = true
+#     session.options.server.show_file_system = false
+#     session.options.server.launch_browser = false
+#     session.options.server.dismiss_update_notification = true
+#     session.options.evaluation.workspace_use_distributed = distributed
+
+#     PlutoStaticHTML.build_notebooks(bopts, notebooks, oopts; session)
+
+#     for nb in notebookmd
+#         src = joinpath(example_dir, nb)
+#         dst = joinpath(@__DIR__, "src/Notebooks", nb);
+#         mv(src, dst; force)
+#     end
+# end
+
+# docplutonotebooks(joinpath(@__DIR__, "..", "script"), [
+#     "dsc-tga-kaolinite.jl",
+# ])
 
 ##############################################################################
 # THE CONFIGURATION
@@ -81,12 +114,16 @@ pages = [
         "DryTransport"  => "DryTransport/index.md",
         "Helpers"       => "helpers.md"
     ],
-    
+
     "Cantera"           => "Cantera/index.md",
     "OpenFOAM"          => "OpenFOAM/index.md",
     "RadCalNet"         => "RadCalNet/index.md",
     "Table of Contents" => "toc.md",
     "References"        => "References/index.md",
+
+    # "Notebooks"         => [
+    #     "Simulating DSC/TGA" => "Notebooks/dsc-tga-kaolinite.md"
+    # ],
 
     "Teaching"          => [
         "Machine Learning"    => "Teaching/Machine Learning/index.md",
@@ -111,7 +148,7 @@ function formatter(text)
         oldgroup = r"\$\$(?<named>[^$]*)\$\$"
         return replace(text, oldgroup => newgroup)
     end
-    
+
     function formatcitations(text)
         # TODO get this working:
         # path = replace("$(@__DIR__)/tmp/References", "\\" => "/", ":" => "")
