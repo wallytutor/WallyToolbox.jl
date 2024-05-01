@@ -5,7 +5,7 @@ CurrentModule = DryTransport
 DocTestSetup  = quote
     using DryTransport
 end
-EditURL = "/WallyToolbox.jl/docs/src/DryTransport/index.md"
+_EditURL = "/WallyToolbox.jl/docs/src/DryTransport/index.md"
 ```
 
 ## Documentation

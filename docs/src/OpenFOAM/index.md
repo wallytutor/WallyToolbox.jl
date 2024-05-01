@@ -5,7 +5,7 @@ CurrentModule = OpenFOAM
 DocTestSetup  = quote
     using OpenFOAM
 end
-EditURL = "/WallyToolbox.jl/docs/src/OpenFOAM/index.md"
+_EditURL = "/WallyToolbox.jl/docs/src/OpenFOAM/index.md"
 ```
 
 ```@autodocs

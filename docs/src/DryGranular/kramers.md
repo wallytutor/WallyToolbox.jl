@@ -1,7 +1,7 @@
 # Kramers' model
 
 ```@meta
-EditURL = "/WallyToolbox.jl/docs/src/DryGranular/kramers.md"
+_EditURL = "/WallyToolbox.jl/docs/src/DryGranular/kramers.md"
 ```
 
 ```@setup kramers
