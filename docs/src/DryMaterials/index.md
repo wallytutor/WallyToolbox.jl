@@ -5,7 +5,7 @@ CurrentModule = DryMaterials
 DocTestSetup  = quote
     using DryMaterials
 end
-_EditURL = "/WallyToolbox.jl/docs/src/DryMaterials/index.md"
+EditURL = "https://github.com/wallytutor/WallyToolbox.jl/blob/main/docs/src/DryMaterials/index.md"
 ```
 
 ## Solid Thermodynamics

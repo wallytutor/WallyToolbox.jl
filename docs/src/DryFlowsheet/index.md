@@ -2,7 +2,7 @@
 
 ```@meta
 CurrentModule = DryFlowsheet
-_EditURL = "/WallyToolbox.jl/docs/src/DryFlowsheet/index.md"
+EditURL = "https://github.com/wallytutor/WallyToolbox.jl/blob/main/docs/src/DryFlowsheet/index.md"
 ```
 
 ```@autodocs
