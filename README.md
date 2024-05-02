@@ -15,6 +15,9 @@ julia --project=.
 # Install `virtualenv`:
 pip install virtualenv
 
+# Alternativelly use built-in `venv`:
+# python -m venv venv
+
 # Create a virtual environment:
 virtualenv venv
 
