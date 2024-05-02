@@ -250,7 +250,6 @@ def post_process(
     mu2 = np.mean(sol_tend[1][where] - 273.15)
 
     plt.close("all")
-    plt.style.use("seaborn-white")
     fig, ax = plt.subplots(2, 3, figsize=(12, 7))
     ax = ax.ravel()
 
