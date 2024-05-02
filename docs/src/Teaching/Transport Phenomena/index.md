@@ -16,5 +16,6 @@ Supporting the above we have the following annexes:
 
 1. [Mathematical background](A1-Mathematical-background.md)
 2. [Dimensionless groups](A2-Dimensionless-groups.md)
+3. [Finite volume diffusion](A4-Finite-Volume-Diffusion.md)
 
 There are also some unstructured [drafts](AX-Drafts.md) being migrated to their final topics.
