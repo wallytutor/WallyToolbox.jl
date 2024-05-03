@@ -41,9 +41,20 @@ class Heat1DProblemSpecification(ABC):
         """ Characteristic cell size over simulation domain. """
         pass
 
-    @abstractproperty
     def dirichlet_bc(self):
         """ Dirichlet (fixed) boundary condition. """
+        pass
+
+    def dirichlet_bc_left(self):
+        """ Dirichlet (fixed) boundary condition. """
+        pass
+
+    def dirichlet_bc_right(self):
+        """ Dirichlet (fixed) boundary condition. """
+        pass
+
+    def set_mesh(self, mesh):
+        """ Attribute mesh to problem. """
         pass
 
 
@@ -92,8 +103,19 @@ class Heat1DModel:
 
         # Set initial and boundary conditions.
         problem.set_initial(self.xc, self.T)
-        self.T.constrain(problem.dirichlet_bc, self.mesh.facesRight)
-        self.T.constrain(problem.dirichlet_bc, self.mesh.facesLeft)
+
+        if hasattr(problem, "set_mesh"):
+            problem.set_mesh(self.mesh)
+
+        if hasattr(problem, "dirichlet_bc_right"):
+            self.T.constrain(problem.dirichlet_bc_right, self.mesh.facesRight)
+        else:
+            self.T.constrain(problem.dirichlet_bc, self.mesh.facesRight)
+
+        if hasattr(problem, "dirichlet_bc_left"):
+            self.T.constrain(problem.dirichlet_bc_left, self.mesh.facesLeft)
+        else:
+            self.T.constrain(problem.dirichlet_bc, self.mesh.facesLeft)
 
         # Create physically-based time-step estimator.
         self._update_equation()
@@ -135,7 +157,12 @@ class Heat1DModel:
         while True:
             count += 1
             res = eq.sweep(var=self.T, dt=tau)
-            if res <= abs_tol or count >= max_sweeps:
+
+            if res <= abs_tol:
+                break
+
+            if count >= max_sweeps:
+                print("DANGER: leaving step without convergence!")
                 break
 
         return res, count
@@ -150,6 +177,52 @@ class Heat1DModel:
         df["Temperature [°C]"] -= 273.15
 
         return df
+
+    def advance(self,
+            tend: float,
+            tout: float,
+            time_tol: Optional[float] = 1.0e-02,
+            abs_tol: Optional[float] = 1.0e-07,
+            max_sweeps: Optional[int] = 50,
+            where: Optional[slice] = None     
+        ):
+        # Check if a slice representing region to extract properties has
+        # been provided, otherwise assume it is the whole domain.
+        where = slice(0, None) if where is None else where
+
+        # Time-step will be limited to twice time tolerance so that the
+        # tracking of `tout` actually is ensured.
+        max_dt = 2 * time_tol
+
+        # Prepare all results variables.
+        table, sol_tout, sol_tend = [], None, None
+
+        # Initialize time and feed of results/time-step.
+        t = 0.0
+        tau, _ = self._feed_update(t, 0.0, 0.0, max_dt, table, where)
+
+        # Create a progress bar because, well, it's cool.
+        pbar = ProgressBar()
+
+        # Loop until target time is reached, updating temperature,
+        # following tracked time, and feeding results table.
+        while t <= tend:
+            self.T.updateOld()
+
+            if abs(t - tout) < time_tol:
+                sol_tout = t, np.array(self.T.numericValue)
+
+            # TODO compute cooling rate at target.
+            # TODO add managed time-step to ensure convergence.
+            t += tau
+            res, count = self._sweep_step(tau, abs_tol, max_sweeps)
+            tau, _ = self._feed_update(t, res, count, max_dt, table, where)
+            pbar.update(frac=(t / tend))
+
+        sol_tend = t, np.array(self.T.numericValue)
+        table = self._make_results_table(table)
+
+        return table, sol_tout, sol_tend
 
     def integrate(
         self,
@@ -178,7 +251,7 @@ class Heat1DModel:
             Location in width where to compute `target` temperature.
         """
         # Check if a slice representing region to extract properties has
-        # been provided, otherwise assume it is the whone domain.
+        # been provided, otherwise assume it is the whole domain.
         where = slice(0, None) if where is None else where
 
         # Time-step will be limited to twice time tolerance so that the
