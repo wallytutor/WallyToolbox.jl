@@ -1,0 +1,63 @@
+{
+	"$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+	"name": "MDPA",
+	"patterns": [
+		{
+			"include": "#comments"
+		},
+		{
+			"include": "#numbers"
+		},
+		{
+			"include": "#keywords"
+		},
+		{
+			"include": "#blocks"
+		},
+		{
+			"include": "#types"
+		},
+		{
+			"include": "#properties"
+		}
+	],
+	"repository": {
+		"comments": {
+			"patterns": [{
+				"name": "comment.line.tdb",
+				"match": "//.*"
+			}]
+		},
+		"numbers": {
+			"patterns": [{
+				"name": "constant.numeric",
+				"match": "((([+-]\\s*)|(\\b))((\\d+(\\.\\d+)?)|(\\.\\d+)))(\\s*[eE]([+-]\\s*)?((\\d+(\\.\\d+)?)|(\\.\\d+)))?\\b"
+			}]
+		},
+		"keywords": {
+			"patterns": [{
+				"name": "keyword.control.ocm",
+				"match": "\\b(Begin|End)\\b"
+			}]
+		},
+		"blocks": {
+			"patterns": [{
+				"name": "entity.name.function",
+				"match": "\\b(ModelPartData|Table|Properties|Nodes|Elements|Conditions|NodalData|ElementalData|ConditionalData|Mesh|MeshData|MeshElements|MeshConditions|SubModelPart|SubModelPartData|SubModelPartTables|SubModelPartNodes|SubModelPartElements|SubModelPartConditions)\\b"
+			}]
+		},
+		"types": {
+			"patterns": [{
+				"name": "entity.name.class",
+				"match": "\\b(TotalLagrangianElement2D4N|LineLoadCondition2D2N|QSConvectionDiffusionExplicit2D3N|LineCondition2D2N|Element2D3N|WallCondition2D2N)\\b"
+			}]
+		},
+		"properties": {
+			"patterns": [{
+				"name": "entity.name.type",
+				"match": "\\b(DENSITY|DYNAMIC_VISCOSITY|CONDUCTIVITY|SPECIFIC_HEAT)\\b"
+			}]
+		}
+	},
+	"scopeName": "source.mdpa"
+}

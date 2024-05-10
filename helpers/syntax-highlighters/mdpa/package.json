@@ -1,0 +1,32 @@
+{
+    "name": "mdpa",
+    "displayName": "MDPA",
+    "description": "Kratos Multiphysics Mesh",
+    "publisher": "Walter Dal'Maz Silva",
+    "author": "Walter Dal'Maz Silva",
+    "license": "MIT",
+    "version": "0.0.1",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/WallyTutor/highlighter-kratos-mdpa"
+    },
+    "engines": {
+        "vscode": "^1.68.0"
+    },
+    "categories": [
+        "Programming Languages"
+    ],
+    "contributes": {
+        "languages": [{
+            "id": "mdpa",
+            "aliases": ["mdpa"],
+            "extensions": [".mdpa"],
+            "configuration": "./language-configuration.json"
+        }],
+        "grammars": [{
+            "language": "mdpa",
+            "scopeName": "source.mdpa",
+            "path": "./syntaxes/mdpa.tmLanguage.json"
+        }]
+    }
+}

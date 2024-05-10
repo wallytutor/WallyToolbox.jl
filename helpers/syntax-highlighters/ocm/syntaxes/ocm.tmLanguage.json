@@ -1,0 +1,140 @@
+{
+	"$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+	"name": "OCM",
+	"patterns": [
+		{
+			"include": "#comments"
+		},
+		{
+			"include": "#numbers"
+		},
+		{
+			"include": "#operators"
+		},
+		{
+			"include": "#variables"
+		},
+		{
+			"include": "#keywords"
+		},
+		{
+			"include": "#calculate-words"
+		},
+		{
+			"include": "#step-map-words"
+		},
+		{
+			"include": "#set-words"
+		},
+		{
+			"include": "#read-words"
+		},
+		{
+			"include": "#list-words"
+		},
+		{
+			"include": "#plot-words"
+		}
+	],
+	"repository": {
+		"comments": {
+			"patterns": [{
+				"name": "comment.line.tdb",
+				"match": "^\\@\\$.*"
+			}]
+		},
+		"numbers": {
+			"patterns": [{
+				"name": "constant.numeric",
+				"match": "((([+-]\\s*)|(\\b))((\\d+(\\.\\d+)?)|(\\.\\d+)))(\\s*[eE]([+-]\\s*)?((\\d+(\\.\\d+)?)|(\\.\\d+)))?\\b"
+			}]
+		},
+		"operators": {
+			"patterns": [
+				{
+					"name": "keyword.control.operator",
+					"match": "[-\\*/\\\\+]"
+				},
+				{
+					"name": "keyword.control.other",
+					"match": "\\b(?i)(LN)\\b"
+				}
+			]
+		},
+		"variables": {
+			"patterns": [
+				{
+					"name": "variable.parameter.T",
+					"match": "\\bT\\b"
+				},
+				{
+					"name": "variable.parameter.P",
+					"match": "\\bP\\b"
+				},
+				{
+					"name": "variable.parameter.N",
+					"match": "\\bN\\b"
+				},
+				{
+					"name": "variable.parameter.X",
+					"match": "\\bX\\b"
+				},
+				{
+					"name": "variable.parameter.W",
+					"match": "\\bW\\b"
+				},
+				{
+					"name": "variable.parameter.B",
+					"match": "\\bB\\b"
+				},
+				{
+					"name": "variable.parameter.NP",
+					"match": "\\bNP\\b"
+				}
+			]
+		},	
+		"keywords": {
+			"patterns": [{
+				"name": "keyword.control.ocm",
+				"match": "\\b(ABOUT|AMEND|BACK|CALCULATE|DEBUG|DELETE|ENTER|EXIT|FIN|HELP|HPCALC|INFORMATION|LIST|MACRO|MAP|NEW|OPTIMIZE|PLOT|QUIT|READ|SAVE|SELECT|SET|SHOW|STEP)\\b"
+			}]
+		},
+		"calculate-words": {
+			"patterns": [{
+				"name": "entity.name.class",
+				"match": "\\b(ALL_EQUILIBRIA|BOSSES_METHOD|CAREFULLY|EQUILIBRIUM|GLOBAL_GRIDMIN|NO_GLOBAL|ONLY_GRIDMIN|PARAEQUILIBRIUM|PHASE|QUIT|SYMBOL|TPFUN_SYMBOLS|TRANSITION|TZERO_POINT|WITH_CHECK_AFTER)\\b"
+			}]
+		},
+		"step-map-words": {
+			"patterns": [{
+				"name": "entity.name.class",
+				"match": "\\b(CONDITIONAL|FAST|NORMAL|PARAEQUILIBRIUM|QUIT|SCHEIL_GULLIVER|SEPARATE|TZERO)\\b"
+			}]
+		},
+		"set-words": {
+			"patterns": [{
+				"name": "entity.name.function",
+				"match": "\\b(ADVANCED|AS_START_EQUILIB|AXIS|BIT|CONDITION|ECHO|FIXED_COEFF|GRID_GENERATOR|INITIAL_T_AND_P|INPUT_AMOUNTS|INTERACTIVE|LINEAR_SYSTEM|LOG_FILE|NUMERIC_OPTIONS|OPTIMIZING_COND|PHASE|QUIT|RANGE_EXPER_EQU|REFERENCE_STATE|SCALED_COEFF|STATUS|SYSTEM_VARIABLE|UNITS|VARIABLE_COEFF|VERBOSE|WEIGHT)\\b"
+			}]
+		},
+		"read-words": {
+			"patterns": [{
+				"name": "entity.name.function",
+				"match": "\\b(DIRECT|ENCRYPTED|PDB|QUIT|SELECTED_PHASES|TDB|UNFORMATED)\\b"
+			}]
+		},
+		"list-words": {
+			"patterns": [{
+				"name": "entity.name.function",
+				"match": "\\b(ACTIVE_EQUILIBR|AXIS|BIBLIOGRAPHY|CONDITIONS|DATA|ELEMENTS|EQUILIBRIA|ERROR_MESSAGE|ESTIMAT_ACCURACY|EXCELL_CSV_FILE|LINE_EQUILIBRIA|MODEL_PARAM_ID|MODEL_PARAM_VAL|OPTIMIZATION|PARAMETER|PHASE|QUADRUPLETS|QUIT|RESULTS|SHORT|STATE_VARIABLES|SYMBOLS|TPFUN_SYMBOLS)\\b"
+			}]
+		},
+		"plot-words": {
+			"patterns": [{
+				"name": "entity.name.tag",
+				"match": "\\b(APPEND|AXIS_LABELS|EXTRA|FONT|GRAPHICS_FORMAT|OUTPUT_FILE|POSITION_OF_KEYS|QUIT|RENDER|SCALE_RANGES|TEXT_LABEL|TITLE)\\b"
+			}]
+		}
+	},
+	"scopeName": "source.ocm"
+}

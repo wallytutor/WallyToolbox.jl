@@ -1,0 +1,32 @@
+{
+    "name": "ocm",
+    "displayName": "OCM",
+    "description": "OpenCALPHAD Macro Language",
+    "publisher": "Walter Dal'Maz Silva",
+    "author": "Walter Dal'Maz Silva",
+    "license": "MIT",
+    "version": "0.0.1",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/WallyTutor/highlighter-opencalphad"
+    },
+    "engines": {
+        "vscode": "^1.68.0"
+    },
+    "categories": [
+        "Programming Languages"
+    ],
+    "contributes": {
+        "languages": [{
+            "id": "ocm",
+            "aliases": ["OCM", "ocm"],
+            "extensions": [".OCM",".ocm"],
+            "configuration": "./language-configuration.json"
+        }],
+        "grammars": [{
+            "language": "ocm",
+            "scopeName": "source.ocm",
+            "path": "./syntaxes/ocm.tmLanguage.json"
+        }]
+    }
+}
