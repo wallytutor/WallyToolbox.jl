@@ -61,6 +61,10 @@ A&amp;=\displaystyle\int_{0}^{Z}\int_{0}^{Y}dydz
 \rho{}c_{p}\left(T_P^{\tau}-T_P^{0}\right)\int_{s}^{n}\beta{}dr=
 \int_{0}^{\tau}
 \left(\beta{}k\frac{\partial{}T}{\partial{}r}\right)\bigg\vert_{s}^{n}dt
+\]</p><p>For simplicity, in what follows we use an unbounded first-order approximation scheme for space derivatives, <em>i.e.</em> they are approximated as:</p><p class="math-container">\[
+\frac{\partial{}T}{\partial{}r}\approx\frac{T_{i+1}-T_{i}}{\delta_{i,i+1}}
+\qquad\text{where}\qquad{}
+\delta_{i,i+1}=r_{i+1}-r_{i}
 \]</p><p>Applying a general Crank-Nicolson (Crank1996)[<a href="../../../References/#Crank1996">8</a>] scheme we integrate numerically the right-hand side. The weighting factor <span>$f$</span> introduces the implicit degree: for <span>$f=1$</span> we have a fully implicit solution, which <span>$f=0$</span> represents a standard Euler integration. <em>Notice that the parenthetical superscript notation <span>$(I)$</span> does not imply exponentiation, but the instant at which the corresponding values are to be evaluated.</em></p><p class="math-container">\[
 \frac{\rho{}c_{p}}{\tau}\left(T_P^{\tau}-T_P^{0}\right)\int_{s}^{n}\beta{}dr=
 \sum_{I=\{0,\tau\}}
@@ -93,63 +97,139 @@ f^{I}\left[
     \alpha_{P}  &amp; = \frac{\rho{}c_{p}}{\gamma\tau}\left(r_n^\gamma-r_s^\gamma\right)\\[8pt]
     \kappa_{j}   &amp; = \frac{\beta_j{}k_j}{\delta_{P,J}}
 \end{aligned}
-\]</p><p>Equation can be reworked as:</p><p class="math-container">\[
+\]</p><p>Using these definitions the equation can be reworked as:</p><p class="math-container">\[
 \alpha_{P}\left(T_P^{\tau}-T_P^{0}\right)=
 \sum_{I=\{0,\tau\}}
-f^{I}\left[
-    \kappa_{n}^{I}\left(T_N^{I}-T_P^{I}\right)-
-    \kappa_{s}^{I}\left(T_P^{I}-T_S^{I}\right)
+f^{(I)}\left[
+    \kappa_{n}^{(I)}\left(T_N^{(I)}-T_P^{(I)}\right)-
+    \kappa_{s}^{(I)}\left(T_P^{(I)}-T_S^{(I)}\right)
 \right]
-\]</p><h4 id="Cylindrical-coordinates"><a class="docs-heading-anchor" href="#Cylindrical-coordinates">Cylindrical coordinates</a><a id="Cylindrical-coordinates-1"></a><a class="docs-heading-anchor-permalink" href="#Cylindrical-coordinates" title="Permalink"></a></h4><p>For conciseness we make <span>$g=(1-f)$</span> and simplify the expression with the new coefficients as</p><p class="math-container">\[
--f\beta_{s}T_S+
-(\alpha_{P}+f\beta_{n}+f\beta_{s})T_P
--f\beta_{n}T_N
+\]</p><p>To get the matrix form of the problem we start by expanding all products. For conciseness we make <span>$f=f^{(0)}$</span> and <span>$g=f^{(\tau)}$</span>;  also everything that is evaluated at <span>$t=\tau$</span> has the superscript dropped; using these ideas the expression is rewritten as:</p><p class="math-container">\[
+-f\kappa_{s}T_S+
+(\alpha_{P}+f\kappa_{n}+f\kappa_{s})T_P
+-f\kappa_{n}T_N
 =
-g\beta_{s}T_S^{0}+
-(\alpha_{P}-g\beta_{n}-g\beta_{s})T_P^{0}+
-g\beta_{n}T_N^{0}
+g\kappa_{s}^{(0)}T_S^{(0)}+
+(\alpha_{P}-g\kappa_{n}^{(0)}-g\kappa_{s}^{(0)})T_P^{(0)}+
+g\kappa_{n}^{(0)}T_N^{(0)}
 \]</p><p>For the fully implicit time-stepping scheme <span>$f=1$</span> the expression reduces to</p><p class="math-container">\[
--\beta_{s}T_S+
-(\alpha_{P}+\beta_{n}+\beta_{s})T_P
--\beta_{n}T_N
+-\kappa_{s}T_S+
+(\alpha_{P}+\kappa_{n}+\kappa_{s})T_P
+-\kappa_{n}T_N
 =
-\alpha_{P}T_P^{0}
+\alpha_{P}T_P^{(0)}
 \]</p><p>where the following coefficients are identified</p><p class="math-container">\[
 \begin{aligned}
-    a_{S} &amp; = -\beta_{s}\\[8pt]
-    a_{N} &amp; = -\beta_{n}\\[8pt]
-    a_{P} &amp; = \alpha_{P}+\beta_{n}+\beta_{s}
+    a_{S} &amp; = -\kappa_{s}\\[8pt]
+    a_{N} &amp; = -\kappa_{n}\\[8pt]
+    a_{P} &amp; = \alpha_{P}+\kappa_{n}+\kappa_{s}
 \end{aligned}
-\]</p><p>and the standard format FVM discretization is reached</p><p class="math-container">\[
+\]</p><p>and the standard finite volume formalism discretization is reached</p><p class="math-container">\[
 a_ST_S + a_PT_P + a_NT_N = \alpha_{P}T_P^{0}
-\]</p><p>A condition for symmetry is that no flux traverses the center of the cylinder at <span>$r=0$</span>. That implies that <em>south</em> derivatives in discrete form of the equation must vanish to enforce <span>$\dot{q}(0,t)=0$</span>, so the first row of the problem is modified to</p><p class="math-container">\[
+\]</p><h4 id="Boundary-conditions"><a class="docs-heading-anchor" href="#Boundary-conditions">Boundary conditions</a><a id="Boundary-conditions-1"></a><a class="docs-heading-anchor-permalink" href="#Boundary-conditions" title="Permalink"></a></h4><p>TODO</p><h4 id="Special-cases-coordinates"><a class="docs-heading-anchor" href="#Special-cases-coordinates">Special cases coordinates</a><a id="Special-cases-coordinates-1"></a><a class="docs-heading-anchor-permalink" href="#Special-cases-coordinates" title="Permalink"></a></h4><p>For cylindrical and spherical systems, a condition for symmetry is that no flux traverses the center of the cylinder at <span>$r=0$</span>. That implies that <em>south</em> derivatives in discrete form of the equation must vanish to enforce <span>$\dot{q}(0,t)=0$</span>, so the first row of the problem is modified to</p><p class="math-container">\[
+a_1T_P + a_NT_N = \alpha_{P}T_P^{0}\quad\text{where}\quad{}a_1=\alpha_{P}+\beta_{n}
+\]</p><p class="math-container">\[
 a_1T_P + a_NT_N = \alpha_{P}T_P^{0}\quad\text{where}\quad{}a_1=\alpha_{P}+\beta_{n}
 \]</p><p>Over the external radius <span>$r=R$</span> a Robin boundary condition is imposed. In this case the heat flux <span>$\dot{q}=U(T_\infty-T_P)$</span> takes the place of <em>north</em> term in FVM discretization and the equation writes</p><p class="math-container">\[
 a_ST_S + a_RT_P = \alpha_{P}T_P^{0}+UT_\infty\quad\text{where}\quad{}a_R=\alpha_{P}+U+\beta_{s}
-\]</p><p>It must be noted here that <span>$U=Rh$</span>, where the actual heat transfer coefficient is <span>$h$</span>. This should be self-evident from a dimensional analysis.</p><h4 id="Spherical-coordinates"><a class="docs-heading-anchor" href="#Spherical-coordinates">Spherical coordinates</a><a id="Spherical-coordinates-1"></a><a class="docs-heading-anchor-permalink" href="#Spherical-coordinates" title="Permalink"></a></h4><p>For conciseness we make <span>$g=(1-f)$</span> and simplify the expression with the new coefficients as</p><p class="math-container">\[
--f\beta_{s}T_S+
-(\alpha_{P}+f\beta_{n}+f\beta_{s})T_P
--f\beta_{n}T_N
+\]</p><p>It must be noted here that <span>$U=\beta{}h$</span>, where the actual heat transfer coefficient is <span>$h$</span>. This should be self-evident from a dimensional analysis.</p><div class="admonition is-danger"><header class="admonition-header">Danger</header><div class="admonition-body"><p>From here on everything is in draft mode.</p></div></div><h2 id="Enthalpy-formulation"><a class="docs-heading-anchor" href="#Enthalpy-formulation">Enthalpy formulation</a><a id="Enthalpy-formulation-1"></a><a class="docs-heading-anchor-permalink" href="#Enthalpy-formulation" title="Permalink"></a></h2><h3 id="Spherical-coordinates-1-D"><a class="docs-heading-anchor" href="#Spherical-coordinates-1-D">Spherical coordinates 1-D</a><a id="Spherical-coordinates-1-D-1"></a><a class="docs-heading-anchor-permalink" href="#Spherical-coordinates-1-D" title="Permalink"></a></h3><p>Heat equation for a constant density phase using enthalpy as dependent variable is stated as:</p><p class="math-container">\[\rho{}\frac{\partial{}h}{\partial{}t}=\nabla\cdotp{}(k\nabla{}T)\]</p><p>For computing the heating dynamics in a sphere, using the definition of divergence in spherical coordinates and using the gradient expansion over the radius we have</p><p class="math-container">\[\rho{}\frac{\partial{}h}{\partial{}t}=
+\frac{1}{r^2}\frac{\partial}{\partial{}r}
+\left(r^2k\frac{\partial{}T}{\partial{}r}\right)\]</p><p>This is now integrated over the differential volume <span>$dV$</span> as described in previous sections and for conciseness we skip that discussion. The integration over radial coordinate introduces the <span>$r^2dr$</span> factor from the differential volume and we get the final form of the equation to integrate.</p><p class="math-container">\[\int_{s}^{n}\int_{0}^{\tau}
+\rho{}\frac{\partial{}h}{\partial{}t}r^2dtdr=
+\int_{0}^{\tau}\int_{s}^{n}
+\frac{\partial}{\partial{}r}
+\left(r^2k\frac{\partial{}T}{\partial{}r}\right)drdt\]</p><p>After effecting the inner integrations and moving out constant terms from the integrals and expanding the evaluation of the definite integral between control volume boundaries <span>$s$</span> and <span>$n$</span> and performing a Crank-Nicolson integration of the right-hand side one gets</p><p class="math-container">\[\begin{align}
+\frac{\rho{}}{\tau}
+\left(h_P^{\tau}-h_P^{0}\right)
+\left(\frac{r_n^3}{3}-\frac{r_s^3}{3}\right)
+&amp;=f\left[
+r_n^2k_n\frac{T_N^{\tau}-T_P^{\tau}}{\delta_{P,N}}-
+r_s^2k_s\frac{T_P^{\tau}-T_S^{\tau}}{\delta_{P,S}}
+\right]\\[8pt]
+&amp;+(1-f)\left[
+r_n^2k_n\frac{T_N^{0}-T_P^{0}}{\delta_{P,N}}-
+r_s^2k_s\frac{T_P^{0}-T_S^{0}}{\delta_{P,S}}
+\right]
+\end{align}\]</p><p>Some coefficients appearing in the above equations are now grouped. Notice that for thermal conductivity <span>$k$</span> which is a function of temperature, the corresponding time-step temperature must be used for its evaluation. For <span>$\beta_{j}$</span> the lower case <span>$j$</span> represents the evaluation at the interface with control volume <span>$J$</span>, what is a very specific notation.</p><p class="math-container">\[\begin{align}
+\alpha_{P}  &amp; = \frac{\rho{}}{3\tau}\left(r_n^3-r_s^3\right)\\[8pt]
+\beta_{j}   &amp; = \frac{r_j^2k_j}{\delta_{P,J}}
+\end{align}\]</p><p>For conciseness we make <span>$g=(1-f)$</span> and simplify the expression with the new coefficients as</p><p class="math-container">\[\begin{align}
+\alpha_{P}h_P^{\tau}-\alpha_{P}h_P^{0}
+
+&amp;=f\beta_{n}T_N^{\tau}-f(\beta_{n}+\beta_{s})T_P^{\tau}-f\beta_{s}T_S^{\tau}
+\\[8pt]
+&amp;+g\beta_{n}T_N^{0}-g(\beta_{n}+\beta_{s})T_P^{0}-g\beta_{s}T_S^{0}
+\end{align}\]</p><p>For the fully implicity time-stepping scheme <span>$f=1$</span> and making <span>$\gamma_{j}^{k}=\alpha_{P}^{-1}\beta_{j}^{k}$</span> one gets</p><p class="math-container">\[h_P^{\tau}-h_P^{0}-\gamma_{n}^{k}T_N^{\tau,k}+(\gamma_{n}^{k}+\gamma_{s}^{k})T_P^{\tau,k}-\gamma_{s}^{k}T_S^{\tau,k}=0\]</p><p>A condition for symmetry is that no flux traverses the center of the sphere at <span>$r=0$</span>. That implies that <em>south</em> derivatives in discretizes form of the equation must vanish to enforce <span>$\dot{q}(0,t)=0$</span>, so the first row of the problem is modified to</p><p class="math-container">\[h_P^{\tau}-h_P^{0}-\gamma_{n}^{k}T_N^{\tau,k}+\gamma_{n}^{k}T_P^{\tau,k}=0\]</p><p>Over the external radius <span>$r=R$</span> a Robin boundary condition is imposed. In this case the heat flux <span>$\dot{q}=U(T_\infty-T_P)$</span> takes the place of <em>north</em> term in FVM discretization and the equation writes</p><p class="math-container">\[h_P^{\tau}-h_P^{0}-\alpha_{P}^{-1}UT_{\infty}+(\alpha_{P}^{-1}U+\gamma_{s}^{k})T_P^{\tau,k}-\gamma_{s}^{k}T_S^{\tau,k}=0\]</p><p>It must be noted here that <span>$U=R^2h$</span>, where the actual heat transfer coefficient is <span>$h$</span>. This should be self-evident from a dimensional analysis.</p><p>This is no longer a linear problem and thus cannot be solved directly. We need now an strategy for solving this coupled system of nonlinear equations. The iterative solution of the problem is indicated in the above equations through the introduction of superscript <span>$k$</span> indicating the iteration number. One can rework the system as</p><p class="math-container">\[\begin{align}
+-\gamma_{1,2}^{k}T_2^{\tau,k}+\gamma_{1,2}^{k}T_1^{\tau,k}+h_1^{\tau}&amp;=h_1^{0}\\
+&amp;\dots \\
+-\gamma_{n}^{k}T_N^{\tau,k}+(\gamma_{n}^{k}+\gamma_{s}^{k})T_P^{\tau,k}-\gamma_{s}^{k}T_S^{\tau,k}+h_P^{\tau}&amp;=h_P^{0}\\
+&amp;\dots \\
+(\alpha_{K}^{-1}U+\gamma_{K-1,K}^{k})T_K^{\tau,k}-\gamma_{K-1,K}^{k}T_{K-1}^{\tau,k}+h_K^{\tau}&amp;=h_K^{0}+\alpha_{K}^{-1}UT_{\infty}
+\end{align}\]</p><p>It is clear now that for implementation purposes one can store the required coefficients in a tridiagonal matrix <span>$A^{k}$</span>. Making <span>$\Gamma_{i}=(\gamma_{i-1,i}+\gamma_{i,i+1})$</span> and <span>$\tilde{U}=\alpha_{K}^{-1}U$</span> we can identify the terms in</p><p class="math-container">\[\begin{pmatrix}
+H_{1}^{k}    \\
+H_{2}^{k}    \\
+H_{3}^{k}    \\
+\vdots   \\
+H_{K-1}^{k}  \\
+H_{K}^{k}    \\
+\end{pmatrix}
 =
-g\beta_{s}T_S^{0}+
-(\alpha_{P}-g\beta_{n}-g\beta_{s})T_P^{0}+
-g\beta_{n}T_N^{0}
-\]</p><p>\subsection{Implicit implementation}</p><p>For the fully implicit time-stepping scheme <span>$f=1$</span> the expression reduces to</p><p class="math-container">\[
--\beta_{s}T_S+
-(\alpha_{P}+\beta_{n}+\beta_{s})T_P
--\beta_{n}T_N
+\begin{pmatrix}
+ \gamma_{1,2}^{k} &amp; -\gamma_{1,2}^{k} &amp;  0                &amp; \dots  &amp; 0 &amp; 0 \\
+-\gamma_{1,2}^{k} &amp;  \Gamma_{2}^{k}   &amp; -\gamma_{2,3}^{k} &amp; \dots  &amp; 0 &amp; 0 \\
+ 0 &amp; -\gamma_{2,3}^{k} &amp;  \Gamma_{3}^{k} &amp; -\gamma_{3,4}^{k}\ddots &amp;  0 &amp;  0 \\
+\vdots  &amp; \ddots &amp; \ddots &amp; \ddots &amp; \ddots  &amp; \vdots \\
+ 0 &amp;  0 &amp; 0 &amp; -\gamma_{K-2,K-1}^{k} &amp;  \Gamma_{K-1}^{k}   &amp; -\gamma_{K-1,K}^{k} \\
+ 0      &amp;  0     &amp;  0     &amp;  0     &amp; -\gamma_{K-1,K}^{k} &amp; \tilde{U}+\gamma_{K-1,K}^{k} \\
+\end{pmatrix}
+\begin{pmatrix}
+T_{1}^{\tau,k}   \\
+T_{2}^{\tau,k}   \\
+T_{3}^{\tau,k}   \\
+\vdots           \\
+T_{K-1}^{\tau,k} \\
+T_{N}^{\tau,k}   \\
+\end{pmatrix}\]</p><p>Since the temperature vector <span>$T^{\tau,k}$</span> is updated every iteration, the coefficients of <span>$A^{k}$</span> must also be updated. With the intermediate vector <span>$H^{\tau,k}$</span> the nonlinear problem is rewriten as</p><p class="math-container">\[\begin{pmatrix}
+H_{1}^{k}    \\
+H_{2}^{k}    \\
+H_{3}^{k}    \\
+\vdots       \\
+H_{K-1}^{k}  \\
+H_{K}^{k}    \\
+\end{pmatrix}
++
+\begin{pmatrix}
+h_{1}^{\tau}   \\
+h_{2}^{\tau}   \\
+h_{3}^{\tau}   \\
+\vdots         \\
+h_{K-1}^{\tau} \\
+h_{K}^{\tau}   \\
+\end{pmatrix}
 =
-\alpha_{P}T_P^{0}
-\]</p><p>where the following coefficients are identified</p><p class="math-container">\[
-\begin{aligned}
-    a_{S} &amp; = -\beta_{s}\\[8pt]
-    a_{N} &amp; = -\beta_{n}\\[8pt]
-    a_{P} &amp; = \alpha_{P}+\beta_{n}+\beta_{s}
-\end{aligned}
-\]</p><p>and the standard format FVM discretization is reached</p><p class="math-container">\[
-a_ST_S + a_PT_P + a_NT_N = \alpha_{P}T_P^{0}
-\]</p><p>A condition for symmetry is that no flux traverses the center of the sphere at <span>$r=0$</span>. That implies that <em>south</em> derivatives in discrete form of the equation must vanish to enforce <span>$\dot{q}(0,t)=0$</span>, so the first row of the problem is modified to</p><p class="math-container">\[
-a_1T_P + a_NT_N = \alpha_{P}T_P^{0}\quad\text{where}\quad{}a_1=\alpha_{P}+\beta_{n}
-\]</p><p>Over the external radius <span>$r=R$</span> a Robin boundary condition is imposed. In this case the heat flux <span>$\dot{q}=U(T_\infty-T_P)$</span> takes the place of <em>north</em> term in FVM discretization and the equation writes</p><p class="math-container">\[
-a_ST_S + a_RT_P = \alpha_{P}T_P^{0}+UT_\infty\quad\text{where}\quad{}a_R=\alpha_{P}+U+\beta_{s}
-\]</p><p>It must be noted here that <span>$U=R^2h$</span>, where the actual heat transfer coefficient is <span>$h$</span>. This should be self-evident from a dimensional analysis.</p><h2 id="Enthalpy-formulation"><a class="docs-heading-anchor" href="#Enthalpy-formulation">Enthalpy formulation</a><a id="Enthalpy-formulation-1"></a><a class="docs-heading-anchor-permalink" href="#Enthalpy-formulation" title="Permalink"></a></h2></article><nav class="docs-footer"><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.3.0 on <span class="colophon-date" title="Monday 13 May 2024 12:50">Monday 13 May 2024</span>. Using Julia version 1.10.3.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+\begin{pmatrix}
+h_1^{0}                 \\
+h_2^{0}                 \\
+h_3^{0}                 \\
+\vdots                  \\
+h_{K-1}^{0}             \\
+h_{K}^{0} + \tilde{U}T_{\infty} \\
+\end{pmatrix}\]</p><p>The choice not to write the problem in this format reflects the fact that the term <span>$H^{\tau,k}$</span> on the left-hand side is updated on a iteration basis, while the vector <span>$b^{0}$</span> is computed once per time step. This last vector was called <span>$b^{0}$</span> instead of <span>$h^{0}$</span> because it also includes the boundary condition in its last element. This is useful for the conception of the inner and outer loop functions used for solution update.</p><p>The traditional approach to solve this sort of problems is to provide a <em>initial guess</em> <span>$T^{\tau,0}=T^{0}$</span>.</p><p class="math-container">\[\begin{align}
+h^{\tau,0}               &amp;= b^{0}-A^{0}T^{\tau,0}\\
+h(T^{\tau,1})-h^{\tau,0} &amp;= 0\\
+\Delta{}T                &amp;= T^{\tau,1}-T^{\tau,0}\\
+T^{\tau,1}               &amp;= T^{\tau,0}+(1-\alpha)\Delta{}T\\
+\varepsilon^{1}          &amp;= \vert\Delta{}T\vert\\
+&amp;\text{repeat}\\
+h^{\tau,1}               &amp;= b^{0}-A^{1}T^{\tau,1}\\
+h(T^{\tau,2})-h^{\tau,1} &amp;= 0\\
+\Delta{}T                &amp;= T^{\tau,2}-T^{\tau,1}\\
+T^{\tau,2}               &amp;= T^{\tau,1}+(1-\alpha)\Delta{}T\\
+\varepsilon^{2}          &amp;= \vert\Delta{}T\vert\\
+&amp;\dots\\
+h^{\tau,k}                 &amp;= b^{0}-A^{k}T^{\tau,k}\\
+h(T^{\tau,k+1})-h^{\tau,k} &amp;= 0\\
+\Delta{}T                  &amp;= T^{\tau,k+1}-T^{\tau,k}\\
+T^{\tau,k+1}               &amp;= T^{\tau,k}+(1-\alpha)\Delta{}T\\
+\varepsilon^{k+1}          &amp;= \vert\Delta{}T\vert\\
+\end{align}\]</p></article><nav class="docs-footer"><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.3.0 on <span class="colophon-date" title="Monday 13 May 2024 13:33">Monday 13 May 2024</span>. Using Julia version 1.10.3.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
