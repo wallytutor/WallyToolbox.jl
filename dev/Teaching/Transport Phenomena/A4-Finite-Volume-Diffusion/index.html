@@ -42,22 +42,22 @@ r^2\sin\phi{}dr{}d\theta{}d\phi &amp; \text{spherical}
 \]</p><p>The components of volume integration not explicitly appearing in the 1-D differential formulation can be moved out of the integrand. For cartesian coordinates the terms leads to the area of the perpendicular plane; for cylindrical coordinates this corresponds to the azimuth and axial components and integration produces a factor <span>$2\pi{}z$</span>; lastly, for spherical coordinates we have the polar and azimuth components moved out and a factor <span>$4\pi$</span>. Since these terms appear in both sides of the equation, they end by cancelling out.</p><p class="math-container">\[
 \Phi=
 \begin{cases}
-A&amp;=\int_{0}^{Z}\int_{0}^{Y}dydz
+A&amp;=\displaystyle\int_{0}^{Z}\int_{0}^{Y}dydz
 &amp; \text{cartesian}\\[12pt]
 %
-2\pi{}z&amp;=\int_{0}^{z}\int_{0}^{2\pi}d\theta{}dz
+2\pi{}z&amp;=\displaystyle\int_{0}^{z}\int_{0}^{2\pi}d\theta{}dz
 &amp; \text{cylindrical}\\[12pt]
 %
-4\pi&amp;=\int_{0}^{\pi}\int_{0}^{2\pi}\sin\phi{}d\theta{}d\phi
+4\pi&amp;=\displaystyle\int_{0}^{\pi}\int_{0}^{2\pi}\sin\phi{}d\theta{}d\phi
 &amp; \text{spherical}
 \end{cases}
-\]</p><p>For now these values might seem worthless, but later we will need them to properly scale the eventual convective boundary conditions applied to the problem.</p><h4 id="Cylindrical-coordinates"><a class="docs-heading-anchor" href="#Cylindrical-coordinates">Cylindrical coordinates</a><a id="Cylindrical-coordinates-1"></a><a class="docs-heading-anchor-permalink" href="#Cylindrical-coordinates" title="Permalink"></a></h4><p>The integration over radial coordinate introduces the <span>$rdr$</span> factor from the differential volume and we get the final form of the equation to integrate.</p><p class="math-container">\[
+\]</p><p>For now these values might seem worthless, but later we will need them to properly scale the eventual convective boundary conditions applied to the problem.</p><p>Applying the remaining component of differential volume to the equations lead to the following expressions. <em>Notice that the meaning of <span>$\beta$</span> is now clear:  it is simply the factor multiplying <span>$dr$</span> in the different coordinate systems. It will make the multiplied factor simplify in the right-hand side and appear back in the left-hand side. You should try performing this step by yourself to get a full insight of what is happening here.</em> So far the equations remain formulated identically.</p><p class="math-container">\[
 \int_{s}^{n}\int_{0}^{\tau}
-\rho{}c_{p}\frac{\partial{}T}{\partial{}t}rdtdr=
-\int_{0}^{\tau}\int_{s}^{n}
-\frac{\partial}{\partial{}r}
-\left(rk\frac{\partial{}T}{\partial{}r}\right)drdt
-\]</p><p>Effecting the inner integration and moving out constant terms from the integrals we have</p><p class="math-container">\[
+\beta\rho{}c_{p}\dfrac{\partial{}T}{\partial{}t}dtdr=
+\displaystyle\int_{0}^{\tau}\int_{s}^{n}
+\dfrac{\partial}{\partial{}r}
+\left(\beta{}k\dfrac{\partial{}T}{\partial{}r}\right)drdt
+\]</p><p>In the above expression, instead of integrating over the full domain, we applied limits over the <em>north</em> and <em>south</em> interfaces of a single finite volume cell (logically using a cell-centered formulation).</p><h4 id="Cylindrical-coordinates"><a class="docs-heading-anchor" href="#Cylindrical-coordinates">Cylindrical coordinates</a><a id="Cylindrical-coordinates-1"></a><a class="docs-heading-anchor-permalink" href="#Cylindrical-coordinates" title="Permalink"></a></h4><p>Effecting the inner integration and moving out constant terms from the integrals we have</p><p class="math-container">\[
 \rho{}c_{p}\left(T_P^{\tau}-T_P^{0}\right)\int_{s}^{n}rdr=
 \int_{0}^{\tau}
 \left(rk\frac{\partial{}T}{\partial{}r}\right)\bigg\vert_{s}^{n}dt
@@ -106,13 +106,7 @@ a_ST_S + a_PT_P + a_NT_N = \alpha_{P}T_P^{0}
 a_1T_P + a_NT_N = \alpha_{P}T_P^{0}\quad\text{where}\quad{}a_1=\alpha_{P}+\beta_{n}
 \]</p><p>Over the external radius <span>$r=R$</span> a Robin boundary condition is imposed. In this case the heat flux <span>$\dot{q}=U(T_\infty-T_P)$</span> takes the place of <em>north</em> term in FVM discretization and the equation writes</p><p class="math-container">\[
 a_ST_S + a_RT_P = \alpha_{P}T_P^{0}+UT_\infty\quad\text{where}\quad{}a_R=\alpha_{P}+U+\beta_{s}
-\]</p><p>It must be noted here that <span>$U=Rh$</span>, where the actual heat transfer coefficient is <span>$h$</span>. This should be self-evident from a dimensional analysis.</p><h4 id="Spherical-coordinates"><a class="docs-heading-anchor" href="#Spherical-coordinates">Spherical coordinates</a><a id="Spherical-coordinates-1"></a><a class="docs-heading-anchor-permalink" href="#Spherical-coordinates" title="Permalink"></a></h4><p>The integration over radial coordinate introduces the <span>$r^2dr$</span> factor from the differential volume and we get the final form of the equation to integrate.</p><p class="math-container">\[
-\int_{s}^{n}\int_{0}^{\tau}
-\rho{}c_{p}\frac{\partial{}T}{\partial{}t}r^2dtdr=
-\int_{0}^{\tau}\int_{s}^{n}
-\frac{\partial}{\partial{}r}
-\left(r^2k\frac{\partial{}T}{\partial{}r}\right)drdt
-\]</p><p>After effecting the inner integration and moving out constant terms from the integrals and expanding the evaluation of the definite integral between control volume boundaries <span>$s$</span> and <span>$n$</span> and performing a Crank-Nicolson integration of the right-hand side one gets</p><p class="math-container">\[
+\]</p><p>It must be noted here that <span>$U=Rh$</span>, where the actual heat transfer coefficient is <span>$h$</span>. This should be self-evident from a dimensional analysis.</p><h4 id="Spherical-coordinates"><a class="docs-heading-anchor" href="#Spherical-coordinates">Spherical coordinates</a><a id="Spherical-coordinates-1"></a><a class="docs-heading-anchor-permalink" href="#Spherical-coordinates" title="Permalink"></a></h4><p>After effecting the inner integration and moving out constant terms from the integrals and expanding the evaluation of the definite integral between control volume boundaries <span>$s$</span> and <span>$n$</span> and performing a Crank-Nicolson integration of the right-hand side one gets</p><p class="math-container">\[
 \begin{aligned}
     \frac{\rho{}c_{p}}{\tau}
     \left(T_P^{\tau}-T_P^{0}\right)
@@ -157,4 +151,4 @@ a_ST_S + a_PT_P + a_NT_N = \alpha_{P}T_P^{0}
 a_1T_P + a_NT_N = \alpha_{P}T_P^{0}\quad\text{where}\quad{}a_1=\alpha_{P}+\beta_{n}
 \]</p><p>Over the external radius <span>$r=R$</span> a Robin boundary condition is imposed. In this case the heat flux <span>$\dot{q}=U(T_\infty-T_P)$</span> takes the place of <em>north</em> term in FVM discretization and the equation writes</p><p class="math-container">\[
 a_ST_S + a_RT_P = \alpha_{P}T_P^{0}+UT_\infty\quad\text{where}\quad{}a_R=\alpha_{P}+U+\beta_{s}
-\]</p><p>It must be noted here that <span>$U=R^2h$</span>, where the actual heat transfer coefficient is <span>$h$</span>. This should be self-evident from a dimensional analysis.</p><h2 id="Enthalpy-formulation"><a class="docs-heading-anchor" href="#Enthalpy-formulation">Enthalpy formulation</a><a id="Enthalpy-formulation-1"></a><a class="docs-heading-anchor-permalink" href="#Enthalpy-formulation" title="Permalink"></a></h2></article><nav class="docs-footer"><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.3.0 on <span class="colophon-date" title="Monday 13 May 2024 11:40">Monday 13 May 2024</span>. Using Julia version 1.10.3.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+\]</p><p>It must be noted here that <span>$U=R^2h$</span>, where the actual heat transfer coefficient is <span>$h$</span>. This should be self-evident from a dimensional analysis.</p><h2 id="Enthalpy-formulation"><a class="docs-heading-anchor" href="#Enthalpy-formulation">Enthalpy formulation</a><a id="Enthalpy-formulation-1"></a><a class="docs-heading-anchor-permalink" href="#Enthalpy-formulation" title="Permalink"></a></h2></article><nav class="docs-footer"><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.3.0 on <span class="colophon-date" title="Monday 13 May 2024 12:10">Monday 13 May 2024</span>. Using Julia version 1.10.3.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
