@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+# Run from this directory
+cd "${0%/*}" || exit
+
+rm -rf case.foam
+rm -rf [0-9]*
+rm -rf wedge.msh
+rm -rf constant/polyMesh
+rm -rf dynamicCode/
+rm -rf log.*

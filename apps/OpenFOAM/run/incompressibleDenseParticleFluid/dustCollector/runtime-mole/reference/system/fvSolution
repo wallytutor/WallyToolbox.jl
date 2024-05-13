@@ -1,0 +1,96 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  11
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    format      ascii;
+    class       dictionary;
+    object      fvSolution;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+solvers
+{
+    alpha.air
+    {
+        max             0.9;
+    }
+
+    p
+    {
+        solver                 GAMG;
+        tolerance              1e-6;
+        relTol                 0.01;
+        smoother               GaussSeidel;
+        // nPreSweeps             0;
+        // nPostSweeps            2;
+        cacheAgglomeration     true;
+        agglomerator           faceAreaPair;
+        nCellsInCoarsestLevel  10;
+        mergeLevels            1;
+        minIter                3;
+    }
+
+    pFinal
+    {
+        $p;
+        tolerance              1e-06;
+        relTol                 0;
+        minIter                3;
+    }
+
+    "(U|k|omega|epsilon).*"
+    {
+        solver                 PBiCGStab;
+        preconditioner         DILU;
+        tolerance              1e-08;
+        relTol                 0.01;
+        minIter                3;
+    }
+
+    //Use with packingModel implicit
+    "cloud:alpha.*"
+    {
+        solver          GAMG;
+        tolerance       1e-06;
+        relTol          0.0;
+        smoother        GaussSeidel;
+        minIter         3;
+
+        // Avoid unconverged iterations but it will slow down the computation
+        // maxIter        1000;
+    }
+}
+
+PIMPLE
+{
+    momentumPredictor        yes;
+    consistent               yes;
+    nOuterCorrectors         1;
+    nCorrectors              2;
+    nNonOrthogonalCorrectors 1;
+
+    residualControl
+    {
+        "(p|U).*"               1.0e-05;
+        "(k|omega).*"           1.0e-05;
+    }
+}
+
+relaxationFactors
+{
+    fields
+    {
+        ".*" 0.9;
+    }
+    equations
+    {
+        ".*" 0.9;
+    }
+}
+
+// ************************************************************************* //

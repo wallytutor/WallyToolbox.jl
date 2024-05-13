@@ -1,0 +1,12 @@
+# Ignore built case.
+[0-9]*
+constant/
+system/
+Allclean
+processor*/
+
+# Ignore all logs.
+log.*
+
+# Unignore actual base case from zero/ directory.
+!zero/*

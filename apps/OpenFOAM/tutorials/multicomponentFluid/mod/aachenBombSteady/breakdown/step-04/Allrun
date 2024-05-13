@@ -1,0 +1,45 @@
+#!/bin/sh
+cd ${0%/*} || exit 1
+
+. $WM_PROJECT_DIR/bin/tools/RunFunctions
+
+touch case.foam
+
+cp -avr zero/*                            .
+cp ../components/Allclean                 .
+
+cp ../components/fv*                      system/
+cp ../components/blockMeshDict            system/
+cp ../components/decomposeParDict         system/
+cp ../components/steadyParticleTracksDict system/
+
+cp ../components/chemistryProperties      constant/
+cp ../components/combustionProperties     constant/
+
+runApplication chemkinToFoam \
+            chemkin/chem.inp \
+            chemkin/therm.dat \
+            chemkin/transportProperties \
+            constant/reactions \
+            constant/speciesThermo
+
+runApplication blockMesh
+runApplication potentialFoam
+rm -rf 0/phi
+runApplication decomposePar
+runApplication mpirun -np 32 foamRun -parallel
+
+# Do not log this!
+reconstructPar -latestTime
+steadyParticleTracks
+
+# Clean-up
+rm -rf processor*/
+
+# NOT WORKING!
+# foamToVTK -latestTime
+
+#cp "postProcessing/residuals(p,U,k,epsilon,h,C7H16)/0/residuals.dat" residuals.ref
+#tail -55 log.mpirun >> residuals.ref
+
+#------------------------------------------------------------------------------

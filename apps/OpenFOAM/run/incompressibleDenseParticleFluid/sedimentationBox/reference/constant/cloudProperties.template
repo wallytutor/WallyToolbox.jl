@@ -1,0 +1,155 @@
+{{{OPENFOAMBANNER}}}FoamFile
+{
+    format      ascii;
+    class       dictionary;
+    object      cloudProperties;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+type        MPPICCloud;
+
+solution
+{
+    maxCo                     1.0;
+
+    coupled                   true;
+    transient                 yes;
+    cellValueSourceCorrection on;
+    averagingMethod           dual;
+
+    interpolationSchemes
+    {
+        rho.air         cell;
+        U.air           cellPoint;
+        mu.air          cell;
+        alpha.air       cell;
+    }
+
+    integrationSchemes
+    {
+        U               Euler;
+    }
+
+    sourceTerms
+    {
+        resetOnStartup  false;
+
+        schemes
+        {
+            U           semiImplicit 1;
+        }
+    }
+}
+
+constantProperties
+{
+    rho0                2450;
+}
+
+subModels
+{
+    // ------------------------------------------------------------------------
+    
+    particleForces
+    {
+        gravity;
+
+        {{dragModel}}
+    }
+
+    // ------------------------------------------------------------------------
+
+    injectionModels
+    {
+        dropoff
+        {
+            type              manualInjection;
+            positionsFile     "cloudPositions";
+
+            SOI               0;
+            nParticle         1;
+            U0                (0 0 0);
+
+            sizeDistribution
+            {
+                type            fixedValue;
+                value           {{particleSize}};
+            }
+        }
+    }
+
+    // ------------------------------------------------------------------------
+
+    packingModel              implicit;
+
+    implicitCoeffs
+    {
+        alphaMin         0.0001;
+        rhoMin           1.0;
+        applyLimiting    true;
+        applyGravity     {{applyGravity}};
+
+        particleStressModel
+        {
+            type         HarrisCrighton;
+            alphaPacked  0.6;
+            pSolid       5.0;
+            beta         2.0;
+            eps          1.0e-02;
+        }
+    }
+
+    // ------------------------------------------------------------------------
+
+    dampingModel              relaxation;
+
+    relaxationCoeffs
+    {
+        timeScaleModel
+        {
+            type         nonEquilibrium;
+            alphaPacked  0.6;
+            e            0.9;
+        }
+    }
+
+    // ------------------------------------------------------------------------
+
+    isotropyModel             stochastic;
+
+    stochasticCoeffs
+    {
+        timeScaleModel
+        {
+            type         isotropic;
+            alphaPacked  0.6;
+            e            0.9;
+        }
+    }
+
+    // ------------------------------------------------------------------------
+
+    patchInteractionModel     standardWallInteraction;
+
+    standardWallInteractionCoeffs
+    {
+        type        rebound;
+        e           0.97;
+        mu          0.09;
+    }
+
+    // ------------------------------------------------------------------------
+    
+    dispersionModel           none;
+    stochasticCollisionModel  none;
+    surfaceFilmModel          none;
+    heatTransferModel         none;
+    radiation                 off;
+
+    // ------------------------------------------------------------------------
+}
+
+cloudFunctions
+{}
+
+// ************************************************************************* //

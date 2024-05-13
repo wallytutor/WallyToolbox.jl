@@ -1,0 +1,47 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  11
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    format          ascii;
+    class           dictionary;
+    location        "constant";
+    object          combustionProperties;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+EDCCoeffs
+{
+    version         v2016;
+}
+
+infinitelyFastChemistryCoeffs
+{
+    semiImplicit    no;
+    C               5;
+}
+
+diffusionCoeffs
+{
+    semiImplicit    no;
+    C               5;
+}
+
+PaSRCoeffs
+{
+    Cmix            1;
+}
+
+reaction
+{
+    //reaction        "C7H16 + 11O2 + 70N2 = 7CO2 + 8H2O + 70N2";
+    reaction        "C7H16 + 11O2 = 7CO2 + 8H2O";
+}
+
+combustionModel EDC;
+
+// ************************************************************************* //

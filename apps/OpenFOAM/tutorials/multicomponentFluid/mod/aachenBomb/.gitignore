@@ -1,0 +1,15 @@
+# Any numbered (time) directory
+[0-9]*
+
+# Mesh
+polyMesh/
+
+# Converted chemistry
+constant/reactions
+constant/speciesThermo
+
+# Logs
+log.*
+
+# Post
+VTK/*

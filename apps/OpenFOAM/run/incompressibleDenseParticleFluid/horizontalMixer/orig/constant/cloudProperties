@@ -1,0 +1,240 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  11
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    format      ascii;
+    class       dictionary;
+    location    "constant";
+    object      cloudProperties;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+type        MPPICCloud;
+
+solution
+{
+    coupled                   true;
+    transient                 yes;
+    cellValueSourceCorrection on;
+    maxCo                     0.7;
+
+    interpolationSchemes
+    {
+        rho.air         cell;
+        U.air           cellPoint;
+        mu.air          cell;
+        alpha.air       cell;
+    }
+
+    averagingMethod     dual;
+
+    integrationSchemes
+    {
+        U               Euler;
+    }
+
+    sourceTerms
+    {
+        schemes
+        {
+            U           semiImplicit 1;
+        }
+    }
+}
+
+constantProperties
+{
+    rho0                2500;
+}
+
+subModels
+{
+    particleForces
+    {
+        gravity;
+
+        sphereDrag;
+
+        // ErgunWenYuDrag
+        // {
+        //     alphac alpha.air;
+        // }
+        // PlessisMasliyahDrag
+        // {
+        //     alphac alpha.air;
+        // }
+        // WenYuDrag
+        // {
+        //     alphac alpha.air;
+        // }
+    }
+
+    injectionModels
+    {
+        model1
+        {
+            type              patchInjection;
+            patchName         inlet;
+
+            // Same as fluid in this case with homogeneous distribution.
+            U0                (2.0 0.0 0.0);
+            flowRateProfile   constant 1;
+
+            // NOTE: mass flow rate must be scaled by the width of the
+            // 2-D extruded mesh, otherwise absurd flow rates will make
+            // convergence impossible!
+
+            parcelsPerSecond  7639;
+
+            // uniformParcelSize volume;
+            // massFlowRate      0.001;
+
+            uniformParcelSize nParticle;
+            nParticle         100;
+
+            SOI               1.0;
+            duration          1.0e+09;
+
+            sizeDistribution
+            {
+                type          fixedValue;
+                value         0.0001;
+            }
+        }
+    }
+
+    // ------------------------------------------------------------------------
+
+    patchInteractionModel localInteraction;
+
+    localInteractionCoeffs
+    {
+        patches
+        (
+            inlet
+            {
+                type rebound;
+                e    0.97;
+                mu   0.09;
+            }
+            outlet
+            {
+                type escape;
+            }
+            walls
+            {
+                type rebound;
+                e    0.97;
+                mu   0.09;
+            }
+        );
+    }
+
+    // ------------------------------------------------------------------------
+
+    packingModel implicit;
+
+    explicitCoeffs
+    {
+        particleStressModel
+        {
+            type        HarrisCrighton;
+            alphaPacked 0.6;
+            pSolid      10.0;
+            beta        2.0;
+            eps         1.0e-07;
+        }
+        correctionLimitingMethod
+        {
+            type absolute;
+            e    0.9;
+        }
+    }
+
+    implicitCoeffs
+    {
+        alphaMin      0.0001;
+        rhoMin        1.0;
+        applyLimiting true;
+        applyGravity  false;
+
+        particleStressModel
+        {
+            type        HarrisCrighton;
+            alphaPacked 0.6;
+            pSolid      5.0;
+            beta        2.0;
+            eps         1.0e-02;
+        }
+    }
+
+    // ------------------------------------------------------------------------
+
+    dampingModel relaxation;
+
+    relaxationCoeffs
+    {
+        timeScaleModel
+        {
+            type        nonEquilibrium;
+            alphaPacked 0.6;
+            e           0.9;
+        }
+    }
+
+    // ------------------------------------------------------------------------
+
+    isotropyModel stochastic;
+
+    stochasticCoeffs
+    {
+        timeScaleModel
+        {
+            type        isotropic;
+            alphaPacked 0.6;
+            e           0.9;
+        }
+    }
+
+    // ------------------------------------------------------------------------
+
+    dispersionModel           none;
+
+    heatTransferModel         none;
+
+    surfaceFilmModel          none;
+    
+    stochasticCollisionModel  none;
+
+    radiation                 off;
+
+}
+
+cloudFunctions
+{
+    massFlux1
+    {
+        type massFlux;
+    }
+    patchPostProcessing1
+    {
+        type             patchPostProcessing;
+        maxStoredParcels 1000;
+        patches          ( outlet );
+    }
+    particleTracks1
+    {
+        type            particleTracks;
+        trackInterval   5;
+        maxSamples      1000000;
+        resetOnWrite    yes;
+    }
+}
+
+
+// ************************************************************************* //

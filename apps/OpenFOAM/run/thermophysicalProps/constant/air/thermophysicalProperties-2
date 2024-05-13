@@ -1,0 +1,74 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  11
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      thermophysicalProperties;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+thermoType
+{
+    type            heRhoThermo;
+    mixture         pureMixture;
+    transport       polynomial;
+    thermo          hPolynomial;
+    equationOfState perfectGas;
+    specie          specie;
+    energy          sensibleEnthalpy;
+}
+
+mixture
+{
+    specie
+    {
+        molWeight       28.9;
+    }
+    thermodynamics
+    {
+        CpCoeffs<8>     (
+             9.935844812015e+02
+            -7.172194218206e-02
+             3.134503293205e-04
+             1.215400441772e-07
+            -4.235424659599e-10
+             2.704616851596e-13
+            -7.218584727836e-17
+             7.144078121623e-21
+        );
+        Sf              0;
+        Hf              0;
+    }
+    transport
+    {
+        muCoeffs<8>     (
+            -9.242771950306e-07
+             8.865121648114e-08
+            -1.046733862477e-10
+             1.070156335986e-13
+            -6.750838653617e-17
+             2.494675099820e-20
+            -4.943884407586e-24
+             4.048862003544e-28
+        );
+        kappaCoeffs<8>  (
+             1.008596328023e-02
+             4.015149597454e-05
+             7.296358601141e-08
+            -1.034997536546e-10
+             7.264304124554e-14
+            -2.830405796393e-17
+             5.789497162455e-21
+            -4.842146506198e-25
+        );
+    }
+}
+
+// ************************************************************************* //

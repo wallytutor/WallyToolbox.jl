@@ -1,0 +1,20 @@
+# Generated mesh
+*.msh
+polyMesh/
+
+# Time directories
+/*/[0-9]*
+
+# Logging
+logging/
+
+# Decomposed cases
+processor*
+
+# Postprocessing
+animation/
+postProcessing/
+VTK/
+*.tmp
+*.mp4
+*.pvsm

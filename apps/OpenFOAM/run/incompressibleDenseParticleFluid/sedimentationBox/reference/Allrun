@@ -1,0 +1,52 @@
+#!/usr/bin/env bash
+
+# Run from this directory
+cd "${0%/*}" || exit 1
+
+# Make OpenFOAM tools available.
+. $WM_PROJECT_DIR/bin/tools/RunFunctions
+
+# Helper to open case with Paraview.
+touch case.foam
+
+# Create initial state.
+cp -avr zero/ "0.000000/"
+
+# Create constant/polyMesh in case
+runApplication gmshToFoam ../geometry.msh
+
+# Fix patches for the present case.
+boundary=constant/polyMesh/boundary
+foamDictionary $boundary -entry entry0/frontAndBack/type -set empty
+foamDictionary $boundary -entry entry0/walls/type        -set wall
+
+# Confirm mesh quality is acceptable.
+runApplication checkMesh
+
+# Improve parallelization efficiency.
+runApplication renumberMesh -overwrite
+tail -5 log.checkMesh | head -2
+
+# Manage type of execution.
+if [ "$(nproc --all)" -gt 10 ]; then
+    echo "Running in parallel:"
+    runApplication decomposePar
+    runApplication mpirun -np 10 foamRun -parallel
+    reconstructPar
+
+    mv log.mpirun log.solver
+    rm -rf processors*
+else
+    echo "Running sequential"
+    runApplication foamRun
+
+    mv log.foamRun log.solver
+fi
+
+# Create VTK files to visualize particles.
+foamToVTK
+
+# Extract data for post-processing.
+python3 positions.py
+
+#------------------------------------------------------------------------------

@@ -1,0 +1,9 @@
+sizeDistribution
+{
+    type            RosinRammler;
+    Q               3;
+    min             0.000001;
+    max             0.000150;
+    d               0.000150;
+    n               3.5;
+}

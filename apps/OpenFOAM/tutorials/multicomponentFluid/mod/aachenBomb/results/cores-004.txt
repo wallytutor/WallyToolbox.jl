@@ -1,0 +1,41 @@
+Courant Number mean: 0.00514474 max: 0.0264202
+deltaT = 1e-05
+Time = 1.000000e-02s
+
+
+Solving 3-D cloud cloud
+Cloud: cloud
+    Current number of parcels       = 0
+    Current mass in system          = 0
+    Linear momentum                 = (0 0 0)
+   |Linear momentum|                = 0
+    Linear kinetic energy           = 0
+    model1:
+        number of parcels added     = 25000
+        mass introduced             = 6e-06
+    Parcel fate (number, mass)
+      - escape                      = 0, 0
+      - stick                       = 0, 0
+    Temperature min/max             = 0, 0
+    Mass transfer phase change      = 6e-06
+    D10, D32, Dmax (mu)             = 0, 0, 0
+    Liquid penetration 95% mass (m) = 0
+
+diagonal:  Solving for rho, Initial residual = 0, Final residual = 0, No Iterations 0
+smoothSolver:  Solving for Ux, Initial residual = 0.00056688, Final residual = 7.72116e-08, No Iterations 2
+smoothSolver:  Solving for Uy, Initial residual = 0.000763083, Final residual = 2.36659e-07, No Iterations 2
+smoothSolver:  Solving for Uz, Initial residual = 0.00056856, Final residual = 1.47974e-07, No Iterations 2
+DILUPBiCGStab:  Solving for C7H16, Initial residual = 0.000108125, Final residual = 8.12227e-07, No Iterations 1
+DILUPBiCGStab:  Solving for O2, Initial residual = 0.000127764, Final residual = 7.58142e-08, No Iterations 1
+DILUPBiCGStab:  Solving for CO2, Initial residual = 0.000127761, Final residual = 7.58046e-08, No Iterations 1
+DILUPBiCGStab:  Solving for H2O, Initial residual = 0.000127761, Final residual = 7.58046e-08, No Iterations 1
+DILUPBiCGStab:  Solving for h, Initial residual = 0.000128244, Final residual = 7.53497e-08, No Iterations 1
+GAMG:  Solving for p, Initial residual = 0.799896, Final residual = 0.00650308, No Iterations 1
+diagonal:  Solving for rho, Initial residual = 0, Final residual = 0, No Iterations 0
+time step continuity errors : sum local = 6.20315e-08, global = -5.83113e-10, cumulative = -0.000831638
+GAMG:  Solving for p, Initial residual = 0.0158136, Final residual = 6.57102e-07, No Iterations 21
+diagonal:  Solving for rho, Initial residual = 0, Final residual = 0, No Iterations 0
+time step continuity errors : sum local = 2.57687e-12, global = 1.16623e-12, cumulative = -0.000831638
+smoothSolver:  Solving for epsilon, Initial residual = 0.000809511, Final residual = 3.06236e-07, No Iterations 2
+smoothSolver:  Solving for k, Initial residual = 0.000740066, Final residual = 5.36329e-07, No Iterations 2
+ExecutionTime = 7382.02 s  ClockTime = 7420 s

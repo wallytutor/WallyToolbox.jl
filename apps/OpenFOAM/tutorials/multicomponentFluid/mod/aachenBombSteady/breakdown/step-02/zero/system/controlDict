@@ -1,0 +1,61 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  11
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    format          ascii;
+    class           dictionary;
+    location        "system";
+    object          controlDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+application     foamRun;
+
+solver          multicomponentFluid;
+
+startFrom       latestTime;
+
+startTime       0;
+
+stopAt          endTime;
+
+endTime         300;
+
+deltaT          1;
+
+writeControl    timeStep;
+
+writeInterval   20;
+
+purgeWrite      5;
+
+writeFormat     ascii;
+
+writePrecision  10;
+
+writeCompression off;
+
+timeFormat      fixed;
+
+timePrecision   0;
+
+runTimeModifiable yes;
+
+functions
+{
+    #includeFunc residuals(p, U, k, epsilon, h)
+
+    #includeFunc patchFlowRate(patch=inlet, phi)
+
+    #includeFunc patchFlowRate(patch=outlet, phi)
+
+    #include "$FOAM_CASE/../functions/massAvgOutletPressureVelocity"
+    #include "$FOAM_CASE/../functions/massAvgOutletTemperature"
+}
+
+// ************************************************************************* //

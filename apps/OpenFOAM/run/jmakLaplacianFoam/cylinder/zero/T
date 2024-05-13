@@ -1,0 +1,51 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  11
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    format      ascii;
+    class       volScalarField;
+    object      T;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions      [ 0  0  0  1  0  0  0 ];
+
+internalField   uniform 299.9;
+
+boundaryField
+{
+    // Ongoing development based on this: www.cfd-online.com/Forums/openfoam/
+    // ...  227900-temperature-dependent-heat-flux-condition.html
+    // TODO implement solidThermo to use externalWallHeatFluxTemperature.
+
+    "(top|bottom|radius)"
+    {
+        name            temperatureHeatFlux;
+        type            codedMixed;
+        value           $internalField;
+        refValue        $internalField;       
+        refGradient     uniform 0;      
+        valueFraction   uniform 0;
+
+        code
+        #{
+            const scalar htc = 10.0;
+            const scalar Tinf = 300.0;
+            const scalar kappa = 1.0;
+            const scalarField& Tp(*this);
+
+            this->refGrad() = htc * (Tinf - Tp) / kappa;
+        #};
+    }
+    "(front|back)"
+    {
+        type            wedge;
+    }
+}
+
+// ************************************************************************* //

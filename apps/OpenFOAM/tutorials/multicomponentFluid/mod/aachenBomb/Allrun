@@ -1,0 +1,22 @@
+#!/bin/sh
+cd ${0%/*} || exit 1
+
+. $WM_PROJECT_DIR/bin/tools/RunFunctions
+
+touch case.foam
+
+cp -avr zero/ 0/
+
+runApplication chemkinToFoam \
+               chemkin/chem.inp chemkin/therm.dat chemkin/transportProperties \
+               constant/reactions constant/speciesThermo
+
+runApplication blockMesh
+
+runApplication renumberMesh -overwrite
+
+runApplication decomposePar
+
+runApplication mpirun -np 2 foamRun -parallel
+
+#------------------------------------------------------------------------------

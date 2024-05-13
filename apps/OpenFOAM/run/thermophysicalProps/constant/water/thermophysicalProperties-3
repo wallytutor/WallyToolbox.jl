@@ -1,0 +1,88 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  11
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      thermophysicalProperties;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+thermoType
+{
+    type            heRhoThermo;
+    mixture         pureMixture;
+    transport       polynomial;
+    thermo          hPolynomial;
+    equationOfState icoPolynomial;
+    specie          specie;
+    energy          sensibleEnthalpy;
+}
+
+mixture
+{
+    specie
+    {
+        molWeight       18.0;
+    }
+    thermodynamics
+    {
+        CpCoeffs<8>     (
+             9.85069e+03
+            -4.86714e+01
+             1.37360e-01
+            -1.27063e-04
+             0.00000e+00
+             0.00000e+00
+             0.00000e+00
+             0.00000e+00
+        );
+        Sf              0;
+        Hf              0;
+    }
+    equationOfState
+    {
+        // I need to check this! (seems) Probably broken!
+        rhoCoeffs<8>    (
+             7.46025e+02
+             1.93017e+00
+            -3.65471e-03
+             0.00000e+00
+             0.00000e+00
+             0.00000e+00
+             0.00000e+00
+             0.00000e+00
+        );
+    }
+    transport
+    {
+        muCoeffs<8>     (
+             1.16947e-01
+            -1.00532e-03
+             2.90283e-06
+            -2.80572e-09
+             0.00000e+00
+             0.00000e+00
+             0.00000e+00
+             0.00000e+00
+        );
+        kappaCoeffs<8>  (
+            -7.10696e-01
+             7.18570e-03
+            -9.29827e-06
+             0.00000e+00
+             0.00000e+00
+             0.00000e+00
+             0.00000e+00
+             0.00000e+00
+        );
+    }
+}
+
+// ************************************************************************* //

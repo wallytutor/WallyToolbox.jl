@@ -1,0 +1,26 @@
+#!/bin/sh
+cd ${0%/*} || exit 1    # Run from this directory
+
+mkdir logging/
+
+if [ ! -f "../geometry.msh" ]; then
+    gmsh -3 ../geometry.geo -o ../geometry.msh | tee logging/log.gmsh
+fi
+
+gmshToFoam ../geometry.msh | tee logging/log.gmshToFoam
+
+checkMesh | tee logging/log.checkMesh
+
+boundary=constant/polyMesh/boundary
+foamDictionary $boundary -entry entry0/frontAndBack/type -set empty
+foamDictionary $boundary -entry entry0/walls/type        -set wall
+
+renumberMesh -overwrite | tee logging/log.renumberMesh
+
+# Activate the following if running in parallel:
+# decomposePar | tee logging/log.decomposePar
+# mpirun -np 16 foamRun -parallel | tee logging/log.foamRun
+
+foamRun | tee logging/log.foamRun
+
+#------------------------------------------------------------------------------

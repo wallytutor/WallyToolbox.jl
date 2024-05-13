@@ -1,0 +1,11 @@
+#!/bin/sh
+cd ${0%/*} || exit 1    # Run from this directory
+
+# Activate the following if running in parallel:
+# reconstructPar
+
+foamToVTK
+
+rm -rf [0-9]*
+
+#------------------------------------------------------------------------------

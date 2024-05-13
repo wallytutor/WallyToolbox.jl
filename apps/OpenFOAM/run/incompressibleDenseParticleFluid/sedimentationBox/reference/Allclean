@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+# Run from this directory
+cd "${0%/*}" || exit
+
+rm -rf case.foam
+rm -rf [0-9]*
+rm -rf constant/polyMesh/
+rm -rf postProcessing
+rm -rf processors*
+rm -rf log.*
+rm -rf VTK
+
+#------------------------------------------------------------------------------

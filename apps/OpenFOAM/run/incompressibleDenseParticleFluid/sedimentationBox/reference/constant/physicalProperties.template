@@ -1,0 +1,18 @@
+{{{OPENFOAMBANNER}}}FoamFile
+{
+    format      ascii;
+    class       dictionary;
+    location    "constant";
+    object      physicalProperties;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+continuousPhaseName air;
+
+viscosityModel      constant;
+
+nu                  1.568e-05;
+
+rho.air             {{rho}};
+
+// ************************************************************************* //

@@ -1,0 +1,52 @@
+// ----------------------------------------------------------------------------
+
+dispersionModel           stochasticDispersionRAS;
+patchInteractionModel     standardWallInteraction;
+stochasticCollisionModel  none;
+surfaceFilmModel          none;
+heatTransferModel         RanzMarshall;
+compositionModel          singlePhaseMixture;
+radiation                 none;
+phaseChangeModel          liquidEvaporationBoil;
+atomisationModel          none;
+breakupModel              ReitzDiwakar;
+
+// ----------------------------------------------------------------------------
+
+standardWallInteractionCoeffs
+{
+    type            rebound;
+}
+
+RanzMarshallCoeffs
+{
+    BirdCorrection  true;
+}
+
+singlePhaseMixtureCoeffs
+{
+    phases
+    (
+        liquid
+        {
+            C7H16               1;
+        }
+    );
+}
+
+liquidEvaporationBoilCoeffs
+{
+    enthalpyTransfer enthalpyDifference;
+    activeLiquids    ( C7H16 );
+}
+
+ReitzDiwakarCoeffs
+{
+    solveOscillationEq yes;
+    Cbag            6;
+    Cb              0.785;
+    Cstrip          0.5;
+    Cs              10;
+}
+
+// ----------------------------------------------------------------------------

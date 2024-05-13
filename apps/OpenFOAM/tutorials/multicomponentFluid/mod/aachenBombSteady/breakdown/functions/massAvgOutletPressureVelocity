@@ -1,0 +1,14 @@
+massAvgOutletPressureVelocity
+{
+    type            surfaceFieldValue;
+    libs            ( "libfieldFunctionObjects.so" );
+    enabled         yes;
+    writeControl    writeTime;
+    log             yes;
+    writeFields     no;
+    select          patch;
+    patch           outlet;
+    operation       average;
+    weightField     phi;
+    fields          ( p U );
+}

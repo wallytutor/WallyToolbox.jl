@@ -1,0 +1,51 @@
+#!/usr/bin/env bash
+
+# Run from this directory
+cd "${0%/*}" || exit 1
+
+# Make OpenFOAM tools available.
+. $WM_PROJECT_DIR/bin/tools/RunFunctions
+
+# Helper to open case with Paraview.
+touch case.foam
+
+# Copy initial conditions.
+cp -avr zero/ 0/
+
+# Generate compatible mesh.
+gmsh -3 -format msh2 constant/wedge.geo
+
+# Increase precision to avoid wedge not planar warnings.
+foamDictionary system/controlDict -entry writePrecision -set 12
+runApplication gmshToFoam constant/wedge.msh
+
+# Fall back to standard value to save disk space.
+foamDictionary system/controlDict -entry writePrecision -set 6
+
+# Fix patches for the present case.
+boundary=constant/polyMesh/boundary
+foamDictionary $boundary -entry entry0/front/type  -set wedge
+foamDictionary $boundary -entry entry0/back/type   -set wedge
+foamDictionary $boundary -entry entry0/walls/type  -set wall
+
+# Check mesh after.
+runApplication checkMesh
+tail -5 log.checkMesh | head -2
+
+# Run a certain number of iterations with constant properties.
+foamDictionary system/controlDict -entry endTime -set 1000
+cp constant/water/thermophysicalProperties-2 constant/thermophysicalProperties
+
+# Initialize flow and remove incompatible field.
+runApplication potentialFoam
+rm -rf 0/phi
+
+# Run application.
+runApplication $(getApplication)
+mv log.rhoSimpleFoam log.solver.1
+
+# Run initialized case with more complex properties.
+foamDictionary system/controlDict -entry endTime -set 3000
+cp constant/water/thermophysicalProperties-1 constant/thermophysicalProperties
+runApplication $(getApplication)
+mv log.rhoSimpleFoam log.solver.2

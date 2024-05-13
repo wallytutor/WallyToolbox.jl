@@ -1,0 +1,5 @@
+sizeDistribution
+{
+    type            fixedValue;
+    value           100e-06;
+}

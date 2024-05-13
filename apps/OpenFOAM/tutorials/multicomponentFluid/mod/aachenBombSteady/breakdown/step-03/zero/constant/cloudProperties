@@ -1,0 +1,132 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  11
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    format      ascii;
+    class       dictionary;
+    location    "constant";
+    object      cloudProperties;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+#include "$FOAM_CASE/../parameters"
+
+type        sprayCloud;
+
+solution
+{
+    calcFrequency   10;
+    maxTrackTime    5.0;
+    maxCo           0.3;
+
+    coupled         true;
+    cellValueSourceCorrection on;
+
+    sourceTerms
+    {
+        resetOnStartup  false;
+        schemes
+        {
+            rho             semiImplicit 1;
+            U               semiImplicit 1;
+            Yi              semiImplicit 1;
+            h               semiImplicit 1;
+            radiation       semiImplicit 1;
+        }
+    }
+
+    interpolationSchemes
+    {
+        rho             cell;
+        U               cellPoint;
+        mu              cell;
+        T               cell;
+        Cp              cell;
+        kappa           cell;
+        p               cell;
+    }
+
+    integrationSchemes
+    {
+        U               Euler;
+        T               analytical;
+    }
+}
+
+constantProperties
+{
+    T0              320;
+    rho0            1000;
+    Cp0             4187;
+    constantVolume  false;
+}
+
+subModels
+{
+    particleForces
+    {
+        sphereDrag;
+        gravity;
+    }
+
+    injectionModels
+    {
+        model1
+        {
+            type              coneInjection;
+
+            massFlowRate      $mdot_fuel;
+            uniformParcelSize volume;
+            parcelsPerSecond  20000;
+            flowRateProfile   constant 1;
+
+            position          (0.001 0.0 0.0);
+            direction         (1.000 0.0 0.0);
+            thetaInner        constant 0.0;
+            thetaOuter        constant 42.0;
+
+            flowType          constantVelocity;
+            Umag              $U_air;
+
+            injectionMethod   disc;
+            dInner            0.000;
+            dOuter            0.002;
+
+            #include "$FOAM_CASE/constant/cloudModels/psdFixedValue"
+            // #include "$FOAM_CASE/constant/cloudModels/psdRosinRammler"
+        }
+    }
+
+    #include "$FOAM_CASE/constant/cloudModels/$type"
+}
+
+cloudFunctions
+{
+    massFlux1
+    {
+        type massFlux;
+    }
+
+    // patchPostProcessing1
+    // {
+    //     type             patchPostProcessing;
+    //     maxStoredParcels 1000;
+    //     patches          ( outlet );
+    // }
+
+    particleTracks1
+    {
+        type            particleTracks;
+        trackInterval   5;
+        maxSamples      1000000;
+        resetOnWrite    yes;
+    }
+}
+
+
+// ************************************************************************* //

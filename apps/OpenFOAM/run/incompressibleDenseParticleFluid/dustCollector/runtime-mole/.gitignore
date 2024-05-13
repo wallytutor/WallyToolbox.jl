@@ -1,0 +1,14 @@
+sandbox*
+
+/**/case/[0-9]*
+/**/case/constant/
+/**/case/logging/
+/**/case/processors*/
+/**/case/system/
+/**/case/VTK/
+/**/case/*.msh
+/**/case/*.sh
+/**/case/*.pvsm
+
+# Maybe commit later
+/**/case/postProcessing/

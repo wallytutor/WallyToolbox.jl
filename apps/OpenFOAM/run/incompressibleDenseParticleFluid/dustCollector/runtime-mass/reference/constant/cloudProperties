@@ -1,0 +1,189 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  11
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    format      ascii;
+    class       dictionary;
+    object      cloudProperties;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+type MPPICCloud;
+
+solution
+{
+    coupled                   true;
+    transient                 yes;
+    cellValueSourceCorrection on;
+    maxCo                     0.7;
+
+    interpolationSchemes
+    {
+        rho.air         cell;
+        U.air           cellPoint;
+        mu.air          cell;
+        alpha.air       cell;
+    }
+
+    averagingMethod     dual;
+
+    integrationSchemes
+    {
+        U               Euler;
+    }
+
+    sourceTerms
+    {
+        schemes
+        {
+            U           semiImplicit 1;
+        }
+    }
+}
+
+constantProperties
+{
+    rho0               2450;
+}
+
+subModels
+{
+    particleForces
+    {
+        gravity;
+
+        ErgunWenYuDrag
+        {
+            alphac alpha.air;
+        }
+    }
+
+    // ------------------------------------------------------------------------
+
+    injectionModels
+    {
+        model1
+        {
+            type              patchInjection;
+            patchName         inlet;
+
+            U0                (32.50 -19.53 0.00);
+            flowRateProfile   constant 1;
+            uniformParcelSize nParticle;
+
+            parcelsPerSecond  22648;
+            nParticle         1;
+        
+            SOI               0;
+            duration          1.0e+09;
+
+            sizeDistribution
+            {
+                type          tabulatedDensity;
+                Q             3;
+
+                distribution
+                (
+                    (1.500000000000e-04  1.045855018587e-01)
+                    (2.600000000000e-04  1.839956629492e-01)
+                    (4.100000000000e-04  1.945686493185e-01)
+                    (7.500000000000e-04  2.911006195787e-01)
+                    (1.250000000000e-03  1.457625774473e-01)
+                    (1.750000000000e-03  4.834299876084e-02)
+                    (3.000000000000e-03  2.662899628253e-02)
+                    (4.000000000000e-03  4.914993804213e-03)
+                );
+            }
+        }
+    }
+
+    // ------------------------------------------------------------------------
+
+    packingModel              implicit;
+
+    implicitCoeffs
+    {
+        alphaMin         0.0001;
+        rhoMin           1.0;
+        applyLimiting    true;
+        applyGravity     true; // TODO disable -> unphysical?! Validate!
+
+        particleStressModel
+        {
+            type         HarrisCrighton;
+            alphaPacked  0.6;
+            pSolid       5.0;
+            beta         2.0;
+            eps          1.0e-02;
+        }
+    }
+
+    dampingModel              relaxation;
+
+    relaxationCoeffs
+    {
+        timeScaleModel
+        {
+            type         nonEquilibrium;
+            alphaPacked  0.6;
+            e            0.9;
+        }
+    }
+
+    isotropyModel             stochastic;
+
+    stochasticCoeffs
+    {
+        timeScaleModel
+        {
+            type         isotropic;
+            alphaPacked  0.6;
+            e            0.9;
+        }
+    }
+
+    patchInteractionModel     standardWallInteraction;
+
+    standardWallInteractionCoeffs
+    {
+        type        rebound;
+        e           0.97;
+        mu          0.09;
+    }
+
+    // ------------------------------------------------------------------------
+    
+    dispersionModel           none;
+    stochasticCollisionModel  none;
+    surfaceFilmModel          none;
+    heatTransferModel         none;
+    radiation                 off;
+
+    // ------------------------------------------------------------------------
+}
+
+cloudFunctions
+{
+    massFlux1
+    {
+        type massFlux;
+    }
+    patchPostProcessing1
+    {
+        type             patchPostProcessing;
+        maxStoredParcels 10000;
+
+        patches          (
+            outlet-screw-1
+            outlet-screw-2
+            outlet-cyclone
+        );
+    }
+}
+
+// ************************************************************************* //
