@@ -1,10 +1,3 @@
-# DryTransport Theory
-
-## Heat conduction
-
-### Spherical coordinates 1-D
-
-
 
 ## Heat conduction formulated in enthalpy
 
