@@ -1,3 +1,4 @@
+# Formulation of diffusion equations
 ## Heat conduction in 1D
 
 ### Temperature formulation
@@ -88,48 +89,78 @@ $$
 \left(\beta{}k\dfrac{\partial{}T}{\partial{}r}\right)drdt
 $$
 
-In the above expression, instead of integrating over the full domain, we applied limits over the *north* and *south* interfaces of a single finite volume cell (logically using a cell-centered formulation).
+In the above expression, instead of integrating over the full domain, we applied limits over the *north* and *south* interfaces of a single finite volume cell (logically using a cell-centered formulation). Because $\beta$ is not time-dependent, we can effect the integration of the inner term and move out constant terms from the integrals, leading to:
+
+$$
+\rho{}c_{p}\left(T_P^{\tau}-T_P^{0}\right)\int_{s}^{n}\beta{}dr=
+\int_{0}^{\tau}
+\left(\beta{}k\frac{\partial{}T}{\partial{}r}\right)\bigg\vert_{s}^{n}dt
+$$
+
+Applying a general Crank-Nicolson ([[@Crank1996]]) scheme we integrate numerically the right-hand side. The weighting factor $f$ introduces the implicit degree: for $f=1$ we have a fully implicit solution, which $f=0$ represents a standard Euler integration. *Notice that the parenthetical superscript notation $(I)$ does not imply exponentiation, but the instant at which the corresponding values are to be evaluated.*
+
+$$
+\frac{\rho{}c_{p}}{\tau}\left(T_P^{\tau}-T_P^{0}\right)\int_{s}^{n}\beta{}dr=
+\sum_{I=\{0,\tau\}}
+%
+f^{(I)}\left[
+    \beta_n{}k_n^{(I)}\frac{T_N^{(I)}-T_P^{(I)}}{\delta_{P,N}}-
+    \beta_s{}k_s^{(I)}\frac{T_P^{(I)}-T_S^{(I)}}{\delta_{P,S}}
+\right]
+\quad\text{where}\quad\sum{}f^{(I)}=1
+$$
+
+Integration of the remaining space integral is trivial given the definition of $\beta$; to remain generic no matter what coordinate system we introduce the constant $\gamma$. Notice that for cartesian coordinates this corresponds simply to the cell length and for other coordinate systems other relationships associated to cell volume can be interpreted.
+
+$$
+\int_{s}^{n}\beta{}dr=\frac{r_n^\gamma}{\gamma}-\frac{r_s^\gamma}{\gamma}
+\qquad\text{where}\qquad\gamma=
+\begin{cases}
+1 & \text{cartesian}\\[12pt]
+%
+2 & \text{cylindrical}\\[12pt]
+%
+3 & \text{spherical}
+\end{cases}
+$$
+
+Putting it all together leads to the final expression:
+
+$$
+\frac{\rho{}c_{p}}{\tau}\left(T_P^{\tau}-T_P^{0}\right)
+\left(\frac{r_n^\gamma}{\gamma}-\frac{r_s^\gamma}{\gamma}\right)=
+\sum_{I=\{0,\tau\}}
+f^{I}\left[
+    \beta_n{}k_n^{I}\frac{T_N^{I}-T_P^{I}}{\delta_{P,N}}-
+    \beta_s{}k_s^{I}\frac{T_P^{I}-T_S^{I}}{\delta_{P,S}}
+\right]
+$$
+
+Some coefficients appearing in the above equations are now grouped. Notice that for thermal conductivity $k$ which is a function of temperature, the corresponding instant $(I)$ temperature must be used for its evaluation. *For $\kappa_{j}$ the lower case $j$ represents the evaluation at the interface with control volume $J$, a very specific notation used here.*
+
+$$
+\begin{aligned}
+    \alpha_{P}  & = \frac{\rho{}c_{p}}{\gamma\tau}\left(r_n^\gamma-r_s^\gamma\right)\\[8pt]
+    \kappa_{j}   & = \frac{\beta_j{}k_j}{\delta_{P,J}}
+\end{aligned}
+$$
+
+Equation can be reworked as:
+
+$$
+\alpha_{P}\left(T_P^{\tau}-T_P^{0}\right)=
+\sum_{I=\{0,\tau\}}
+f^{I}\left[
+    \kappa_{n}^{I}\left(T_N^{I}-T_P^{I}\right)-
+    \kappa_{s}^{I}\left(T_P^{I}-T_S^{I}\right)
+\right]
+$$
 
 
 
 
 #### Cylindrical coordinates
 
-
-Effecting the inner integration and moving out constant terms from the integrals we have
-
-$$
-\rho{}c_{p}\left(T_P^{\tau}-T_P^{0}\right)\int_{s}^{n}rdr=
-\int_{0}^{\tau}
-\left(rk\frac{\partial{}T}{\partial{}r}\right)\bigg\vert_{s}^{n}dt
-$$
-
-Expanding the evaluation of the definite integral between control volume boundaries $s$ and $n$ and performing a Crank-Nicolson integration of the right-hand side one gets:
-
-$$
-\begin{aligned}
-    \frac{\rho{}c_{p}}{\tau}
-    \left(T_P^{\tau}-T_P^{0}\right)
-    \left(\frac{r_n^2}{2}-\frac{r_s^2}{2}\right)
-    &=f\left[
-    r_nk_n\frac{T_N^{\tau}-T_P^{\tau}}{\delta_{P,N}}-
-    r_sk_s\frac{T_P^{\tau}-T_S^{\tau}}{\delta_{P,S}}
-    \right]\\[8pt]
-    &+(1-f)\left[
-    r_nk_n\frac{T_N^{0}-T_P^{0}}{\delta_{P,N}}-
-    r_sk_s\frac{T_P^{0}-T_S^{0}}{\delta_{P,S}}
-    \right]
-\end{aligned}
-$$
-
-Some coefficients appearing in the above equations are now grouped. Notice that for thermal conductivity $k$ which is a function of temperature, the corresponding time-step temperature must be used for its evaluation. For $\beta_{j}$ the lower case $j$ represents the evaluation at the interface with control volume $J$, what is a very specific notation.
-
-$$
-\begin{aligned}
-    \alpha_{P}  & = \frac{\rho{}c_{p}}{2\tau}\left(r_n^2-r_s^2\right)\\[8pt]
-    \beta_{j}   & = \frac{r_jk_j}{\delta_{P,J}}
-\end{aligned}
-$$
 
 For conciseness we make $g=(1-f)$ and simplify the expression with the new coefficients as
 
@@ -185,32 +216,6 @@ It must be noted here that $U=Rh$, where the actual heat transfer coefficient is
 
 #### Spherical coordinates
 
-After effecting the inner integration and moving out constant terms from the integrals and expanding the evaluation of the definite integral between control volume boundaries $s$ and $n$ and performing a Crank-Nicolson integration of the right-hand side one gets
-
-$$
-\begin{aligned}
-    \frac{\rho{}c_{p}}{\tau}
-    \left(T_P^{\tau}-T_P^{0}\right)
-    \left(\frac{r_n^3}{3}-\frac{r_s^3}{3}\right)
-    &=f\left[
-    r_n^2k_n\frac{T_N^{\tau}-T_P^{\tau}}{\delta_{P,N}}-
-    r_s^2k_s\frac{T_P^{\tau}-T_S^{\tau}}{\delta_{P,S}}
-    \right]\\[8pt]
-    &+(1-f)\left[
-    r_n^2k_n\frac{T_N^{0}-T_P^{0}}{\delta_{P,N}}-
-    r_s^2k_s\frac{T_P^{0}-T_S^{0}}{\delta_{P,S}}
-    \right]
-\end{aligned}
-$$
-
-Some coefficients appearing in the above equations are now grouped. Notice that for thermal conductivity $k$ which is a function of temperature, the corresponding time-step temperature must be used for its evaluation. For $\beta_{j}$ the lower case $j$ represents the evaluation at the interface with control volume $J$, what is a very specific notation.
-
-$$
-\begin{aligned}
-    \alpha_{P}  & = \frac{\rho{}c_{p}}{3\tau}\left(r_n^3-r_s^3\right)\\[8pt]
-    \beta_{j}   & = \frac{r_j^2k_j}{\delta_{P,J}}
-\end{aligned}
-$$
 
 For conciseness we make $g=(1-f)$ and simplify the expression with the new coefficients as
 
