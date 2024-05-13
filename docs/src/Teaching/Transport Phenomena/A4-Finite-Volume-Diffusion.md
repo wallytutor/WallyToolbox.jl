@@ -65,33 +65,36 @@ The components of volume integration not explicitly appearing in the 1-D differe
 $$
 \Phi=
 \begin{cases}
-A&=\int_{0}^{Z}\int_{0}^{Y}dydz
+A&=\displaystyle\int_{0}^{Z}\int_{0}^{Y}dydz
 & \text{cartesian}\\[12pt]
 %
-2\pi{}z&=\int_{0}^{z}\int_{0}^{2\pi}d\theta{}dz
+2\pi{}z&=\displaystyle\int_{0}^{z}\int_{0}^{2\pi}d\theta{}dz
 & \text{cylindrical}\\[12pt]
 %
-4\pi&=\int_{0}^{\pi}\int_{0}^{2\pi}\sin\phi{}d\theta{}d\phi
+4\pi&=\displaystyle\int_{0}^{\pi}\int_{0}^{2\pi}\sin\phi{}d\theta{}d\phi
 & \text{spherical}
 \end{cases}
 $$
 
 For now these values might seem worthless, but later we will need them to properly scale the eventual convective boundary conditions applied to the problem.
 
+Applying the remaining component of differential volume to the equations lead to the following expressions. *Notice that the meaning of $\beta$ is now clear:  it is simply the factor multiplying $dr$ in the different coordinate systems. It will make the multiplied factor simplify in the right-hand side and appear back in the left-hand side. You should try performing this step by yourself to get a full insight of what is happening here.* So far the equations remain formulated identically.
+
+$$
+\int_{s}^{n}\int_{0}^{\tau}
+\beta\rho{}c_{p}\dfrac{\partial{}T}{\partial{}t}dtdr=
+\displaystyle\int_{0}^{\tau}\int_{s}^{n}
+\dfrac{\partial}{\partial{}r}
+\left(\beta{}k\dfrac{\partial{}T}{\partial{}r}\right)drdt
+$$
+
+In the above expression, instead of integrating over the full domain, we applied limits over the *north* and *south* interfaces of a single finite volume cell (logically using a cell-centered formulation).
+
+
 
 
 #### Cylindrical coordinates
 
-
-The integration over radial coordinate introduces the $rdr$ factor from the differential volume and we get the final form of the equation to integrate.
-
-$$
-\int_{s}^{n}\int_{0}^{\tau}
-\rho{}c_{p}\frac{\partial{}T}{\partial{}t}rdtdr=
-\int_{0}^{\tau}\int_{s}^{n}
-\frac{\partial}{\partial{}r}
-\left(rk\frac{\partial{}T}{\partial{}r}\right)drdt
-$$
 
 Effecting the inner integration and moving out constant terms from the integrals we have
 
@@ -181,16 +184,6 @@ $$
 It must be noted here that $U=Rh$, where the actual heat transfer coefficient is $h$. This should be self-evident from a dimensional analysis.
 
 #### Spherical coordinates
-
-The integration over radial coordinate introduces the $r^2dr$ factor from the differential volume and we get the final form of the equation to integrate.
-
-$$
-\int_{s}^{n}\int_{0}^{\tau}
-\rho{}c_{p}\frac{\partial{}T}{\partial{}t}r^2dtdr=
-\int_{0}^{\tau}\int_{s}^{n}
-\frac{\partial}{\partial{}r}
-\left(r^2k\frac{\partial{}T}{\partial{}r}\right)drdt
-$$
 
 After effecting the inner integration and moving out constant terms from the integrals and expanding the evaluation of the definite integral between control volume boundaries $s$ and $n$ and performing a Crank-Nicolson integration of the right-hand side one gets
 
