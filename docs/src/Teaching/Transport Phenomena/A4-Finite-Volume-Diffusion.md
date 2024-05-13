@@ -2,13 +2,13 @@
 
 ### Temperature formulation
 
-Heat equation formulated with temperature as dependent variable is stated as:
+Heat equation formulated with temperature as dependent variable applied to constant density $\rho$ and specific heat $c_{p}$ can be stated as:
 
 $$
 \rho{}c_{p}\frac{\partial{}T}{\partial{}t}=\nabla\cdotp{}(k\nabla{}T)
 $$
 
-Applying the divergence operator and expanding the gradient term for different coordinate systems leads to the following expressions. Notice that coordinate was expressed as $r$ even in cartesian coordinates for homogeneity of notation in what follows.
+Applying the divergence operator to the right hand side to a single coordinate and expanding the gradient term for different coordinate systems (cartesian, cylindrical, and spherical) leads to the following expressions. *Notice that coordinate was expressed as $r$ even in cartesian coordinates for homogeneity of notation in what follows.*
 
 $$
 \rho{}c_{p}\dfrac{\partial{}T}{\partial{}t}=\begin{cases}
@@ -23,7 +23,7 @@ $$
 \end{cases}
 $$
 
-Stated this way the problem can be reformulated as
+Stated this way the problem can be reformulated with a simpler notation as
 
 $$
 \rho{}c_{p}\dfrac{\partial{}T}{\partial{}t}=
@@ -52,7 +52,7 @@ $$
 $$
 dV=
 \begin{cases}
-dxdydz & \text{cartesian}\\[12pt]
+drdydz & \text{cartesian}\\[12pt]
 %
 rdr{}d\theta{}dz & \text{cylindrical}\\[12pt]
 %
@@ -60,13 +60,28 @@ r^2\sin\phi{}dr{}d\theta{}d\phi & \text{spherical}
 \end{cases}
 $$
 
+The components of volume integration not explicitly appearing in the 1-D differential formulation can be moved out of the integrand. For cartesian coordinates the terms leads to the area of the perpendicular plane; for cylindrical coordinates this corresponds to the azimuth and axial components and integration produces a factor $2\pi{}z$; lastly, for spherical coordinates we have the polar and azimuth components moved out and a factor $4\pi$. Since these terms appear in both sides of the equation, they end by cancelling out.
+
+$$
+\Phi=
+\begin{cases}
+A&=\int_{0}^{Z}\int_{0}^{Y}dydz
+& \text{cartesian}\\[12pt]
+%
+2\pi{}z&=\int_{0}^{z}\int_{0}^{2\pi}d\theta{}dz
+& \text{cylindrical}\\[12pt]
+%
+4\pi&=\int_{0}^{\pi}\int_{0}^{2\pi}\sin\phi{}d\theta{}d\phi
+& \text{spherical}
+\end{cases}
+$$
+
+For now these values might seem worthless, but later we will need them to properly scale the eventual convective boundary conditions applied to the problem.
+
+
+
 #### Cylindrical coordinates
 
-Since the problem is specified to be symmetric around cylinder center (this must include initial conditions), the azimuth and axial components can be moved outside the time and radial integration and lead to a common $2\pi{}z$ factor in both sides of the equation, which cancels out.
-
-$$
-\int_{0}^{z}\int_{0}^{2\pi}d\theta{}dz=2\pi{}z
-$$
 
 The integration over radial coordinate introduces the $rdr$ factor from the differential volume and we get the final form of the equation to integrate.
 
@@ -166,25 +181,6 @@ $$
 It must be noted here that $U=Rh$, where the actual heat transfer coefficient is $h$. This should be self-evident from a dimensional analysis.
 
 #### Spherical coordinates
-
-In the case of spherical coordinates we start with a modification in divergence operator as follows
-
-
-The expression is again integrated over time and the differential volume $dV$.
-
-$$
-\int_{V}\int_{0}^{\tau}
-\rho{}c_{p}\frac{\partial{}T}{\partial{}t}dtdV=
-\int_{0}^{\tau}\int_{V}
-\frac{1}{r^2}\frac{\partial}{\partial{}r}
-\left(r^2k\frac{\partial{}T}{\partial{}r}\right)dVdt
-$$
-
-Since the problem is specified to be symmetric around sphere center (this must include initial conditions), the polar and azimuth components can be moved outside the time and radial integration and lead to a common $4\pi$ factor in both sides of the equation, which cancels out.
-
-$$
-\int_{0}^{\pi}\int_{0}^{2\pi}\sin\phi{}d\theta{}d\phi=4\pi
-$$
 
 The integration over radial coordinate introduces the $r^2dr$ factor from the differential volume and we get the final form of the equation to integrate.
 
