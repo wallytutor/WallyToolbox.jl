@@ -77,8 +77,6 @@ A&=\displaystyle\int_{0}^{Z}\int_{0}^{Y}dydz
 \end{cases}
 $$
 
-For now these values might seem worthless, but later we will need them to properly scale the eventual convective boundary conditions applied to the problem.
-
 Applying the remaining component of differential volume to the equations lead to the following expressions. *Notice that the meaning of $\beta$ is now clear:  it is simply the factor multiplying $dr$ in the different coordinate systems. It will make the multiplied factor simplify in the right-hand side and appear back in the left-hand side. You should try performing this step by yourself to get a full insight of what is happening here.* So far the equations remain formulated identically.
 
 $$
@@ -230,13 +228,22 @@ It must be noted here that $U=\beta{}h$, where the actual heat transfer coeffici
 
 ## Enthalpy formulation
 
+Enthalpy formulation is less trivial from the perspective that both sides of the equation do not use the same variable; balance is performed over enthalpy while driving force remains the temperature gradient (as per Fourier's law). In this case an extra step is added to the solution, solve a (generally) nonlinear equation for $T=f(h)$. Quite often this is formulated as a root finding problem stated as $h-\hat{h}(T)=0$, where $h$ represents the integrate enthalpy in a control volume and $\hat{h}$ the provided function relating temperature to enthalpy. The equation is this case is stated as:
+
+$$
+\frac{\partial{}(\rho{}h)}{\partial{}t}=\nabla\cdotp{}(k\nabla{}T)
+$$
+
+Difficulties arise particularly when dealing with phase change, such as solidification and melting, where we find discontinuities in enthalpy function. In such formulations, all problem coefficients are required to be assumed temperature-dependent. Although of high practical relevance, most standard engineering textbooks ignore this sort of development. A recent paper by ([[@Hristov2023]]) tries to handle this sort of formalism, but expanded in temperature units. Let's assume the enthalpy to be related to other variables as $H(T)=\rho(T)h(T)=\rho(T){}c_{p}(T)T$, then 
+
+
+
+
+
+
+
 ### Spherical coordinates 1-D
 
-Heat equation for a constant density phase using enthalpy as dependent variable is stated as:
-
-```math
-\rho{}\frac{\partial{}h}{\partial{}t}=\nabla\cdotp{}(k\nabla{}T)
-```
 
 For computing the heating dynamics in a sphere, using the definition of divergence in spherical coordinates and using the gradient expansion over the radius we have
 
