@@ -1,0 +1,800 @@
+// FreeFem++ language basics
+
+// ----------------------------------------------------------------------------
+// Execution handling (not for beginners!)
+// ----------------------------------------------------------------------------
+
+// This include will be explained in the end:
+include "getARGV.idp"
+
+int example = getARGV("-example", 0);
+
+if (example <= 0) {
+    cout << ">> Provide `-example` with value > 0 to run an example" << endl;
+}
+
+macro header(t) cout << "*** " << t << " ***\n" << endl;//
+
+// ----------------------------------------------------------------------------
+// PART 01 - FUNDAMENTALS
+// ----------------------------------------------------------------------------
+
+if (example == 1) {
+    header("FreeFem++ basics");
+
+    // FreeFem++ languange uses as C++-like syntax. For declaring new
+    // variables it should be straightforward for C++ users:
+    int i, j;
+    bool f = false;
+    real a = 3.14, b = pi, c;
+    complex d;
+
+    // Standard I/O also uses bit-shift as C++ (without namespace):
+    // cout << "Enter a value for c:" << endl;
+    // cin >> c;
+    // cout << "The value of c = " << c << endl;
+
+    // Both `cout` and `cerr` can be used:
+    cout << ">>         a = " << a << endl;
+    cerr << ">>         b = " << b << endl;
+
+    // Attribution of values works with `=` sign:
+    a = 1;
+    b = 2;
+    a = b;
+
+    i = 0;
+    j = 1;
+
+    cout << ">>      flag = " << f << endl;
+    cout << ">>         a = " << a << endl;
+    cerr << ">>         b = " << b << endl;
+    cout << ">>         i = " << i << endl;
+    cout << ">>         j = " << j << endl;
+
+    // Operations with integer and real numbers:
+    cout << ">>       1+3 = " << 1+3 << " " << 1/3 << "\n";
+    cout << ">>  10^(+10) = " << 10^(+10) << "\n";
+    cout << ">>  10^(-10) = " << 10^(-10) << "\n";
+    cout << ">> 5-10^(-2) = " << 5 - 10^(-2) << " == 4.99\n";
+    cout << ">> 5+10^(-2) = " << 5 + 10^(-2) << " == 5.01\n";
+
+    // Complex numbers:
+    cout << ">>    10-10i = " << 10 - 10i << endl;
+    cout << ">>         d = " << d << endl;
+}
+
+if (example == 2) {
+    header("Formatting output");
+
+    complex d = -1 + 2i;
+
+    // Setting number display precision:
+    int prec = cout.precision(12);
+    cout << ">> Precision before calling cout.precision " << prec << endl;
+
+    // Basic output for scientific notation:
+    cout.scientific;
+    cout << ">>\n>> Scientific notation:" << endl;
+    cout << ">>  (-1+0i)^(1/3) = " << (-1+0i)^(1.0/3.0) << endl;
+    cout << ">>           1000 = " << 1000.0 << endl;
+
+    // Fallback to previous precision and get fixed+showpos:
+    cout.precision(prec);
+    cout.fixed;
+    cout.showpos;
+    cout << ">>\n>> Fixed and showpos:" << endl;
+    cout << ">>  (-1+0i)^(1/3) = " << (-1+0i)^(1.0/3.0) << endl;;
+
+    // ... deactivate showpos:
+    cout.noshowpos;
+    cout << ">>\n>> With noshowpos:" << endl;
+    cout << ">>       8^(1/3)  = " << (8)^(1./3) << endl;
+    cout << ">>       sqrt(-1) = " << sqrt(-1+0i) << endl;
+
+    // ... and reset cout to default:
+    cout.default;
+    cout << ">>\n>> Back to defaults:" << endl;
+    cout << ">>             d  = " << d << "\n"
+         << ">>        real(d) = " << real(d) << "\n"
+         << ">>        conj(d) = " << conj(d) << "\n"
+         << ">>         arg(d) = " << arg(d)
+         << endl;
+}
+
+if (example == 3) {
+    header("Increment and decrement operators");
+
+    int i = 0;
+
+    cout << ">>   i = " << i   << endl;
+    cout << ">> ++i = " << ++i << endl;
+    cout << ">>   i = " << i   << endl;
+    cout << ">> i++ = " << i++ << endl;
+    cout << ">>   i = " << i   << endl;
+    cout << ">> --i = " << --i << endl;
+    cout << ">>   i = " << i   << endl;
+    cout << ">> i-- = " << i-- << endl;
+    cout << ">>   i = " << i   << endl;
+}
+
+if (example == 4) {
+    header("String concatenation");
+
+    string str0, str1;
+
+    str0 = "\"My name is";
+    str1 = "Walter";
+    str0 = str0 + " " + str1;
+    str0 = str0 + " and I can add a number " + 2 + "\"";
+    cout << ">> " << str0 << endl;
+}
+
+if (example == 5) {
+    header("Ternary operator and for loop");
+
+    real a = 0, b;
+
+    for (int i = 0; i < 10; i++) {
+        a += i^2;
+        cout << ">> (i = " << i << ") a = " << a << endl;
+    }
+
+    b = a == 0 ? a : -1;
+    cout << ">> a if a is 0     else -1 = " << b << endl;
+    
+    b = a != 0 ? a : -1;
+    cout << ">> a if a is not 0 else -1 = " << b << endl;
+}
+
+// ----------------------------------------------------------------------------
+// PART 02 - ARRAYS
+// ----------------------------------------------------------------------------
+
+// Introduction to arrays:
+if (example == 6) {
+    // Declare real arrays of size 10 indexed by integers.
+    real [int] rtab0(10);
+    real [int] rtab1(10);
+
+    // Declare complex arrays of size 10 indexed by integers.
+    complex [int] ctab0(10), ctab1(10);
+
+    // Elements can be set all at once...
+    rtab0 = 1;
+    ctab0 = 1+2i;
+
+    // ... or by accessing an specific index.
+    rtab0[1] = 2;
+    ctab0[1] = 2; // Valid because "R" in "C": 2 + 0i
+
+    // Sizes can be accessed by attribute `n`:
+    cout << ">> len(rtab0) = " << rtab0.n
+        << " " << rtab0[1] << " " << rtab0[9] << endl;
+    cout << ">> len(ctab0) = " << ctab0.n
+        << " " << ctab0[1] << " " << ctab0[9] << endl;
+
+    // Arrays support full range attribution:
+    rtab1 = rtab0;
+
+    // And other elementwise operations.
+    rtab0 = rtab0 + rtab1;
+    rtab0 = 2*rtab0 + 5*rtab1;
+    rtab1 = 2*rtab0 - 5*rtab1;
+    rtab0 += rtab0;
+
+    cout << ">> rtab0 = " << rtab0 << endl;
+    cout << ">> rtab1 = " << rtab1 << endl;
+
+    ctab1 = ctab0;
+    ctab0 = ctab0 + ctab1;
+    ctab0 = 2*ctab0 + 5*ctab1;
+    ctab1 = 2*ctab0 - 5*ctab1;
+    ctab0 += ctab0;
+
+    cout << ">> ctab0 = " << ctab0 << endl;
+    cout << ">> ctab1 = " << ctab1 << endl;
+}
+
+// More operations with arrays and methods:
+if (example == 999) {
+    int n = 5;
+    real[int] a(n), b(n), c(n);
+    real [int, int] M(n, n);
+
+    a = 1;
+    a(0:4:2) = 2;
+    a(3:4) = 4;
+
+    cout <<">> a = " << a << endl;
+
+    b = a + a;
+    cout << ">> b = a + a; b = \n" << b << endl;
+
+    b += a;
+    cout << ">> b += a; b = \n" << b << endl;
+
+    b += 2*a;
+    cout << ">> b += 2*a; b = \n" << b << endl;
+
+    b /= 2;
+    cout << ">> b /= 2; b = \n" << b << endl;
+
+    b .*= a;
+    cout << ">> b .* = a; b = \n" << b << endl;
+
+    b ./= a;
+    cout << "b ./= a; b =\n" << b << endl;
+
+    c = a .* b;
+    cout << ">> c = a .* b; c =\n" << c << endl;
+
+    cout << "--- the  methods ---" << endl;
+    cout << ">>   a          = " << a << endl;
+    cout << ">> ||a||_1      = " << a.l1     << endl;
+    cout << ">> ||a||_2      = " << a.l2     << endl;
+    cout << ">> ||a||_infty  = " << a.linfty << endl;
+    cout << ">> sum a_i      = " << a.sum    << endl;
+    cout << ">> max a_i      = a[" << a.imax << "] = " <<  a.max << endl;
+    cout << ">> min a_i      = a[" << a.imin << "] = " <<  a.min << endl;
+    cout << ">> a'*a         = " <<  (a'*a)   << endl;
+    cout << ">> quantile 0.2 =  " <<  a.quantile(0.2) << endl;
+}
+
+// Examples with map:
+if (example == 999) {
+    // A *map* can be created by setting keys to string:
+    real [string] map;
+
+    // It works essentially the same way as an array.
+    map["1"] = 2.0;
+
+    // 2 is automaticaly cast to the string "2"
+    map[2] = 3.0;
+
+    // Notice below the access of map["2"] instead of map[2]:
+    cout << ">> map[1] = " << map["1"] << " == 2.0" << endl;
+    cout << ">> map[2] = " << map["2"] << " == 3.0" << endl;
+}
+
+// Table resizing:
+if (example == 999) {
+    real [int] tab = [1, 2, 3, 3.14, pi];
+    cout << ">> tab = " << tab << endl;
+
+    tab.resize(10);
+    for (int i = 5; i < 10; i++) tab[i] = i;
+    cout << ">> tab = " << tab << endl;
+
+    real[int] a, b(10);
+    a.resize(b.n);
+    a = b;
+
+    // This sets only the first 2 elements of `a`:
+    a = [1, 2];
+
+    // Crop the tail of the array:
+    a.resize(5);
+
+    cout << ">> a = "<< a << endl;
+    cout << ">> b = "<< b << endl;
+}
+
+// Arrays of arrays:
+if (example == 7) {
+    real[int][int] v(10);
+
+    for(int i = 0; i < v.n; ++i)
+    {
+        v[i].resize(i+1);
+
+        for(int j = 0; j < v[i].n; ++j)
+        {
+            v[i][j] = i;
+        }
+        cout << ">> v[" << i << "] =\n" << v[i] << endl;
+    }
+}
+
+// Multidimensional arrays:
+if (example == 8) {
+    int k = 10;
+    real [int, int] A(k, k), B(k, k);
+    A = 0;
+
+    for(int i = 0; i < A.n; i++)
+        for(int j = 0; j < A.m; j++)
+            A(i, j) = i + 100 * (j + 1);
+
+    B = A;
+    A.resize(15, 15);
+
+    cout << ">> A = " << A << endl;
+    cout << ">> B = " << B << endl;
+
+    // Using array slicing:
+    cout << ">> A(2:4,1:2) =\n" << A(2:4, 1:2) << endl;
+    cout << ">> A(2,1:2) =\n" << A(2, 1:2) << endl;
+    cout << ">> A(:, 1) =\n" << A(:, 1) << endl;
+    cout << ">> A( :,1).sum = " << A(:, 1).sum << endl;
+    cout << ">> A( :,1).min = " << A(:, 1).min << endl;
+}
+
+// Elementwise ternary operation:
+if (example == 9) {
+    real[int]  a(5), b(5), c(5), d(5);
+    a = 1;
+    b = 2;
+    c = 3;
+
+    // A zero evaluates to false
+    a[2] = 0;
+
+    d = (a ? b : c);
+    cout << ">> (a ? b : c) = " << d << endl;
+
+    d = (a ? 1 : 10);
+    cout << ">> (a ? 1 : 10) = " << d << endl;
+
+    d = (a ? b : -1);
+    cout << ">> (a ? b : -1) = " << d << endl;
+}
+
+// Array mapping
+if (example == 10) {
+    cout << "--- array mapping ---" << endl;
+
+    int n = 5;
+    real[int] a(n), b(n), c(n);
+    int[int] I = [2, 3, 4, -1, 3];
+
+    a = [2, 3, 1, 5, 0];
+    b = c = -3;
+
+    // for(i = 0; i < b.n; i++) if(I[i] >=0) b[i] = a[I[i]];
+    b = a(I);
+
+    // for(i = 0; i < I.n; i++) if(I[i] >=0) c(I[i]) = a[i];
+    c(I) = a;
+
+    cout << ">> b = a(I); b =\n" << b << "\n c(I) = a; c =\n" << c << endl;
+
+    // for( i=0;i<I.n;i++) if(I[i] >=0)  C(I[i])+=a[i];
+    c(I) += a;
+
+    cout << ">> b = a(I); b =\n" << b << "\n c(I) += a; c =\n" << c << endl;
+}
+
+// {
+// // bidimensionnal  array
+//   int N=3,M=4;
+
+//   real[int,int] A(N,M),RA(N,M);
+//   real[int]  b(N),c(M);
+//   b=[1,2,3];
+//   c=[4,5,6,7];
+
+//   complex[int,int]  C(N,M);
+//   complex[int]  cb=[1,2,3],cc=[10i,20i,30i,40i];
+
+
+//   b=[1,2,3];
+
+//   int [int] I=[2,0,1];
+//   int [int] J=[2,0,1,3];
+
+//   A=1; // set the all matrix
+//   A(2,:) = 4; //  the full line 2
+//   A(:,1) = 5; //  the full column 1
+//   A(0:N-1,2) = 2; // set the column 2
+//   A(1,0:2) = 3; // set the line 1 from 0 to 2
+
+//   cout << " A = " << A << endl;
+//   // outer product
+//   C  =  cb*cc';
+//   C +=  3*cb*cc';
+//   C -=  5i*cb*cc';
+//   cout << " C = " << C << endl;
+//   // the way to transform a array to a sparce matrix
+//   matrix B;
+//   B = A;
+//   B=A(I,J); // B(i,j)= A(I(i),J(j))
+//   B=A(I^-1,J^-1);  // B(I(i),J(j))= A(i,j)
+
+//   A = 2.*b*c'; // outer product
+//   cout << " A = " << A << endl;
+//   cout << " A(1,2) " << A(1,2)  << endl;
+//   B = b*c'; // outer product  B(i,j)  = b(i)*c(j)
+//   B = b*c'; // outer product  B(i,j)  = b(i)*c(j)
+//   B = (2*b*c')(I,J); //   outer product  B(i,j)  = b(I(i))*c(J(j))
+//   B = (3.*b*c')(I^-1,J^-1); // outer product  B(I(i),J(j))  = b(i)*c(j)
+//   cout << "B = (3.*b*c')(I^-1,J^-1) =  " << B << endl;
+//   cout << " b =" <<  b << endl;
+//   b = exp(b) ;
+//   cout << " exp(b) =" <<  b << endl;
+//   cb += complex(10.)*cc(0:2);
+//   cout << " cb =" <<  cb << endl;
+//   cb = exp(cb) ;
+//   cout << " exp(cb) =" <<  cb << endl;
+//   cout << " exp(cb).re =" <<  cb.re << endl;
+//   cout << " exp(cb).im =" <<  cb.im << endl;
+//   cb.im = 0.;
+//   cout << cb << endl;
+//   b += cb.re + cb.im;   //  do not work to do
+//   cout << " b = " << endl;
+//   {ofstream FA("A.txt");
+//   FA << A << endl;
+//   }
+//   {ifstream FA("A.txt");
+//   FA >> RA ;
+//   cout << RA << endl;
+//   RA -= A;
+//   cout << " RA =  00 == " << RA.linfty  << endl;
+//   assert( RA.linfty < 1e-12);
+//   }
+//   //  Add april 2018
+//    	real[int] AV(A.n*A.m);
+// 	for [i,j,aij: A ] AV[i+A.n*j]=aij;
+//   	int i,j,ii,jj;
+//   	ijmax(A,ii,jj);
+//   	i = A.imax;	j=  A.jmax;
+//   	cout << " max " << i << " " << j << " "<< AV.imax << " " << A.max << endl;
+//   	assert( i+A.n*j== AV.imax );
+//   	assert( ii+A.n*jj == AV.imax );
+//   	ijmin(A,i,j);
+//   	ii = A.imin;	jj=  A.jmin;
+//   	cout << " min  " << i << " " << j << " "<< AV.imin << " " << A.min<< " == " << AV.min << endl;
+//   	cout << " minn " << ii << " " << jj << " "<< AV.imin << " " << A.min<< " == " << AV.min << endl;
+//   	assert( i+A.n*j == AV.imin  );
+//   	assert( ii+A.n*jj == AV.imin  );
+// }
+// {
+// // sort array :
+// real[int] a=[3,5,7,9,0];
+// real[int] b(a);
+// int[int] p=[0,1,2,3,4];
+
+// b=a;
+// cout << " a =" <<a << endl;
+// sort(b,p);
+// cout << " b.sort=" <<  b << endl;
+// cout << " b = " << b << endl;
+// cout << " p =  " << p << endl;
+// b=a;
+// b(0:5:2).sort;
+// cout << b << endl;
+// cout << b(0:5:2)  << endl;
+// cout << " quantile(0.2)  = " <<  b.quantile(0.2) << endl;
+// p[0] = 1000;
+// p[1] = 888;
+// cout << "before    p(1:3).sort  " << p  << endl;
+// p(1:3).sort;
+// cout << "after   p(1:3).sort " << p  << endl;
+// p.sort; // version 3.19 ##
+// cout << "after   p.sort " << p  << endl;
+
+// macro AA [ [1,2],[3,4]] //
+// macro BB [ [1,2],[5,10]] //
+//  cout << AA[1][0] << " 3  " << endl;
+//  cout << trace( AA * BB' + AA - BB' ) <<endl;
+// }
+
+// {
+// int[int] tt(2:10); //  2,3,4,5,6,7,8,9,10
+// int[int] t1(2:3:10); // 2,5,8,
+// cout << " tt(2:10)= " << tt << endl;
+// cout << " t1(2:3:10)= " << t1 << endl;
+// tt=1:2:5;
+// cout << " 1.:2:5 =>  " << tt << endl;
+// }
+
+// {
+// real[int] tt(2:10); //  2,3,4,5,6,7,8,9,10
+// real[int] t1(2.:3:10.); // 2,5,8,
+// cout << " tt(2:10) = = " << tt << endl;
+// cout << " t1(2.:3:10.)= " << t1 << endl;
+// tt=1.:0.5:3.999;
+// cout << " 1.:0.5:3.999 =>  " << tt << endl;
+// }
+// {
+// complex[int] tt(2.+0i:10.+0i); //  2,3,4,5,6,7,8,9,10
+// complex[int] t1(2.:3.:10.); // 2,5,8,
+// cout << " tt(2.+0i:10.+0i)= " << tt << endl;
+// cout << " t1(2.:3.:10.);= " << t1 << endl;
+// cout << " tt.re real part array   " << tt.re << endl ;
+//  //  the real part array of the complex array \index{re}\index{array!re}
+// cout << " tt.im imag part array   " << tt.im << endl ;
+// //  the imag part array of the complex array \index{im}\index{array!im}
+
+
+// }
+// {
+
+// real [int] tab(10), tab1(10); // 2 array of 10 real
+// //real [int] tab2;    //  bug array with no size
+// tab = 1.03;                //  set all the array to 1.03
+// tab[1]=2.15;
+// cout << tab[1] << " " << tab[9] << " size of tab = "
+//      << tab.n << " min: " << tab.min << "  max:" << tab.max
+//      << " sum : "   << tab.sum <<   endl; //
+// tab.resize(12); //  change the size of array tab
+//   // to 12 with preserving first value
+// tab(10:11)=3.14; //  set unset value
+// cout <<" resize tab: " <<  tab << endl;
+// real [string] tt;
+// tt["+"]=1.5;
+// cout<<tt["a"]<<"  "<<tt["+"]<<endl;
+// real[int]  a(5),b(5),c(5),d(5);
+// a = 1;
+// b = 2;
+// c = 3;
+// a[2]=0;
+// d = ( a ? b : c ); // for i = 0, n-1  : d[i] = a[i] ? b[i] : c[i] ,
+// cout << " d = ( a ? b : c )  is " << d << endl;
+// d = ( a ? 1 : c );// for i = 0, n-1: d[i] = a[i] ? 1 : c[i] ,   (v2.23-1)
+// d = ( a ? b : 0 );// for i = 0, n-1: d[i] = a[i] ? b[i] : 0 ,   (v2.23-1)
+// d = ( a ? 1 : 0 );// for i = 0, n-1: d[i] = a[i] ? 0 : 1 ,     \hfill(v2.23-1)
+//  tab.sort ; //  sort the array tab  (version 2.18)
+// cout << " tab (after sort) "  << tab << endl;
+// int[int] ii(0:d.n-1); // set array ii to 0,1, ..., d.n-1
+// d=-1:-5; // set d to  -1,-2, .. -5
+// sort(d,ii); // sort array d and ii in parallele
+// cout << " d " << d << "\n ii = " << ii << endl;
+
+// }
+
+// for(int i=0;i<ARGV.n;++i)
+//   {
+//     cout << ARGV[i] << endl;
+//   }
+
+// {
+// mesh Th=square(2,2);
+// fespace Vh(Th,P1);// scalar
+// fespace Wh(Th,[P1,P1]);// vector
+// Vh[int] vh(10);
+// Wh[int] [uh,wh](10);
+// vh[2]=x;
+// [uh[2],wh[2]]=[y,x];
+// [uh[2],wh[2]]=[y,x]; // set 3rd value
+// cout << wh.n << endl;
+// cout << vh.n <<endl;
+// vh.resize(20);
+// cout << vh.n <<endl;
+// }
+
+
+
+// {
+//   cout << " new stuff " << endl;
+//   int[string] a=["2",1,"12",4];
+//   string[string] b= ["-1",1,"13","qsdqdq"];
+//   cout << " a " << a  << endl;
+//    cout << " b " << b  << endl;
+// // the new kind of loop:
+//   for [i,v:a] cout << " a: " << i << " " << v << endl;
+
+//   real[int,int] t=[[1,2],[2,3],[3,4],[5,6]];
+//   cout << t << endl;
+//   cout << t(1:3,0:1)' << endl;
+
+// }
+// {
+//   for(real a=-1;a< 2; a+= 0.4)
+//   cout << projection(-0.1,1,a)<< endl;
+//   cout << dist(3,4)<< " " << dist(1,2,3) << " = " << sqrt( 14.  ) << endl;
+// }
+// { // array of array
+
+// 	real[int][int] a(10);
+
+// 	for(int i=0; i< a.n; ++i)
+// 	{
+// 	  a[i].resize(10+i);
+// 	  a[i]=1:10+i ;
+// 	}
+// 	cout << a[3] << endl;
+
+// 	real[int,int][int]  aa(5); //  array of matrix
+// 	for(int i=0; i< aa.n; ++i)
+// 	{
+// 	  aa[i].resize(10+i,2);
+// 	  aa[i]= 10 ;
+// 	  aa[i](2,1)=2;
+// 	}
+
+
+// }
+// {
+// 	int n=10;
+// 	real[int,int] a(10,10);
+// 	int[int] I=[1,3,6];
+// 	for [i,j,aij:a] aij = i + 10 *j;
+
+// 	cout << a << endl;
+
+// 	real[int] b(I.n);
+// 	b= a(1,:)(I);
+// 	cout << b << endl;
+// 	real[int] c= a(:,1)(I);
+// 	cout << b << endl;
+
+// 	real[int] d = a.diag ; //
+// 	real[int] aa= a.asarray; //  view full mat as a arry
+// 	real[int] d1= a.asarray(1:n*n-1:n+1); // build
+
+// 	cout <<  " d =" << d <<endl;
+// 	cout <<  " aa =" << aa <<endl;
+// 	cout <<  " d1=" << d1  <<endl; // diag shifted to one
+
+// 	a(2:5,3:7).diag= 200;
+// 	a.diag += 100;
+
+// 	cout << a << endl;
+
+// 	assert( a(9,9) == 199 );
+// 	assert( a(5,6) == 200 );
+// 	a =eye(5);
+// 	cout << a << endl;
+
+// 	matrix A=eye(10);
+// 	cout << A << endl;
+// 	A=eye(5);
+// 	cout << A << endl;
+// 	d.rmeps(15.);// put to zero term abs < 15
+// 	cout << d << endl;
+
+// }
+// {
+// 	int[int] XX=[1,2,6,1,1];
+// 	int[int] I;
+// 	findall(XX,10,I);// version 4.7.
+// 	cout << I << endl;
+// 	cout  << " max "<< I.max << " min  " << I.min << " sum " << I.sum << " " << I.n << endl;
+// 	//assert(I.n==0);// attention I.sum bug before v 4.7.1
+// 	verbosity=10;
+// 	findall(XX,1,I);
+// 	cout << I << " " << I.sum << endl;
+//          assert(I.sum==0+3+4); //commemt   due  to bug on ubuntu ????? FH ...
+// 	cout  << " max "<< I.max << " min  " << I.min << " sum " << I.sum << endl;
+// }
+
+// ----------------------------------------------------------------------------
+// PART 03 - FORALL LOOPS
+// ----------------------------------------------------------------------------
+
+// real [int,int] a(2,3);
+// for [i,j,aij : a]
+// {
+//    aij= 1.+i+2*j;
+//    cout << i << " "<< j << " " << aij << endl;
+// }
+
+// real [int] b(10);
+// for [i,bi : b]
+// {
+//   bi=i+1;
+//   cout << i << " " << bi << endl;
+// }
+// cout << " b=" << b << endl;
+
+// matrix A=a;
+// for [i,j,aij : A]
+// {
+//     cout << i << " " << j <<" " <<  aij << endl;
+//     aij= -aij;
+// }
+// cout << A << endl;
+
+// ----------------------------------------------------------------------------
+// PART 04 - FUNCTIONS
+// ----------------------------------------------------------------------------
+
+// func int fi(real  a1)
+// {
+//    int i=a1*a1/1;
+//    return i;
+// }
+
+// func real myfunction(real a,real b)
+// {
+//    real aa=a;
+//    real z =fi(aa)+b;
+//    return z;
+// }
+
+// cout << myfunction(1.0,3.) << " " << myfunction(1,3)  << endl;
+
+// func real[int] aaa(int n)
+// {
+//   real[int] a(n);
+//   a=0;
+//   a[2]=n;
+//   return a;
+// }
+
+// func real[int] bb(real[int] &a)
+// {
+//   cout << " sum " << a.sum << endl;
+//   return a;
+// }
+
+// func real[int] bbb(real[int] a)
+// {
+//   cout << " sum " << a.sum << endl;
+//   a[0]=100;
+//   return a;
+// }
+
+// cout << aaa(3) << endl;
+
+// real[int] A=[1,4,7];
+// cout << bb(A) << endl;
+// real[int] aa=bb(A);
+// real[int] ac=bbb(A);
+// cout << " xxxx "<< endl;
+// cout << aa << " == "  << A <<endl;
+// assert(A[0]==100);
+// cout << ac << " == " << A << endl;
+
+// real x=1e1000;
+// cout << x << " " << isInf(x) << " " << isNaN(x) << " " << isNormal(x) <<endl;
+// x =1;
+// cout << x << " " << isInf(x) << " " << isNaN(x) << " " << isNormal(x)<<endl;
+// x = NaN();
+// cout << x << " " << isInf(x) << " " << isNaN(x) << " " << isNormal(x)<<endl;
+
+// ----------------------------------------------------------------------------
+// PART 05 - MACROS
+// ----------------------------------------------------------------------------
+
+if (false) {
+    macro test1(uu) uu//
+    cout << test1("toto") << endl;
+
+    macro test2(u) u#xx//
+    string strxx = "check";
+    cout << test2(str) << endl;
+
+    macro length(a) a.n//
+    real [int] a(10);
+    cout << length(a) << endl;
+
+    macro div(u) (dx(u#x) + dy(u#y) + dz(u#z))//
+    macro grad(u) [dx(u), dy(u), dz(u)]//
+    macro Grad(u) [grad(u#x), grad(u#y), grad(u#z)]//
+    // so div(v) returns (dx(vx) + dy(vy) + dz(vz))
+}
+
+// ----------------------------------------------------------------------------
+// PART 06 - ERROR HANDLING
+// ----------------------------------------------------------------------------
+
+if (false) {
+    real a;
+    try
+    {
+        a = 1 / 0;
+    }
+    catch (...)
+    {
+        cerr << "An error occured!!" << endl;
+        a = 0;
+    }
+
+    cout << ">> a = " << a << endl;
+}
+
+// ----------------------------------------------------------------------------
+// PART 07 - CLI ARGUMENTS
+// ----------------------------------------------------------------------------
+
+if (false) {
+    int n = getARGV("-size", 5);
+
+    mesh Mesh = square(n, n);
+    plot(Mesh);
+
+    string config = getARGV("-C", "default");
+    cout << "The configuration is " << config << endl;
+}

@@ -1,0 +1,6 @@
+
+macro div(u)   dx(u#x) + dy(u#y) + dz(u#z) //
+
+macro grad(u) [dx(u), dy(u), dz(u)] //
+
+macro Grad(u) [grad(u#x), grad(u#y), grad(u#z)] //
