@@ -41,21 +41,24 @@ class Heat1DProblemSpecification(ABC):
         """ Characteristic cell size over simulation domain. """
         pass
 
-    def dirichlet_bc(self):
-        """ Dirichlet (fixed) boundary condition. """
-        pass
+    # TODO think of a better solution, this breaks past calculations
+    # maybe I should return a pair and test for that?
+    
+    # def dirichlet_bc(self):
+    #     """ Dirichlet (fixed) boundary condition. """
+    #     pass
 
-    def dirichlet_bc_left(self):
-        """ Dirichlet (fixed) boundary condition. """
-        pass
+    # def dirichlet_bc_left(self):
+    #     """ Dirichlet (fixed) boundary condition. """
+    #     pass
 
-    def dirichlet_bc_right(self):
-        """ Dirichlet (fixed) boundary condition. """
-        pass
+    # def dirichlet_bc_right(self):
+    #     """ Dirichlet (fixed) boundary condition. """
+    #     pass
 
-    def set_mesh(self, mesh):
-        """ Attribute mesh to problem. """
-        pass
+    # def set_mesh(self, mesh):
+    #     """ Attribute mesh to problem. """
+    #     pass
 
 
 class Heat1DModel:
@@ -323,7 +326,7 @@ def post_process(
     mu2 = np.mean(sol_tend[1][where] - 273.15)
 
     plt.close("all")
-    fig, ax = plt.subplots(2, 3, figsize=(12, 7))
+    fig, ax = plt.subplots(2, 3, figsize=(12, 7), facecolor="white")
     ax = ax.ravel()
 
     ax[0].plot(t, T)
