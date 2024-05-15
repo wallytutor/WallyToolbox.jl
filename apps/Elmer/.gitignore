@@ -1,0 +1,18 @@
+# Ignore all for now
+/[0-9]*/
+
+# # Local copies
+# /*/**/
+
+# # Results
+# *.vtu
+# *.dat
+
+# # Elmer specific
+# ELMERSOLVER_STARTINFO
+
+# # Elmer mesh
+# *.boundary
+# *.elements
+# *.header
+# *.nodes
