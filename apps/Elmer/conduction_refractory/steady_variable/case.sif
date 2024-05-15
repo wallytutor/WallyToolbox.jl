@@ -91,7 +91,7 @@ Material 2
   Name = "Refractory"
   Heat Conductivity = Variable Time
     Procedure "refractory" "conductivity"
-  Heat Capacity = 1110
+  Heat Capacity = 1000
   Density = 2500
 End
 
