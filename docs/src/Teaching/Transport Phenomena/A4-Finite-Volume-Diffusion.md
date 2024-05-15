@@ -1,7 +1,10 @@
-# Formulation of diffusion equations
-## Heat conduction in 1D
+# Formulations of heat conduction
 
-### Temperature formulation
+## Temperature formulation
+
+Before attempting to derive heat conduction equation in terms of enthalpy, it is worth warming up with its handling in temperature formulation. In this case, the equation is solved directly in terms of temperature as dependent variable which is also used in the governing potential (Fourier's law). This simple case is applicable to many engineering problems. First we formulate the problem with constant thermophysical properties before proceeding to variable density and specific heat.
+
+### Constant thermophysical properties
 
 Heat equation formulated with temperature as dependent variable applied to constant density $\rho$ and specific heat $c_{p}$ can be stated as:
 
@@ -200,6 +203,13 @@ $$
 a_ST_S + a_PT_P + a_NT_N = \alpha_{P}T_P^{0}
 $$
 
+The interested reader may wish to derive the boundary conditions to this case. We will refrain from that here because it will be done for the rather more general case in the following sections.
+
+---
+### Variable thermophysical properties
+
+
+
 #### Boundary conditions
 
 TODO
@@ -222,10 +232,12 @@ $$
 
 It must be noted here that $U=\beta{}h$, where the actual heat transfer coefficient is $h$. This should be self-evident from a dimensional analysis.
 
+---
 !!! danger
 
 	From here on everything is in draft mode.
 
+---
 ## Enthalpy formulation
 
 Enthalpy formulation is less trivial from the perspective that both sides of the equation do not use the same variable; balance is performed over enthalpy while driving force remains the temperature gradient (as per Fourier's law). In this case an extra step is added to the solution, solve a (generally) nonlinear equation for $T=f(h)$. Quite often this is formulated as a root finding problem stated as $h-\hat{h}(T)=0$, where $h$ represents the integrate enthalpy in a control volume and $\hat{h}$ the provided function relating temperature to enthalpy. The equation is this case is stated as:
@@ -266,12 +278,6 @@ $$
 \frac{\partial{}T}{\partial{}t}=
 \nabla\cdotp{}(k\nabla{}T)
 $$
-
-
-
-
-
-
 
 ### Spherical coordinates 1-D
 
