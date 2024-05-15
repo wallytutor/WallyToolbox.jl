@@ -9,6 +9,9 @@
 			"include": "#numbers"
 		},
 		{
+			"include": "#strings"
+	    },
+		{
 			"include": "#datatypes"
 		},
 		{
@@ -16,6 +19,9 @@
 		},
 		{
 			"include": "#fieldsheader"
+		},
+		{
+			"include": "#fieldsconstants"
 		},
 		{
 			"include": "#fieldssimulation"
@@ -52,11 +58,40 @@
 				"match": "\\b(CHECK\\s*KEYWORDS|Mesh\\s*DB|Include\\s*Path|Results\\s*Directory)\\b"
 			}]
 		},
+		"fieldsconstants": {
+			"patterns": [{
+				"name": "entity.name.function",
+				"match": "\\b(Gravity|Stefan Boltzmann|Permittivity of Vacuum|Permeability of Vacuum|Boltzmann Constant|Unit Charge)\\b"
+			}]
+		},
 		"fieldssimulation": {
 			"patterns": [{
 				"name": "entity.name.function",
-				"match": "\\b(Max Output Level|Coordinate System|Coordinate Mapping|Simulation Type|Steady State Max Iterations|Output Intervals|Timestep intervals|Timestep Sizes|Timestepping Method|BDF Order|Solver Input File|Post File)\\b"
+				"match": "\\b(Max(\\s+)Output(\\s+)Level|Coordinate(\\s+)System|Coordinate(\\s+)Mapping|Simulation(\\s+)Type|Steady(\\s+)State(\\s+)Max(\\s+)Iterations|Output(\\s+)Intervals|Timestep(\\s+)intervals|Timestep(\\s+)Sizes|Timestepping(\\s+)Method|BDF(\\s+)Order|Solver(\\s+)Input(\\s+)File|Post(\\s+)File)\\b"
 			}]
+		},
+		"fieldssolver": {
+			"patterns": [{
+				"name": "entity.name.function",
+				"match": "\\b()\\b"
+			}]
+		},
+		"fieldsbody": {
+			"patterns": [{
+				"name": "entity.name.function",
+				"match": "\\b(Target\\s+Bodies|Name|Equation|Material|Initial\\s+condition)\\b"
+			}]
+		},
+		"strings": {
+			"name": "string.ref.tdb",
+			"begin": "\"",
+			"end": "\"",
+			"patterns": [
+				{
+					"name": "constant.character.ref-strings.tdb",
+					"match": "\\\\."
+				}
+			]
 		}
 	},
 	"scopeName": "source.sif"
