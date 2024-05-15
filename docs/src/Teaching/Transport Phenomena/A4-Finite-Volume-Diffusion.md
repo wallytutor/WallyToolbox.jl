@@ -234,7 +234,38 @@ $$
 \frac{\partial{}(\rho{}h)}{\partial{}t}=\nabla\cdotp{}(k\nabla{}T)
 $$
 
-Difficulties arise particularly when dealing with phase change, such as solidification and melting, where we find discontinuities in enthalpy function. In such formulations, all problem coefficients are required to be assumed temperature-dependent. Although of high practical relevance, most standard engineering textbooks ignore this sort of development. A recent paper by ([[@Hristov2023]]) tries to handle this sort of formalism, but expanded in temperature units. Let's assume the enthalpy to be related to other variables as $H(T)=\rho(T)h(T)=\rho(T){}c_{p}(T)T$, then 
+Difficulties arise particularly when dealing with phase change, such as solidification and melting, where we find discontinuities in enthalpy function. In such formulations, all problem coefficients are required to be assumed temperature-dependent. Although of high practical relevance, most standard engineering textbooks ignore this sort of development. A recent paper by ([[@Hristov2023]]) tries to handle this sort of formalism, but expanded in temperature units. Let's assume the enthalpy to be related to other variables as $H(T)=\rho(T)h(T)=\rho(T){}c_{p}(T)T$, then
+
+$$
+\frac{\partial{}H}{\partial{}t}=
+\rho{}c_{p}\frac{\partial{}T}{\partial{}t}+
+c_{p}T\frac{\partial{}\rho}{\partial{}t}+
+\rho{}T\frac{\partial{}c_{p}}{\partial{}t}
+$$
+
+If (continuous) relationships for $\rho(T)$ and $c_{p}(T)$ are available, it can be expanded to
+
+$$
+\frac{\partial{}H}{\partial{}t}=
+\left(
+	\rho{}c_{p}+
+	c_{p}T\frac{\partial{}\rho}{\partial{}T}+
+	\rho{}T\frac{\partial{}c_{p}}{\partial{}T}
+\right)
+\frac{\partial{}T}{\partial{}t}
+$$
+
+so that heat equation writes with the proper divergence operator as
+
+$$
+\left(
+	\rho{}c_{p}+
+	c_{p}T\frac{\partial{}\rho}{\partial{}T}+
+	\rho{}T\frac{\partial{}c_{p}}{\partial{}T}
+\right)
+\frac{\partial{}T}{\partial{}t}=
+\nabla\cdotp{}(k\nabla{}T)
+$$
 
 
 
@@ -247,25 +278,25 @@ Difficulties arise particularly when dealing with phase change, such as solidifi
 
 For computing the heating dynamics in a sphere, using the definition of divergence in spherical coordinates and using the gradient expansion over the radius we have
 
-```math
+$$
 \rho{}\frac{\partial{}h}{\partial{}t}=
 \frac{1}{r^2}\frac{\partial}{\partial{}r}
 \left(r^2k\frac{\partial{}T}{\partial{}r}\right)
-```
+$$
 
 This is now integrated over the differential volume ``dV`` as described in previous sections and for conciseness we skip that discussion. The integration over radial coordinate introduces the ``r^2dr`` factor from the differential volume and we get the final form of the equation to integrate.
 
-```math
+$$
 \int_{s}^{n}\int_{0}^{\tau}
 \rho{}\frac{\partial{}h}{\partial{}t}r^2dtdr=
 \int_{0}^{\tau}\int_{s}^{n}
 \frac{\partial}{\partial{}r}
 \left(r^2k\frac{\partial{}T}{\partial{}r}\right)drdt
-```
+$$
 
 After effecting the inner integrations and moving out constant terms from the integrals and expanding the evaluation of the definite integral between control volume boundaries ``s`` and ``n`` and performing a Crank-Nicolson integration of the right-hand side one gets
 
-```math
+$$
 \begin{align}
 \frac{\rho{}}{\tau}
 \left(h_P^{\tau}-h_P^{0}\right)
@@ -279,20 +310,20 @@ r_n^2k_n\frac{T_N^{0}-T_P^{0}}{\delta_{P,N}}-
 r_s^2k_s\frac{T_P^{0}-T_S^{0}}{\delta_{P,S}}
 \right]
 \end{align}
-```
+$$
 
 Some coefficients appearing in the above equations are now grouped. Notice that for thermal conductivity ``k`` which is a function of temperature, the corresponding time-step temperature must be used for its evaluation. For ``\beta_{j}`` the lower case ``j`` represents the evaluation at the interface with control volume ``J``, what is a very specific notation.
 
-```math
+$$
 \begin{align}
 \alpha_{P}  & = \frac{\rho{}}{3\tau}\left(r_n^3-r_s^3\right)\\[8pt]
 \beta_{j}   & = \frac{r_j^2k_j}{\delta_{P,J}}
 \end{align}
-```
+$$
 
 For conciseness we make ``g=(1-f)`` and simplify the expression with the new coefficients as
 
-```math
+$$
 \begin{align}
 \alpha_{P}h_P^{\tau}-\alpha_{P}h_P^{0}
 
@@ -300,31 +331,31 @@ For conciseness we make ``g=(1-f)`` and simplify the expression with the new coe
 \\[8pt]
 &+g\beta_{n}T_N^{0}-g(\beta_{n}+\beta_{s})T_P^{0}-g\beta_{s}T_S^{0}
 \end{align}
-```
+$$
 
-For the fully implicity time-stepping scheme ``f=1`` and making ``\gamma_{j}^{k}=\alpha_{P}^{-1}\beta_{j}^{k}`` one gets
+For the fully implicit time-stepping scheme ``f=1`` and making $\gamma_{j}^{k}=\alpha_{P}^{-1}\beta_{j}^{k}$ one gets
 
-```math
+$$
 h_P^{\tau}-h_P^{0}-\gamma_{n}^{k}T_N^{\tau,k}+(\gamma_{n}^{k}+\gamma_{s}^{k})T_P^{\tau,k}-\gamma_{s}^{k}T_S^{\tau,k}=0
-```
+$$
 
 A condition for symmetry is that no flux traverses the center of the sphere at ``r=0``. That implies that *south* derivatives in discretizes form of the equation must vanish to enforce ``\dot{q}(0,t)=0``, so the first row of the problem is modified to
 
-```math
+$$
 h_P^{\tau}-h_P^{0}-\gamma_{n}^{k}T_N^{\tau,k}+\gamma_{n}^{k}T_P^{\tau,k}=0
-```
+$$
 
 Over the external radius ``r=R`` a Robin boundary condition is imposed. In this case the heat flux ``\dot{q}=U(T_\infty-T_P)`` takes the place of *north* term in FVM discretization and the equation writes
 
-```math
+$$
 h_P^{\tau}-h_P^{0}-\alpha_{P}^{-1}UT_{\infty}+(\alpha_{P}^{-1}U+\gamma_{s}^{k})T_P^{\tau,k}-\gamma_{s}^{k}T_S^{\tau,k}=0
-```
+$$
 
 It must be noted here that ``U=R^2h``, where the actual heat transfer coefficient is ``h``. This should be self-evident from a dimensional analysis.
 
 This is no longer a linear problem and thus cannot be solved directly. We need now an strategy for solving this coupled system of nonlinear equations. The iterative solution of the problem is indicated in the above equations through the introduction of superscript ``k`` indicating the iteration number. One can rework the system as
 
-```math
+$$
 \begin{align}
 -\gamma_{1,2}^{k}T_2^{\tau,k}+\gamma_{1,2}^{k}T_1^{\tau,k}+h_1^{\tau}&=h_1^{0}\\
 &\dots \\
@@ -332,11 +363,11 @@ This is no longer a linear problem and thus cannot be solved directly. We need n
 &\dots \\
 (\alpha_{K}^{-1}U+\gamma_{K-1,K}^{k})T_K^{\tau,k}-\gamma_{K-1,K}^{k}T_{K-1}^{\tau,k}+h_K^{\tau}&=h_K^{0}+\alpha_{K}^{-1}UT_{\infty}
 \end{align}
-```
+$$
 
 It is clear now that for implementation purposes one can store the required coefficients in a tridiagonal matrix ``A^{k}``. Making ``\Gamma_{i}=(\gamma_{i-1,i}+\gamma_{i,i+1})`` and ``\tilde{U}=\alpha_{K}^{-1}U`` we can identify the terms in
 
-```math
+$$
 \begin{pmatrix}
 H_{1}^{k}    \\
 H_{2}^{k}    \\
@@ -362,11 +393,11 @@ T_{3}^{\tau,k}   \\
 T_{K-1}^{\tau,k} \\
 T_{N}^{\tau,k}   \\
 \end{pmatrix}
-```
+$$
 
-Since the temperature vector ``T^{\tau,k}`` is updated every iteration, the coefficients of ``A^{k}`` must also be updated. With the intermediate vector ``H^{\tau,k}`` the nonlinear problem is rewriten as
+Since the temperature vector ``T^{\tau,k}`` is updated every iteration, the coefficients of ``A^{k}`` must also be updated. With the intermediate vector ``H^{\tau,k}`` the nonlinear problem is rewritten as
 
-```math
+$$
 \begin{pmatrix}
 H_{1}^{k}    \\
 H_{2}^{k}    \\
@@ -393,13 +424,13 @@ h_3^{0}                 \\
 h_{K-1}^{0}             \\
 h_{K}^{0} + \tilde{U}T_{\infty} \\
 \end{pmatrix}
-```
+$$
 
 The choice not to write the problem in this format reflects the fact that the term ``H^{\tau,k}`` on the left-hand side is updated on a iteration basis, while the vector ``b^{0}`` is computed once per time step. This last vector was called ``b^{0}`` instead of ``h^{0}`` because it also includes the boundary condition in its last element. This is useful for the conception of the inner and outer loop functions used for solution update.
 
 The traditional approach to solve this sort of problems is to provide a *initial guess* ``T^{\tau,0}=T^{0}``.
 
-```math
+$$
 \begin{align}
 h^{\tau,0}               &= b^{0}-A^{0}T^{\tau,0}\\
 h(T^{\tau,1})-h^{\tau,0} &= 0\\
@@ -419,4 +450,4 @@ h(T^{\tau,k+1})-h^{\tau,k} &= 0\\
 T^{\tau,k+1}               &= T^{\tau,k}+(1-\alpha)\Delta{}T\\
 \varepsilon^{k+1}          &= \vert\Delta{}T\vert\\
 \end{align}
-```
+$$

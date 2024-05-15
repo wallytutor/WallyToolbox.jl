@@ -63,8 +63,7 @@ Review and in-depth studies for solidification of knowledge:
 - [Introduction to finite element methods](https://www.youtube.com/playlist?list=PLJhG_d-Sp_JHKVRhfTgDqbic_4MHpltXZ)
 - [Wolfgang Bangerth's video lectures](https://www.math.colostate.edu/~bangerth/videos.html)
 
-<details>
-<summary>Week 1</summary><br>
+### Week 1
 
 - [ ] Follow 21 tutorials provided with Gmsh
 - [x] Follow [this](https://www.youtube.com/playlist?list=PL4eMS3gkRNXcvNnawxzuzRlFDa5CseoQV) short course on FreeCAD.
@@ -74,10 +73,8 @@ Review and in-depth studies for solidification of knowledge:
 - [ ] Barzegari's notebook associated to Langtangens chapter 1
 - [ ] Engineering Statics | Lectures videos 1 to 10
 - [ ] Intro to the Finite Element Method | Lectures 1
-</details>
 
-<details>
-<summary>Week 2</summary><br>
+### Week 2
 
 - [ ] Nithiarasu (2016), chapter 3 (1/2)
 - [ ] Langtangen (2016), chapter 2 (2/3) 
@@ -86,10 +83,8 @@ Review and in-depth studies for solidification of knowledge:
 - [ ] Solid Mechanics | Theory (all at once)
 - [ ] Intro to Continuum Mechanics | Seminars 1
 - [ ] Intro to the Finite Element Method | Lectures 2
-</details>
 
-<details>
-<summary>Week 3</summary><br>
+### Week 3
 
 - [ ] Nithiarasu (2016), chapter 3 (2/2)
 - [ ] Langtangen (2016), chapter 2 (3/3) 
@@ -98,10 +93,8 @@ Review and in-depth studies for solidification of knowledge:
 - [ ] Engineering Statics | Lectures videos 15 to 18
 - [ ] Intro to Continuum Mechanics | Seminars 2
 - [ ] Intro to the Finite Element Method | Lectures 3
-</details>
 
-<details>
-<summary>Week 4</summary><br>
+### Week 4
 
 - [ ] Nithiarasu (2016), chapter 4
 - [ ] Langtangen (2016), chapter 3 (1/5) 
@@ -110,10 +103,8 @@ Review and in-depth studies for solidification of knowledge:
 - [ ] Intro to Continuum Mechanics | Seminars 3
 - [ ] Intro to the Finite Element Method | Lectures 4
 - [ ] Follow [these](https://www.youtube.com/playlist?list=PL6fjYEpJFi7W6ayU8zKi7G0-EZmkjtbPo) ParaView tutorials.
-</details>
 
-<details>
-<summary>Week 5</summary><br>
+### Week 5
 
 - [ ] Nithiarasu (2016), chapter 5
 - [ ] Langtangen (2016), chapter 3 (2/5) 
@@ -121,30 +112,24 @@ Review and in-depth studies for solidification of knowledge:
 - [ ] Intro to Continuum Mechanics | Seminars 4
 - [ ] Intro to the Finite Element Method | Lectures 5
 - [ ] Follow [these](https://www.youtube.com/playlist?list=PLvkU6i2iQ2fpcVsqaKXJT5Wjb9_ttRLK-) ParaView tutorials.
-</details>
 
-<details>
-<summary>Week 6</summary><br>
+### Week 6
 
 - [ ] Nithiarasu (2016), chapter 6
 - [ ] Langtangen (2016), chapter 3 (3/5) 
 - [ ] Intro to Continuum Mechanics | Seminars 5
 - [ ] Intro to the Finite Element Method | Lectures 6
 - [ ] Follow [this](https://www.youtube.com/watch?v=aVlOcc828uM) ParaView seminar.
-</details>
 
-<details>
-<summary>Week 7</summary><br>
+### Week 7
 
 - [ ] Nithiarasu (2016), chapter 7 (1/3)
 - [ ] Langtangen (2016), chapter 3 (4/5) 
 - [ ] Intro to Continuum Mechanics | Seminars 6
 - [ ] Intro to the Finite Element Method | Lectures 7
 - [ ] Follow [this](https://www.youtube.com/watch?v=fGcD4dC6Pug&t=5s) ParaView seminar.
-</details>
 
-<details>
-<summary>Week 8</summary><br>
+### Week 8
 
 - [ ] Nithiarasu (2016), chapter 7 (2/3)
 - [ ] Langtangen (2016), chapter 3 (5/5) 
@@ -152,20 +137,16 @@ Review and in-depth studies for solidification of knowledge:
 - [ ] Intro to Continuum Mechanics | Seminars 7
 - [ ] Intro to the Finite Element Method | Lectures 8
 - [ ] Follow [this](https://www.youtube.com/watch?v=7WMaHXLK6No) ParaView seminar.
-</details>
 
-<details>
-<summary>Week 9</summary><br>
+### Week 9
 
 - [ ] Nithiarasu (2016), chapter 7 (3/3)
 - [ ] Langtangen (2016), chapter 4 (1/2) 
 - [ ] Intro to Continuum Mechanics | Seminars 8
 - [ ] Intro to the Finite Element Method | Lectures 9
 - [ ] Follow [this](https://www.youtube.com/watch?v=knWz0LCSgic) ParaView seminar.
-</details>
 
-<details>
-<summary>Week 10</summary><br>
+### Week 10
 
 - [ ] Nithiarasu (2016), chapter 8
 - [ ] Langtangen (2016), chapter 4 (2/2) 
@@ -173,106 +154,69 @@ Review and in-depth studies for solidification of knowledge:
 - [ ] Intro to Continuum Mechanics | Seminars 9
 - [ ] Intro to the Finite Element Method | Lectures 10
 - [ ] Follow [this](https://www.youtube.com/watch?v=J6PTrFUFD00) ParaView seminar.
-</details>
 
-<details>
-<summary>Week 11</summary><br>
+### Week 11
 
 - [ ] Follow 7 extended tutorials provided with Gmsh (Python)
 - [ ] Nithiarasu (2016), chapter 9
 - [ ] Langtangen (2016), chapter 5 (1/3) 
 - [ ] Intro to Continuum Mechanics | Seminars 10
 - [ ] Follow [this](https://www.youtube.com/watch?v=IXXDxM62tUU) ParaView seminar.
-</details>
 
-<details>
-<summary>Week 12</summary><br>
+### Week 12
 
 - [ ] Nithiarasu (2016), chapter 10
 - [ ] Langtangen (2016), chapter 5 (2/3) 
-</details>
 
-<details>
-<summary>Week 13</summary><br>
+### Week 13
 
 - [ ] Nithiarasu (2016), chapter 11
 - [ ] Langtangen (2016), chapter 5 (3/3) 
 - [ ] Barzegari's  notebook associated to Langtangens chapter 5
-</details>
 
-<details>
-<summary>Week 14</summary><br>
+### Week 14
 
 - [ ] Nithiarasu (2016), chapter 12
 - [ ] Langtangen (2016), chapter 6 (1/2) 
-</details>
 
-<details>
-<summary>Week 15</summary><br>
+### Week 15
 
 - [ ] Nithiarasu (2016), chapter 13
 - [ ] Langtangen (2016), chapter 6 (2/2) 
 - [ ] Barzegari's  notebook associated to Langtangens chapter 6
-</details>
 
-<details>
-<summary>Week 16</summary><br>
+### Week 16
 
 - [ ] Nithiarasu (2016), chapter 14 and 15
 - [ ] Langtangen (2016), chapter 7 
 - [ ] Barzegari's  notebook associated to Langtangens chapter 7
-</details>
 
-<details>
-<summary>Week 17</summary><br>
+### Week 17
 
 - [ ] Langtangen (2016), chapter 8
 - [ ] Barzegari's  notebook associated to Langtangens chapter 8
-</details>
 
-<details>
-<summary>Week 18</summary><br>
+### Week 18
 
 - [ ] Langtangen (2016), chapter 9 (1/4)
-</details>
 
-<details>
-<summary>Week 19</summary><br>
+### Week 19
 
 - [ ] Langtangen (2016), chapter 9 (2/4)
-</details>
 
-<details>
-<summary>Week 20</summary><br>
+### Week 20
 
 - [ ] Langtangen (2016), chapter 9 (3/4)
-</details>
 
-<details>
-<summary>Week 21</summary><br>
+### Week 21
 
 - [ ] Langtangen (2016), chapter 9 (4/4)
 - [ ] Barzegari's  notebook associated to Langtangens chapter 9
-</details>
 
-<details>
-<summary>Week 22</summary><br>
+### Week 22
 
 - [ ] Langtangen (2016), chapter 10
-</details>
 
-<details>
-<summary>Week 23</summary><br>
+### Week 23
 
 - [ ] Langtangen (2016), chapter 11
-</details>
-
-<details>
-<summary>Week 24</summary><br>
-...
-</details>
-
-<details>
-<summary>Week 25</summary><br>
-...
-</details>
