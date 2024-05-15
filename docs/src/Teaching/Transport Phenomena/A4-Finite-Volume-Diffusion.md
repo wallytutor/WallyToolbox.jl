@@ -106,7 +106,7 @@ $$
 \delta_{i,i+1}=r_{i+1}-r_{i}
 $$
 
-Applying a general Crank-Nicolson ([[@Crank1996]]) scheme we integrate numerically the right-hand side. The weighting factor $f$ introduces the implicit degree: for $f=1$ we have a fully implicit solution, which $f=0$ represents a standard Euler integration. *Notice that the parenthetical superscript notation $(I)$ does not imply exponentiation, but the instant at which the corresponding values are to be evaluated.*
+Applying a general Crank-Nicolson ([[@Crank1996]]) scheme we integrate numerically the right-hand side. The weighting factor $f$ introduces the implicit degree: for $f=1$ we have a fully implicit solution, which $f=0$ represents a standard Euler integration. It should be self evident that $\sum{}f^{(I)}=1$. *Notice that the parenthetical superscript notation $(I)$ does not imply exponentiation, but the instant at which the corresponding values are to be evaluated.*
 
 $$
 \frac{\rho{}c_{p}}{\tau}\left(T_P^{\tau}-T_P^{0}\right)\int_{s}^{n}\beta{}dr=
@@ -116,7 +116,6 @@ f^{(I)}\left[
     \beta_n{}k_n^{(I)}\frac{T_N^{(I)}-T_P^{(I)}}{\delta_{P,N}}-
     \beta_s{}k_s^{(I)}\frac{T_P^{(I)}-T_S^{(I)}}{\delta_{P,S}}
 \right]
-\quad\text{where}\quad\sum{}f^{(I)}=1
 $$
 
 Integration of the remaining space integral is trivial given the definition of $\beta$; to remain generic no matter what coordinate system we introduce the constant $\gamma$. Notice that for cartesian coordinates this corresponds simply to the cell length and for other coordinate systems other relationships associated to cell volume can be interpreted.
@@ -214,10 +213,7 @@ To enter the variable thermophysical properties formulation it is worth saying a
 
 	In practical applications, especially in high-dimensional problems coupled to fluid dynamics, it is worth performing a sensitivity analysis with different sampling points over $\rho(T){}c_{p}(T)$ to determine whether solving the problem with temperature-dependent properties is really required. For most cases this can lead to impressive speed-ups in simulations.
 
-In such formulations, all problem coefficients are required to be assumed temperature-dependent. Although of high practical relevance, most standard engineering textbooks ignore this sort of development.
-
-A recent paper by ([[@Hristov2023]]) tries to handle this sort of formalism, but expanded in temperature units. Let's assume the enthalpy to be related to other variables as $H(T)=\rho(T)h(T)=\rho(T){}c_{p}(T)T$, then
-
+Although of high practical relevance, it is almost incredible that most standard engineering textbooks ignore this sort of development. A recent paper by ([[@Hristov2023]]) tries to handle this sort of formalism analytically with properties expanded as simple temperature functions. Expanding the left-hand side of heat equation formulated in $H(T)$ leads to
 
 $$
 \frac{\partial{}H}{\partial{}t}=
@@ -250,7 +246,20 @@ $$
 \nabla\cdotp{}(k\nabla{}T)
 $$
 
-Cite ([[@Shirzad2023]])
+!!! info
+
+	It is worth mentioning here, although we will not develop further for now, that in materials science and other fields, when involving a phase transformation kinetics described by an Avrami-like formalism such as discussed by ([[@Shirzad2023]]), we could end with a system of coupled partial differential equations. For instance, if density only is changed through an arbitrary kinetics $f(t,\rho,T,\dot{T})$, the next (unrealistic) model would arise. In fact, as discussed by ([[@Mittemeijer1988]]), we should solve for a new non-equilibrium thermodynamic state $\beta$ for the kinetics and analytically evaluate a JMAK expression for density, but that is beyond our scope here (for now!).
+
+	$$
+	\begin{align}
+	\left(
+		\rho{}c_{p}+
+		\rho{}T\frac{\partial{}c_{p}}{\partial{}T}
+	\right)\frac{\partial{}T}{\partial{}t}
+	&=\nabla\cdotp{}(k\nabla{}T)-c_{p}T\frac{\partial{}\rho}{\partial{}t}\\[12pt]
+	\frac{\partial{}\rho}{\partial{}t}&=f(t,\rho,T,\dot{T})
+	\end{align}
+	$$
 
 
 #### Boundary conditions
