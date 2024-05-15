@@ -1,0 +1,63 @@
+{
+	"$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+	"name": "SIF",
+	"patterns": [
+		{
+			"include": "#comments"
+		},
+		{
+			"include": "#numbers"
+		},
+		{
+			"include": "#datatypes"
+		},
+		{
+			"include": "#sections"
+		},
+		{
+			"include": "#fieldsheader"
+		},
+		{
+			"include": "#fieldssimulation"
+		}
+	],
+	"repository": {
+		"comments": {
+			"patterns": [{
+				"name": "comment.line.tdb",
+				"match": "#.*"
+			}]
+		},
+		"numbers": {
+			"patterns": [{
+				"name": "constant.numeric",
+				"match": "((([+-]\\s*)|(\\b))((\\d+(\\.\\d+)?)|(\\.\\d+)))(\\s*[eE]([+-]\\s*)?((\\d+(\\.\\d+)?)|(\\.\\d+)))?\\b"
+			}]
+		},
+		"datatypes": {
+			"patterns": [{
+				"name": "entity.name.class",
+				"match": "\\b(Real|Integer|Logical|String|File)\\b"
+			}]
+		},
+		"sections": {
+			"patterns": [{
+				"name": "keyword.control.sif",
+				"match": "\\b(Header|Constants|Simulation|Solver\\s*\\d+|Body\\s*\\d+|Equation\\s*\\d+|Body Force\\s*\\d+|Material\\s*\\d+|(Initial|Boundary) Condition\\s*\\d+|Run Control|Component\\s*\\d+|End)\\b"
+			}]
+		},
+		"fieldsheader": {
+			"patterns": [{
+				"name": "entity.name.function",
+				"match": "\\b(CHECK\\s*KEYWORDS|Mesh\\s*DB|Include\\s*Path|Results\\s*Directory)\\b"
+			}]
+		},
+		"fieldssimulation": {
+			"patterns": [{
+				"name": "entity.name.function",
+				"match": "\\b(Max Output Level|Coordinate System|Coordinate Mapping|Simulation Type|Steady State Max Iterations|Output Intervals|Timestep intervals|Timestep Sizes|Timestepping Method|BDF Order|Solver Input File|Post File)\\b"
+			}]
+		}
+	},
+	"scopeName": "source.sif"
+}
