@@ -183,7 +183,7 @@ $$
 (\alpha_{P}+\kappa_{n}+\kappa_{s})T_P
 -\kappa_{n}T_N
 =
-\alpha_{P}T_P^{(0)}
+a_{P}^{(0)}T_P^{(0)}
 $$
 
 where the following coefficients are identified
@@ -192,14 +192,15 @@ $$
 \begin{aligned}
     a_{S} & = -\kappa_{s}\\[8pt]
     a_{N} & = -\kappa_{n}\\[8pt]
-    a_{P} & = \alpha_{P}+\kappa_{n}+\kappa_{s}
+    a_{P} & = \alpha_{P}+\kappa_{n}+\kappa_{s}\\[8pt]
+    a_{P}^{(0)} &= \alpha_{P}
 \end{aligned}
 $$
 
 and the standard finite volume formalism discretization is reached
 
 $$
-a_ST_S + a_PT_P + a_NT_N = \alpha_{P}T_P^{0}
+a_ST_S + a_PT_P + a_NT_N = a_{P}^{(0)}T_P^{(0)}
 $$
 
 The interested reader may wish to derive the boundary conditions to this case. We will refrain from that here because it will be done for the rather more general case in the following sections.
@@ -275,6 +276,61 @@ $$
 \left(\beta{}k\dfrac{\partial{}T}{\partial{}r}\right)drdt
 $$
 
+Solving left-hand side of this integral is non-trivial and we will skip it for now; consider then the non-expanded version of the enthalpy problem:
+
+$$
+\int_{s}^{n}\int_{0}^{\tau}
+\beta
+\dfrac{\partial{}(\rho{}c_{p}T)}{\partial{}t}dtdr=
+\displaystyle\int_{0}^{\tau}\int_{s}^{n}
+\dfrac{\partial}{\partial{}r}
+\left(\beta{}k\dfrac{\partial{}T}{\partial{}r}\right)drdt
+$$
+
+Next we integrate both sides of the equation at once and apply a fully implicit interpolation to the right-hand side; for the analogous details provided for constant thermophysical properties, please check the previous section. This leads to the following discrete equation:
+
+$$
+\frac{r_n^\gamma-r_s^\gamma}{\gamma\tau}
+\left[(\rho{}c_{p}T_P)-(\rho{}c_{p}T_P)^{0}\right]
+=
+\beta_n{}k_n\frac{T_N-T_P}{\delta_{P,N}}-
+\beta_s{}k_s\frac{T_P-T_S}{\delta_{P,S}}
+$$
+
+where we can identify the following coefficients (not exactly the same as before!):
+
+$$
+\begin{aligned}
+\alpha_{P}  & = \frac{r_n^\gamma-r_s^\gamma}{\gamma\tau}\\[8pt]
+\kappa_{j}   & = \frac{\beta_j{}k_j}{\delta_{P,J}}
+\end{aligned}
+$$
+
+
+$$
+-\kappa_n{}T_N
++(\alpha_{P}(\rho{}c_{p})^{(\star)}+\kappa_n{}+\kappa_s{})T_P
+-\kappa_s{}T_S
+=
+\alpha_{P}(\rho{}c_{p})^{(0)}T_P^{(0)}
+$$
+
+where the following coefficients are identified
+
+$$
+\begin{aligned}
+    a_{S} & = -\kappa_{s}\\[8pt]
+    a_{N} & = -\kappa_{n}\\[8pt]
+    a_{P} & = \alpha_{P}(\rho{}c_{p})^{(\star)}+\kappa_{n}+\kappa_{s}\\[8pt]
+    a_{P}^{(0)} &= \alpha_{P}(\rho{}c_{p})^{(0)}
+\end{aligned}
+$$
+
+There are two main differences in the above coefficients with respect to the constant properties case: both $a_{P}$ and $a_{P}^{(0)}$ need to be updated. Since the previous case already considered variable thermal conductivity, it was intrinsically non-linear and solution should already be iterative. In that sense, using a $(\star)$ superscript in $(\rho{}c_{p})^{(\star)}$ is not needed because the $\kappa$ already need to be updated on a iteration basis until time-step convergence; nonetheless, it was kept to emphasize the different in the present formulation. The final problem statement remains the same, say
+
+$$
+a_ST_S + a_PT_P + a_NT_N = a_{P}^{(0)}T_P^{(0)}
+$$
 
 #### Boundary conditions
 
