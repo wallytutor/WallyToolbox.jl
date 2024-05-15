@@ -116,15 +116,16 @@ g\kappa_{n}^{(0)}T_N^{(0)}
 (\alpha_{P}+\kappa_{n}+\kappa_{s})T_P
 -\kappa_{n}T_N
 =
-\alpha_{P}T_P^{(0)}
+a_{P}^{(0)}T_P^{(0)}
 \]</p><p>where the following coefficients are identified</p><p class="math-container">\[
 \begin{aligned}
     a_{S} &amp; = -\kappa_{s}\\[8pt]
     a_{N} &amp; = -\kappa_{n}\\[8pt]
-    a_{P} &amp; = \alpha_{P}+\kappa_{n}+\kappa_{s}
+    a_{P} &amp; = \alpha_{P}+\kappa_{n}+\kappa_{s}\\[8pt]
+    a_{P}^{(0)} &amp;= \alpha_{P}
 \end{aligned}
 \]</p><p>and the standard finite volume formalism discretization is reached</p><p class="math-container">\[
-a_ST_S + a_PT_P + a_NT_N = \alpha_{P}T_P^{0}
+a_ST_S + a_PT_P + a_NT_N = a_{P}^{(0)}T_P^{(0)}
 \]</p><p>The interested reader may wish to derive the boundary conditions to this case. We will refrain from that here because it will be done for the rather more general case in the following sections.</p><hr/><h3 id="Variable-thermophysical-properties"><a class="docs-heading-anchor" href="#Variable-thermophysical-properties">Variable thermophysical properties</a><a id="Variable-thermophysical-properties-1"></a><a class="docs-heading-anchor-permalink" href="#Variable-thermophysical-properties" title="Permalink"></a></h3><p>To enter the variable thermophysical properties formulation it is worth saying a few words ahead of time about the next subject, the enthalpy formulation. That is because for variable density <span>$\rho(T)$</span> and specific heat capacity <span>$c_{p}(T)$</span> under constant pressure the left-hand side of heat equation can be better expressed in terms of enthalpy <span>$H(T)=\rho(T)h(T)=\rho(T){}c_{p}(T)T$</span>. Such a formulation is a requirement when dealing with phase change, such as solidification and melting - where we find discontinuities in enthalpy function; it is also needed in situations where material properties change above a certain degree for which constant properties could no longer be assumed over the foreseeable temperature range.</p><div class="admonition is-info"><header class="admonition-header">Info</header><div class="admonition-body"><p>In practical applications, especially in high-dimensional problems coupled to fluid dynamics, it is worth performing a sensitivity analysis with different sampling points over <span>$\rho(T){}c_{p}(T)$</span> to determine whether solving the problem with temperature-dependent properties is really required. For most cases this can lead to impressive speed-ups in simulations.</p></div></div><p>Although of high practical relevance, it is almost incredible that most standard engineering textbooks ignore this sort of development. A recent paper by (Hristov2023)[<a href="../../../References/#Hristov2023">9</a>] tries to handle this sort of formalism analytically with properties expanded as simple temperature functions. Expanding the left-hand side of heat equation formulated in <span>$H(T)$</span> leads to</p><p class="math-container">\[
 \frac{\partial{}H}{\partial{}t}=
 \rho{}c_{p}\frac{\partial{}T}{\partial{}t}+
@@ -167,6 +168,39 @@ c_{p}T\frac{\partial{}\rho}{\partial{}t}+
 \displaystyle\int_{0}^{\tau}\int_{s}^{n}
 \dfrac{\partial}{\partial{}r}
 \left(\beta{}k\dfrac{\partial{}T}{\partial{}r}\right)drdt
+\]</p><p>Solving left-hand side of this integral is non-trivial and we will skip it for now; consider then the non-expanded version of the enthalpy problem:</p><p class="math-container">\[
+\int_{s}^{n}\int_{0}^{\tau}
+\beta
+\dfrac{\partial{}(\rho{}c_{p}T)}{\partial{}t}dtdr=
+\displaystyle\int_{0}^{\tau}\int_{s}^{n}
+\dfrac{\partial}{\partial{}r}
+\left(\beta{}k\dfrac{\partial{}T}{\partial{}r}\right)drdt
+\]</p><p>Next we integrate both sides of the equation at once and apply a fully implicit interpolation to the right-hand side; for the analogous details provided for constant thermophysical properties, please check the previous section. This leads to the following discrete equation:</p><p class="math-container">\[
+\frac{r_n^\gamma-r_s^\gamma}{\gamma\tau}
+\left[(\rho{}c_{p}T_P)-(\rho{}c_{p}T_P)^{0}\right]
+=
+\beta_n{}k_n\frac{T_N-T_P}{\delta_{P,N}}-
+\beta_s{}k_s\frac{T_P-T_S}{\delta_{P,S}}
+\]</p><p>where we can identify the following coefficients (not exactly the same as before!):</p><p class="math-container">\[
+\begin{aligned}
+\alpha_{P}  &amp; = \frac{r_n^\gamma-r_s^\gamma}{\gamma\tau}\\[8pt]
+\kappa_{j}   &amp; = \frac{\beta_j{}k_j}{\delta_{P,J}}
+\end{aligned}
+\]</p><p class="math-container">\[
+-\kappa_n{}T_N
++(\alpha_{P}(\rho{}c_{p})^{(\star)}+\kappa_n{}+\kappa_s{})T_P
+-\kappa_s{}T_S
+=
+\alpha_{P}(\rho{}c_{p})^{(0)}T_P^{(0)}
+\]</p><p>where the following coefficients are identified</p><p class="math-container">\[
+\begin{aligned}
+    a_{S} &amp; = -\kappa_{s}\\[8pt]
+    a_{N} &amp; = -\kappa_{n}\\[8pt]
+    a_{P} &amp; = \alpha_{P}(\rho{}c_{p})^{(\star)}+\kappa_{n}+\kappa_{s}\\[8pt]
+    a_{P}^{(0)} &amp;= \alpha_{P}(\rho{}c_{p})^{(0)}
+\end{aligned}
+\]</p><p>There are two main differences in the above coefficients with respect to the constant properties case: both <span>$a_{P}$</span> and <span>$a_{P}^{(0)}$</span> need to be updated. Since the previous case already considered variable thermal conductivity, it was intrinsically non-linear and solution should already be iterative. In that sense, using a <span>$(\star)$</span> superscript in <span>$(\rho{}c_{p})^{(\star)}$</span> is not needed because the <span>$\kappa$</span> already need to be updated on a iteration basis until time-step convergence; nonetheless, it was kept to emphasize the different in the present formulation. The final problem statement remains the same, say</p><p class="math-container">\[
+a_ST_S + a_PT_P + a_NT_N = a_{P}^{(0)}T_P^{(0)}
 \]</p><h4 id="Boundary-conditions"><a class="docs-heading-anchor" href="#Boundary-conditions">Boundary conditions</a><a id="Boundary-conditions-1"></a><a class="docs-heading-anchor-permalink" href="#Boundary-conditions" title="Permalink"></a></h4><p>TODO</p><h4 id="Special-cases-coordinates"><a class="docs-heading-anchor" href="#Special-cases-coordinates">Special cases coordinates</a><a id="Special-cases-coordinates-1"></a><a class="docs-heading-anchor-permalink" href="#Special-cases-coordinates" title="Permalink"></a></h4><p>For cylindrical and spherical systems, a condition for symmetry is that no flux traverses the center of the cylinder at <span>$r=0$</span>. That implies that <em>south</em> derivatives in discrete form of the equation must vanish to enforce <span>$\dot{q}(0,t)=0$</span>, so the first row of the problem is modified to</p><p class="math-container">\[
 a_1T_P + a_NT_N = \alpha_{P}T_P^{0}\quad\text{where}\quad{}a_1=\alpha_{P}+\beta_{n}
 \]</p><p class="math-container">\[
@@ -299,4 +333,4 @@ h(T^{\tau,k+1})-h^{\tau,k} &amp;= 0\\
 T^{\tau,k+1}               &amp;= T^{\tau,k}+(1-\alpha)\Delta{}T\\
 \varepsilon^{k+1}          &amp;= \vert\Delta{}T\vert\\
 \end{align}
-\]</p></article><nav class="docs-footer"><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.3.0 on <span class="colophon-date" title="Wednesday 15 May 2024 04:49">Wednesday 15 May 2024</span>. Using Julia version 1.10.3.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+\]</p></article><nav class="docs-footer"><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.3.0 on <span class="colophon-date" title="Wednesday 15 May 2024 08:04">Wednesday 15 May 2024</span>. Using Julia version 1.10.3.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
