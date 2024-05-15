@@ -1,8 +1,8 @@
 Header
   CHECK KEYWORDS Warn
-  Mesh DB "." "."
   Include Path ""
-  Results Directory ""
+  Mesh DB "." "geometry"
+  Results Directory "results"
 End
 
 Simulation
@@ -10,10 +10,11 @@ Simulation
   Coordinate System = Cartesian
   Coordinate Mapping(3) = 1 2 3
   Simulation Type = Steady state
-  Steady State Max Iterations = 1
+  Steady State Max Iterations = 10
   Output Intervals(1) = 1
   Solver Input File = case.sif
   Post File = case.vtu
+  #Output File = case.dat
 End
 
 Constants
@@ -48,7 +49,7 @@ Solver 1
   Exec Solver = Always
   Stabilize = True
   Optimize Bandwidth = True
-  Steady State Convergence Tolerance = 1.0e-5
+  Steady State Convergence Tolerance = 1.0e-8
   Nonlinear System Convergence Tolerance = 1.0e-7
   Nonlinear System Max Iterations = 20
   Nonlinear System Newton After Iterations = 3
@@ -64,6 +65,15 @@ Solver 1
   Linear System Abort Not Converged = False
   Linear System Residual Output = 10
   Linear System Precondition Recompute = 1
+End
+
+Solver 2
+  Exec Solver = After Simulation
+  Equation = SaveLine
+  Procedure = "SaveData" "SaveLine"
+  Filename = "line.dat"
+  Polyline Coordinates(2,2) = 0.0 0.8 0.0 1.0
+  Polyline Divisions(1) = 20
 End
 
 Equation 1

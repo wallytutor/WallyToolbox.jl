@@ -16,3 +16,8 @@
 
 # Results
 *.vtu
+*.dat
+*.dat.names
+
+# Execution logs
+log.*
