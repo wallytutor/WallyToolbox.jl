@@ -76,6 +76,23 @@ Curve Loop(2) = {5, 7, 8, 4};
 Plane Surface(2) = {2};
 
 ///////////////////////////////////////////////////////////////////
+// Structured Mesh
+///////////////////////////////////////////////////////////////////
+
+Transfinite Curve {4} = (100 * d + 1) Using Progression 1.08;
+Transfinite Curve {-7} = (100 * d + 1) Using Progression 1.08;
+
+Transfinite Curve {3} = (100 * n * d + 1);
+Transfinite Curve {5} = (100 * n * d + 1);
+Transfinite Curve {8} = (100 * n * d + 1);
+
+Transfinite Surface {2};
+Recombine Surface {2};
+Recombine Surface {1};
+
+MeshSize {1, 2, 3, 6} = 0.05;
+
+///////////////////////////////////////////////////////////////////
 // Physics
 ///////////////////////////////////////////////////////////////////
 
@@ -96,9 +113,6 @@ Physical Surface("block", 8) = {1};
 Mesh 2;
 
 RefineMesh;
-RefineMesh;
-// RefineMesh;
-// RefineMesh;
 
 Save "geometry.unv";
 
