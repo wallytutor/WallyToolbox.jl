@@ -12,12 +12,6 @@
 			"include": "#strings"
 	    },
 		{
-			"include": "#datatypes"
-		},
-		{
-			"include": "#sections"
-		},
-		{
 			"include": "#fieldsheader"
 		},
 		{
@@ -25,6 +19,18 @@
 		},
 		{
 			"include": "#fieldssimulation"
+		},
+		{
+			"include": "#fieldssolver"
+		},
+		{
+			"include": "#fieldsbody"
+		},
+		{
+			"include": "#sections"
+		},
+		{
+			"include": "#datatypes"
 		}
 	],
 	"repository": {
@@ -39,6 +45,17 @@
 				"name": "constant.numeric",
 				"match": "((([+-]\\s*)|(\\b))((\\d+(\\.\\d+)?)|(\\.\\d+)))(\\s*[eE]([+-]\\s*)?((\\d+(\\.\\d+)?)|(\\.\\d+)))?\\b"
 			}]
+		},
+		"strings": {
+			"name": "string.ref.tdb",
+			"begin": "\"",
+			"end": "\"",
+			"patterns": [
+				{
+					"name": "constant.character.ref-strings.tdb",
+					"match": "\\\\."
+				}
+			]
 		},
 		"datatypes": {
 			"patterns": [{
@@ -73,25 +90,14 @@
 		"fieldssolver": {
 			"patterns": [{
 				"name": "entity.name.function",
-				"match": "\\b()\\b"
+				"match": "\\b(Equation(\\s+)\\=(\\s+)|Variable(\\s+)\\=(\\s+)|Procedure(\\s+)\\=(\\s+)|Exec(\\s+)Solver|Stabilize)\\b"
 			}]
 		},
 		"fieldsbody": {
 			"patterns": [{
 				"name": "entity.name.function",
-				"match": "\\b(Target\\s+Bodies|Name|Equation|Material|Initial\\s+condition)\\b"
+				"match": "\\b(Target(\\s+)Bodies|Name|Equation(\\s+)\\=(\\s+)|Material(\\s+)\\=(\\s+)|Initial(\\s+)condition)\\b"
 			}]
-		},
-		"strings": {
-			"name": "string.ref.tdb",
-			"begin": "\"",
-			"end": "\"",
-			"patterns": [
-				{
-					"name": "constant.character.ref-strings.tdb",
-					"match": "\\\\."
-				}
-			]
 		}
 	},
 	"scopeName": "source.sif"
