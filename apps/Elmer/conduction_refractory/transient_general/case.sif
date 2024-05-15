@@ -17,8 +17,8 @@ Simulation
   Timestep Sizes(1) = 1
   Timestepping Method = BDF
   BDF Order = 3
-  Solver Input File = case.sif
-  Post File = case.vtu
+  Solver Input File = "case.sif"
+  Post File = "case.vtu"
 End
 
 Constants

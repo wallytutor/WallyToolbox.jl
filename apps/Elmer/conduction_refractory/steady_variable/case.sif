@@ -12,8 +12,8 @@ Simulation
   Simulation Type = Steady state
   Steady State Max Iterations = 10
   Output Intervals(1) = 1
-  Solver Input File = case.sif
-  Post File = case.vtu
+  Solver Input File = "case.sif"
+  Post File = "case.vtu"
 End
 
 Constants
