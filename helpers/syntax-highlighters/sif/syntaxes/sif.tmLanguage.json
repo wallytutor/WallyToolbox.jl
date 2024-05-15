@@ -15,13 +15,16 @@
 			"include": "#strings"
 	    },
 		{
+			"include": "#fieldssimulation"
+		},
+		{
+			"include": "#sections"
+		},
+		{
 			"include": "#fieldsheader"
 		},
 		{
 			"include": "#fieldsconstants"
-		},
-		{
-			"include": "#fieldssimulation"
 		},
 		{
 			"include": "#fieldssolver"
@@ -39,13 +42,13 @@
 			"include": "#fieldsconditions"
 		},
 		{
-			"include": "#sections"
-		},
-		{
 			"include": "#datatypes"
 		},
 		{
 			"include": "#options"
+		},
+		{
+			"include": "#equations"
 		}
 	],
 	"repository": {
@@ -117,19 +120,19 @@
 		"fieldssimulation": {
 			"patterns": [{
 				"name": "entity.name.function",
-				"match": "\\b(Max(\\s+)Output(\\s+)Level|Coordinate(\\s+)System|Coordinate(\\s+)Mapping|Simulation(\\s+)Type|Steady(\\s+)State(\\s+)Max(\\s+)Iterations|Output(\\s+)Intervals|Timestep(\\s+)intervals|Timestep(\\s+)Sizes|Timestepping(\\s+)Method|BDF(\\s+)Order|Solver(\\s+)Input(\\s+)File|Post(\\s+)File)\\b"
+				"match": "\\b((Simulation(\\s+))*(Max(\\s+)Output(\\s+)Level|Coordinate(\\s+)System|Coordinate(\\s+)Mapping|Simulation(\\s+)Type|Steady(\\s+)State(\\s+)Max(\\s+)Iterations|Output(\\s+)Intervals|Timestep(\\s+)intervals|Timestep(\\s+)Sizes|Timestepping(\\s+)Method|BDF(\\s+)Order|Solver(\\s+)Input(\\s+)File|Post(\\s+)File))\\b"
 			}]
 		},
 		"fieldssolver": {
 			"patterns": [{
 				"name": "entity.name.function",
-				"match": "\\b((Solver(\\s+)(\\d+))*(Equation|Variable|Procedure|Exec(\\s+)Solver|Stabilize|Optimize Bandwidth|Steady State Convergence Tolerance|Nonlinear System Convergence Tolerance|Nonlinear System Max Iterations|Nonlinear System Newton After Iterations|Nonlinear System Newton After Tolerance|Nonlinear System Relaxation Factor|Linear System Solver|Linear System Iterative Method|Linear System Max Iterations|Linear System Convergence Tolerance|BiCGstabl polynomial degree|Linear System Preconditioning|Linear System ILUT Tolerance|Linear System Abort Not Converged|Linear System Residual Output|Linear System Precondition Recompute|Filename| Polyline(\\s+)Coordinates|Polyline(\\s+)Divisions))\\b"
+				"match": "\\b((Solver(\\s+)(\\d+))*(Equation|Variable|Procedure|Exec(\\s+)Solver|Stabilize|Optimize Bandwidth|Steady State Convergence Tolerance|Nonlinear System Convergence Tolerance|Nonlinear System Max Iterations|Nonlinear System Newton After Iterations|Nonlinear System Newton After Tolerance|Nonlinear System Relaxation Factor|Linear System Solver|Linear System Iterative Method|Linear System Max Iterations|Linear System Convergence Tolerance|BiCGstabl polynomial degree|Linear System Preconditioning|Linear System ILUT Tolerance|Linear System Abort Not Converged|Linear System Residual Output|Linear System Precondition Recompute|Filename|Polyline(\\s+)Coordinates|Polyline(\\s+)Divisions))\\b"
 			}]
 		},
 		"fieldsbody": {
 			"patterns": [{
 				"name": "entity.name.function",
-				"match": "\\b(Target(\\s+)Bodies|Name|Equation(\\s+)\\=(\\s+)|Material(\\s+)\\=(\\s+)|Initial(\\s+)condition)\\b"
+				"match": "\\b((Body(\\s+)(\\d+))*(Target(\\s+)Bodies|Name|Equation|Material|Initial(\\s+)condition))\\b"
 			}]
 		},
 		"fieldsequation": {
@@ -148,6 +151,12 @@
 			"patterns": [{
 				"name": "entity.name.function",
 				"match": "\\b(Target Boundaries|Heat Flux|Temperature)\\b"
+			}]
+		},
+		"equations": {
+			"patterns": [{
+				"name": "entity.name.tag",
+				"match": "\\b(Heat Equation|SaveLine)\\b"
 			}]
 		}
 	},
