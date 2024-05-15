@@ -246,20 +246,34 @@ $$
 \nabla\cdotp{}(k\nabla{}T)
 $$
 
-!!! info
+It is worth mentioning here, although we will not develop further for now, that in materials science and other fields, when involving a phase transformation kinetics described by an Avrami-like formalism such as discussed by ([[@Shirzad2023]]), we could end with a system of coupled partial differential equations. For instance, if density only is changed through an arbitrary kinetics $f(t,\rho,T,\dot{T})$, the next (unrealistic) model would arise. In fact, as discussed by ([[@Mittemeijer1988]]), we should solve for a new non-equilibrium thermodynamic state $\beta$ for the kinetics and analytically evaluate a JMAK expression for density, but that is beyond our scope here (for now!).
 
-	It is worth mentioning here, although we will not develop further for now, that in materials science and other fields, when involving a phase transformation kinetics described by an Avrami-like formalism such as discussed by ([[@Shirzad2023]]), we could end with a system of coupled partial differential equations. For instance, if density only is changed through an arbitrary kinetics $f(t,\rho,T,\dot{T})$, the next (unrealistic) model would arise. In fact, as discussed by ([[@Mittemeijer1988]]), we should solve for a new non-equilibrium thermodynamic state $\beta$ for the kinetics and analytically evaluate a JMAK expression for density, but that is beyond our scope here (for now!).
+$$
+\begin{align}
+\left(
+	\rho{}c_{p}+
+	\rho{}T\frac{\partial{}c_{p}}{\partial{}T}
+\right)\frac{\partial{}T}{\partial{}t}
+&=\nabla\cdotp{}(k\nabla{}T)-c_{p}T\frac{\partial{}\rho}{\partial{}t}\\[12pt]
+\frac{\partial{}\rho}{\partial{}t}&=f(t,\rho,T,\dot{T})
+\end{align}
+$$
 
-	$$
-	\begin{align}
-	\left(
-		\rho{}c_{p}+
-		\rho{}T\frac{\partial{}c_{p}}{\partial{}T}
-	\right)\frac{\partial{}T}{\partial{}t}
-	&=\nabla\cdotp{}(k\nabla{}T)-c_{p}T\frac{\partial{}\rho}{\partial{}t}\\[12pt]
-	\frac{\partial{}\rho}{\partial{}t}&=f(t,\rho,T,\dot{T})
-	\end{align}
-	$$
+The base development of the integral form of the heat equation in different coordinate systems being already treated in the previous sections, we use that result here to get
+
+$$
+\int_{s}^{n}\int_{0}^{\tau}
+\beta
+\left(
+	\rho{}c_{p}+
+	c_{p}T\frac{\partial{}\rho}{\partial{}T}+
+	\rho{}T\frac{\partial{}c_{p}}{\partial{}T}
+\right)
+\dfrac{\partial{}T}{\partial{}t}dtdr=
+\displaystyle\int_{0}^{\tau}\int_{s}^{n}
+\dfrac{\partial}{\partial{}r}
+\left(\beta{}k\dfrac{\partial{}T}{\partial{}r}\right)drdt
+$$
 
 
 #### Boundary conditions
