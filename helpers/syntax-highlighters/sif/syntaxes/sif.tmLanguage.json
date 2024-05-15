@@ -43,6 +43,9 @@
 		},
 		{
 			"include": "#datatypes"
+		},
+		{
+			"include": "#options"
 		}
 	],
 	"repository": {
@@ -84,7 +87,13 @@
 		"datatypes": {
 			"patterns": [{
 				"name": "entity.name.class",
-				"match": "\\b(Variable|Procedure|Real|Integer|Logical|String|File)\\b"
+				"match": "\\b(Real|Integer|Logical|String|File)\\b"
+			}]
+		},
+		"options": {
+			"patterns": [{
+				"name": "entity.name.tag",
+				"match": "\\b(Warn|Cartesian|Transient|BDF|Always|After Simulation|True|False|Iterative|BiCGStab|ILU0)\\b"
 			}]
 		},
 		"sections": {
@@ -114,7 +123,7 @@
 		"fieldssolver": {
 			"patterns": [{
 				"name": "entity.name.function",
-				"match": "\\b(Equation(\\s+)\\=(\\s+)|Variable(\\s+)\\=(\\s+)|Procedure(\\s+)\\=(\\s+)|Exec(\\s+)Solver|Stabilize|Optimize Bandwidth|Steady State Convergence Tolerance|Nonlinear System Convergence Tolerance|Nonlinear System Max Iterations|Nonlinear System Newton After Iterations|Nonlinear System Newton After Tolerance|Nonlinear System Relaxation Factor|Linear System Solver|Linear System Iterative Method|Linear System Max Iterations|Linear System Convergence Tolerance|BiCGstabl polynomial degree|Linear System Preconditioning|Linear System ILUT Tolerance|Linear System Abort Not Converged|Linear System Residual Output|Linear System Precondition Recompute|Filename| Polyline(\\s+)Coordinates|Polyline(\\s+)Divisions)\\b"
+				"match": "\\b((Solver(\\s+)(\\d+))*(Equation|Variable|Procedure|Exec(\\s+)Solver|Stabilize|Optimize Bandwidth|Steady State Convergence Tolerance|Nonlinear System Convergence Tolerance|Nonlinear System Max Iterations|Nonlinear System Newton After Iterations|Nonlinear System Newton After Tolerance|Nonlinear System Relaxation Factor|Linear System Solver|Linear System Iterative Method|Linear System Max Iterations|Linear System Convergence Tolerance|BiCGstabl polynomial degree|Linear System Preconditioning|Linear System ILUT Tolerance|Linear System Abort Not Converged|Linear System Residual Output|Linear System Precondition Recompute|Filename| Polyline(\\s+)Coordinates|Polyline(\\s+)Divisions))\\b"
 			}]
 		},
 		"fieldsbody": {
