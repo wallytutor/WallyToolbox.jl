@@ -208,6 +208,49 @@ The interested reader may wish to derive the boundary conditions to this case. W
 ---
 ### Variable thermophysical properties
 
+To enter the variable thermophysical properties formulation it is worth saying a few words ahead of time about the next subject, the enthalpy formulation. That is because for variable density $\rho(T)$ and specific heat capacity $c_{p}(T)$ under constant pressure the left-hand side of heat equation can be better expressed in terms of enthalpy $H(T)=\rho(T)h(T)=\rho(T){}c_{p}(T)T$. Such a formulation is a requirement when dealing with phase change, such as solidification and melting - where we find discontinuities in enthalpy function; it is also needed in situations where material properties change above a certain degree for which constant properties could no longer be assumed over the foreseeable temperature range.
+
+!!! info
+
+	In practical applications, especially in high-dimensional problems coupled to fluid dynamics, it is worth performing a sensitivity analysis with different sampling points over $\rho(T){}c_{p}(T)$ to determine whether solving the problem with temperature-dependent properties is really required. For most cases this can lead to impressive speed-ups in simulations.
+
+In such formulations, all problem coefficients are required to be assumed temperature-dependent. Although of high practical relevance, most standard engineering textbooks ignore this sort of development.
+
+A recent paper by ([[@Hristov2023]]) tries to handle this sort of formalism, but expanded in temperature units. Let's assume the enthalpy to be related to other variables as $H(T)=\rho(T)h(T)=\rho(T){}c_{p}(T)T$, then
+
+
+$$
+\frac{\partial{}H}{\partial{}t}=
+\rho{}c_{p}\frac{\partial{}T}{\partial{}t}+
+c_{p}T\frac{\partial{}\rho}{\partial{}t}+
+\rho{}T\frac{\partial{}c_{p}}{\partial{}t}
+$$
+
+If (continuous) relationships for $\rho(T)$ and $c_{p}(T)$ are available, it can be expanded to
+
+$$
+\frac{\partial{}H}{\partial{}t}=
+\left(
+	\rho{}c_{p}+
+	c_{p}T\frac{\partial{}\rho}{\partial{}T}+
+	\rho{}T\frac{\partial{}c_{p}}{\partial{}T}
+\right)
+\frac{\partial{}T}{\partial{}t}
+$$
+
+so that heat equation writes with the proper divergence operator as
+
+$$
+\left(
+	\rho{}c_{p}+
+	c_{p}T\frac{\partial{}\rho}{\partial{}T}+
+	\rho{}T\frac{\partial{}c_{p}}{\partial{}T}
+\right)
+\frac{\partial{}T}{\partial{}t}=
+\nabla\cdotp{}(k\nabla{}T)
+$$
+
+Cite ([[@Shirzad2023]])
 
 
 #### Boundary conditions
@@ -246,38 +289,7 @@ $$
 \frac{\partial{}(\rho{}h)}{\partial{}t}=\nabla\cdotp{}(k\nabla{}T)
 $$
 
-Difficulties arise particularly when dealing with phase change, such as solidification and melting, where we find discontinuities in enthalpy function. In such formulations, all problem coefficients are required to be assumed temperature-dependent. Although of high practical relevance, most standard engineering textbooks ignore this sort of development. A recent paper by ([[@Hristov2023]]) tries to handle this sort of formalism, but expanded in temperature units. Let's assume the enthalpy to be related to other variables as $H(T)=\rho(T)h(T)=\rho(T){}c_{p}(T)T$, then
 
-$$
-\frac{\partial{}H}{\partial{}t}=
-\rho{}c_{p}\frac{\partial{}T}{\partial{}t}+
-c_{p}T\frac{\partial{}\rho}{\partial{}t}+
-\rho{}T\frac{\partial{}c_{p}}{\partial{}t}
-$$
-
-If (continuous) relationships for $\rho(T)$ and $c_{p}(T)$ are available, it can be expanded to
-
-$$
-\frac{\partial{}H}{\partial{}t}=
-\left(
-	\rho{}c_{p}+
-	c_{p}T\frac{\partial{}\rho}{\partial{}T}+
-	\rho{}T\frac{\partial{}c_{p}}{\partial{}T}
-\right)
-\frac{\partial{}T}{\partial{}t}
-$$
-
-so that heat equation writes with the proper divergence operator as
-
-$$
-\left(
-	\rho{}c_{p}+
-	c_{p}T\frac{\partial{}\rho}{\partial{}T}+
-	\rho{}T\frac{\partial{}c_{p}}{\partial{}T}
-\right)
-\frac{\partial{}T}{\partial{}t}=
-\nabla\cdotp{}(k\nabla{}T)
-$$
 
 ### Spherical coordinates 1-D
 
