@@ -15,33 +15,41 @@ end
 
 "Remove everything generated automatically during previous run."
 function cleanup()
-    rm("geometry/"; force = true, recursive = true)
+    # rm("geometry/"; force = true, recursive = true)
     rm("logs/";     force = true, recursive = true)
     rm("results/";  force = true, recursive = true)
 end
 
 "Run the full simulation workflow from pre- to postprocessing."
 function workflow()
+    geo = joinpath(@__DIR__, "geometry.geo")
+    unv = joinpath(@__DIR__, "geometry.unv")
+    mat = joinpath(@__DIR__, "../refractory.f90")
+
     @info "Handling compilation of libraries..."
     redirect_to_files("log.exe.compile", "log.err.compile") do
-        run(`elmerf90.bat -o refractory.dll refractory.f90`)
+        run(`elmerf90.bat -o refractory.dll $(mat)`)
     end
 
     @info "Generating base computational mesh..."
     redirect_to_files("log.exe.gmsh", "log.err.gmsh") do
-        run(`gmsh - geometry.geo`)
+        run(`gmsh - $(geo)`)
     end
 
     @info "Handling conversion to Elmer grid format..."
     redirect_to_files("log.exe.grid", "log.err.grid") do
-        run(`ElmerGrid 8 2 geometry.unv -autoclean`)
-        rm("geometry.unv"; force = true)
+        run(`ElmerGrid 8 2 $(unv) -autoclean`)
+        rm(unv; force = true)
     end
 
     @info "Solving/integrating problem (may take a while)..."
     redirect_to_files("log.exe.solver", "log.err.solver") do
+        open("ELMERSOLVER_STARTINFO", "w") do fp
+            write(fp, "case.sif\n1\n")
+        end
         run(`ElmerSolver`)
         rm("refractory.dll"; force = true)
+        rm("ELMERSOLVER_STARTINFO"; force = true)
     end
 
     @info "Cleaning up logs..."

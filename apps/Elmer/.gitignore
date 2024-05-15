@@ -8,6 +8,9 @@
 # Generated grids (unless explicitly unignored)
 *.unv
 
+# This can be programatically generated
+ELMERSOLVER_STARTINFO
+
 # Elmer mesh
 *.boundary
 *.elements

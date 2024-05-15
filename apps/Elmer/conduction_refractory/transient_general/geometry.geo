@@ -23,7 +23,7 @@ L = 1.0;
 H = 1.0;
 
 // Depth of slab.
-d = 0.1;
+d = 0.15;
 
 // Width in semi-domain of slab w.r.t. its depth.
 n = 3;
@@ -97,8 +97,8 @@ Mesh 2;
 
 RefineMesh;
 RefineMesh;
-RefineMesh;
-RefineMesh;
+// RefineMesh;
+// RefineMesh;
 
 Save "geometry.unv";
 

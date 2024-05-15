@@ -1,7 +1,7 @@
 Header
   CHECK KEYWORDS Warn
-  Include Path ""
   Mesh DB "." "geometry"
+  Include Path ""
   Results Directory "results"
 End
 
@@ -9,12 +9,16 @@ Simulation
   Max Output Level = 5
   Coordinate System = Cartesian
   Coordinate Mapping(3) = 1 2 3
+  # Simulation Type = Transient
   Simulation Type = Steady state
   Steady State Max Iterations = 10
   Output Intervals(1) = 1
+  Timestep intervals(1) = 1800
+  Timestep Sizes(1) = 1
+  Timestepping Method = BDF
+  BDF Order = 3
   Solver Input File = case.sif
   Post File = case.vtu
-  #Output File = case.dat
 End
 
 Constants
@@ -92,7 +96,14 @@ Material 2
   Name = "Refractory"
   Heat Conductivity = Variable Time
     Procedure "refractory" "conductivity"
-  Heat Capacity = 1110
+  Heat Capacity = Variable Temperature
+    Real
+      200.0   921.0
+      294.0   921.0
+      573.0   984.0
+      878.0  1047.0
+      3000.0 1047.0
+    End
   Density = 2500
 End
 
@@ -104,7 +115,7 @@ End
 Boundary Condition 1
   Target Boundaries(1) = 6 
   Name = "Heat Source"
-  Temperature = 813.15
+  Temperature = 1923.15
 End
 
 Boundary Condition 2
