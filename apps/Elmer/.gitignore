@@ -1,18 +1,14 @@
 # Ignore all for now
 /[0-9]*/
 
-# # Local copies
-# /*/**/
+# Generated grids (unless explicitly unignored)
+*.unv
 
-# # Results
-# *.vtu
-# *.dat
+# Elmer mesh
+*.boundary
+*.elements
+*.header
+*.nodes
 
-# # Elmer specific
-# ELMERSOLVER_STARTINFO
-
-# # Elmer mesh
-# *.boundary
-# *.elements
-# *.header
-# *.nodes
+# Results
+*.vtu
