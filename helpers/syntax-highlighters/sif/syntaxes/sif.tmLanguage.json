@@ -9,6 +9,9 @@
 			"include": "#numbers"
 		},
 		{
+			"include": "#operators"
+		},
+		{
 			"include": "#strings"
 	    },
 		{
@@ -25,6 +28,15 @@
 		},
 		{
 			"include": "#fieldsbody"
+		},
+		{
+			"include": "#fieldsequation"
+		},
+		{
+			"include": "#fieldsmaterial"
+		},
+		{
+			"include": "#fieldsconditions"
 		},
 		{
 			"include": "#sections"
@@ -46,6 +58,18 @@
 				"match": "((([+-]\\s*)|(\\b))((\\d+(\\.\\d+)?)|(\\.\\d+)))(\\s*[eE]([+-]\\s*)?((\\d+(\\.\\d+)?)|(\\.\\d+)))?\\b"
 			}]
 		},
+		"operators": {
+			"patterns": [
+				{
+					"name": "keyword.control.operator",
+					"match": "[-\\*/\\\\+=]"
+				},
+				{
+					"name": "keyword.control.other",
+					"match": "\\b(?i)(LN)\\b"
+				}
+			]
+		},
 		"strings": {
 			"name": "string.ref.tdb",
 			"begin": "\"",
@@ -60,19 +84,19 @@
 		"datatypes": {
 			"patterns": [{
 				"name": "entity.name.class",
-				"match": "\\b(Real|Integer|Logical|String|File)\\b"
+				"match": "\\b(Variable|Procedure|Real|Integer|Logical|String|File)\\b"
 			}]
 		},
 		"sections": {
 			"patterns": [{
 				"name": "keyword.control.sif",
-				"match": "\\b(Header|Constants|Simulation|Solver\\s*\\d+|Body\\s*\\d+|Equation\\s*\\d+|Body Force\\s*\\d+|Material\\s*\\d+|(Initial|Boundary) Condition\\s*\\d+|Run Control|Component\\s*\\d+|End)\\b"
+				"match": "\\b(Header|Constants|Simulation|Solver(\\s+)\\d+|Body(\\s+)\\d+|Equation(\\s+)\\d+|Body Force(\\s+)\\d+|Material(\\s+)\\d+|(Initial|Boundary)(\\s+)Condition(\\s+)\\d+|Run Control|Component(\\s+)\\d+|End)\\b"
 			}]
 		},
 		"fieldsheader": {
 			"patterns": [{
 				"name": "entity.name.function",
-				"match": "\\b(CHECK\\s*KEYWORDS|Mesh\\s*DB|Include\\s*Path|Results\\s*Directory)\\b"
+				"match": "\\b(CHECK(\\s+)KEYWORDS|Mesh(\\s+)DB|Include(\\s+)Path|Results(\\s+)Directory)\\b"
 			}]
 		},
 		"fieldsconstants": {
@@ -90,13 +114,31 @@
 		"fieldssolver": {
 			"patterns": [{
 				"name": "entity.name.function",
-				"match": "\\b(Equation(\\s+)\\=(\\s+)|Variable(\\s+)\\=(\\s+)|Procedure(\\s+)\\=(\\s+)|Exec(\\s+)Solver|Stabilize)\\b"
+				"match": "\\b(Equation(\\s+)\\=(\\s+)|Variable(\\s+)\\=(\\s+)|Procedure(\\s+)\\=(\\s+)|Exec(\\s+)Solver|Stabilize|Optimize Bandwidth|Steady State Convergence Tolerance|Nonlinear System Convergence Tolerance|Nonlinear System Max Iterations|Nonlinear System Newton After Iterations|Nonlinear System Newton After Tolerance|Nonlinear System Relaxation Factor|Linear System Solver|Linear System Iterative Method|Linear System Max Iterations|Linear System Convergence Tolerance|BiCGstabl polynomial degree|Linear System Preconditioning|Linear System ILUT Tolerance|Linear System Abort Not Converged|Linear System Residual Output|Linear System Precondition Recompute|Filename| Polyline(\\s+)Coordinates|Polyline(\\s+)Divisions)\\b"
 			}]
 		},
 		"fieldsbody": {
 			"patterns": [{
 				"name": "entity.name.function",
 				"match": "\\b(Target(\\s+)Bodies|Name|Equation(\\s+)\\=(\\s+)|Material(\\s+)\\=(\\s+)|Initial(\\s+)condition)\\b"
+			}]
+		},
+		"fieldsequation": {
+			"patterns": [{
+				"name": "entity.name.function",
+				"match": "\\b(Active(\\s+)Solvers)\\b"
+			}]
+		},
+		"fieldsmaterial": {
+			"patterns": [{
+				"name": "entity.name.function",
+				"match": "\\b(Heat Conductivity|Heat Capacity|Density)\\b"
+			}]
+		},
+		"fieldsconditions": {
+			"patterns": [{
+				"name": "entity.name.function",
+				"match": "\\b(Target Boundaries|Heat Flux|Temperature)\\b"
 			}]
 		}
 	},
