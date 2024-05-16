@@ -9,9 +9,13 @@ Simulation
   Max Output Level = 5
   Coordinate System = Cartesian
   Coordinate Mapping(3) = 1 2 3
-  Simulation Type = Steady state
-  Steady State Max Iterations = 1
+  Simulation Type = Transient
+  Steady State Max Iterations = 10
   Output Intervals(1) = 1
+  Timestep intervals(1) = 250
+  Timestep Sizes(1) = 5
+  Timestepping Method = BDF
+  BDF Order = 2
   Solver Input File = case.sif
   Post File = case.vtu
 End

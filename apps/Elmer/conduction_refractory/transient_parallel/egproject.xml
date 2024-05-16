@@ -25,7 +25,7 @@
       </widget>
       <widget type="LineEdit">
          <objectName>steadyStateMaxIterEdit</objectName>
-         <text>1</text>
+         <text>10</text>
       </widget>
       <widget type="LineEdit">
          <objectName>coordinateMappingEdit</objectName>
@@ -33,7 +33,7 @@
       </widget>
       <widget type="LineEdit">
          <objectName>timeStepIntervalsEdit</objectName>
-         <text></text>
+         <text>250</text>
       </widget>
       <widget type="LineEdit">
          <objectName>outputIntervalsEdit</objectName>
@@ -41,7 +41,7 @@
       </widget>
       <widget type="LineEdit">
          <objectName>timestepSizesEdit</objectName>
-         <text></text>
+         <text>5</text>
       </widget>
       <widget type="LineEdit">
          <objectName>coordinateScalingEdit</objectName>
@@ -109,11 +109,11 @@
       </widget>
       <widget type="ComboBox">
          <objectName>bdfOrderCombo</objectName>
-         <currentIndex>0</currentIndex>
+         <currentIndex>1</currentIndex>
       </widget>
       <widget type="ComboBox">
          <objectName>simulationTypeCombo</objectName>
-         <currentIndex>0</currentIndex>
+         <currentIndex>1</currentIndex>
       </widget>
    </generalsetup>
    <parallelsettings>
