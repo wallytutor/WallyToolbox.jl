@@ -2,6 +2,8 @@
 // Slab inside large block.
 ///////////////////////////////////////////////////////////////////
 
+SetFactory("OpenCASCADE");
+
 General.BackgroundGradient = 0;
 General.Color.Background = {200, 220, 240};
 General.Color.Foreground = White;
@@ -75,19 +77,28 @@ Plane Surface(1) = {1};
 Curve Loop(2) = {5, 7, 8, 4};
 Plane Surface(2) = {2};
 
+
 ///////////////////////////////////////////////////////////////////
 // Physics
 ///////////////////////////////////////////////////////////////////
 
-Physical Curve("hot", 1) = {8};
-Physical Curve("sym_slab", 2) = {7};
-Physical Curve("sym_block", 3) = {6};
-Physical Curve("bottom_block", 4) = {1};
-Physical Curve("side_block", 5) = {2};
-Physical Curve("top_block", 6) = {3};
+// Physical Curve("hot", 1) = {8};
+// Physical Curve("sym_slab", 2) = {7};
+// Physical Curve("sym_block", 3) = {6};
+// Physical Curve("bottom_block", 4) = {1};
+// Physical Curve("side_block", 5) = {2};
+// Physical Curve("top_block", 6) = {3};
+// Physical Surface("slab", 7) = {2};
+// Physical Surface("block", 8) = {1};
 
-Physical Surface("slab", 7) = {2};
-Physical Surface("block", 8) = {1};
+Physical Curve(1) = {8};
+Physical Curve(2) = {7};
+Physical Curve(3) = {6};
+Physical Curve(4) = {1};
+Physical Curve(5) = {2};
+Physical Curve(6) = {3};
+Physical Surface(1) = {2};
+Physical Surface(2) = {1};
 
 ///////////////////////////////////////////////////////////////////
 // Meshing
@@ -97,11 +108,9 @@ Mesh 2;
 
 RefineMesh;
 RefineMesh;
-// RefineMesh;
-// RefineMesh;
 
 Save "geometry.unv";
 
 ///////////////////////////////////////////////////////////////////
 // EOF
-/////////////////////////////////////////////////////////////////////+
+///////////////////////////////////////////////////////////////////
