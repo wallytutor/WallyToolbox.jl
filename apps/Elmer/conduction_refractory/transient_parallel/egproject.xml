@@ -119,7 +119,7 @@
    <parallelsettings>
       <widget type="CheckBox">
          <objectName>parallelActiveCheckBox</objectName>
-         <isChecked>0</isChecked>
+         <isChecked>1</isChecked>
       </widget>
       <widget type="CheckBox">
          <objectName>skipPartitioningCheckBox</objectName>
@@ -127,7 +127,7 @@
       </widget>
       <widget type="LineEdit">
          <objectName>qt_spinbox_lineedit</objectName>
-         <text>2</text>
+         <text>4</text>
       </widget>
       <widget type="LineEdit">
          <objectName>parallelExecLineEdit</objectName>
@@ -1232,7 +1232,7 @@
          </widget>
          <widget type="TextEdit">
             <key>/Heat Equation/Material/Free text/1</key>
-            <value>Heat Conductivity = Variable Temperature
+            <value>  Heat Conductivity = Variable Temperature
     Real MATC "1.984706119175 - tx * (2.531209E-03 - 1.43E-06 * tx)"</value>
          </widget>
          <widget type="Edit">
@@ -1261,7 +1261,7 @@
          </widget>
          <widget type="TextEdit">
             <key>/General/Material/Free text/1</key>
-            <value>Heat Capacity = Variable Temperature
+            <value>  Heat Capacity = Variable Temperature
     Real
       200.0   921.0
       294.0   921.0

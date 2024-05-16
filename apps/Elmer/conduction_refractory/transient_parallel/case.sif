@@ -80,9 +80,9 @@ End
 
 Material 2
   Name = "Refractory"
-Heat Conductivity = Variable Temperature
+  Heat Conductivity = Variable Temperature
     Real MATC "1.984706119175 - tx * (2.531209E-03 - 1.43E-06 * tx)"
-Heat Capacity = Variable Temperature
+  Heat Capacity = Variable Temperature
     Real
       200.0   921.0
       294.0   921.0
