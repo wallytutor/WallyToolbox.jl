@@ -32,6 +32,8 @@
 
 - Users must be aware that Elmer has no default unit system; one must take care that units are coherent across the different models and materials.
 
+- Support to mathematical operations in SIF through MATC, which has its own [syntax and documentation](https://www.nic.funet.fi/pub/sci/physics/elmer/doc/MATCManual.pdf). It can be used, *e.g.* for computing temperature dependent properties, what can be helpful for simple expressions (instead of writing Fortran 90 code for extensions).
+
 - Before running in parallel a working case running in serial is required;
 
 ## Postprocessing
