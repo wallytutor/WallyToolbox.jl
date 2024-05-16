@@ -1,6 +1,6 @@
 Header
   CHECK KEYWORDS Warn
-  Mesh DB "." "geometry"
+  Mesh DB ".." "structured"
   Include Path ""
   Results Directory "results"
 End

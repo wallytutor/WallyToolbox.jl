@@ -114,7 +114,7 @@ Mesh 2;
 
 RefineMesh;
 
-Save "geometry.unv";
+Save "structured.unv";
 
 ///////////////////////////////////////////////////////////////////
 // EOF

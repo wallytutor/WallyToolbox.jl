@@ -1,6 +1,6 @@
 Header
   CHECK KEYWORDS Warn
-  Mesh DB "." "geometry"
+  Mesh DB ".." "structured"
   Include Path ""
   Results Directory "results"
 End
@@ -9,7 +9,7 @@ Simulation
   Max Output Level = 5
   Coordinate System = Cartesian
   Coordinate Mapping(3) = 1 2 3
-  #Simulation Type = Steady state
+  # Simulation Type = Steady state
   Simulation Type = Transient
   Steady State Max Iterations = 10
   Output Intervals(1) = 1

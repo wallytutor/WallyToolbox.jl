@@ -22,8 +22,8 @@ end
 
 "Run the full simulation workflow from pre- to postprocessing."
 function workflow()
-    geo = joinpath(@__DIR__, "geometry.geo")
-    unv = joinpath(@__DIR__, "geometry.unv")
+    geo = joinpath(@__DIR__, "../structured.geo")
+    unv = joinpath(@__DIR__, "../structured.unv")
     mat = joinpath(@__DIR__, "../refractory.f90")
 
     @info "Handling compilation of libraries..."
