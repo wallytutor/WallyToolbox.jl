@@ -29,12 +29,12 @@ function workflow()
 
     @info "Generating base computational mesh..."
     redirect_to_files("log.exe.gmsh", "log.err.gmsh") do
-        run(`gmsh - $(geo)`)
+        run(`gmsh - $(geo) -order 2`)
     end
 
     @info "Handling conversion to Elmer grid format..."
     redirect_to_files("log.exe.grid", "log.err.grid") do
-        run(`ElmerGrid 8 2 $(unv) -autoclean`)
+        run(`ElmerGrid 8 2 $(unv) -autoclean -merge 1.0e-05`)
         rm(unv; force = true)
     end
 
