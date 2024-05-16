@@ -16,8 +16,10 @@ ELMERSOLVER_STARTINFO
 *.elements
 *.header
 *.nodes
+partitioning.*
 
 # Results
+*.pvtu
 *.vtu
 *.dat
 *.dat.names
