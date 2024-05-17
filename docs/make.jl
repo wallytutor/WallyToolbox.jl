@@ -130,6 +130,7 @@ pages = [
         "Transport Phenomena" => "Teaching/Transport Phenomena/index.md",
         "Basilisk"            => "Teaching/Basilisk/Basilisk.md",
         "OpenFOAM"            => "Teaching/OpenFOAM/index.md",
+        "Elmer"               => "Teaching/Elmer/index.md",
     ],
 ]
 
