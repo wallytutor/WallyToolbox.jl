@@ -9,6 +9,7 @@ The goal of this page is not to supersede the [documentation](https://www.csc.fi
 
 - [Guided Tour](Guided-Tour.md)
 - [SIF file inputs](SIF.md)
+- [MATC language](MATC.md)
 
 ---
 ## Ongoing work
