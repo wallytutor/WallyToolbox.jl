@@ -7,6 +7,7 @@
 
 # Generated grids (unless explicitly unignored)
 *.unv
+*.msh*
 
 # This can be programatically generated
 ELMERSOLVER_STARTINFO
@@ -23,6 +24,8 @@ partitioning.*
 *.vtu
 *.dat
 *.dat.names
+*.result
+*.mp4
 
 # Execution logs
 log.*

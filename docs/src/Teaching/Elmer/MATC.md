@@ -196,16 +196,16 @@ r = pow(x,y)
 ### General utilities
 
 |                                      |                                                                                                         |
-| ------------------------------ | :------------------------------------------------------------------------------------------------------ |
-| `funcdel(name)`                | Delete given function definition from parser.                                                           |
-| `funclist(name)`               | Give header of the function given by name.                                                              |
-| `env(name)`                    | Get value of environment variable of the operating system.                                              |
-| `exists(name)`                 | Return true (non-zero) if variable by given name exists otherwise return false (=0).                    |
-| `source(name)`                 | Execute commands from file given name.                                                                  |
-| `format(precision)`            | Set number of digits used in printing values in MATC.                                                   |
-| `r = eval(str)`                | Evaluate content of string str. Another form of this command is `@str`.                                 |
-| `who`                          | Give list of currently defined variables.                                                               |
-| `help` or `help("symbol")`     | First form of the command gives list of available commands. Second form gives help on specific routine. |
+| ------------------------------------ | :------------------------------------------------------------------------------------------------------ |
+| `funcdel(name)`                      | Delete given function definition from parser.                                                           |
+| `funclist(name)`                     | Give header of the function given by name.                                                              |
+| `env(name)`                          | Get value of environment variable of the operating system.                                              |
+| `exists(name)`                       | Return true (non-zero) if variable by given name exists otherwise return false (=0).                    |
+| `source(name)`                       | Execute commands from file given name.                                                                  |
+| `format(precision)`                  | Set number of digits used in printing values in MATC.                                                   |
+| `r = eval(str)`                      | Evaluate content of string str. Another form of this command is `@str`.                                 |
+| `who`                                | Give list of currently defined variables.                                                               |
+| `help` or `help("symbol")`           | First form of the command gives list of available commands. Second form gives help on specific routine. |
 
 ### String and I/O functions
 
@@ -260,7 +260,7 @@ r = pow(x,y)
 
 ## Usage
 
-One thing that in my opinion lacks in the documentation are examples of use in conjunction with SIF. For instance, for setting the thermal conductivity of a material as temperature-dependent one could use the following snippet and modify the string to match the desired expression.
+One thing that in my opinion lacks in the documentation are examples of use in conjunction with SIF. For instance, for setting the thermal conductivity of a material as temperature-dependent one could use the following snippet and modify the string to match the desired expression. An example of its usage is provided in [this case](https://github.com/wallytutor/WallyToolbox.jl/blob/main/apps/Elmer/conduction_refractory/transient_parallel/case.sif).
 
 ```C
   Heat Conductivity = Variable Temperature

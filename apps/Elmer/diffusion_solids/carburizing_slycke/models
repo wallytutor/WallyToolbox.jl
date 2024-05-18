@@ -1,0 +1,15 @@
+function diffusivity(tx) {
+    T = 1173.15;
+    R = 8.314462;
+    A = 4.84e-05 * exp(-38 * tx) / (1.0 - 5.0 * tx);
+    E = 155000.0 - 570000.0 * tx;
+    _diffusivity = A * exp(-E / (R * T));
+}
+
+function mtc(t) {
+    val = 1.0;
+    if (t > 7200.0) {
+        val = 0.0;
+    }
+    _mtc = val;
+}
