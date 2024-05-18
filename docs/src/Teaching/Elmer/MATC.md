@@ -95,99 +95,29 @@ Assume the following definitions:
 - `l`, `t` and `r` logical matrices 
 - `s`, `n` and `m` scalars 
 
-
-```@raw html
-<table>
-<tr>
-  <th style="width:120px">Operation</th>
-  <th>Meaning</th>
-</tr>
-<tr>
-  <td>`b = a'`    </td>
-  <td>is transpose of matrix a.</td>
-</tr>
-<tr>
-  <td>`b = @a`    </td>
-  <td>evaluate content of a string variable a as a MATC statement.</td>
-</tr>
-<tr>
-  <td>`t = ~l`    </td>
-  <td>elementwise logical not of  if x is not zero.</td>
-</tr>
-<tr>
-  <td>`b = a ^ s` </td>
-  <td>if a is a square matrix and s is integral, a matrix power is computed, otherwise an elementwise power.</td>
-</tr>
-<tr>
-  <td>`c = a * b` </td>
-  <td>if a and b are compatible for matrix product, that is computed, otherwise if they are of the same size or at least one of them is scalar, an elementwise product is computed.</td>
-</tr>
-<tr>
-  <td>`c = a # b` </td>
-  <td>elementwise multiplication of a and b.</td>
-</tr>
-<tr>
-  <td>`c = a / b` </td>
-  <td>is fraction of a and b computed elementwise.</td>
-</tr>
-<tr>
-  <td>`c = a + b` </td>
-  <td>is sum of matrices a and b computed elementwise.</td>
-</tr>
-<tr>
-  <td>`c = a - b` </td>
-  <td>is difference of matrices a and b computed elementwise.</td>
-</tr>
-<tr>
-  <td>`l = a == b`</td>
-  <td>equality of matrices a and b elementwise.</td>
-</tr>
-<tr>
-  <td>`l = a <> b`</td>
-  <td>inequality of matrices a and b elementwise.</td>
-</tr>
-<tr>
-  <td>`l = a < b` </td>
-  <td>true if a is less than b computed elementwise.</td>
-</tr>
-<tr>
-  <td>`l = a > b` </td>
-  <td>true if a is greater than b computed elementwise.</td>
-</tr>
-<tr>
-  <td>`l = a <= b`</td>
-  <td>true if a is less than or equal to b computed elementwise.</td>
-</tr>
-<tr>
-  <td>`l = a >= b`</td>
-  <td>true if a is greater than or equal to b computed elementwise.</td>
-</tr>
-<tr>
-  <td>`a = n : m` </td>
-  <td>return a vector of values starting from n and ending to m by increment of (plus-minus) one.</td>
-</tr>
-<tr>
-  <td>`r = l & t` </td>
-  <td>elementwise logical and of a and b.</td>
-</tr>
-<tr>
-  <td>`l = a \| b`</td>
-  <td>elementwise logical or of a and b.</td>
-</tr>
-<tr>
-  <td>`c = a ? b` </td>
-  <td>reduction: set values of a where b is zero to zero.</td>
-</tr>
-<tr>
-  <td>`b = n m % a`</td>
-  <td>resize a to matrix of size n by m.</td>
-</tr>
-<tr>
-  <td>`b = a`     </td>
-  <td>assigning a to b.</td>
-</tr>
-</table>
-```
+|                              |                                                                                                                                                                               |
+| ------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `b = a'`      | is transpose of matrix a.                                                                                                                                                     |
+| `b = @a`      | evaluate content of a string variable a as a MATC statement.                                                                                                                  |
+| `t = ~l`      | elementwise logical not of  if x is not zero.                                                                                                                                 |
+| `b = a ^ s`   | if a is a square matrix and s is integral, a matrix power is computed, otherwise an elementwise power.                                                                        |
+| `c = a * b`   | if a and b are compatible for matrix product, that is computed, otherwise if they are of the same size or at least one of them is scalar, an elementwise product is computed. |
+| `c = a # b`   | elementwise multiplication of a and b.                                                                                                                                        |
+| `c = a / b`   | is fraction of a and b computed elementwise.                                                                                                                                  |
+| `c = a + b`   | is sum of matrices a and b computed elementwise.                                                                                                                              |
+| `c = a - b`   | is difference of matrices a and b computed elementwise.                                                                                                                       |
+| `l = a == b`  | equality of matrices a and b elementwise.                                                                                                                                     |
+| `l = a <> b`  | inequality of matrices a and b elementwise.                                                                                                                                   |
+| `l = a < b`   | true if a is less than b computed elementwise.                                                                                                                                |
+| `l = a > b`   | true if a is greater than b computed elementwise.                                                                                                                             |
+| `l = a <= b`  | true if a is less than or equal to b computed elementwise.                                                                                                                    |
+| `l = a >= b`  | true if a is greater than or equal to b computed elementwise.                                                                                                                 |
+| `a = n : m`   | return a vector of values starting from n and ending to m by increment of (plus-minus) one.                                                                                   |
+| `r = l & t`   | elementwise logical and of a and b.                                                                                                                                           |
+| `l = a \| b`  | elementwise logical or of a and b.                                                                                                                                            |
+| `c = a ? b`   | reduction: set values of a where b is zero to zero.                                                                                                                           |
+| `b = n m % a` | resize a to matrix of size n by m.                                                                                                                                            |
+| `b = a`       | assigning a to b.                                                                                                                                                             |
 
 ## Function definitions
 
@@ -265,179 +195,67 @@ r = pow(x,y)
 
 ### General utilities
 
-```@raw html
-<table>
-<tr>
-  <th style="width:250px"></th>
-  <th></th>
-</tr>
-<tr>
-  <td>`funcdel(name)`</td><td>Delete given function definition from parser.</td>
-</tr>
-<tr>
-  <td>`funclist(name)`</td><td>Give header of the function given by name.</td>
-</tr>
-<tr>
-  <td>`env(name)`</td><td>Get value of environment variable of the operating system.</td>
-</tr>
-<tr>
-  <td>`exists(name)`</td><td>Return true (non-zero) if variable by given name exists otherwise return false (=0).</td> 
-</tr>
-<tr>
-  <td>`source(name)`</td><td>Execute commands from file given name.</td>
-</tr>
-<tr>
-  <td>`format(precision)`</td><td>Set number of digits used in printing values in MATC.</td>
-</tr>
-<tr>
-  <td>`r = eval(str)`</td><td>Evaluate content of string str. Another form of this command is `@str`.</td>
-</tr>
-<tr>
-  <td>`who`</td><td>Give list of currently defined variables.</td>
-</tr>
-<tr>
-  <td>`help` or `help("symbol")`</td><td>First form of the command gives list of available commands. Second form gives help on specific routine.</td>
-</tr>
-</table>
-```
+|                              | |
+|---|---|
+| `funcdel(name)` | Delete given function definition from parser. |
+| `funclist(name)` | Give header of the function given by name. |
+| `env(name)` | Get value of environment variable of the operating system. |
+| `exists(name)` | Return true (non-zero) if variable by given name exists otherwise return false (=0). | 
+| `source(name)` | Execute commands from file given name. |
+| `format(precision)` | Set number of digits used in printing values in MATC. |
+| `r = eval(str)` | Evaluate content of string str. Another form of this command is `@str`. |
+| `who` | Give list of currently defined variables. |
+| `help` or `help("symbol")` | First form of the command gives list of available commands. Second form gives help on specific routine. |
+
 
 ### String and I/O functions
 
-```@raw html
-<table>
-<tr>
-  <th style="width:250px"></th>
-  <th></th>
-</tr>
-<tr>
-  <td>`str = sprintf(fmt[,vec])`</td><td>Return a string formatted using `fmt` and values from `vec`. A call to corresponding C-language function is made.</td>
-</tr>
-<tr>
-  <td>`vec = sscanf(str,fmt)`</td><td>Return values from `str` using format `fmt`. A call to corresponding C-language function is made.</td>
-</tr>
-<tr>
-  <td>`str = fread(fp,n)`</td><td>Read `n` bytes from file given by `fp`. File pointer fp should have been obtained from a call to `fopen` or `freopen`, or be the standard input file stdin. Data is returned as function value.</td>
-</tr>
-<tr>
-  <td>`vec = fscanf(fp,fmt)`</td><td>Read file `fp` as given in format. Format fmt is equal to C-language format. File pointer `fp` should have been obtained from a call to `fopen` or `freopen`, or be the standard input.</td>
-</tr>
-<tr>
-  <td>`str = fgets(fp)`</td><td>Read next line from fp. File pointer fp should have been obtained from a call to fopen or freopen or be the standard input.</td>
-</tr>
-<tr>
-  <td>`n = fwrite(fp,buf,n)`</td><td>Write n bytes from buf to file fp. File pointer fp should have been obtained from a call to fopen or freopen or be the standard output (stdout) or standard error (stderr). Return value is number of bytes actually written. Note that one matrix element reserves 8 bytes of space.</td>
-</tr>
-<tr>
-  <td>`n = fprintf(fp,fmt[, vec])`</td><td>Write formatted string to file fp. File pointer fp should have been obtained from a call to fopen or freopen or be the standard output (stdout) or standard error (stderr). The format fmt is equal to C-language format.</td>
-</tr>
-<tr>
-  <td>`fputs(fp,str)`</td><td>Write string str to file fp. File pointer fp should have been obtained from a call to fopen or freopen or be the standard input (stdin).</td>
-</tr>
-<tr>
-  <td>`fp = fopen(name,mode)`</td><td>Reopen file given previous file pointer, name and access mode. The most usual modes are `"r"` for reading and `"w"` for writing. Return value fp is used in functions reading and writing the file.</td>
-</tr>
-<tr>
-  <td>`fp = freopen(fp,name,mode)`</td><td>Reopen file given previous file pointer, name and access mode. The most usual modes are `"r"` for reading and `"w"` for writing. Return value fp is used in functions reading and writing the file.</td>
-</tr>
-<tr>
-  <td>`fclose(fp) `</td><td>Close file previously opened with fopen or freopen.</td>
-</tr>
-<tr>
-  <td>`save(name, a[,ascii_flag])`</td><td>Close file previously opened with `fopen` or `freopen`.</td>
-</tr>
-<tr>
-  <td>`r = load(name)`</td><td>Load matrix from a file given name and in format used by `save` command.</td>
-</tr>
-</table>
-```
+|                              | |
+|---|---|
+| `str = sprintf(fmt[,vec])` | Return a string formatted using `fmt` and values from `vec`. A call to corresponding C-language function is made. |
+| `vec = sscanf(str,fmt)` | Return values from `str` using format `fmt`. A call to corresponding C-language function is made. |
+| `str = fread(fp,n)` | Read `n` bytes from file given by `fp`. File pointer fp should have been obtained from a call to `fopen` or `freopen`, or be the standard input file stdin. Data is returned as function value. |
+| `vec = fscanf(fp,fmt)` | Read file `fp` as given in format. Format fmt is equal to C-language format. File pointer `fp` should have been obtained from a call to `fopen` or `freopen`, or be the standard input. |
+| `str = fgets(fp)` | Read next line from fp. File pointer fp should have been obtained from a call to fopen or freopen or be the standard input. |
+| `n = fwrite(fp,buf,n)` | Write n bytes from buf to file fp. File pointer fp should have been obtained from a call to fopen or freopen or be the standard output (stdout) or standard error (stderr). Return value is number of bytes actually written. Note that one matrix element reserves 8 bytes of space. |
+| `n = fprintf(fp,fmt[, vec])` | Write formatted string to file fp. File pointer fp should have been obtained from a call to fopen or freopen or be the standard output (stdout) or standard error (stderr). The format fmt is equal to C-language format. |
+| `fputs(fp,str)` | Write string str to file fp. File pointer fp should have been obtained from a call to fopen or freopen or be the standard input (stdin). |
+| `fp = fopen(name,mode)` | Reopen file given previous file pointer, name and access mode. The most usual modes are `"r"` for reading and `"w"` for writing. Return value fp is used in functions reading and writing the file. |
+| `fp = freopen(fp,name,mode)` | Reopen file given previous file pointer, name and access mode. The most usual modes are `"r"` for reading and `"w"` for writing. Return value fp is used in functions reading and writing the file. |
+| `fclose(fp) ` | Close file previously opened with fopen or freopen. |
+| `save(name, a[,ascii_flag])` | Close file previously opened with `fopen` or `freopen`. |
+| `r = load(name)` | Load matrix from a file given name and in format used by `save` command. |
 
 ### Numerical utilities
 
-```@raw html
-<table>
-<tr>
-  <th style="width:250px"></th>
-  <th></th>
-</tr>
-<tr>
-  <td>`r = min(matrix)`</td><td>Return value is a vector containing smallest element in columns of given matrix. r = min(min(matrix)) gives smallest element of the matrix.</td>
-</tr>
-<tr>
-  <td>`r = max(matrix)`</td><td>Return value is a vector containing largest element in columns of given matrix. `r = max(max(matrix))` gives largest element of the matrix.</td>
-</tr>
-<tr>
-  <td>`r = sum(matrix)`</td><td>Return vector is column sums of given matrix. `r = sum(sum(matrix))` gives the total sum of elements of the matrix.</td>
-</tr>
-<tr>
-  <td>`r = zeros(n,m)`</td><td>Return n by m matrix with elements initialized to zero.</td>
-</tr>
-<tr>
-  <td>`r = ones(n,m)`</td><td>Return n by m matrix with elements initialized to one.</td>
-</tr>
-<tr>
-  <td>`r = rand(n,m)`</td><td>Return n by m matrix with elements initialized with random numbers from zero to one.</td>
-</tr>
-<tr>
-  <td>`r = diag(matrix)` or `r = diag(vector)`</td><td>Given matrix return diagonal entries as a vector. Given vector return matrix with diagonal elements from vector. `r = diag(diag(a))` gives matrix with diagonal elements from matrix `a`, otherwise elements are zero.</td>
-</tr>
-<tr>
-  <td>`r = vector(start,end,inc)`</td><td>Return vector of values going from start to end by inc.</td>
-</tr>
-<tr>
-  <td>`r = size(matrix)`</td><td>Return size of given matrix.</td>
-</tr>
-<tr>
-  <td>`r = resize(matrix,n,m)`</td><td>Make a matrix to look as a `n` by `m` matrix. This is the same as `r = n m % matrix`.</td>
-</tr>
-<tr>
-  <td>`r = where(a)`</td><td>Return a row vector giving linear index to `a` where `a` is not zero.</td>
-</tr>
-<tr>
-  <td>`r = matcvt(matrix, type)`</td><td>Makes a type conversion from MATC matrix double precision array to given type, which can be one of the following: `"int"`, `"char"` or `"float"`.</td>
-</tr>
-<tr>
-  <td>`r = cvtmat(special, type)`</td><td>Makes a type conversion from given type to MATC matrix. Type can be one of the following: `"int"`, `"char"` or `"float"`.</td>
-</tr>
-</table>
-```
+|                              | |
+|---|---|
+| `r = min(matrix)` | Return value is a vector containing smallest element in columns of given matrix. r = min(min(matrix)) gives smallest element of the matrix. |
+| `r = max(matrix)` | Return value is a vector containing largest element in columns of given matrix. `r = max(max(matrix))` gives largest element of the matrix. |
+| `r = sum(matrix)` | Return vector is column sums of given matrix. `r = sum(sum(matrix))` gives the total sum of elements of the matrix. |
+| `r = zeros(n,m)` | Return n by m matrix with elements initialized to zero. |
+| `r = ones(n,m)` | Return n by m matrix with elements initialized to one. |
+| `r = rand(n,m)` | Return n by m matrix with elements initialized with random numbers from zero to one. |
+| `r = diag(a)` | Given matrix return diagonal entries as a vector. Given vector return matrix with diagonal elements from vector. `r = diag(diag(a))` gives matrix with diagonal elements from matrix `a`, otherwise elements are zero. |
+| `r = vector(start,end,inc)` | Return vector of values going from start to end by inc. |
+| `r = size(matrix)` | Return size of given matrix. |
+| `r = resize(matrix,n,m)` | Make a matrix to look as a `n` by `m` matrix. This is the same as `r = n m % matrix`. |
+| `r = where(a)` | Return a row vector giving linear index to `a` where `a` is not zero. |
+| `r = matcvt(matrix, type)` | Makes a type conversion from MATC matrix double precision array to given type, which can be one of the following: `"int"`, `"char"` or `"float"`. |
+| `r = cvtmat(special, type)` | Makes a type conversion from given type to MATC matrix. Type can be one of the following: `"int"`, `"char"` or `"float"`. |
+
 
 ### Linear algebra
 
-```@raw html
-<table>
-<tr>
-  <th style="width:250px"></th>
-  <th></th>
-</tr>
-<tr>
-  <td>`r = trace(matrix)`</td><td>Return value is the sum of matrix diagonal elements.</td>
-</tr>
-<tr>
-  <td>`r = det(matrix)`</td><td>Return value is determinant of given square matrix.</td>
-</tr>
-<tr>
-  <td>`r = inv(matrix)`</td><td>Invert given square matrix. Computed also by operator $^{-1}$</td>
-</tr>
-<tr>
-  <td>`r = tril(x)`</td><td>Return the lower triangle of the matrix x.</td>
-</tr>
-<tr>
-  <td>`r = triu(x)`</td><td>Return the upper triangle of the matrix x.</td>
-</tr>
-<tr>
-  <td>`r = eig(matrix)`</td><td>Return eigenvalues of given square matrix. The expression `r(n,0)` is real part of the n:th eigenvalue, `r(n,1)` is the imaginary part respectively.</td>
-</tr>
-<tr>
-  <td>`r = jacob(a,b,eps)`</td><td>Solve symmetric positive definite eigenvalue problem by Jacob iteration. Return values are the eigenvalues. Also a variable eigv is created containing eigenvectors.</td>
-</tr>
-<tr>
-  <td>`r = lud(matrix)`</td><td>Return value is LUD decomposition of given matrix.</td>
-</tr>
-<tr>
-  <td>`r = hesse(matrix)`</td><td>Return the upper hessenberg form of given matrix.</td>
-</tr>
-<tr>
-  <td>`r = eye(n)`</td><td>Return n by n identity matrix.</td>
-</tr>
-</table>
-```
+|                              | |
+|---|---|
+| `r = trace(matrix)` | Return value is the sum of matrix diagonal elements. |
+| `r = det(matrix)` | Return value is determinant of given square matrix. |
+| `r = inv(matrix)` | Invert given square matrix. Computed also by operator $^{-1}$ |
+| `r = tril(x)` | Return the lower triangle of the matrix x. |
+| `r = triu(x)` | Return the upper triangle of the matrix x. |
+| `r = eig(matrix)` | Return eigenvalues of given square matrix. The expression `r(n,0)` is real part of the n:th eigenvalue, `r(n,1)` is the imaginary part respectively. |
+| `r = jacob(a,b,eps)` | Solve symmetric positive definite eigenvalue problem by Jacob iteration. Return values are the eigenvalues. Also a variable eigv is created containing eigenvectors. |
+| `r = lud(matrix)` | Return value is LUD decomposition of given matrix. |
+| `r = hesse(matrix)` | Return the upper hessenberg form of given matrix. |
+| `r = eye(n)` | Return n by n identity matrix. |
