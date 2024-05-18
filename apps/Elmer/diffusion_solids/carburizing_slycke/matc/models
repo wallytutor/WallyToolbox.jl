@@ -1,3 +1,7 @@
+xinit = 0.007396605468680156;
+
+xs = 0.0448613671691429;
+
 function diffusivity(tx) {
     T = 1173.15;
     R = 8.314462;
@@ -6,10 +10,10 @@ function diffusivity(tx) {
     _diffusivity = A * exp(-E / (R * T));
 }
 
-function mtc(t) {
+function masstransfercoef(t) {
     val = 1.0;
     if (t > 7200.0) {
         val = 0.0;
     }
-    _mtc = val;
+    _masstransfercoef = val;
 }

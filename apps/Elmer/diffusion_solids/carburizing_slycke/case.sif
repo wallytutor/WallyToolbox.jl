@@ -18,11 +18,14 @@ Simulation
   BDF Order = 1
   Solver Input File = case.sif
   Post File = case.vtu
-Newmark Beta = 1.0
-Output File = "restart.result"
-!Restart File = "restart.result"
-!Restart Position = 120
-!Restart Time = 120.0
+  Newmark Beta = 1.0
+  Output File = "restart.result"
+
+!  Restart File = "restart.result"
+!  Restart Position = 120
+!  Restart Time = 120.0
+
+$ source("matc/models");
 End
 
 Constants
@@ -49,12 +52,12 @@ Solver 1
   Exec Solver = Always
   Stabilize = True
   Optimize Bandwidth = True
-  Steady State Convergence Tolerance = 1.0e-5
-  Nonlinear System Convergence Tolerance = 1.0e-7
+  Steady State Convergence Tolerance = 1.0e-8
+  Nonlinear System Convergence Tolerance = 1.0e-8
   Nonlinear System Max Iterations = 20
   Nonlinear System Newton After Iterations = 3
   Nonlinear System Newton After Tolerance = 1.0e-3
-  Nonlinear System Relaxation Factor = 1
+  Nonlinear System Relaxation Factor = 0.75
   Nonlinear System Convergence Measure = Residual
   Linear System Solver = Iterative
   Linear System Iterative Method = BiCGStab
@@ -76,44 +79,27 @@ End
 
 Material 1
   Name = "Steel"
-  Heat Conductivity = 44.8
   Heat expansion Coefficient = 13.8e-6
-$ function diffusivity(tx) {                        \
-    T = 1173.15;                                    \
-    R = 8.314462;                                   \
-    A = 4.84e-05 * exp(-38 * tx) / (1.0 - 5.0 * tx);\
-    E = 155000.0 - 570000.0 * tx;                   \
-    _diffusivity = A * exp(-E / (R * T));           \
-}
-
-Concentration Diffusivity = Variable Concentration
-    Real MATC "diffusivity(tx)"
+  Youngs modulus = 200.0e9
+  Poisson ratio = 0.285
   Sound speed = 5100.0
   Density = 7890.0
-  Poisson ratio = 0.285
   Heat Capacity = 500.0
-  Youngs modulus = 200.0e9
+  Heat Conductivity = 44.8
+
+  Concentration Diffusivity = Variable Concentration
+    Real MATC "diffusivity(tx)"
 End
 
 Initial Condition 1
   Name = "Carbon_Content"
-  Concentration = 0.007396605468680156
+  Concentration = Real MATC "xinit"
 End
 
 Boundary Condition 1
   Target Boundaries(1) = 2 
   Name = "Saturation"
-$ xs = 0.0448613671691429;
-
-$ function mtc(t) {  \
-    val = 1.0;       \
-    if (t > 7200.0) {\
-        val = 0.0;   \
-    }                \
-    _mtc = val;      \
-}
-
   External Concentration = Real MATC "xs"
   Mass Transfer Coefficient = Variable Time
-    Real MATC "mtc(tx)"
+    Real MATC "masstransfercoef(tx)"
 End
