@@ -307,6 +307,7 @@ DryUtilities.kg_h_to_nm3_h
 
 ```@docs
 DryUtilities.defaultvalue
+DryUtilities.redirect_to_files
 ```
 
 ## Abstract types

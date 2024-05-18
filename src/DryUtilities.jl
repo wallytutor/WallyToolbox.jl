@@ -146,4 +146,19 @@ kg_h_to_nm3_h(ṁ, mw) = ṁ / (C_REF * mw)
 "Syntax sugar for handling a possibly *nothing* value."
 defaultvalue(p, q) = isnothing(p) ? q : p
 
+"Helper function to redirect outputs to the right files."
+function redirect_to_files(dofunc, outfile; errfile = nothing)
+    errfile = defaultvalue(errfile, outfile)
+
+    open(outfile, "w") do out
+        open(errfile, "w") do err
+            redirect_stdout(out) do
+                redirect_stderr(err) do
+                    dofunc()
+                end
+            end
+        end
+    end
+end
+
 end # (module DryUtilities)

@@ -96,7 +96,7 @@
 		"options": {
 			"patterns": [{
 				"name": "entity.name.tag",
-				"match": "\\b(Warn|Cartesian|Transient|BDF|Always|After Simulation|True|False|Iterative|BiCGStab|ILU0|Residual)\\b"
+				"match": "\\b(Warn|Cartesian|Steady state|Transient|BDF|Always|After Simulation|True|False|Iterative|BiCGStab|ILU0|Residual|Absolute Mass)\\b"
 			}]
 		},
 		"sections": {
@@ -120,7 +120,7 @@
 		"fieldssimulation": {
 			"patterns": [{
 				"name": "entity.name.function",
-				"match": "\\b((Simulation(\\s+))*(Max(\\s+)Output(\\s+)Level|Coordinate(\\s+)System|Coordinate(\\s+)Mapping|Simulation(\\s+)Type|Steady(\\s+)State(\\s+)Max(\\s+)Iterations|Output(\\s+)Intervals|Timestep(\\s+)intervals|Timestep(\\s+)Sizes|Timestepping(\\s+)Method|BDF(\\s+)Order|Solver(\\s+)Input(\\s+)File|Post(\\s+)File))\\b"
+				"match": "\\b((Simulation(\\s+))*(Max(\\s+)Output(\\s+)Level|Coordinate(\\s+)System|Coordinate(\\s+)Mapping|Simulation(\\s+)Type|Steady(\\s+)State(\\s+)Max(\\s+)Iterations|Output(\\s+)Intervals|Timestep(\\s+)intervals|Timestep(\\s+)Sizes|Timestepping(\\s+)Method|BDF(\\s+)Order|Solver(\\s+)Input(\\s+)File|Post(\\s+)File)|Newmark(\\s+)Beta)\\b"
 			}]
 		},
 		"fieldssolver": {
@@ -138,25 +138,25 @@
 		"fieldsequation": {
 			"patterns": [{
 				"name": "entity.name.function",
-				"match": "\\b(Active(\\s+)Solvers)\\b"
+				"match": "\\b(Active(\\s+)Solvers|Concentration(\\s+)Units)\\b"
 			}]
 		},
 		"fieldsmaterial": {
 			"patterns": [{
 				"name": "entity.name.function",
-				"match": "\\b(Heat Conductivity|Heat Capacity|Density)\\b"
+				"match": "\\b(Sound speed|Youngs modulus|Heat Conductivity|Heat expansion Coefficient|Poisson ratio|Heat Capacity|Density|Concentration Diffusivity)\\b"
 			}]
 		},
 		"fieldsconditions": {
 			"patterns": [{
 				"name": "entity.name.function",
-				"match": "\\b(Target Boundaries|Heat Flux|Temperature)\\b"
+				"match": "\\b(Concentration|Target Boundaries|Heat Flux|Temperature)\\b"
 			}]
 		},
 		"equations": {
 			"patterns": [{
 				"name": "entity.name.tag",
-				"match": "\\b(Heat Equation|SaveLine)\\b"
+				"match": "\\b(Heat Equation|Advection Diffusion Equation|SaveLine)\\b"
 			}]
 		}
 	},
