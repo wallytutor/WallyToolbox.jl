@@ -152,3 +152,41 @@ function mult(a, b)
 You can get element (3,5) of the `a` times `b` matrix with `mult(x,y)[3,5]` or the diagonal values of the same matrix by `diag(mult(x, y))`.
 
 ## Built-in functions
+
+The following listing provides a series of mathematical functions which follow a their meaning in C. The only exceptions are `ln` denoting the natural logarithm and `log` used here for base 10 logarithms.
+
+```C
+r = sin(x)
+
+r = cos(x)
+
+r = tan(x)
+
+r = asin(x)
+
+r = acos(x)
+
+r = atan(x)
+
+r = sinh(x)
+
+r = cosh(x)
+
+r = tanh(x)
+
+r = exp(x)
+
+r = ln(x)
+
+r = log(x)
+
+r = sqrt(x)
+
+r = ceil(x)
+
+r = floor(x)
+
+r = abs(x)
+
+r = pow(x,y) 
+```
