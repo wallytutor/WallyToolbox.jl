@@ -257,3 +257,145 @@ r = abs(x)
 
 r = pow(x,y) 
 ```
+
+<table>
+<tr>
+  <th style="width:250px">Operation</th>
+  <th>Meaning</th>
+</tr>
+<tr>
+  <td>`funcdel(name)`</td><td>Delete given function definition from parser.</td>
+</tr>
+<tr>
+  <td>`funclist(name)`</td><td>Give header of the function given by name.</td>
+</tr>
+<tr>
+  <td>`env(name)`</td><td>Get value of environment variable of the operating system.</td>
+</tr>
+<tr>
+  <td>`str = sprintf(fmt[,vec] )`</td><td>Return a string formatted using fmt and values from vec. A call to corresponding C-language function is made.</td>
+</tr>
+<tr>
+  <td>`vec = sscanf(str,fmt)`</td><td>Return values from str using format fmt. A call to corresponding C-language function is made.</td>
+</tr>
+<tr>
+  <td>`special = matcvt(matrix, type)`</td><td>Makes a type conversion from MATC matrix double precision array to given type, which can be one of the following: `"int"`, `"char"` or `"float"`.</td>
+</tr>
+<tr>
+  <td>`r = cvtmat( special, type )`</td><td>Makes a type conversion from given type to MATC matrix. Type can be one of the following: `"int"`, `"char"` or `"float"`.</td>
+</tr>
+<tr>
+  <td>`r = eval(str)`</td><td>Evaluate content of string str. Another form of this command is `@str`.</td>
+</tr>
+<tr>
+  <td>`source(name)`</td><td>Execute commands from file given name.</td>
+</tr>
+<tr>
+  <td>`help` or `help("symbol")`</td><td>First form of the command gives list of available commands. Second form gives help on specific routine.</td>
+</tr>
+<tr>
+  <td>`str = fread(fp,n)`</td><td>Read `n` bytes from file given by `fp`. File pointer fp should have been obtained from a call to `fopen` or `freopen`, or be the standard input file stdin. Data is returned as function value.</td>
+</tr>
+<tr>
+  <td>`vec = fscanf(fp,fmt)`</td><td>Read file `fp` as given in format. Format fmt is equal to C-language format. File pointer `fp` should have been obtained from a call to `fopen` or `freopen`, or be the standard input.</td>
+</tr>
+<tr>
+  <td>`str = fgets(fp)`</td><td>Read next line from fp. File pointer fp should have been obtained from a call to fopen or freopen or be the standard input.</td>
+</tr>
+<tr>
+  <td>`n = fwrite(fp,buf,n)`</td><td>Write n bytes from buf to file fp. File pointer fp should have been obtained from a call to fopen or freopen or be the standard output (stdout) or standard error (stderr). Return value is number of bytes actually written. Note that one matrix element reserves 8 bytes of space.</td>
+</tr>
+<tr>
+  <td>`n = fprintf(fp,fmt[, vec])`</td><td>Write formatted string to file fp. File pointer fp should have been obtained from a call to fopen or freopen or be the standard output (stdout) or standard error (stderr). The format fmt is equal to C-language format.</td>
+</tr>
+<tr>
+  <td>`fputs(fp,str)`</td><td>Write string str to file fp. File pointer fp should have been obtained from a call to fopen or freopen or be the standard input (stdin).</td>
+</tr>
+<tr>
+  <td>`fp = fopen(name,mode)`</td><td>Reopen file given previous file pointer, name and access mode. The most usual modes are `"r"` for reading and `"w"` for writing. Return value fp is used in functions reading and writing the file.</td>
+</tr>
+<tr>
+  <td>`fp = freopen(fp,name,mode)`</td><td>Reopen file given previous file pointer, name and access mode. The most usual modes are `"r"` for reading and `"w"` for writing. Return value fp is used in functions reading and writing the file.</td>
+</tr>
+<tr>
+  <td>`fclose(fp) `</td><td>Close file previously opened with fopen or freopen.</td>
+</tr>
+<tr>
+  <td>`save(name, a[,ascii_flag])`</td><td>Close file previously opened with `fopen` or `freopen`.</td>
+</tr>
+<tr>
+  <td>`r = load(name)`</td><td>Load matrix from a file given name and in format used by `save` command.</td>
+</tr>
+<tr>
+  <td>`r = min(matrix)`</td><td>Return value is a vector containing smallest element in columns of given matrix. r = min(min(matrix)) gives smallest element of the matrix.</td>
+</tr>
+<tr>
+  <td>`r = max(matrix)`</td><td>Return value is a vector containing largest element in columns of given matrix. `r = max(max(matrix))` gives largest element of the matrix.</td>
+</tr>
+<tr>
+  <td>`r = sum(matrix)`</td><td>Return vector is column sums of given matrix. `r = sum(sum(matrix))` gives the total sum of elements of the matrix.</td>
+</tr>
+<tr>
+  <td>`r = trace(matrix)`</td><td>Return value is the sum of matrix diagonal elements.</td>
+</tr>
+<tr>
+  <td>`r = det(matrix)`</td><td>Return value is determinant of given square matrix.</td>
+</tr>
+<tr>
+  <td>`r = inv(matrix)`</td><td>Invert given square matrix. Computed also by operator $^{-1}$</td>
+</tr>
+<tr>
+  <td>`r = tril(x)`</td><td>Return the lower triangle of the matrix x.</td>
+</tr>
+<tr>
+  <td>`r = triu(x)`</td><td>Return the upper triangle of the matrix x.</td>
+</tr>
+<tr>
+  <td>`r = eig(matrix)`</td><td>Return eigenvalues of given square matrix. The expression `r(n,0)` is real part of the n:th eigenvalue, `r(n,1)` is the imaginary part respectively.</td>
+</tr>
+<tr>
+  <td>`r = jacob(a,b,eps)`</td><td>Solve symmetric positive definite eigenvalue problem by Jacob iteration. Return values are the eigenvalues. Also a variable eigv is created containing eigenvectors.</td>
+</tr>
+<tr>
+  <td>`r = lud(matrix)`</td><td>Return value is LUD decomposition of given matrix. </td>
+</tr>
+<tr>
+  <td>`r = hesse(matrix)`</td><td>Return the upper hessenberg form of given matrix.</td>
+</tr>
+<tr>
+  <td>`r = eye(n)`</td><td>Return n by n identity matrix. </td>
+</tr>
+<tr>
+  <td>`r = zeros(n,m)`</td><td>Return n by m matrix with elements initialized to zero.</td>
+</tr>
+<tr>
+  <td>`r = ones(n,m)`</td><td>Return n by m matrix with elements initialized to one.</td>
+</tr>
+<tr>
+  <td>`r = rand(n,m)`</td><td>Return n by m matrix with elements initialized with random numbers from zero to one.</td>
+</tr>
+<tr>
+  <td>`r = diag(matrix) or r=diag(vector)`</td><td>Given matrix return diagonal entries as a vector. Given vector return matrix with diagonal elements from vector. r = diag(diag(a)) gives matrix with diagonal elements from matrix a, otherwise elements are zero.</td>
+</tr>
+<tr>
+  <td>`r = vector(start,end,inc)`</td><td>Return vector of values going from start to end by inc.</td>
+</tr>
+<tr>
+  <td>`r = size(matrix)`</td><td>Return size of given matrix.</td>
+</tr>
+<tr>
+  <td>`r = resize(matrix,n,m)`</td><td>Make a matrix to look as a n by m matrix. This is the same as r = n m % matrix. </td>
+</tr>
+<tr>
+  <td>`where(a)`</td><td>Return a row vector giving linear index to a where a is not zero. </td>
+</tr>
+<tr>
+  <td>`exists(name)`</td><td>Return true (non-zero) if variable by given name exists otherwise return false </td>(=0). 
+</tr>
+<tr>
+  <td>`who`</td><td>Give list of currently defined variables.</td>
+</tr>
+<tr>
+  <td>`format(precision)`</td><td>Set number of digits used in printing values in MATC.</td>
+</tr>
+</table>
