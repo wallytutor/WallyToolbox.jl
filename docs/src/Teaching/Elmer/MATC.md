@@ -95,6 +95,8 @@ Assume the following definitions:
 - `l`, `t` and `r` logical matrices 
 - `s`, `n` and `m` scalars 
 
+
+```@raw html
 <table>
 <tr>
   <th style="width:120px">Operation</th>
@@ -185,6 +187,7 @@ Assume the following definitions:
   <td>assigning a to b.</td>
 </tr>
 </table>
+```
 
 ## Function definitions
 
@@ -262,6 +265,7 @@ r = pow(x,y)
 
 ### General utilities
 
+```@raw html
 <table>
 <tr>
   <th style="width:250px"></th>
@@ -277,7 +281,7 @@ r = pow(x,y)
   <td>`env(name)`</td><td>Get value of environment variable of the operating system.</td>
 </tr>
 <tr>
-  <td>`exists(name)`</td><td>Return true (non-zero) if variable by given name exists otherwise return false</td>(=0). 
+  <td>`exists(name)`</td><td>Return true (non-zero) if variable by given name exists otherwise return false (=0).</td> 
 </tr>
 <tr>
   <td>`source(name)`</td><td>Execute commands from file given name.</td>
@@ -295,9 +299,11 @@ r = pow(x,y)
   <td>`help` or `help("symbol")`</td><td>First form of the command gives list of available commands. Second form gives help on specific routine.</td>
 </tr>
 </table>
+```
 
 ### String and I/O functions
 
+```@raw html
 <table>
 <tr>
   <th style="width:250px"></th>
@@ -343,9 +349,11 @@ r = pow(x,y)
   <td>`r = load(name)`</td><td>Load matrix from a file given name and in format used by `save` command.</td>
 </tr>
 </table>
+```
 
 ### Numerical utilities
 
+```@raw html
 <table>
 <tr>
   <th style="width:250px"></th>
@@ -391,9 +399,11 @@ r = pow(x,y)
   <td>`r = cvtmat(special, type)`</td><td>Makes a type conversion from given type to MATC matrix. Type can be one of the following: `"int"`, `"char"` or `"float"`.</td>
 </tr>
 </table>
+```
 
 ### Linear algebra
 
+```@raw html
 <table>
 <tr>
   <th style="width:250px"></th>
@@ -430,3 +440,4 @@ r = pow(x,y)
   <td>`r = eye(n)`</td><td>Return n by n identity matrix.</td>
 </tr>
 </table>
+```
