@@ -257,3 +257,12 @@ r = pow(x,y)
 | `r = lud(matrix)`                    | Return value is LUD decomposition of given matrix.                                                                                                                   |
 | `r = hesse(matrix)`                  | Return the upper hessenberg form of given matrix.                                                                                                                    |
 | `r = eye(n)`                         | Return n by n identity matrix.                                                                                                                                       |
+
+## Usage
+
+One thing that in my opinion lacks in the documentation are examples of use in conjunction with SIF. For instance, for setting the thermal conductivity of a material as temperature-dependent one could use the following snippet and modify the string to match the desired expression.
+
+```C
+  Heat Conductivity = Variable Temperature
+    Real MATC "1.0 - tx * (2.5E-03 - 1.2E-06 * tx)"
+```
