@@ -245,15 +245,15 @@ r = pow(x,y)
 
 ### Linear algebra
 
-| `-----------------------------------` |                                                                                                                                                                      |
-| ------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `r = trace(matrix)`                   | Return value is the sum of matrix diagonal elements.                                                                                                                 |
-| `r = det(matrix)`                     | Return value is determinant of given square matrix.                                                                                                                  |
-| `r = inv(matrix)`                     | Invert given square matrix. Computed also by operator $^{-1}$                                                                                                        |
-| `r = tril(x)`                         | Return the lower triangle of the matrix x.                                                                                                                           |
-| `r = triu(x)`                         | Return the upper triangle of the matrix x.                                                                                                                           |
-| `r = eig(matrix)`                     | Return eigenvalues of given square matrix. The expression `r(n,0)` is real part of the n:th eigenvalue, `r(n,1)` is the imaginary part respectively.                 |
-| `r = jacob(a,b,eps)`                  | Solve symmetric positive definite eigenvalue problem by Jacob iteration. Return values are the eigenvalues. Also a variable eigv is created containing eigenvectors. |
-| `r = lud(matrix)`                     | Return value is LUD decomposition of given matrix.                                                                                                                   |
-| `r = hesse(matrix)`                   | Return the upper hessenberg form of given matrix.                                                                                                                    |
-| `r = eye(n)`                          | Return n by n identity matrix.                                                                                                                                       |
+|                                      |                                                                                                                                                                      |
+| ------------------------------------ | :------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `r = trace(matrix)`                  | Return value is the sum of matrix diagonal elements.                                                                                                                 |
+| `r = det(matrix)`                    | Return value is determinant of given square matrix.                                                                                                                  |
+| `r = inv(matrix)`                    | Invert given square matrix. Computed also by operator $^{-1}$                                                                                                        |
+| `r = tril(x)`                        | Return the lower triangle of the matrix x.                                                                                                                           |
+| `r = triu(x)`                        | Return the upper triangle of the matrix x.                                                                                                                           |
+| `r = eig(matrix)`                    | Return eigenvalues of given square matrix. The expression `r(n,0)` is real part of the n:th eigenvalue, `r(n,1)` is the imaginary part respectively.                 |
+| `r = jacob(a,b,eps)`                 | Solve symmetric positive definite eigenvalue problem by Jacob iteration. Return values are the eigenvalues. Also a variable eigv is created containing eigenvectors. |
+| `r = lud(matrix)`                    | Return value is LUD decomposition of given matrix.                                                                                                                   |
+| `r = hesse(matrix)`                  | Return the upper hessenberg form of given matrix.                                                                                                                    |
+| `r = eye(n)`                         | Return n by n identity matrix.                                                                                                                                       |
