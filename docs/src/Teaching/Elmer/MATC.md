@@ -96,7 +96,7 @@ Assume the following definitions:
 - `s`, `n` and `m` scalars 
 
 |                              |                                                                                                                                                                               |
-| ------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| ------------- |:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `b = a'`      | is transpose of matrix a.                                                                                                                                                     |
 | `b = @a`      | evaluate content of a string variable a as a MATC statement.                                                                                                                  |
 | `t = ~l`      | elementwise logical not of  if x is not zero.                                                                                                                                 |
@@ -195,23 +195,22 @@ r = pow(x,y)
 
 ### General utilities
 
-|                              | |
-|---|---|
-| `funcdel(name)` | Delete given function definition from parser. |
-| `funclist(name)` | Give header of the function given by name. |
-| `env(name)` | Get value of environment variable of the operating system. |
-| `exists(name)` | Return true (non-zero) if variable by given name exists otherwise return false (=0). | 
-| `source(name)` | Execute commands from file given name. |
-| `format(precision)` | Set number of digits used in printing values in MATC. |
-| `r = eval(str)` | Evaluate content of string str. Another form of this command is `@str`. |
-| `who` | Give list of currently defined variables. |
-| `help` or `help("symbol")` | First form of the command gives list of available commands. Second form gives help on specific routine. |
-
+|                                |                                                                                                         |     |
+| ------------------------------ | :------------------------------------------------------------------------------------------------------ | --- |
+| `funcdel(name)`                | Delete given function definition from parser.                                                           |     |
+| `funclist(name)`               | Give header of the function given by name.                                                              |     |
+| `env(name)`                    | Get value of environment variable of the operating system.                                              |     |
+| `exists(name)`                 | Return true (non-zero) if variable by given name exists otherwise return false (=0).                    |     |
+| `source(name)`                 | Execute commands from file given name.                                                                  |     |
+| `format(precision)`            | Set number of digits used in printing values in MATC.                                                   |     |
+| `r = eval(str)`                | Evaluate content of string str. Another form of this command is `@str`.                                 |     |
+| `who`                          | Give list of currently defined variables.                                                               |     |
+| `help` or `help("symbol")`     | First form of the command gives list of available commands. Second form gives help on specific routine. |     |
 
 ### String and I/O functions
 
 |                              | |
-|---|---|
+|---|:---|
 | `str = sprintf(fmt[,vec])` | Return a string formatted using `fmt` and values from `vec`. A call to corresponding C-language function is made. |
 | `vec = sscanf(str,fmt)` | Return values from `str` using format `fmt`. A call to corresponding C-language function is made. |
 | `str = fread(fp,n)` | Read `n` bytes from file given by `fp`. File pointer fp should have been obtained from a call to `fopen` or `freopen`, or be the standard input file stdin. Data is returned as function value. |
@@ -229,7 +228,7 @@ r = pow(x,y)
 ### Numerical utilities
 
 |                              | |
-|---|---|
+|---|:---|
 | `r = min(matrix)` | Return value is a vector containing smallest element in columns of given matrix. r = min(min(matrix)) gives smallest element of the matrix. |
 | `r = max(matrix)` | Return value is a vector containing largest element in columns of given matrix. `r = max(max(matrix))` gives largest element of the matrix. |
 | `r = sum(matrix)` | Return vector is column sums of given matrix. `r = sum(sum(matrix))` gives the total sum of elements of the matrix. |
@@ -244,11 +243,10 @@ r = pow(x,y)
 | `r = matcvt(matrix, type)` | Makes a type conversion from MATC matrix double precision array to given type, which can be one of the following: `"int"`, `"char"` or `"float"`. |
 | `r = cvtmat(special, type)` | Makes a type conversion from given type to MATC matrix. Type can be one of the following: `"int"`, `"char"` or `"float"`. |
 
-
 ### Linear algebra
 
 |                              | |
-|---|---|
+|---|:---|
 | `r = trace(matrix)` | Return value is the sum of matrix diagonal elements. |
 | `r = det(matrix)` | Return value is determinant of given square matrix. |
 | `r = inv(matrix)` | Invert given square matrix. Computed also by operator $^{-1}$ |
