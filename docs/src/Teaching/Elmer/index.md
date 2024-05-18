@@ -8,10 +8,27 @@ The goal of this page is not to supersede the [documentation](https://www.csc.fi
 ## Contents
 
 - [Guided Tour](Guided-Tour.md)
-- [SIF file inputs](SIF.md)
+- [Standard file input](SIF.md)
 - [MATC language](MATC.md)
 
 ---
 ## Ongoing work
 
 - Development of a [VS Code syntax highlight extension](https://github.com/wallytutor/WallyToolbox.jl/tree/main/helpers/syntax-highlighters/sif) with help of data provided in [SOLVER.KEYWORDS](https://github.com/ElmerCSC/elmerfem/blob/devel/fem/src/SOLVER.KEYWORDS).
+
+---
+## Retrieving materials
+
+Because there are plenty of interesting materials in Elmer public directory, it is worth downloading it all and selecting what to keep later. In a Linux terminal one could run the following command. If you also want to retrieve the animations, binaries, and virtual machines, consider removing and/or modifying the `-X` options.
+
+```shell
+#!/usr/bin/env bash
+
+URL="https://www.nic.funet.fi/pub/sci/physics/elmer/"
+
+wget -r -l 20 --no-parent               \
+	-X /pub/sci/physics/elmer/anim/ \
+    -X /pub/sci/physics/elmer/bin/  \
+	-R "index.html*"                \
+	${URL}
+```
