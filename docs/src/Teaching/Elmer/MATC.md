@@ -121,4 +121,34 @@ Assume the following definitions:
 
 ## Function definitions
 
+The syntax of the function definition is similar to that of Fortran but without an `end` statement and is given below. Notice the `!` denoting comments in the description of the function.
+
+```Fortran
+function name(arg1, arg2, ...)
+!
+! Optional function description (seen with help("name"))
+!
+import var1, var2
+export var3, var4
+
+    expr;
+     ...
+    expr;
+
+    _name = value
+```
+
+Functions have their own list of variables. Global variables are not seen in this function unless imported by `import` or given as arguments. Local variables can be made global by the `export` statement. 
+
+Functions, if returning matrices, behave in many ways as variables do. So if you have defined function `mult` as follows 
+
+```Fortran
+function mult(a, b)
+
+   _mult = a * b;
+
+```
+
+You can get element (3,5) of the `a` times `b` matrix with `mult(x,y)[3,5]` or the diagonal values of the same matrix by `diag(mult(x, y))`.
+
 ## Built-in functions
