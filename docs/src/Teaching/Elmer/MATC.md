@@ -101,79 +101,79 @@ Assume the following definitions:
   <th>Meaning</th>
 </tr>
 <tr>
-  <td>`b = a'`     </td>
+  <td>`b = a'`    </td>
   <td>is transpose of matrix a.</td>
 </tr>
 <tr>
-  <td>`b = @a`     </td>
+  <td>`b = @a`    </td>
   <td>evaluate content of a string variable a as a MATC statement.</td>
 </tr>
 <tr>
-  <td>`t = ~l`     </td>
+  <td>`t = ~l`    </td>
   <td>elementwise logical not of  if x is not zero.</td>
 </tr>
 <tr>
-  <td>`b = a ^ s`  </td>
+  <td>`b = a ^ s` </td>
   <td>if a is a square matrix and s is integral, a matrix power is computed, otherwise an elementwise power.</td>
 </tr>
 <tr>
-  <td>`c = a * b`  </td>
+  <td>`c = a * b` </td>
   <td>if a and b are compatible for matrix product, that is computed, otherwise if they are of the same size or at least one of them is scalar, an elementwise product is computed.</td>
 </tr>
 <tr>
-  <td>`c = a # b`  </td>
+  <td>`c = a # b` </td>
   <td>elementwise multiplication of a and b.</td>
 </tr>
 <tr>
-  <td>`c = a / b`  </td>
+  <td>`c = a / b` </td>
   <td>is fraction of a and b computed elementwise.</td>
 </tr>
 <tr>
-  <td>`c = a + b`  </td>
+  <td>`c = a + b` </td>
   <td>is sum of matrices a and b computed elementwise.</td>
 </tr>
 <tr>
-  <td>`c = a - b`  </td>
+  <td>`c = a - b` </td>
   <td>is difference of matrices a and b computed elementwise.</td>
 </tr>
 <tr>
-  <td>`l = a == b` </td>
+  <td>`l = a == b`</td>
   <td>equality of matrices a and b elementwise.</td>
 </tr>
 <tr>
-  <td>`l = a <> b` </td>
+  <td>`l = a <> b`</td>
   <td>inequality of matrices a and b elementwise.</td>
 </tr>
 <tr>
-  <td>`l = a < b`  </td>
+  <td>`l = a < b` </td>
   <td>true if a is less than b computed elementwise.</td>
 </tr>
 <tr>
-  <td>`l = a > b`  </td>
+  <td>`l = a > b` </td>
   <td>true if a is greater than b computed elementwise.</td>
 </tr>
 <tr>
-  <td>`l = a <= b` </td>
+  <td>`l = a <= b`</td>
   <td>true if a is less than or equal to b computed elementwise.</td>
 </tr>
 <tr>
-  <td>`l = a >= b` </td>
+  <td>`l = a >= b`</td>
   <td>true if a is greater than or equal to b computed elementwise.</td>
 </tr>
 <tr>
-  <td>`a = n : m`  </td>
+  <td>`a = n : m` </td>
   <td>return a vector of values starting from n and ending to m by increment of (plus-minus) one.</td>
 </tr>
 <tr>
-  <td>`r = l & t`  </td>
+  <td>`r = l & t` </td>
   <td>elementwise logical and of a and b.</td>
 </tr>
 <tr>
-  <td>`l = a \| b` </td>
+  <td>`l = a \| b`</td>
   <td>elementwise logical or of a and b.</td>
 </tr>
 <tr>
-  <td>`c = a ? b`  </td>
+  <td>`c = a ? b` </td>
   <td>reduction: set values of a where b is zero to zero.</td>
 </tr>
 <tr>
@@ -181,7 +181,7 @@ Assume the following definitions:
   <td>resize a to matrix of size n by m.</td>
 </tr>
 <tr>
-  <td>`b = a`      </td>
+  <td>`b = a`     </td>
   <td>assigning a to b.</td>
 </tr>
 </table>
@@ -219,6 +219,8 @@ function mult(a, b)
 You can get element (3,5) of the `a` times `b` matrix with `mult(x,y)[3,5]` or the diagonal values of the same matrix by `diag(mult(x, y))`.
 
 ## Built-in functions
+
+### C-style math
 
 The following listing provides a series of mathematical functions which follow a their meaning in C. The only exceptions are `ln` denoting the natural logarithm and `log` used here for base 10 logarithms.
 
@@ -258,10 +260,12 @@ r = abs(x)
 r = pow(x,y) 
 ```
 
+### General utilities
+
 <table>
 <tr>
-  <th style="width:250px">Operation</th>
-  <th>Meaning</th>
+  <th style="width:250px"></th>
+  <th></th>
 </tr>
 <tr>
   <td>`funcdel(name)`</td><td>Delete given function definition from parser.</td>
@@ -273,25 +277,37 @@ r = pow(x,y)
   <td>`env(name)`</td><td>Get value of environment variable of the operating system.</td>
 </tr>
 <tr>
-  <td>`str = sprintf(fmt[,vec] )`</td><td>Return a string formatted using fmt and values from vec. A call to corresponding C-language function is made.</td>
-</tr>
-<tr>
-  <td>`vec = sscanf(str,fmt)`</td><td>Return values from str using format fmt. A call to corresponding C-language function is made.</td>
-</tr>
-<tr>
-  <td>`special = matcvt(matrix, type)`</td><td>Makes a type conversion from MATC matrix double precision array to given type, which can be one of the following: `"int"`, `"char"` or `"float"`.</td>
-</tr>
-<tr>
-  <td>`r = cvtmat( special, type )`</td><td>Makes a type conversion from given type to MATC matrix. Type can be one of the following: `"int"`, `"char"` or `"float"`.</td>
-</tr>
-<tr>
-  <td>`r = eval(str)`</td><td>Evaluate content of string str. Another form of this command is `@str`.</td>
+  <td>`exists(name)`</td><td>Return true (non-zero) if variable by given name exists otherwise return false</td>(=0). 
 </tr>
 <tr>
   <td>`source(name)`</td><td>Execute commands from file given name.</td>
 </tr>
 <tr>
+  <td>`format(precision)`</td><td>Set number of digits used in printing values in MATC.</td>
+</tr>
+<tr>
+  <td>`r = eval(str)`</td><td>Evaluate content of string str. Another form of this command is `@str`.</td>
+</tr>
+<tr>
+  <td>`who`</td><td>Give list of currently defined variables.</td>
+</tr>
+<tr>
   <td>`help` or `help("symbol")`</td><td>First form of the command gives list of available commands. Second form gives help on specific routine.</td>
+</tr>
+</table>
+
+### String and I/O functions
+
+<table>
+<tr>
+  <th style="width:250px"></th>
+  <th></th>
+</tr>
+<tr>
+  <td>`str = sprintf(fmt[,vec])`</td><td>Return a string formatted using `fmt` and values from `vec`. A call to corresponding C-language function is made.</td>
+</tr>
+<tr>
+  <td>`vec = sscanf(str,fmt)`</td><td>Return values from `str` using format `fmt`. A call to corresponding C-language function is made.</td>
 </tr>
 <tr>
   <td>`str = fread(fp,n)`</td><td>Read `n` bytes from file given by `fp`. File pointer fp should have been obtained from a call to `fopen` or `freopen`, or be the standard input file stdin. Data is returned as function value.</td>
@@ -326,6 +342,15 @@ r = pow(x,y)
 <tr>
   <td>`r = load(name)`</td><td>Load matrix from a file given name and in format used by `save` command.</td>
 </tr>
+</table>
+
+### Numerical utilities
+
+<table>
+<tr>
+  <th style="width:250px"></th>
+  <th></th>
+</tr>
 <tr>
   <td>`r = min(matrix)`</td><td>Return value is a vector containing smallest element in columns of given matrix. r = min(min(matrix)) gives smallest element of the matrix.</td>
 </tr>
@@ -334,6 +359,45 @@ r = pow(x,y)
 </tr>
 <tr>
   <td>`r = sum(matrix)`</td><td>Return vector is column sums of given matrix. `r = sum(sum(matrix))` gives the total sum of elements of the matrix.</td>
+</tr>
+<tr>
+  <td>`r = zeros(n,m)`</td><td>Return n by m matrix with elements initialized to zero.</td>
+</tr>
+<tr>
+  <td>`r = ones(n,m)`</td><td>Return n by m matrix with elements initialized to one.</td>
+</tr>
+<tr>
+  <td>`r = rand(n,m)`</td><td>Return n by m matrix with elements initialized with random numbers from zero to one.</td>
+</tr>
+<tr>
+  <td>`r = diag(matrix)` or `r = diag(vector)`</td><td>Given matrix return diagonal entries as a vector. Given vector return matrix with diagonal elements from vector. `r = diag(diag(a))` gives matrix with diagonal elements from matrix `a`, otherwise elements are zero.</td>
+</tr>
+<tr>
+  <td>`r = vector(start,end,inc)`</td><td>Return vector of values going from start to end by inc.</td>
+</tr>
+<tr>
+  <td>`r = size(matrix)`</td><td>Return size of given matrix.</td>
+</tr>
+<tr>
+  <td>`r = resize(matrix,n,m)`</td><td>Make a matrix to look as a `n` by `m` matrix. This is the same as `r = n m % matrix`.</td>
+</tr>
+<tr>
+  <td>`r = where(a)`</td><td>Return a row vector giving linear index to `a` where `a` is not zero.</td>
+</tr>
+<tr>
+  <td>`r = matcvt(matrix, type)`</td><td>Makes a type conversion from MATC matrix double precision array to given type, which can be one of the following: `"int"`, `"char"` or `"float"`.</td>
+</tr>
+<tr>
+  <td>`r = cvtmat(special, type)`</td><td>Makes a type conversion from given type to MATC matrix. Type can be one of the following: `"int"`, `"char"` or `"float"`.</td>
+</tr>
+</table>
+
+### Linear algebra
+
+<table>
+<tr>
+  <th style="width:250px"></th>
+  <th></th>
 </tr>
 <tr>
   <td>`r = trace(matrix)`</td><td>Return value is the sum of matrix diagonal elements.</td>
@@ -357,45 +421,12 @@ r = pow(x,y)
   <td>`r = jacob(a,b,eps)`</td><td>Solve symmetric positive definite eigenvalue problem by Jacob iteration. Return values are the eigenvalues. Also a variable eigv is created containing eigenvectors.</td>
 </tr>
 <tr>
-  <td>`r = lud(matrix)`</td><td>Return value is LUD decomposition of given matrix. </td>
+  <td>`r = lud(matrix)`</td><td>Return value is LUD decomposition of given matrix.</td>
 </tr>
 <tr>
   <td>`r = hesse(matrix)`</td><td>Return the upper hessenberg form of given matrix.</td>
 </tr>
 <tr>
-  <td>`r = eye(n)`</td><td>Return n by n identity matrix. </td>
-</tr>
-<tr>
-  <td>`r = zeros(n,m)`</td><td>Return n by m matrix with elements initialized to zero.</td>
-</tr>
-<tr>
-  <td>`r = ones(n,m)`</td><td>Return n by m matrix with elements initialized to one.</td>
-</tr>
-<tr>
-  <td>`r = rand(n,m)`</td><td>Return n by m matrix with elements initialized with random numbers from zero to one.</td>
-</tr>
-<tr>
-  <td>`r = diag(matrix) or r=diag(vector)`</td><td>Given matrix return diagonal entries as a vector. Given vector return matrix with diagonal elements from vector. r = diag(diag(a)) gives matrix with diagonal elements from matrix a, otherwise elements are zero.</td>
-</tr>
-<tr>
-  <td>`r = vector(start,end,inc)`</td><td>Return vector of values going from start to end by inc.</td>
-</tr>
-<tr>
-  <td>`r = size(matrix)`</td><td>Return size of given matrix.</td>
-</tr>
-<tr>
-  <td>`r = resize(matrix,n,m)`</td><td>Make a matrix to look as a n by m matrix. This is the same as r = n m % matrix. </td>
-</tr>
-<tr>
-  <td>`where(a)`</td><td>Return a row vector giving linear index to a where a is not zero. </td>
-</tr>
-<tr>
-  <td>`exists(name)`</td><td>Return true (non-zero) if variable by given name exists otherwise return false </td>(=0). 
-</tr>
-<tr>
-  <td>`who`</td><td>Give list of currently defined variables.</td>
-</tr>
-<tr>
-  <td>`format(precision)`</td><td>Set number of digits used in printing values in MATC.</td>
+  <td>`r = eye(n)`</td><td>Return n by n identity matrix.</td>
 </tr>
 </table>
