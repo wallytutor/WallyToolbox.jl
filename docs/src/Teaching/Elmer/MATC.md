@@ -95,29 +95,96 @@ Assume the following definitions:
 - `l`, `t` and `r` logical matrices 
 - `s`, `n` and `m` scalars 
 
-| <div style="width:120px">Operation</div> | Meaning                                                                                                                                                                       |
-| ---------------------------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `b = a'`                                 | is transpose of matrix a.                                                                                                                                                     |
-| `b = @a`                                 | evaluate content of a string variable a as a MATC statement.                                                                                                                  |
-| `t = ~l`                                 | elementwise logical not of  if x is not zero.                                                                                                                                 |
-| `b = a ^ s`                              | if a is a square matrix and s is integral, a matrix power is computed, otherwise an elementwise power.                                                                        |
-| `c = a * b`                              | if a and b are compatible for matrix product, that is computed, otherwise if they are of the same size or at least one of them is scalar, an elementwise product is computed. |
-| `c = a # b`                              | elementwise multiplication of a and b.                                                                                                                                        |
-| `c = a / b`                              | is fraction of a and b computed elementwise.                                                                                                                                  |
-| `c = a + b`                              | is sum of matrices a and b computed elementwise.                                                                                                                              |
-| `c = a - b`                              | is difference of matrices a and b computed elementwise.                                                                                                                       |
-| `l = a == b`                             | equality of matrices a and b elementwise.                                                                                                                                     |
-| `l = a <> b`                             | inequality of matrices a and b elementwise.                                                                                                                                   |
-| `l = a < b`                              | true if a is less than b computed elementwise.                                                                                                                                |
-| `l = a > b`                              | true if a is greater than b computed elementwise.                                                                                                                             |
-| `l = a <= b`                             | true if a is less than or equal to b computed elementwise.                                                                                                                    |
-| `l = a >= b`                             | true if a is greater than or equal to b computed elementwise.                                                                                                                 |
-| `a = n : m`                              | return a vector of values starting from n and ending to m by increment of (plus-minus) one.                                                                                   |
-| `r = l & t`                              | elementwise logical and of a and b.                                                                                                                                           |
-| `l = a \| b`                             | elementwise logical or of a and b.                                                                                                                                            |
-| `c = a ? b`                              | reduction: set values of a where b is zero to zero.                                                                                                                           |
-| `b = n m % a`                            | resize a to matrix of size n by m.                                                                                                                                            |
-| `b = a`                                  | assigning a to b.                                                                                                                                                             |
+<table>
+<tr>
+  <th style="width:120px">Operation</th>
+  <th>Meaning</th>
+</tr>
+<tr>
+  <td>`b = a'`     </td>
+  <td>is transpose of matrix a.</td>
+</tr>
+<tr>
+  <td>`b = @a`     </td>
+  <td>evaluate content of a string variable a as a MATC statement.</td>
+</tr>
+<tr>
+  <td>`t = ~l`     </td>
+  <td>elementwise logical not of  if x is not zero.</td>
+</tr>
+<tr>
+  <td>`b = a ^ s`  </td>
+  <td>if a is a square matrix and s is integral, a matrix power is computed, otherwise an elementwise power.</td>
+</tr>
+<tr>
+  <td>`c = a * b`  </td>
+  <td>if a and b are compatible for matrix product, that is computed, otherwise if they are of the same size or at least one of them is scalar, an elementwise product is computed.</td>
+</tr>
+<tr>
+  <td>`c = a # b`  </td>
+  <td>elementwise multiplication of a and b.</td>
+</tr>
+<tr>
+  <td>`c = a / b`  </td>
+  <td>is fraction of a and b computed elementwise.</td>
+</tr>
+<tr>
+  <td>`c = a + b`  </td>
+  <td>is sum of matrices a and b computed elementwise.</td>
+</tr>
+<tr>
+  <td>`c = a - b`  </td>
+  <td>is difference of matrices a and b computed elementwise.</td>
+</tr>
+<tr>
+  <td>`l = a == b` </td>
+  <td>equality of matrices a and b elementwise.</td>
+</tr>
+<tr>
+  <td>`l = a <> b` </td>
+  <td>inequality of matrices a and b elementwise.</td>
+</tr>
+<tr>
+  <td>`l = a < b`  </td>
+  <td>true if a is less than b computed elementwise.</td>
+</tr>
+<tr>
+  <td>`l = a > b`  </td>
+  <td>true if a is greater than b computed elementwise.</td>
+</tr>
+<tr>
+  <td>`l = a <= b` </td>
+  <td>true if a is less than or equal to b computed elementwise.</td>
+</tr>
+<tr>
+  <td>`l = a >= b` </td>
+  <td>true if a is greater than or equal to b computed elementwise.</td>
+</tr>
+<tr>
+  <td>`a = n : m`  </td>
+  <td>return a vector of values starting from n and ending to m by increment of (plus-minus) one.</td>
+</tr>
+<tr>
+  <td>`r = l & t`  </td>
+  <td>elementwise logical and of a and b.</td>
+</tr>
+<tr>
+  <td>`l = a \| b` </td>
+  <td>elementwise logical or of a and b.</td>
+</tr>
+<tr>
+  <td>`c = a ? b`  </td>
+  <td>reduction: set values of a where b is zero to zero.</td>
+</tr>
+<tr>
+  <td>`b = n m % a`</td>
+  <td>resize a to matrix of size n by m.</td>
+</tr>
+<tr>
+  <td>`b = a`      </td>
+  <td>assigning a to b.</td>
+</tr>
+</table>
 
 ## Function definitions
 
