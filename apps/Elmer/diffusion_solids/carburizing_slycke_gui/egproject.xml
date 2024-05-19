@@ -102,7 +102,7 @@
 !  Restart File = "restart.result"
 !  Restart Position = 120
 !  Restart Time = 120.0
-$ source("matc/models.ini");</text>
+$ source("models.ini");</text>
       </widget>
       <widget type="TextEdit">
          <objectName>constantsFreeTextEdit</objectName>
@@ -264,18 +264,6 @@ $ source("matc/models.ini");</text>
             <isChecked>0</isChecked>
          </widget>
          <widget type="CheckBox">
-            <objectName>useHypre</objectName>
-            <isChecked>0</isChecked>
-         </widget>
-         <widget type="CheckBox">
-            <objectName>useParasails</objectName>
-            <isChecked>0</isChecked>
-         </widget>
-         <widget type="CheckBox">
-            <objectName>useBoomerAMG</objectName>
-            <isChecked>0</isChecked>
-         </widget>
-         <widget type="CheckBox">
             <objectName>stabilizeCheck</objectName>
             <isChecked>1</isChecked>
          </widget>
@@ -294,6 +282,18 @@ $ source("matc/models.ini");</text>
          <widget type="CheckBox">
             <objectName>linearSystemAbortWhenNotConvergedCheck</objectName>
             <isChecked>1</isChecked>
+         </widget>
+         <widget type="CheckBox">
+            <objectName>useHypre</objectName>
+            <isChecked>0</isChecked>
+         </widget>
+         <widget type="CheckBox">
+            <objectName>useParasails</objectName>
+            <isChecked>0</isChecked>
+         </widget>
+         <widget type="CheckBox">
+            <objectName>useBoomerAMG</objectName>
+            <isChecked>0</isChecked>
          </widget>
          <widget type="LineEdit">
             <objectName>mgLevelsEdit</objectName>
@@ -344,28 +344,8 @@ $ source("matc/models.ini");</text>
             <text>2</text>
          </widget>
          <widget type="LineEdit">
-            <objectName>thresholdEdit</objectName>
-            <text>-0.8</text>
-         </widget>
-         <widget type="LineEdit">
-            <objectName>filterEdit</objectName>
-            <text>-0.8</text>
-         </widget>
-         <widget type="LineEdit">
-            <objectName>maxLevelEdit</objectName>
-            <text>1</text>
-         </widget>
-         <widget type="LineEdit">
-            <objectName>symmetryEdit</objectName>
-            <text>0</text>
-         </widget>
-         <widget type="LineEdit">
-            <objectName>boomerMaxLevels</objectName>
-            <text>25</text>
-         </widget>
-         <widget type="LineEdit">
-            <objectName>boomerSweeps</objectName>
-            <text>1</text>
+            <objectName>steadyStateConvergenceToleranceEdit</objectName>
+            <text>1.0e-5</text>
          </widget>
          <widget type="LineEdit">
             <objectName>nonlinSystemConvergenceToleranceEdit</objectName>
@@ -386,10 +366,6 @@ $ source("matc/models.ini");</text>
          <widget type="LineEdit">
             <objectName>nonlinSystemNewtonAfterTolEdit</objectName>
             <text>1.0e-3</text>
-         </widget>
-         <widget type="LineEdit">
-            <objectName>steadyStateConvergenceToleranceEdit</objectName>
-            <text>1.0e-5</text>
          </widget>
          <widget type="LineEdit">
             <objectName>linearSystemMaxIterationsEdit</objectName>
@@ -415,6 +391,54 @@ $ source("matc/models.ini");</text>
             <objectName>linearSystemBiCGstablPolDeg</objectName>
             <text>2</text>
          </widget>
+         <widget type="LineEdit">
+            <objectName>thresholdEdit</objectName>
+            <text>-0.8</text>
+         </widget>
+         <widget type="LineEdit">
+            <objectName>filterEdit</objectName>
+            <text>-0.8</text>
+         </widget>
+         <widget type="LineEdit">
+            <objectName>maxLevelEdit</objectName>
+            <text>1</text>
+         </widget>
+         <widget type="LineEdit">
+            <objectName>symmetryEdit</objectName>
+            <text>0</text>
+         </widget>
+         <widget type="LineEdit">
+            <objectName>boomerMaxLevels</objectName>
+            <text>25</text>
+         </widget>
+         <widget type="LineEdit">
+            <objectName>boomerSweeps</objectName>
+            <text>1</text>
+         </widget>
+         <widget type="ComboBox">
+            <objectName>steadyStateConvergenceMeasureCombo</objectName>
+            <currentIndex>0</currentIndex>
+         </widget>
+         <widget type="ComboBox">
+            <objectName>nonlinSystemConvergenceMeasureCombo</objectName>
+            <currentIndex>0</currentIndex>
+         </widget>
+         <widget type="ComboBox">
+            <objectName>linearSystemMultigridMethod</objectName>
+            <currentIndex>0</currentIndex>
+         </widget>
+         <widget type="ComboBox">
+            <objectName>linearSystemDirectMethod</objectName>
+            <currentIndex>0</currentIndex>
+         </widget>
+         <widget type="ComboBox">
+            <objectName>linearSystemIterativeMethod</objectName>
+            <currentIndex>0</currentIndex>
+         </widget>
+         <widget type="ComboBox">
+            <objectName>linearSystemPreconditioning</objectName>
+            <currentIndex>3</currentIndex>
+         </widget>
          <widget type="ComboBox">
             <objectName>boomerCycle</objectName>
             <currentIndex>1</currentIndex>
@@ -435,44 +459,8 @@ $ source("matc/models.ini");</text>
             <objectName>boomerSmoother</objectName>
             <currentIndex>6</currentIndex>
          </widget>
-         <widget type="ComboBox">
-            <objectName>nonlinSystemConvergenceMeasureCombo</objectName>
-            <currentIndex>0</currentIndex>
-         </widget>
-         <widget type="ComboBox">
-            <objectName>steadyStateConvergenceMeasureCombo</objectName>
-            <currentIndex>0</currentIndex>
-         </widget>
-         <widget type="ComboBox">
-            <objectName>linearSystemMultigridMethod</objectName>
-            <currentIndex>0</currentIndex>
-         </widget>
-         <widget type="ComboBox">
-            <objectName>linearSystemDirectMethod</objectName>
-            <currentIndex>0</currentIndex>
-         </widget>
-         <widget type="ComboBox">
-            <objectName>linearSystemIterativeMethod</objectName>
-            <currentIndex>0</currentIndex>
-         </widget>
-         <widget type="ComboBox">
-            <objectName>linearSystemPreconditioning</objectName>
-            <currentIndex>3</currentIndex>
-         </widget>
       </item>
       <item index="1" name="SaveMaterials">
-         <widget type="RadioButton">
-            <objectName>linearSystemSolverIterative</objectName>
-            <isChecked>1</isChecked>
-         </widget>
-         <widget type="RadioButton">
-            <objectName>linearSystemSolverDirect</objectName>
-            <isChecked>0</isChecked>
-         </widget>
-         <widget type="RadioButton">
-            <objectName>linearSystemSolverMultigrid</objectName>
-            <isChecked>0</isChecked>
-         </widget>
          <widget type="RadioButton">
             <objectName>execAlways</objectName>
             <isChecked>0</isChecked>
@@ -503,6 +491,18 @@ $ source("matc/models.ini");</text>
          </widget>
          <widget type="RadioButton">
             <objectName>execNever</objectName>
+            <isChecked>0</isChecked>
+         </widget>
+         <widget type="RadioButton">
+            <objectName>linearSystemSolverIterative</objectName>
+            <isChecked>1</isChecked>
+         </widget>
+         <widget type="RadioButton">
+            <objectName>linearSystemSolverDirect</objectName>
+            <isChecked>0</isChecked>
+         </widget>
+         <widget type="RadioButton">
+            <objectName>linearSystemSolverMultigrid</objectName>
             <isChecked>0</isChecked>
          </widget>
          <widget type="CheckBox">
@@ -538,10 +538,6 @@ $ source("matc/models.ini");</text>
             <isChecked>0</isChecked>
          </widget>
          <widget type="CheckBox">
-            <objectName>linearSystemAbortWhenNotConvergedCheck</objectName>
-            <isChecked>0</isChecked>
-         </widget>
-         <widget type="CheckBox">
             <objectName>stabilizeCheck</objectName>
             <isChecked>0</isChecked>
          </widget>
@@ -555,6 +551,10 @@ $ source("matc/models.ini");</text>
          </widget>
          <widget type="CheckBox">
             <objectName>optimizeBandwidthCheck</objectName>
+            <isChecked>0</isChecked>
+         </widget>
+         <widget type="CheckBox">
+            <objectName>linearSystemAbortWhenNotConvergedCheck</objectName>
             <isChecked>0</isChecked>
          </widget>
          <widget type="LineEdit">
@@ -650,6 +650,10 @@ $ source("matc/models.ini");</text>
             <text>1.0e-3</text>
          </widget>
          <widget type="LineEdit">
+            <objectName>steadyStateConvergenceToleranceEdit</objectName>
+            <text>1.0e-5</text>
+         </widget>
+         <widget type="LineEdit">
             <objectName>linearSystemMaxIterationsEdit</objectName>
             <text>500</text>
          </widget>
@@ -672,10 +676,6 @@ $ source("matc/models.ini");</text>
          <widget type="LineEdit">
             <objectName>linearSystemBiCGstablPolDeg</objectName>
             <text>2</text>
-         </widget>
-         <widget type="LineEdit">
-            <objectName>steadyStateConvergenceToleranceEdit</objectName>
-            <text>1.0e-5</text>
          </widget>
          <widget type="ComboBox">
             <objectName>boomerCycle</objectName>
@@ -702,6 +702,10 @@ $ source("matc/models.ini");</text>
             <currentIndex>0</currentIndex>
          </widget>
          <widget type="ComboBox">
+            <objectName>steadyStateConvergenceMeasureCombo</objectName>
+            <currentIndex>0</currentIndex>
+         </widget>
+         <widget type="ComboBox">
             <objectName>linearSystemMultigridMethod</objectName>
             <currentIndex>0</currentIndex>
          </widget>
@@ -717,24 +721,12 @@ $ source("matc/models.ini");</text>
             <objectName>linearSystemPreconditioning</objectName>
             <currentIndex>3</currentIndex>
          </widget>
-         <widget type="ComboBox">
-            <objectName>steadyStateConvergenceMeasureCombo</objectName>
-            <currentIndex>0</currentIndex>
-         </widget>
       </item>
    </solverparameters>
    <equation>
       <item index="0">
          <active>1</active>
          <name>Diffusion</name>
-         <widget type="Combo">
-            <key>/Diffusion Equation/Equation/Concentration Units/0</key>
-            <value>Absolute Mass</value>
-         </widget>
-         <widget type="Label">
-            <key>/Diffusion Equation/Equation/Give Execution priority/0</key>
-            <value>Give Execution priority</value>
-         </widget>
          <widget type="CheckBox">
             <key>/SaveMaterials/Equation/Active/0</key>
             <value>0</value>
@@ -743,8 +735,24 @@ $ source("matc/models.ini");</text>
             <key>/Diffusion Equation/Equation/Activate for this equation set/0</key>
             <value>Activate for this equation set</value>
          </widget>
+         <widget type="Label">
+            <key>/SaveMaterials/Equation/Give Execution priority/0</key>
+            <value>Give Execution priority</value>
+         </widget>
+         <widget type="Combo">
+            <key>/Diffusion Equation/Equation/Concentration Units/0</key>
+            <value>Absolute Mass</value>
+         </widget>
+         <widget type="CheckBox">
+            <key>/Diffusion Equation/Equation/Active/0</key>
+            <value>1</value>
+         </widget>
          <widget type="Edit">
             <key>/SaveMaterials/Equation/Priority/0</key>
+            <value></value>
+         </widget>
+         <widget type="Edit">
+            <key>/Diffusion Equation/Equation/Priority/0</key>
             <value></value>
          </widget>
          <widget type="Label">
@@ -752,28 +760,16 @@ $ source("matc/models.ini");</text>
             <value>Activate for this equation set</value>
          </widget>
          <widget type="Label">
-            <key>/SaveMaterials/Equation/Give Execution priority/0</key>
+            <key>/Diffusion Equation/Equation/Give Execution priority/0</key>
             <value>Give Execution priority</value>
-         </widget>
-         <widget type="CheckBox">
-            <key>/Diffusion Equation/Equation/Active/0</key>
-            <value>1</value>
-         </widget>
-         <widget type="Edit">
-            <key>/Diffusion Equation/Equation/Priority/0</key>
-            <value></value>
          </widget>
       </item>
       <item index="1">
          <active>1</active>
          <name>Diffusivity</name>
          <widget type="Edit">
-            <key>/SaveMaterials/Equation/Priority/1</key>
+            <key>/Diffusion Equation/Equation/Priority/1</key>
             <value></value>
-         </widget>
-         <widget type="Label">
-            <key>/Diffusion Equation/Equation/Give Execution priority/1</key>
-            <value>Give Execution priority</value>
          </widget>
          <widget type="Label">
             <key>/Diffusion Equation/Equation/Activate for this equation set/1</key>
@@ -782,6 +778,14 @@ $ source("matc/models.ini");</text>
          <widget type="CheckBox">
             <key>/SaveMaterials/Equation/Active/1</key>
             <value>1</value>
+         </widget>
+         <widget type="Label">
+            <key>/Diffusion Equation/Equation/Give Execution priority/1</key>
+            <value>Give Execution priority</value>
+         </widget>
+         <widget type="Label">
+            <key>/SaveMaterials/Equation/Activate for this equation set/1</key>
+            <value>Activate for this equation set</value>
          </widget>
          <widget type="Combo">
             <key>/Diffusion Equation/Equation/Concentration Units/1</key>
@@ -796,12 +800,8 @@ $ source("matc/models.ini");</text>
             <value>Give Execution priority</value>
          </widget>
          <widget type="Edit">
-            <key>/Diffusion Equation/Equation/Priority/1</key>
+            <key>/SaveMaterials/Equation/Priority/1</key>
             <value></value>
-         </widget>
-         <widget type="Label">
-            <key>/SaveMaterials/Equation/Activate for this equation set/1</key>
-            <value>Activate for this equation set</value>
          </widget>
       </item>
    </equation>
@@ -809,6 +809,15 @@ $ source("matc/models.ini");</text>
       <item index="0">
          <active>1</active>
          <name>Steel</name>
+         <widget type="TextEdit">
+            <key>/General/Material/Free text/0</key>
+            <value>Concentration Diffusivity = Variable Concentration
+    Real MATC "diffusivity(T, tx)"</value>
+         </widget>
+         <widget type="Edit">
+            <key>/General/Material/Density/0</key>
+            <value>7850.0</value>
+         </widget>
          <widget type="Label">
             <key>/General/Material/Free text input/0</key>
             <value>Free text input</value>
@@ -817,18 +826,9 @@ $ source("matc/models.ini");</text>
             <key>/General/Material/Concentration Diffusivity/0</key>
             <value></value>
          </widget>
-         <widget type="TextEdit">
-            <key>/General/Material/Free text/0</key>
-            <value>Concentration Diffusivity = Variable Concentration
-    Real MATC "diffusivity(T, tx)"</value>
-         </widget>
          <widget type="Label">
             <key>/General/Material/Properties/0</key>
             <value>Properties</value>
-         </widget>
-         <widget type="Edit">
-            <key>/General/Material/Density/0</key>
-            <value>7850.0</value>
          </widget>
       </item>
    </material>
@@ -855,6 +855,14 @@ $ source("matc/models.ini");</text>
             <key>/General/BoundaryCondition/Mass Transfer Coeff./0</key>
             <value></value>
          </widget>
+         <widget type="Edit">
+            <key>/General/BoundaryCondition/External Concentration/0</key>
+            <value></value>
+         </widget>
+         <widget type="Label">
+            <key>/General/BoundaryCondition/Free text input/0</key>
+            <value>Free text input</value>
+         </widget>
          <widget type="TextEdit">
             <key>/General/BoundaryCondition/Free text/0</key>
             <value>External Concentration = Real MATC "xs"
@@ -865,30 +873,10 @@ $ source("matc/models.ini");</text>
             <key>/General/BoundaryCondition/Diffusion Flux conditions/0</key>
             <value>Diffusion Flux conditions</value>
          </widget>
-         <widget type="Edit">
-            <key>/General/BoundaryCondition/External Concentration/0</key>
-            <value></value>
-         </widget>
-         <widget type="Label">
-            <key>/General/BoundaryCondition/Free text input/0</key>
-            <value>Free text input</value>
-         </widget>
       </item>
    </boundarycondition>
    <solverspecificoptions>
-      <item index="0" id="0" name="Diffusion Equation">
-         <widget type="Edit">
-            <key>/SaveMaterials/Solver/Parameter 1/0</key>
-            <value></value>
-         </widget>
-         <widget type="Edit">
-            <key>/SaveMaterials/Solver/Parameter 10/0</key>
-            <value></value>
-         </widget>
-         <widget type="Edit">
-            <key>/SaveMaterials/Solver/Parameter 4/0</key>
-            <value></value>
-         </widget>
+      <item index="0" name="Diffusion Equation" id="0">
          <widget type="Edit">
             <key>/SaveMaterials/Solver/Variable/0</key>
             <value></value>
@@ -897,12 +885,8 @@ $ source("matc/models.ini");</text>
             <key>/SaveMaterials/Solver/Parameter 5/0</key>
             <value></value>
          </widget>
-         <widget type="Edit">
-            <key>/SaveMaterials/Solver/Parameter 9/0</key>
-            <value></value>
-         </widget>
-         <widget type="Edit">
-            <key>/SaveMaterials/Solver/Parameter 6/0</key>
+         <widget type="TextEdit">
+            <key>/SaveMaterials/Solver/Free text/0</key>
             <value></value>
          </widget>
          <widget type="Edit">
@@ -910,19 +894,31 @@ $ source("matc/models.ini");</text>
             <value>"SaveData" "SaveMaterials"</value>
          </widget>
          <widget type="Edit">
-            <key>/SaveMaterials/Solver/Variable DOFs/0</key>
+            <key>/SaveMaterials/Solver/Parameter 8/0</key>
             <value></value>
          </widget>
          <widget type="Edit">
-            <key>/SaveMaterials/Solver/Parameter 8/0</key>
+            <key>/SaveMaterials/Solver/Parameter 10/0</key>
+            <value></value>
+         </widget>
+         <widget type="Edit">
+            <key>/Diffusion Equation/Solver/Variable/0</key>
+            <value>Concentration</value>
+         </widget>
+         <widget type="Edit">
+            <key>/SaveMaterials/Solver/Parameter 2/0</key>
+            <value></value>
+         </widget>
+         <widget type="Edit">
+            <key>/SaveMaterials/Solver/Variable DOFs/0</key>
             <value></value>
          </widget>
          <widget type="Edit">
             <key>/SaveMaterials/Solver/Parameter 3/0</key>
             <value></value>
          </widget>
-         <widget type="TextEdit">
-            <key>/SaveMaterials/Solver/Free text/0</key>
+         <widget type="Edit">
+            <key>/SaveMaterials/Solver/Parameter 6/0</key>
             <value></value>
          </widget>
          <widget type="Edit">
@@ -934,53 +930,29 @@ $ source("matc/models.ini");</text>
             <value>1</value>
          </widget>
          <widget type="Edit">
-            <key>/SaveMaterials/Solver/Parameter 2/0</key>
+            <key>/SaveMaterials/Solver/Parameter 1/0</key>
             <value></value>
-         </widget>
-         <widget type="Edit">
-            <key>/Diffusion Equation/Solver/Variable/0</key>
-            <value>Concentration</value>
          </widget>
          <widget type="Edit">
             <key>/SaveMaterials/Solver/Parameter 7/0</key>
             <value></value>
          </widget>
+         <widget type="Edit">
+            <key>/SaveMaterials/Solver/Parameter 9/0</key>
+            <value></value>
+         </widget>
+         <widget type="Edit">
+            <key>/SaveMaterials/Solver/Parameter 4/0</key>
+            <value></value>
+         </widget>
       </item>
-      <item index="1" id="1" name="SaveMaterials">
+      <item index="1" name="SaveMaterials" id="1">
          <widget type="Edit">
-            <key>/SaveMaterials/Solver/Variable/1</key>
-            <value></value>
-         </widget>
-         <widget type="TextEdit">
-            <key>/SaveMaterials/Solver/Free text/1</key>
-            <value></value>
+            <key>/Diffusion Equation/Solver/Variable/1</key>
+            <value>Concentration</value>
          </widget>
          <widget type="Edit">
-            <key>/SaveMaterials/Solver/Variable DOFs/1</key>
-            <value></value>
-         </widget>
-         <widget type="Edit">
-            <key>/SaveMaterials/Solver/Parameter 1/1</key>
-            <value>Concentration Diffusivity</value>
-         </widget>
-         <widget type="Edit">
-            <key>/SaveMaterials/Solver/Parameter 7/1</key>
-            <value></value>
-         </widget>
-         <widget type="Edit">
-            <key>/SaveMaterials/Solver/Parameter 5/1</key>
-            <value></value>
-         </widget>
-         <widget type="Edit">
-            <key>/SaveMaterials/Solver/Procedure/1</key>
-            <value>"SaveData" "SaveMaterials"</value>
-         </widget>
-         <widget type="CheckBox">
-            <key>/SaveMaterials/Solver/No Matrix Equation/1</key>
-            <value>1</value>
-         </widget>
-         <widget type="Edit">
-            <key>/SaveMaterials/Solver/Parameter 8/1</key>
+            <key>/SaveMaterials/Solver/Parameter 6/1</key>
             <value></value>
          </widget>
          <widget type="Edit">
@@ -988,7 +960,7 @@ $ source("matc/models.ini");</text>
             <value>"AdvectionDiffusion" "AdvectionDiffusionSolver"</value>
          </widget>
          <widget type="Edit">
-            <key>/SaveMaterials/Solver/Parameter 2/1</key>
+            <key>/SaveMaterials/Solver/Variable DOFs/1</key>
             <value></value>
          </widget>
          <widget type="Edit">
@@ -996,7 +968,43 @@ $ source("matc/models.ini");</text>
             <value></value>
          </widget>
          <widget type="Edit">
-            <key>/SaveMaterials/Solver/Parameter 10/1</key>
+            <key>/SaveMaterials/Solver/Parameter 7/1</key>
+            <value></value>
+         </widget>
+         <widget type="Edit">
+            <key>/SaveMaterials/Solver/Parameter 1/1</key>
+            <value>Concentration Diffusivity</value>
+         </widget>
+         <widget type="CheckBox">
+            <key>/SaveMaterials/Solver/No Matrix Equation/1</key>
+            <value>1</value>
+         </widget>
+         <widget type="Edit">
+            <key>/SaveMaterials/Solver/Variable/1</key>
+            <value></value>
+         </widget>
+         <widget type="Edit">
+            <key>/SaveMaterials/Solver/Parameter 5/1</key>
+            <value></value>
+         </widget>
+         <widget type="TextEdit">
+            <key>/SaveMaterials/Solver/Free text/1</key>
+            <value></value>
+         </widget>
+         <widget type="Edit">
+            <key>/SaveMaterials/Solver/Parameter 8/1</key>
+            <value></value>
+         </widget>
+         <widget type="Edit">
+            <key>/SaveMaterials/Solver/Procedure/1</key>
+            <value>"SaveData" "SaveMaterials"</value>
+         </widget>
+         <widget type="Edit">
+            <key>/SaveMaterials/Solver/Parameter 4/1</key>
+            <value></value>
+         </widget>
+         <widget type="Edit">
+            <key>/SaveMaterials/Solver/Parameter 2/1</key>
             <value></value>
          </widget>
          <widget type="Edit">
@@ -1004,15 +1012,7 @@ $ source("matc/models.ini");</text>
             <value></value>
          </widget>
          <widget type="Edit">
-            <key>/SaveMaterials/Solver/Parameter 6/1</key>
-            <value></value>
-         </widget>
-         <widget type="Edit">
-            <key>/Diffusion Equation/Solver/Variable/1</key>
-            <value>Concentration</value>
-         </widget>
-         <widget type="Edit">
-            <key>/SaveMaterials/Solver/Parameter 4/1</key>
+            <key>/SaveMaterials/Solver/Parameter 10/1</key>
             <value></value>
          </widget>
       </item>

@@ -23,7 +23,7 @@ Newmark Beta = 1.0
 !  Restart File = "restart.result"
 !  Restart Position = 120
 !  Restart Time = 120.0
-$ source("matc/models.ini");
+$ source("models.ini");
 End
 
 Constants
@@ -45,8 +45,8 @@ End
 
 Solver 2
   Equation = Diffusion Equation
-  Procedure = "AdvectionDiffusion" "AdvectionDiffusionSolver"
   Variable = Concentration
+  Procedure = "AdvectionDiffusion" "AdvectionDiffusionSolver"
   Exec Solver = Always
   Stabilize = True
   Optimize Bandwidth = True
