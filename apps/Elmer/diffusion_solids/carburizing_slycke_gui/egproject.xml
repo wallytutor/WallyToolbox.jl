@@ -1,0 +1,990 @@
+<!DOCTYPE egproject>
+<contents>
+   <geometryinputfile>sample.msh</geometryinputfile>
+   <operations/>
+   <generalsetup>
+      <widget type="CheckBox">
+         <objectName>checkKeywordsWarn</objectName>
+         <isChecked>1</isChecked>
+      </widget>
+      <widget type="CheckBox">
+         <objectName>calculateMeshPiecesCheck</objectName>
+         <isChecked>0</isChecked>
+      </widget>
+      <widget type="LineEdit">
+         <objectName>meshDBEdit1</objectName>
+         <text>.</text>
+      </widget>
+      <widget type="LineEdit">
+         <objectName>meshDBEdit2</objectName>
+         <text>sample</text>
+      </widget>
+      <widget type="LineEdit">
+         <objectName>includePathEdit</objectName>
+         <text></text>
+      </widget>
+      <widget type="LineEdit">
+         <objectName>resultsDirectoryEdit</objectName>
+         <text>results</text>
+      </widget>
+      <widget type="LineEdit">
+         <objectName>steadyStateMaxIterEdit</objectName>
+         <text>1</text>
+      </widget>
+      <widget type="LineEdit">
+         <objectName>coordinateMappingEdit</objectName>
+         <text>1 2 3</text>
+      </widget>
+      <widget type="LineEdit">
+         <objectName>timeStepIntervalsEdit</objectName>
+         <text>1800</text>
+      </widget>
+      <widget type="LineEdit">
+         <objectName>outputIntervalsEdit</objectName>
+         <text>60</text>
+      </widget>
+      <widget type="LineEdit">
+         <objectName>timestepSizesEdit</objectName>
+         <text>10.0</text>
+      </widget>
+      <widget type="LineEdit">
+         <objectName>coordinateScalingEdit</objectName>
+         <text></text>
+      </widget>
+      <widget type="LineEdit">
+         <objectName>angularFrequencyEdit</objectName>
+         <text></text>
+      </widget>
+      <widget type="LineEdit">
+         <objectName>solverInputFileEdit</objectName>
+         <text>case.sif</text>
+      </widget>
+      <widget type="LineEdit">
+         <objectName>postFileEdit</objectName>
+         <text>case.vtu</text>
+      </widget>
+      <widget type="LineEdit">
+         <objectName>desiredMeshPiecesEdit</objectName>
+         <text></text>
+      </widget>
+      <widget type="LineEdit">
+         <objectName>gravityEdit</objectName>
+         <text>0 -1 0 9.82</text>
+      </widget>
+      <widget type="LineEdit">
+         <objectName>boltzmannEdit</objectName>
+         <text>1.380649e-23</text>
+      </widget>
+      <widget type="LineEdit">
+         <objectName>stefanBoltzmannEdit</objectName>
+         <text>5.670374419e-08</text>
+      </widget>
+      <widget type="LineEdit">
+         <objectName>unitChargeEdit</objectName>
+         <text>1.6021766e-19</text>
+      </widget>
+      <widget type="LineEdit">
+         <objectName>vacuumPermittivityEdit</objectName>
+         <text>8.85418781e-12</text>
+      </widget>
+      <widget type="LineEdit">
+         <objectName>vacuumPermeabilityEdit</objectName>
+         <text>1.25663706e-6</text>
+      </widget>
+      <widget type="TextEdit">
+         <objectName>headerFreeTextEdit</objectName>
+         <text></text>
+      </widget>
+      <widget type="TextEdit">
+         <objectName>simulationFreeTextEdit</objectName>
+         <text>Newmark Beta = 1.0
+!  Output File = "restart.result"
+!  Restart File = "restart.result"
+!  Restart Position = 120
+!  Restart Time = 120.0
+$ source("matc/models.ini");</text>
+      </widget>
+      <widget type="TextEdit">
+         <objectName>constantsFreeTextEdit</objectName>
+         <text></text>
+      </widget>
+      <widget type="ComboBox">
+         <objectName>maxOutputLevelCombo</objectName>
+         <currentIndex>4</currentIndex>
+      </widget>
+      <widget type="ComboBox">
+         <objectName>coordinateSystemCombo</objectName>
+         <currentIndex>0</currentIndex>
+      </widget>
+      <widget type="ComboBox">
+         <objectName>timesteppingMethodCombo</objectName>
+         <currentIndex>0</currentIndex>
+      </widget>
+      <widget type="ComboBox">
+         <objectName>bdfOrderCombo</objectName>
+         <currentIndex>2</currentIndex>
+      </widget>
+      <widget type="ComboBox">
+         <objectName>simulationTypeCombo</objectName>
+         <currentIndex>1</currentIndex>
+      </widget>
+   </generalsetup>
+   <parallelsettings>
+      <widget type="CheckBox">
+         <objectName>parallelActiveCheckBox</objectName>
+         <isChecked>1</isChecked>
+      </widget>
+      <widget type="CheckBox">
+         <objectName>skipPartitioningCheckBox</objectName>
+         <isChecked>0</isChecked>
+      </widget>
+      <widget type="LineEdit">
+         <objectName>qt_spinbox_lineedit</objectName>
+         <text>4</text>
+      </widget>
+      <widget type="LineEdit">
+         <objectName>parallelExecLineEdit</objectName>
+         <text>mpiexec.exe</text>
+      </widget>
+      <widget type="LineEdit">
+         <objectName>parallelArgsLineEdit</objectName>
+         <text>-n %n ElmerSolver_mpi.exe</text>
+      </widget>
+      <widget type="LineEdit">
+         <objectName>divideLineEdit</objectName>
+         <text>ElmerGrid 2 2 %msh -partdual -metiskway %n</text>
+      </widget>
+      <widget type="LineEdit">
+         <objectName>mergeLineEdit</objectName>
+         <text>echo 'No need to merge VTU files!'</text>
+      </widget>
+   </parallelsettings>
+   <meshparameters>
+      <widget type="RadioButton">
+         <objectName>tetlibRadioButton</objectName>
+         <isChecked>0</isChecked>
+      </widget>
+      <widget type="RadioButton">
+         <objectName>nglibRadioButton</objectName>
+         <isChecked>1</isChecked>
+      </widget>
+      <widget type="RadioButton">
+         <objectName>elmerGridRadioButton</objectName>
+         <isChecked>0</isChecked>
+      </widget>
+      <widget type="LineEdit">
+         <objectName>tetlibStringEdit</objectName>
+         <text>nnJApVq1.414</text>
+      </widget>
+      <widget type="LineEdit">
+         <objectName>nglibMaxHEdit</objectName>
+         <text>1000000</text>
+      </widget>
+      <widget type="LineEdit">
+         <objectName>nglibFinenessEdit</objectName>
+         <text>0.5</text>
+      </widget>
+      <widget type="LineEdit">
+         <objectName>nglibBgmeshEdit</objectName>
+         <text></text>
+      </widget>
+      <widget type="LineEdit">
+         <objectName>elmerGridStringEdit</objectName>
+         <text>-autoclean -relh 1.0</text>
+      </widget>
+      <widget type="LineEdit">
+         <objectName>elementCodesStringEdit</objectName>
+         <text></text>
+      </widget>
+   </meshparameters>
+   <solverparameters>
+      <item name="Diffusion Equation" index="0">
+         <widget type="RadioButton">
+            <objectName>execAlways</objectName>
+            <isChecked>1</isChecked>
+         </widget>
+         <widget type="RadioButton">
+            <objectName>execBeforeSimulation</objectName>
+            <isChecked>0</isChecked>
+         </widget>
+         <widget type="RadioButton">
+            <objectName>execAfterSimulation</objectName>
+            <isChecked>0</isChecked>
+         </widget>
+         <widget type="RadioButton">
+            <objectName>execBeforeTimestep</objectName>
+            <isChecked>0</isChecked>
+         </widget>
+         <widget type="RadioButton">
+            <objectName>execAfterTimestep</objectName>
+            <isChecked>0</isChecked>
+         </widget>
+         <widget type="RadioButton">
+            <objectName>execBeforeSaving</objectName>
+            <isChecked>0</isChecked>
+         </widget>
+         <widget type="RadioButton">
+            <objectName>execAfterSaving</objectName>
+            <isChecked>0</isChecked>
+         </widget>
+         <widget type="RadioButton">
+            <objectName>execNever</objectName>
+            <isChecked>0</isChecked>
+         </widget>
+         <widget type="RadioButton">
+            <objectName>linearSystemSolverIterative</objectName>
+            <isChecked>1</isChecked>
+         </widget>
+         <widget type="RadioButton">
+            <objectName>linearSystemSolverDirect</objectName>
+            <isChecked>0</isChecked>
+         </widget>
+         <widget type="RadioButton">
+            <objectName>linearSystemSolverMultigrid</objectName>
+            <isChecked>0</isChecked>
+         </widget>
+         <widget type="CheckBox">
+            <objectName>mgEqualSplitCheck</objectName>
+            <isChecked>0</isChecked>
+         </widget>
+         <widget type="CheckBox">
+            <objectName>adaptiveMeshRefinementCheck</objectName>
+            <isChecked>0</isChecked>
+         </widget>
+         <widget type="CheckBox">
+            <objectName>adaptiveRemeshCheck</objectName>
+            <isChecked>0</isChecked>
+         </widget>
+         <widget type="CheckBox">
+            <objectName>adaptiveSaveMeshCheck</objectName>
+            <isChecked>0</isChecked>
+         </widget>
+         <widget type="CheckBox">
+            <objectName>adaptiveCoarseningCheck</objectName>
+            <isChecked>0</isChecked>
+         </widget>
+         <widget type="CheckBox">
+            <objectName>useHypre</objectName>
+            <isChecked>0</isChecked>
+         </widget>
+         <widget type="CheckBox">
+            <objectName>useParasails</objectName>
+            <isChecked>0</isChecked>
+         </widget>
+         <widget type="CheckBox">
+            <objectName>useBoomerAMG</objectName>
+            <isChecked>0</isChecked>
+         </widget>
+         <widget type="CheckBox">
+            <objectName>stabilizeCheck</objectName>
+            <isChecked>1</isChecked>
+         </widget>
+         <widget type="CheckBox">
+            <objectName>bubblesCheck</objectName>
+            <isChecked>0</isChecked>
+         </widget>
+         <widget type="CheckBox">
+            <objectName>lumpedMassCheck</objectName>
+            <isChecked>0</isChecked>
+         </widget>
+         <widget type="CheckBox">
+            <objectName>optimizeBandwidthCheck</objectName>
+            <isChecked>1</isChecked>
+         </widget>
+         <widget type="CheckBox">
+            <objectName>linearSystemAbortWhenNotConvergedCheck</objectName>
+            <isChecked>0</isChecked>
+         </widget>
+         <widget type="LineEdit">
+            <objectName>mgLevelsEdit</objectName>
+            <text>2</text>
+         </widget>
+         <widget type="LineEdit">
+            <objectName>mgMeshNameEdit</objectName>
+            <text></text>
+         </widget>
+         <widget type="LineEdit">
+            <objectName>mgPreSmoothingItersEdit</objectName>
+            <text>5</text>
+         </widget>
+         <widget type="LineEdit">
+            <objectName>mgPostSmoothingItersEdit</objectName>
+            <text>5</text>
+         </widget>
+         <widget type="LineEdit">
+            <objectName>mgMaxItersEdit</objectName>
+            <text>300</text>
+         </widget>
+         <widget type="LineEdit">
+            <objectName>mgToleranceEdit</objectName>
+            <text>1.0e-8</text>
+         </widget>
+         <widget type="LineEdit">
+            <objectName>mgILUTEdit</objectName>
+            <text>1.0e-3</text>
+         </widget>
+         <widget type="LineEdit">
+            <objectName>adaptiveMeshNameEdit</objectName>
+            <text></text>
+         </widget>
+         <widget type="LineEdit">
+            <objectName>adaptiveErrorLimitEdit</objectName>
+            <text>0.1</text>
+         </widget>
+         <widget type="LineEdit">
+            <objectName>adaptiveMinHEdit</objectName>
+            <text></text>
+         </widget>
+         <widget type="LineEdit">
+            <objectName>adaptiveMaxHEdit</objectName>
+            <text></text>
+         </widget>
+         <widget type="LineEdit">
+            <objectName>adaptiveMaxChangeEdit</objectName>
+            <text>2</text>
+         </widget>
+         <widget type="LineEdit">
+            <objectName>thresholdEdit</objectName>
+            <text>-0.8</text>
+         </widget>
+         <widget type="LineEdit">
+            <objectName>filterEdit</objectName>
+            <text>-0.8</text>
+         </widget>
+         <widget type="LineEdit">
+            <objectName>maxLevelEdit</objectName>
+            <text>1</text>
+         </widget>
+         <widget type="LineEdit">
+            <objectName>symmetryEdit</objectName>
+            <text>0</text>
+         </widget>
+         <widget type="LineEdit">
+            <objectName>boomerMaxLevels</objectName>
+            <text>25</text>
+         </widget>
+         <widget type="LineEdit">
+            <objectName>boomerSweeps</objectName>
+            <text>1</text>
+         </widget>
+         <widget type="LineEdit">
+            <objectName>steadyStateConvergenceToleranceEdit</objectName>
+            <text>1.0e-5</text>
+         </widget>
+         <widget type="LineEdit">
+            <objectName>linearSystemMaxIterationsEdit</objectName>
+            <text>500</text>
+         </widget>
+         <widget type="LineEdit">
+            <objectName>linearSystemConvergenceToleranceEdit</objectName>
+            <text>1.0e-10</text>
+         </widget>
+         <widget type="LineEdit">
+            <objectName>linearSystemILUTToleranceEdit</objectName>
+            <text>1.0e-3</text>
+         </widget>
+         <widget type="LineEdit">
+            <objectName>linearSystemResiduaOutputEdit</objectName>
+            <text>10</text>
+         </widget>
+         <widget type="LineEdit">
+            <objectName>linearSystemPreconditionRecomputeEdit</objectName>
+            <text>1</text>
+         </widget>
+         <widget type="LineEdit">
+            <objectName>linearSystemBiCGstablPolDeg</objectName>
+            <text>2</text>
+         </widget>
+         <widget type="LineEdit">
+            <objectName>nonlinSystemConvergenceToleranceEdit</objectName>
+            <text>1.0e-8</text>
+         </widget>
+         <widget type="LineEdit">
+            <objectName>nonlinSystemMaxIterationEdit</objectName>
+            <text>20</text>
+         </widget>
+         <widget type="LineEdit">
+            <objectName>nonlinSystemRelaxationFactorEdit</objectName>
+            <text>1</text>
+         </widget>
+         <widget type="LineEdit">
+            <objectName>nonlinSystemNewtonAfterIterEdit</objectName>
+            <text>3</text>
+         </widget>
+         <widget type="LineEdit">
+            <objectName>nonlinSystemNewtonAfterTolEdit</objectName>
+            <text>1.0e-3</text>
+         </widget>
+         <widget type="ComboBox">
+            <objectName>boomerCycle</objectName>
+            <currentIndex>1</currentIndex>
+         </widget>
+         <widget type="ComboBox">
+            <objectName>boomerCoarsening</objectName>
+            <currentIndex>6</currentIndex>
+         </widget>
+         <widget type="ComboBox">
+            <objectName>boomerRelaxation</objectName>
+            <currentIndex>3</currentIndex>
+         </widget>
+         <widget type="ComboBox">
+            <objectName>boomerInterpolation</objectName>
+            <currentIndex>0</currentIndex>
+         </widget>
+         <widget type="ComboBox">
+            <objectName>boomerSmoother</objectName>
+            <currentIndex>6</currentIndex>
+         </widget>
+         <widget type="ComboBox">
+            <objectName>steadyStateConvergenceMeasureCombo</objectName>
+            <currentIndex>0</currentIndex>
+         </widget>
+         <widget type="ComboBox">
+            <objectName>linearSystemMultigridMethod</objectName>
+            <currentIndex>0</currentIndex>
+         </widget>
+         <widget type="ComboBox">
+            <objectName>linearSystemDirectMethod</objectName>
+            <currentIndex>0</currentIndex>
+         </widget>
+         <widget type="ComboBox">
+            <objectName>linearSystemIterativeMethod</objectName>
+            <currentIndex>0</currentIndex>
+         </widget>
+         <widget type="ComboBox">
+            <objectName>linearSystemPreconditioning</objectName>
+            <currentIndex>3</currentIndex>
+         </widget>
+         <widget type="ComboBox">
+            <objectName>nonlinSystemConvergenceMeasureCombo</objectName>
+            <currentIndex>0</currentIndex>
+         </widget>
+      </item>
+      <item name="SaveMaterials" index="1">
+         <widget type="RadioButton">
+            <objectName>execAlways</objectName>
+            <isChecked>1</isChecked>
+         </widget>
+         <widget type="RadioButton">
+            <objectName>execBeforeSimulation</objectName>
+            <isChecked>0</isChecked>
+         </widget>
+         <widget type="RadioButton">
+            <objectName>execAfterSimulation</objectName>
+            <isChecked>0</isChecked>
+         </widget>
+         <widget type="RadioButton">
+            <objectName>execBeforeTimestep</objectName>
+            <isChecked>0</isChecked>
+         </widget>
+         <widget type="RadioButton">
+            <objectName>execAfterTimestep</objectName>
+            <isChecked>0</isChecked>
+         </widget>
+         <widget type="RadioButton">
+            <objectName>execBeforeSaving</objectName>
+            <isChecked>0</isChecked>
+         </widget>
+         <widget type="RadioButton">
+            <objectName>execAfterSaving</objectName>
+            <isChecked>0</isChecked>
+         </widget>
+         <widget type="RadioButton">
+            <objectName>execNever</objectName>
+            <isChecked>0</isChecked>
+         </widget>
+         <widget type="RadioButton">
+            <objectName>linearSystemSolverIterative</objectName>
+            <isChecked>1</isChecked>
+         </widget>
+         <widget type="RadioButton">
+            <objectName>linearSystemSolverDirect</objectName>
+            <isChecked>0</isChecked>
+         </widget>
+         <widget type="RadioButton">
+            <objectName>linearSystemSolverMultigrid</objectName>
+            <isChecked>0</isChecked>
+         </widget>
+         <widget type="CheckBox">
+            <objectName>mgEqualSplitCheck</objectName>
+            <isChecked>0</isChecked>
+         </widget>
+         <widget type="CheckBox">
+            <objectName>adaptiveMeshRefinementCheck</objectName>
+            <isChecked>0</isChecked>
+         </widget>
+         <widget type="CheckBox">
+            <objectName>adaptiveRemeshCheck</objectName>
+            <isChecked>0</isChecked>
+         </widget>
+         <widget type="CheckBox">
+            <objectName>adaptiveSaveMeshCheck</objectName>
+            <isChecked>0</isChecked>
+         </widget>
+         <widget type="CheckBox">
+            <objectName>adaptiveCoarseningCheck</objectName>
+            <isChecked>0</isChecked>
+         </widget>
+         <widget type="CheckBox">
+            <objectName>useHypre</objectName>
+            <isChecked>0</isChecked>
+         </widget>
+         <widget type="CheckBox">
+            <objectName>useParasails</objectName>
+            <isChecked>0</isChecked>
+         </widget>
+         <widget type="CheckBox">
+            <objectName>useBoomerAMG</objectName>
+            <isChecked>0</isChecked>
+         </widget>
+         <widget type="CheckBox">
+            <objectName>stabilizeCheck</objectName>
+            <isChecked>1</isChecked>
+         </widget>
+         <widget type="CheckBox">
+            <objectName>bubblesCheck</objectName>
+            <isChecked>0</isChecked>
+         </widget>
+         <widget type="CheckBox">
+            <objectName>lumpedMassCheck</objectName>
+            <isChecked>0</isChecked>
+         </widget>
+         <widget type="CheckBox">
+            <objectName>optimizeBandwidthCheck</objectName>
+            <isChecked>1</isChecked>
+         </widget>
+         <widget type="CheckBox">
+            <objectName>linearSystemAbortWhenNotConvergedCheck</objectName>
+            <isChecked>0</isChecked>
+         </widget>
+         <widget type="LineEdit">
+            <objectName>mgLevelsEdit</objectName>
+            <text>2</text>
+         </widget>
+         <widget type="LineEdit">
+            <objectName>mgMeshNameEdit</objectName>
+            <text></text>
+         </widget>
+         <widget type="LineEdit">
+            <objectName>mgPreSmoothingItersEdit</objectName>
+            <text>5</text>
+         </widget>
+         <widget type="LineEdit">
+            <objectName>mgPostSmoothingItersEdit</objectName>
+            <text>5</text>
+         </widget>
+         <widget type="LineEdit">
+            <objectName>mgMaxItersEdit</objectName>
+            <text>300</text>
+         </widget>
+         <widget type="LineEdit">
+            <objectName>mgToleranceEdit</objectName>
+            <text>1.0e-8</text>
+         </widget>
+         <widget type="LineEdit">
+            <objectName>mgILUTEdit</objectName>
+            <text>1.0e-3</text>
+         </widget>
+         <widget type="LineEdit">
+            <objectName>adaptiveMeshNameEdit</objectName>
+            <text></text>
+         </widget>
+         <widget type="LineEdit">
+            <objectName>adaptiveErrorLimitEdit</objectName>
+            <text>0.1</text>
+         </widget>
+         <widget type="LineEdit">
+            <objectName>adaptiveMinHEdit</objectName>
+            <text></text>
+         </widget>
+         <widget type="LineEdit">
+            <objectName>adaptiveMaxHEdit</objectName>
+            <text></text>
+         </widget>
+         <widget type="LineEdit">
+            <objectName>adaptiveMaxChangeEdit</objectName>
+            <text>2</text>
+         </widget>
+         <widget type="LineEdit">
+            <objectName>thresholdEdit</objectName>
+            <text>-0.8</text>
+         </widget>
+         <widget type="LineEdit">
+            <objectName>filterEdit</objectName>
+            <text>-0.8</text>
+         </widget>
+         <widget type="LineEdit">
+            <objectName>maxLevelEdit</objectName>
+            <text>1</text>
+         </widget>
+         <widget type="LineEdit">
+            <objectName>symmetryEdit</objectName>
+            <text>0</text>
+         </widget>
+         <widget type="LineEdit">
+            <objectName>boomerMaxLevels</objectName>
+            <text>25</text>
+         </widget>
+         <widget type="LineEdit">
+            <objectName>boomerSweeps</objectName>
+            <text>1</text>
+         </widget>
+         <widget type="LineEdit">
+            <objectName>nonlinSystemConvergenceToleranceEdit</objectName>
+            <text>1.0e-7</text>
+         </widget>
+         <widget type="LineEdit">
+            <objectName>nonlinSystemMaxIterationEdit</objectName>
+            <text>20</text>
+         </widget>
+         <widget type="LineEdit">
+            <objectName>nonlinSystemRelaxationFactorEdit</objectName>
+            <text>1</text>
+         </widget>
+         <widget type="LineEdit">
+            <objectName>nonlinSystemNewtonAfterIterEdit</objectName>
+            <text>3</text>
+         </widget>
+         <widget type="LineEdit">
+            <objectName>nonlinSystemNewtonAfterTolEdit</objectName>
+            <text>1.0e-3</text>
+         </widget>
+         <widget type="LineEdit">
+            <objectName>steadyStateConvergenceToleranceEdit</objectName>
+            <text>1.0e-5</text>
+         </widget>
+         <widget type="LineEdit">
+            <objectName>linearSystemMaxIterationsEdit</objectName>
+            <text>500</text>
+         </widget>
+         <widget type="LineEdit">
+            <objectName>linearSystemConvergenceToleranceEdit</objectName>
+            <text>1.0e-10</text>
+         </widget>
+         <widget type="LineEdit">
+            <objectName>linearSystemILUTToleranceEdit</objectName>
+            <text>1.0e-3</text>
+         </widget>
+         <widget type="LineEdit">
+            <objectName>linearSystemResiduaOutputEdit</objectName>
+            <text>10</text>
+         </widget>
+         <widget type="LineEdit">
+            <objectName>linearSystemPreconditionRecomputeEdit</objectName>
+            <text>1</text>
+         </widget>
+         <widget type="LineEdit">
+            <objectName>linearSystemBiCGstablPolDeg</objectName>
+            <text>2</text>
+         </widget>
+         <widget type="ComboBox">
+            <objectName>boomerCycle</objectName>
+            <currentIndex>1</currentIndex>
+         </widget>
+         <widget type="ComboBox">
+            <objectName>boomerCoarsening</objectName>
+            <currentIndex>6</currentIndex>
+         </widget>
+         <widget type="ComboBox">
+            <objectName>boomerRelaxation</objectName>
+            <currentIndex>3</currentIndex>
+         </widget>
+         <widget type="ComboBox">
+            <objectName>boomerInterpolation</objectName>
+            <currentIndex>0</currentIndex>
+         </widget>
+         <widget type="ComboBox">
+            <objectName>boomerSmoother</objectName>
+            <currentIndex>6</currentIndex>
+         </widget>
+         <widget type="ComboBox">
+            <objectName>nonlinSystemConvergenceMeasureCombo</objectName>
+            <currentIndex>0</currentIndex>
+         </widget>
+         <widget type="ComboBox">
+            <objectName>steadyStateConvergenceMeasureCombo</objectName>
+            <currentIndex>0</currentIndex>
+         </widget>
+         <widget type="ComboBox">
+            <objectName>linearSystemMultigridMethod</objectName>
+            <currentIndex>0</currentIndex>
+         </widget>
+         <widget type="ComboBox">
+            <objectName>linearSystemDirectMethod</objectName>
+            <currentIndex>0</currentIndex>
+         </widget>
+         <widget type="ComboBox">
+            <objectName>linearSystemIterativeMethod</objectName>
+            <currentIndex>0</currentIndex>
+         </widget>
+         <widget type="ComboBox">
+            <objectName>linearSystemPreconditioning</objectName>
+            <currentIndex>3</currentIndex>
+         </widget>
+      </item>
+   </solverparameters>
+   <equation>
+      <item index="0">
+         <active>1</active>
+         <name>Diffusion</name>
+         <widget type="Edit">
+            <key>/Diffusion Equation/Equation/Priority/0</key>
+            <value></value>
+         </widget>
+         <widget type="Combo">
+            <key>/Diffusion Equation/Equation/Concentration Units/0</key>
+            <value>Absolute Mass</value>
+         </widget>
+         <widget type="CheckBox">
+            <key>/Diffusion Equation/Equation/Active/0</key>
+            <value>1</value>
+         </widget>
+         <widget type="Label">
+            <key>/Diffusion Equation/Equation/Activate for this equation set/0</key>
+            <value>Activate for this equation set</value>
+         </widget>
+         <widget type="Label">
+            <key>/Diffusion Equation/Equation/Give Execution priority/0</key>
+            <value>Give Execution priority</value>
+         </widget>
+      </item>
+      <item index="1">
+         <active>1</active>
+         <name>Diffusivity</name>
+         <widget type="CheckBox">
+            <key>/SaveMaterials/Equation/Active/1</key>
+            <value>1</value>
+         </widget>
+         <widget type="Label">
+            <key>/Diffusion Equation/Equation/Activate for this equation set/1</key>
+            <value>Activate for this equation set</value>
+         </widget>
+         <widget type="Label">
+            <key>/SaveMaterials/Equation/Activate for this equation set/1</key>
+            <value>Activate for this equation set</value>
+         </widget>
+         <widget type="CheckBox">
+            <key>/Diffusion Equation/Equation/Active/1</key>
+            <value>0</value>
+         </widget>
+         <widget type="Edit">
+            <key>/SaveMaterials/Equation/Priority/1</key>
+            <value></value>
+         </widget>
+         <widget type="Edit">
+            <key>/Diffusion Equation/Equation/Priority/1</key>
+            <value></value>
+         </widget>
+         <widget type="Label">
+            <key>/Diffusion Equation/Equation/Give Execution priority/1</key>
+            <value>Give Execution priority</value>
+         </widget>
+         <widget type="Combo">
+            <key>/Diffusion Equation/Equation/Concentration Units/1</key>
+            <value>Absolute Mass</value>
+         </widget>
+         <widget type="Label">
+            <key>/SaveMaterials/Equation/Give Execution priority/1</key>
+            <value>Give Execution priority</value>
+         </widget>
+      </item>
+   </equation>
+   <material>
+      <item index="0">
+         <active>1</active>
+         <name>Steel</name>
+         <widget type="Edit">
+            <key>/General/Material/Concentration Diffusivity/0</key>
+            <value></value>
+         </widget>
+         <widget type="Label">
+            <key>/General/Material/Free text input/0</key>
+            <value>Free text input</value>
+         </widget>
+         <widget type="Edit">
+            <key>/General/Material/Density/0</key>
+            <value>7850.0</value>
+         </widget>
+         <widget type="Label">
+            <key>/General/Material/Properties/0</key>
+            <value>Properties</value>
+         </widget>
+         <widget type="TextEdit">
+            <key>/General/Material/Free text/0</key>
+            <value>  Concentration Diffusivity = Variable Concentration
+    Real MATC "diffusivity(T, tx)"</value>
+         </widget>
+      </item>
+   </material>
+   <bodyforce/>
+   <initialcondition>
+      <item index="0">
+         <active>1</active>
+         <name>Carbon</name>
+         <widget type="Label">
+            <key>/General/InitialCondition/Variables/0</key>
+            <value>Variables</value>
+         </widget>
+         <widget type="Edit">
+            <key>/General/InitialCondition/Concentration/0</key>
+            <value>Real MATC "xinit"</value>
+         </widget>
+      </item>
+   </initialcondition>
+   <boundarycondition>
+      <item index="0">
+         <active>1</active>
+         <name>Carburize</name>
+         <widget type="Label">
+            <key>/General/BoundaryCondition/Free text input/0</key>
+            <value>Free text input</value>
+         </widget>
+         <widget type="Edit">
+            <key>/General/BoundaryCondition/Mass Transfer Coeff./0</key>
+            <value></value>
+         </widget>
+         <widget type="TextEdit">
+            <key>/General/BoundaryCondition/Free text/0</key>
+            <value>  External Concentration = Real MATC "xs"
+  Mass Transfer Coefficient = Variable Time
+    Real MATC "masstransfercoef(tx)"</value>
+         </widget>
+         <widget type="Label">
+            <key>/General/BoundaryCondition/Diffusion Flux conditions/0</key>
+            <value>Diffusion Flux conditions</value>
+         </widget>
+         <widget type="Edit">
+            <key>/General/BoundaryCondition/External Concentration/0</key>
+            <value></value>
+         </widget>
+      </item>
+   </boundarycondition>
+   <solverspecificoptions>
+      <item name="Diffusion Equation" index="0" id="0">
+         <widget type="Edit">
+            <key>/Diffusion Equation/Solver/Procedure/0</key>
+            <value>"AdvectionDiffusion" "AdvectionDiffusionSolver"</value>
+         </widget>
+         <widget type="Edit">
+            <key>/Diffusion Equation/Solver/Variable/0</key>
+            <value>Concentration</value>
+         </widget>
+      </item>
+      <item name="SaveMaterials" index="1" id="1">
+         <widget type="Edit">
+            <key>/SaveMaterials/Solver/Procedure/1</key>
+            <value>"SaveData" "SaveMaterials"</value>
+         </widget>
+         <widget type="TextEdit">
+            <key>/SaveMaterials/Solver/Free text/1</key>
+            <value></value>
+         </widget>
+         <widget type="Edit">
+            <key>/SaveMaterials/Solver/Parameter 3/1</key>
+            <value></value>
+         </widget>
+         <widget type="Edit">
+            <key>/SaveMaterials/Solver/Parameter 1/1</key>
+            <value>Concentration Diffusivity</value>
+         </widget>
+         <widget type="Edit">
+            <key>/SaveMaterials/Solver/Parameter 8/1</key>
+            <value></value>
+         </widget>
+         <widget type="Edit">
+            <key>/SaveMaterials/Solver/Parameter 9/1</key>
+            <value></value>
+         </widget>
+         <widget type="Edit">
+            <key>/SaveMaterials/Solver/Parameter 2/1</key>
+            <value></value>
+         </widget>
+         <widget type="Edit">
+            <key>/Diffusion Equation/Solver/Procedure/1</key>
+            <value>"AdvectionDiffusion" "AdvectionDiffusionSolver"</value>
+         </widget>
+         <widget type="Edit">
+            <key>/SaveMaterials/Solver/Variable/1</key>
+            <value></value>
+         </widget>
+         <widget type="Edit">
+            <key>/SaveMaterials/Solver/Parameter 7/1</key>
+            <value></value>
+         </widget>
+         <widget type="Edit">
+            <key>/SaveMaterials/Solver/Variable DOFs/1</key>
+            <value></value>
+         </widget>
+         <widget type="Edit">
+            <key>/SaveMaterials/Solver/Parameter 6/1</key>
+            <value></value>
+         </widget>
+         <widget type="Edit">
+            <key>/Diffusion Equation/Solver/Variable/1</key>
+            <value>Concentration</value>
+         </widget>
+         <widget type="CheckBox">
+            <key>/SaveMaterials/Solver/No Matrix Equation/1</key>
+            <value>1</value>
+         </widget>
+         <widget type="Edit">
+            <key>/SaveMaterials/Solver/Parameter 4/1</key>
+            <value></value>
+         </widget>
+         <widget type="Edit">
+            <key>/SaveMaterials/Solver/Parameter 5/1</key>
+            <value></value>
+         </widget>
+         <widget type="Edit">
+            <key>/SaveMaterials/Solver/Parameter 10/1</key>
+            <value></value>
+         </widget>
+      </item>
+   </solverspecificoptions>
+   <bodyproperties>
+      <item index="0">
+         <widget type="LineEdit">
+            <objectName>nameEdit</objectName>
+            <text></text>
+         </widget>
+         <widget type="ComboBox">
+            <objectName>equationCombo</objectName>
+            <currentIndex>1</currentIndex>
+         </widget>
+         <widget type="ComboBox">
+            <objectName>materialCombo</objectName>
+            <currentIndex>1</currentIndex>
+         </widget>
+         <widget type="ComboBox">
+            <objectName>bodyForceCombo</objectName>
+            <currentIndex>0</currentIndex>
+         </widget>
+         <widget type="ComboBox">
+            <objectName>initialConditionCombo</objectName>
+            <currentIndex>1</currentIndex>
+         </widget>
+      </item>
+   </bodyproperties>
+   <boundaryproperties>
+      <item index="0">
+         <widget type="CheckBox">
+            <objectName>boundaryAsABody</objectName>
+            <isChecked>0</isChecked>
+         </widget>
+         <widget type="ComboBox">
+            <objectName>boundaryConditionCombo</objectName>
+            <currentIndex>0</currentIndex>
+         </widget>
+      </item>
+      <item index="1">
+         <widget type="CheckBox">
+            <objectName>boundaryAsABody</objectName>
+            <isChecked>0</isChecked>
+         </widget>
+         <widget type="ComboBox">
+            <objectName>boundaryConditionCombo</objectName>
+            <currentIndex>1</currentIndex>
+         </widget>
+      </item>
+   </boundaryproperties>
+</contents>

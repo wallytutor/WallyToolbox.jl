@@ -1,0 +1,118 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE edf>
+<edf version="1.0">
+  <ALL Widget="">
+    <Name>Stuff for all 'Solvers'</Name>
+
+    <Equation>
+      <Parameter Widget="Label">
+        <Name> Activate for this equation set </Name>
+      </Parameter>
+      <Parameter Widget="CheckBox">
+        <Name> Active </Name>
+        <Type> Logical </Type>
+        <Statustip> Check if this equation is part of the PDE-system</Statustip>
+        <Whatis> If checked, this equation is part of the PDE-system. </Whatis>
+      </Parameter>
+
+      <Parameter Widget="Label">
+        <Name> Give Execution priority </Name>
+      </Parameter>
+      <Parameter Widget="Edit">
+        <Name> Priority </Name>
+        <Type> Integer </Type>
+        <Statustip> Execution priority </Statustip>
+        <Whatis> Solver execution priority, determines solvers execution order. </Whatis>
+      </Parameter>
+    </Equation>
+  </ALL>
+
+  <PDE Name="General">
+    <Name>General</Name>
+
+    <Material>
+      <Parameter Widget="Label">
+        <Name> Properties </Name>
+      </Parameter>
+
+      <Parameter Widget="Edit">
+        <Name> Density </Name>
+        <Whatis>Density value may be entered here. Some models, like the ideal gas model compute
+          density internally. In such case this value may not be necessary.</Whatis>
+        <StatusTip>Give value to density.</StatusTip>
+      </Parameter>
+
+      <Parameter Widget="Edit">
+        <Name> Concentration Diffusivity </Name>
+        <StatusTip> Set value to oxygen diffusivity, can also be a tensor for anisotropy. </StatusTip>
+        <Whatis> Give value to diffusivity material property. </Whatis>
+      </Parameter>
+
+      <Parameter Widget="Label">
+        <Name> Free text input </Name>
+      </Parameter>
+
+      <Parameter Widget="TextEdit" Enabled="True">
+        <Name> Free text </Name>
+        <Type> String </Type>
+        <Whatis> Free text is copied into the Material-block of the SIF as such. </Whatis>
+        <StatusTip> Free text is copied into the Material-block of the SIF as such. </StatusTip>
+        <DefaultValue>
+          
+          Variable Concentration
+            Real MATC "diffusivity(T, tx)"
+        </DefaultValue>
+      </Parameter>
+    </Material>
+
+    <InitialCondition>
+      <Parameter Widget="Label">
+        <Name> Variables </Name>
+      </Parameter>
+
+      <Parameter Widget="Edit">
+        <Name> Concentration </Name>
+        <Whatis> Give initial value to Concentration field. </Whatis>
+        <StatusTip> Give initial value to Concentration field. </StatusTip>
+        <DefaultValue> Real MATC "xinit" </DefaultValue>
+      </Parameter>
+    </InitialCondition>
+
+    <BoundaryCondition>
+      <Parameter Widget="Label">
+        <Name> Diffusion Flux conditions </Name>
+      </Parameter>
+
+      <Parameter Widget="Edit">
+        <Name> Mass Transfer Coeff. </Name>
+        <SifName> Mass Transfer Coefficient </SifName>
+        <Whatis> Give mass transfer coefficient. </Whatis>
+        <StatusTip> Give mass transfer flux. </StatusTip>
+      </Parameter>
+
+      <Parameter Widget="Edit">
+        <Name> External Concentration </Name>
+        <Whatis> Give external concentration. </Whatis>
+        <StatusTip> Give external concentration. </StatusTip>
+      </Parameter>
+
+      <Parameter Widget="Label">
+        <Name> Free text input </Name>
+      </Parameter>
+
+      <Parameter Widget="TextEdit" Enabled="True">
+        <Name> Free text </Name>
+        <Type> String </Type>
+        <Whatis> Free text is copied into the Boundary Condition-block of the SIF as such. </Whatis>
+        <StatusTip> Free text is copied into the Boundary Condition-block of the SIF as such. </StatusTip>
+        <DefaultValue>
+
+          External Concentration = Real MATC "xs"
+          Mass Transfer Coefficient = Variable Time
+            Real MATC "masstransfercoef(tx)"
+        </DefaultValue>
+      </Parameter>
+
+    </BoundaryCondition>
+  </PDE>
+</edf>

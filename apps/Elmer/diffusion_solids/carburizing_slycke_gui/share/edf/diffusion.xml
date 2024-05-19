@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE edf>
+<edf version="1.0">
+  <PDE Name="Diffusion Equation">
+    <Name> Diffusion Equation </Name>
+
+    <Equation>
+      <Parameter Widget="Label">
+        <Name> Concentration Units </Name>
+      </Parameter>
+      <Parameter Widget="Combo">
+        <Type> String </Type>
+        <Name> Concentration Units </Name>
+        <Item Type="Active">
+          <Name> Absolute Mass </Name>
+        </Item>
+      </Parameter>
+    </Equation>
+
+    <Solver>
+      <Parameter Widget="Edit">
+        <Name> Procedure </Name>
+        <DefaultValue> "AdvectionDiffusion" "AdvectionDiffusionSolver" </DefaultValue>
+      </Parameter>
+      <Parameter Widget="Edit" Enabled="True">
+        <Name> Variable </Name>
+        <DefaultValue> Concentration </DefaultValue>
+      </Parameter>
+    </Solver>
+  </PDE>
+</edf>

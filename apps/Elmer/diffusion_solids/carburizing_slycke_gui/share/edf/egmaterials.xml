@@ -1,0 +1,8 @@
+<!DOCTYPE egmaterials>
+<materiallibrary>
+
+  <material name="Steel">
+    <parameter name="Density" >7850.0</parameter>
+  </material >
+
+</materiallibrary>

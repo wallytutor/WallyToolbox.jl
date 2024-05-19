@@ -1,0 +1,109 @@
+Header
+  CHECK KEYWORDS Warn
+  Mesh DB "." "sample"
+  Include Path ""
+  Results Directory "results"
+End
+
+Simulation
+  Max Output Level = 5
+  Coordinate System = Cartesian
+  Coordinate Mapping(3) = 1 2 3
+  Simulation Type = Transient
+  Steady State Max Iterations = 1
+  Output Intervals(1) = 60
+  Timestep intervals(1) = 1800
+  Timestep Sizes(1) = 10.0
+  Timestepping Method = BDF
+  BDF Order = 3
+  Solver Input File = case.sif
+  Post File = case.vtu
+Newmark Beta = 1.0
+!  Output File = "restart.result"
+!  Restart File = "restart.result"
+!  Restart Position = 120
+!  Restart Time = 120.0
+$ source("matc/models.ini");
+End
+
+Constants
+  Gravity(4) = 0 -1 0 9.82
+  Stefan Boltzmann = 5.670374419e-08
+  Permittivity of Vacuum = 8.85418781e-12
+  Permeability of Vacuum = 1.25663706e-6
+  Boltzmann Constant = 1.380649e-23
+  Unit Charge = 1.6021766e-19
+End
+
+Body 1
+  Target Bodies(1) = 1
+  Name = "Body 1"
+  Equation = 1
+  Material = 1
+  Initial condition = 1
+End
+
+Solver 2
+  Equation = Diffusion Equation
+  Procedure = "AdvectionDiffusion" "AdvectionDiffusionSolver"
+  Variable = Concentration
+  Exec Solver = Always
+  Stabilize = True
+  Optimize Bandwidth = True
+  Steady State Convergence Tolerance = 1.0e-5
+  Nonlinear System Convergence Tolerance = 1.0e-8
+  Nonlinear System Max Iterations = 20
+  Nonlinear System Newton After Iterations = 3
+  Nonlinear System Newton After Tolerance = 1.0e-3
+  Nonlinear System Relaxation Factor = 1
+  Nonlinear System Convergence Measure = Residual
+  Linear System Solver = Iterative
+  Linear System Iterative Method = BiCGStab
+  Linear System Max Iterations = 500
+  Linear System Convergence Tolerance = 1.0e-10
+  BiCGstabl polynomial degree = 2
+  Linear System Preconditioning = ILU0
+  Linear System ILUT Tolerance = 1.0e-3
+  Linear System Abort Not Converged = False
+  Linear System Residual Output = 10
+  Linear System Precondition Recompute = 1
+End
+
+Solver 1
+  Equation = SaveMaterials
+  Procedure = "SaveData" "SaveMaterials"
+  Parameter 1 = Concentration Diffusivity
+  Exec Solver = Always
+End
+
+Equation 1
+  Name = "Diffusion"
+  Concentration Units = Absolute Mass
+  Active Solvers(1) = 2
+End
+
+Equation 2
+  Name = "Diffusivity"
+  Concentration Units = Absolute Mass
+  Active Solvers(1) = 1
+End
+
+Material 1
+  Name = "Steel"
+  Density = 7850.0
+  Concentration Diffusivity = Variable Concentration
+    Real MATC "diffusivity(T, tx)"
+End
+
+Initial Condition 1
+  Name = "Carbon"
+  Concentration = Real MATC "xinit"
+End
+
+Boundary Condition 1
+  Target Boundaries(1) = 2 
+  Name = "Carburize"
+  External Concentration = Real MATC "xs"
+  Mass Transfer Coefficient = Variable Time
+    Real MATC "masstransfercoef(tx)"
+End
