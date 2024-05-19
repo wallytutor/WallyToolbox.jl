@@ -56,7 +56,6 @@ Solver 2
   Nonlinear System Newton After Iterations = 3
   Nonlinear System Newton After Tolerance = 1.0e-3
   Nonlinear System Relaxation Factor = 1
-  Nonlinear System Convergence Measure = Residual
   Linear System Solver = Iterative
   Linear System Iterative Method = BiCGStab
   Linear System Max Iterations = 500
@@ -64,16 +63,16 @@ Solver 2
   BiCGstabl polynomial degree = 2
   Linear System Preconditioning = ILU0
   Linear System ILUT Tolerance = 1.0e-3
-  Linear System Abort Not Converged = False
+  Linear System Abort Not Converged = True
   Linear System Residual Output = 10
   Linear System Precondition Recompute = 1
 End
 
 Solver 1
   Equation = SaveMaterials
-  Procedure = "SaveData" "SaveMaterials"
   Parameter 1 = Concentration Diffusivity
-  Exec Solver = Always
+  Procedure = "SaveData" "SaveMaterials"
+  Exec Solver = After Timestep
 End
 
 Equation 1
@@ -90,9 +89,9 @@ End
 
 Material 1
   Name = "Steel"
-  Density = 7850.0
-  Concentration Diffusivity = Variable Concentration
+Concentration Diffusivity = Variable Concentration
     Real MATC "diffusivity(T, tx)"
+  Density = 7850.0
 End
 
 Initial Condition 1
@@ -103,7 +102,7 @@ End
 Boundary Condition 1
   Target Boundaries(1) = 2 
   Name = "Carburize"
-  External Concentration = Real MATC "xs"
+External Concentration = Real MATC "xs"
   Mass Transfer Coefficient = Variable Time
     Real MATC "masstransfercoef(tx)"
 End

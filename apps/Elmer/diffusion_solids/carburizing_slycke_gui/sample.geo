@@ -13,7 +13,7 @@ Line(4) = {4, 1};
 Curve Loop(1) = {1, 2, 3, 4};
 Plane Surface(1) = {1};
 
-Transfinite Curve {1, 3} = 200 Using Bump 0.6;
+Transfinite Curve {1, 3} = 40 Using Bump 0.3;
 Transfinite Curve {2, 4} = 2;
 
 Transfinite Surface {1};
