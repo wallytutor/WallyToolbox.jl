@@ -12,6 +12,7 @@ The goal of this directory is to provide an easy way to setup a portable toolbox
 - [ElmerFEM](https://www.nic.funet.fi/pub/sci/physics/elmer/bin/windows/)
 - [ParaView](https://www.paraview.org/download/)
 - [Salome](https://www.salome-platform.org/?page_id=2430)
+- [FreeCAD](https://www.freecad.org/downloads.php)
 
 ### Next deployments
 
@@ -50,6 +51,8 @@ The goal of this directory is to provide an easy way to setup a portable toolbox
 ## Setup of environment
 
 - Extract downloaded software to their own directories; right-click the compressed packages and select the option to select to a directory (some software are compressed directly to the root of the file and can make a mess otherwise).
+
+- Enable VSCode [portable mode](https://code.visualstudio.com/docs/editor/portable) and install required extensions (Python and Julia support, ...).
 
 ## Creating a launcher
 
