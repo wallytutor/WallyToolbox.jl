@@ -4,6 +4,7 @@ from pathlib import Path
 
 basepaths = {
     "MYENV_ELMER":     "ElmerFEM-gui-mpi-Windows-AMD64",
+    "MYENV_FREECAD":   "FreeCAD_0.21.2-2023-12-17-conda-Windows-x86_64-py310",
     "MYENV_GIT":       "PortableGit-2.45.1",
     "MYENV_GMSH":      "gmsh-4.13.0-Windows64-sdk",
     "MYENV_JULIA":     "julia-1.10.3",

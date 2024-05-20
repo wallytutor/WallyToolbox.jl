@@ -10,6 +10,7 @@ set LANG="en_US.UTF-8"
 @REM @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 set ELMER_VERSION=ElmerFEM-gui-mpi-Windows-AMD64
+set FREECAD_VERSION=FreeCAD_0.21.2-2023-12-17-conda-Windows-x86_64-py310
 set GIT_VERSION=PortableGit-2.45.1
 set GMSH_VERSION=gmsh-4.13.0-Windows64-sdk
 set JULIA_VERSION=julia-1.10.3
@@ -59,6 +60,7 @@ set PATH=%HERE%\%VSCODE_VERSION%;%PATH%
 set PATH=%HERE%\%GIT_VERSION%\cmd;%PATH%
 set PATH=%HERE%\%PARAVIEW_VERSION%\bin;%PATH%
 set PATH=%HERE%\%SALOME_VERSION%;%PATH%
+set PATH=%HERE%\%FREECAD_VERSION%\bin;%PATH%
 
 @REM @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @REM EOF
