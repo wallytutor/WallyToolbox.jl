@@ -2,6 +2,8 @@
 bin/Elmer*
 bin/gmsh*
 bin/julia*
+bin/ParaView*
 bin/PortableGit*
+bin/SALOME*
 bin/VSCode*
 bin/WPy64*

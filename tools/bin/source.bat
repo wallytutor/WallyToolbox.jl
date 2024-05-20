@@ -14,7 +14,9 @@ set GIT_VERSION=PortableGit-2.45.1
 set GMSH_VERSION=gmsh-4.13.0-Windows64-sdk
 set JULIA_VERSION=julia-1.10.3
 set WINPYTHON_VERSION=WPy64-31231b3
+set PARAVIEW_VERSION=ParaView-5.12.0-Windows-Python3.10-msvc2017-AMD64
 set PYTHON_VERSION=python-3.12.3.amd64
+set SALOME_VERSION=SALOME-9.12.0
 set VSCODE_VERSION=VSCode-win32-x64-1.89.1
 
 @REM @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -55,6 +57,8 @@ set PATH=%ELMER_HOME%\lib;%PATH%
 
 set PATH=%HERE%\%VSCODE_VERSION%;%PATH%
 set PATH=%HERE%\%GIT_VERSION%\cmd;%PATH%
+set PATH=%HERE%\%PARAVIEW_VERSION%\bin;%PATH%
+set PATH=%HERE%\%SALOME_VERSION%;%PATH%
 
 @REM @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @REM EOF

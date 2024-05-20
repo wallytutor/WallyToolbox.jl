@@ -10,43 +10,19 @@ The goal of this directory is to provide an easy way to setup a portable toolbox
 - [Python](https://github.com/winpython/winpython/releases)
 - [gmsh](https://gmsh.info/#Download)
 - [ElmerFEM](https://www.nic.funet.fi/pub/sci/physics/elmer/bin/windows/)
+- [ParaView](https://www.paraview.org/download/)
+- [Salome](https://www.salome-platform.org/?page_id=2430)
 
-### Preparation and postprocessing
+### Next deployments
 
 - [Blender]()
-- [ParaView]()
-- [Salome]()
-
-### Simulation tools
-
-- [Cantera]()
-- [CasADi]()
-- [DualSPHysics]()
-- [DWSIM]()
-- [Dyssol]()
-- [Ipopt]()
-- [MUSEN]()
-- [OpenCALPHAD]()
+- [MikTeX]()
+- [JabRef]()
+- [texstudio]()
+- [strawberry-perl]()
 - [SU2]()
 
-### Programming languages
-
-- [Octave]()
-- [Scilab]()
-- [ZeroBraneStudio (Lua)]()
-
-### Text processing
-
-- [MikTeX]()
-- [strawberry-perl]()
-- [texstudio]()
-
-### Editors and environments
-
-- [nteract]()
-- [nvim]()
-
-### Other
+### Optional deployments
 
 - [7-zip]()
 - [Fiji]()
@@ -57,6 +33,19 @@ The goal of this directory is to provide an easy way to setup a portable toolbox
 - [puTTy]()
 - [Tabby]()
 - [MSYS2]()
+- [Octave]()
+- [Scilab]()
+- [ZeroBraneStudio (Lua)]()
+- [nteract]()
+- [nvim]()
+- [Cantera]()
+- [CasADi]()
+- [DualSPHysics]()
+- [DWSIM]()
+- [Dyssol]()
+- [Ipopt]()
+- [MUSEN]()
+- [OpenCALPHAD]()
 
 ## Setup of environment
 
