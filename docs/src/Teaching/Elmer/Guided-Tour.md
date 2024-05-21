@@ -55,3 +55,38 @@
 ## Limitations and issues
 
 - Currently the GUI is not able to import SIF files generated manually because it stores its state in a XML file; to be able to re-run cases from the GUI users need to create the equivalent case (eventually using the free text fields) in the GUI itself before regenerating a SIF file. Notice that this will overwrite the SIF file, so keep in mind to backup the file in another directory; that is especially required for highly customized cases.
+
+---
+
+## Material properties
+
+Material properties can be specified as:
+
+- Constant: just the default numeric input in SIF files
+
+- Tabulated linearly or using a cubic spline, *e.g.*
+
+```Fortran
+! Linear interpolation
+Viscosity = Variable Temperature
+  Real
+	298.15 1.0
+	! ... more data here
+	373.15 2.0
+End
+
+! Cubic spline interpolation
+Viscosity = Variable Temperature
+  Real cubic
+	298.15 1.0
+	315.15 1.1
+	345.15 1.5
+	! ... more data here
+	373.15 2.0
+End
+```
+
+- Using MATC as explained [here](MATC.md). Notice that sourcing files in MATC is the recommended way to get reusable code; coding MATC in SIF files requires to escape all lines and quickly becomes messy.
+
+- User-defined functions (UDF) can also be provided in Fortran... (to be continued).
+

@@ -10,6 +10,7 @@ The goal of this page is not to supersede the [documentation](https://www.csc.fi
 - [Guided Tour](Guided-Tour.md)
 - [Standard file input](SIF.md)
 - [MATC language](MATC.md)
+- [User-defined functions](UDF.md)
 
 ---
 ## Ongoing work
