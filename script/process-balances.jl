@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.19.40
+# v0.19.41
 
 using Markdown
 using InteractiveUtils
@@ -11,15 +11,16 @@ begin
     Pkg.activate(Base.current_project())
 
     import Unitful
-    
+
     using DocStringExtensions: FIELDS
     using Luxor
     using Roots: find_zero
     using Statistics: mean
     using SteamTables: SpecificH
     using Unitful: @u_str, uconvert, ustrip
-    
+
     using WallyToolbox
+    using DryConstants
     using DryUtilities: nm3_h_to_kg_h, kg_h_to_nm3_h
     using DryMaterials: AbstractLiquidMaterial
     using DryMaterials: PureWater, PureAir, PureMineral
@@ -237,7 +238,7 @@ struct CooledCrusherUnits
         T_in_sep      = val_or_na(inputs.T_in_sep)
         T_out_rec     = val_or_na(inputs.T_out_rec)
         T_out_crush   = val_or_na(inputs.T_out_crush)
-            
+
         # Get material streams.
         cooler, Y_cool     = get(kw, :cooler,  (PureAir(),     [1.0]))
         clinker, Y_clinker = get(kw, :clinker, (PureMineral(), [1.0, 0.0]))
@@ -281,7 +282,7 @@ struct CooledCrusherUnits
         htc_rec = get(kw, :htc_pipe_rec, nothing)
         htc_cru = get(kw, :htc_cooling,  nothing)
         # temp_cru = T_out_crush
-        
+
         # Premix meal that is not iterated upon.
         meal_stream = clinker_stream
         meal_stream += parasite_air_stream
@@ -303,15 +304,15 @@ struct CooledCrusherUnits
                 coolant  = cooling_stream,
                 power    = milling_power,
                 temp_out = T_out_cool,
-                temp_cru = T_out_crush, 
+                temp_cru = T_out_crush,
                 glob_htc = nothing
             )
         end
-        
+
         while itercount <= solver.max_iter
             # Mix meal and recirculation
             product = meal_stream + recirc_stream
-            
+
             # Add crushing energy and cool down system.
             # TODO T_out_crush can be actually *computed*!
             mid_crusher, T_out_cool, T_out_crush = cooled_crushing(
@@ -319,20 +320,20 @@ struct CooledCrusherUnits
                 coolant  = cooling_stream,
                 power    = milling_power,
                 temp_out = T_out_cool,
-                temp_cru = T_out_crush, 
+                temp_cru = T_out_crush,
                 glob_htc = htc_cru
             )
 
-			# Mix crusher product with *dilution air*
-			crusher = CooledCrushingMill(
-				mid_crusher.rawmeal,
-				mid_crusher.product + crusher_air_stream,
-				mid_crusher.coolant,
-				mid_crusher.power,
-				mid_crusher.loss,
-				mid_crusher.globalhtc
-			)
-			
+            # Mix crusher product with *dilution air*
+            crusher = CooledCrushingMill(
+                mid_crusher.rawmeal,
+                mid_crusher.product + crusher_air_stream,
+                mid_crusher.coolant,
+                mid_crusher.power,
+                mid_crusher.loss,
+                mid_crusher.globalhtc
+            )
+
             # Loose some heat in vertical pipeline.
             rets = transport_pipe(crusher.product, T_in_sep, T_env, htc_sep)
             transport_sep, T_in_sep = rets
@@ -815,7 +816,7 @@ begin
     const ϕ             = 77.64
     const ηseparator    = 47.65
 
-    const T_env         = 5.0
+    const T_env         = 7.0
     const T_out_cool    = 75.0
     const T_in_sep      = 73.0
     const T_out_rec     = 39.0
