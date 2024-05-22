@@ -2,7 +2,7 @@
 
 SetFactory("OpenCASCADE");
 
-R = 0.50;
+R = 100e-06;
 f = 0.98;
 
 Nx = 6;
