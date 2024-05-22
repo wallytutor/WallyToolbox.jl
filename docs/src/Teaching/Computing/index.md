@@ -21,6 +21,7 @@ sudo mount -t drvfs Z: /mnt/z
 
 - For some reason `minted` blocks `\begin{minted}...\end{minted}` have problems to render in Beamer (something related to multilevel macros). I managed to insert code blocks with `\inputminted` as reported [here](https://tex.stackexchange.com/questions/159667/including-python-code-in-beamer)
 
-### MikTeX
+### MiKTeX
 
 - [mathkerncmssi source file could not be found](https://tex.stackexchange.com/questions/553716/mathkerncmssi-source-file-could-not-be-found)
+- [Installing user packages and classes](https://docs.miktex.org/manual/localadditions.html)
