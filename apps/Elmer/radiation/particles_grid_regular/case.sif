@@ -58,15 +58,31 @@ Solver 1
   Linear System Precondition Recompute = 1
 End
 
+Solver 2
+  Equation = SaveLine
+  Save Flux = True
+  Filename = bflux.dat
+  Flux Coefficient = Heat Conductivity
+  Flux Variable = Temperature
+  Procedure = "SaveData" "SaveLine"
+  Exec Solver = After Simulation
+  Stabilize = True
+End
+
 Equation 1
   Name = "Conduction"
   Active Solvers(1) = 1
 End
 
+Equation 2
+  Name = "Boundary Flux"
+  Active Solvers(1) = 2
+End
+
 Material 1
   Name = "Solid"
-  Density = 3000.0
   Heat Conductivity = 1.0
+  Density = 3000.0
 End
 
 Initial Condition 1
@@ -78,19 +94,22 @@ Boundary Condition 1
   Target Boundaries(1) = 1 
   Name = "Heat Source"
   Temperature = 500.0
+  Save Line = False
 End
 
 Boundary Condition 2
   Target Boundaries(1) = 2 
   Name = "Heat Sink"
-  Heat Transfer Coefficient = 10
+  Heat Transfer Coefficient = 100
   External Temperature = 499
+  Save Line = True
 End
 
 Boundary Condition 3
   Target Boundaries(1) = 3 
   Name = "Symmetry 2D"
   Heat Flux = 0
+  Save Line = False
 End
 
 Boundary Condition 4
