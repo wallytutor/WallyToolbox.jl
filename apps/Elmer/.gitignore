@@ -17,8 +17,10 @@ ELMERSOLVER_STARTINFO
 *.elements
 *.header
 *.nodes
+*.nodes.orig
 *.nodes.new
 partitioning.*
+ViewFactors.dat*
 
 # Results
 *.pvtu
