@@ -13,8 +13,6 @@ Simulation
   Steady State Max Iterations = 50
   Output Intervals(1) = 1
   Solver Input File = case.sif
-  ! No postprocessing here.
-  !  Post File = case.vtu
 End
 
 Constants
@@ -94,7 +92,7 @@ End
 Boundary Condition 1
   Target Boundaries(1) = 1 
   Name = "Heat Source"
-  Temperature = 1300.0
+  Temperature = 1
   Save Line = False
 End
 
@@ -102,7 +100,7 @@ Boundary Condition 2
   Target Boundaries(1) = 2 
   Name = "Heat Sink"
   Heat Transfer Coefficient = 100
-  External Temperature = 1299
+  External Temperature = 0.0
   Save Line = True
 End
 
@@ -116,7 +114,7 @@ End
 Boundary Condition 4
   Target Boundaries(1) = 4 
   Name = "Internal"
-  Emissivity = 0.9
+  Emissivity = 1.0
   Radiation Boundary = 1
   Radiation Target Body = -1
   Radiation = Diffuse Gray

@@ -1,75 +1,177 @@
 # -*- coding: utf-8 -*-
+using CairoMakie
+using DelimitedFiles
+using Statistics
 using WallyToolbox
 using DryUtilities: redirect_to_files
 
-function startlog(logs)
-    @info "Enforcing logging directory..."
-    !isdir(logs) && mkdir(logs)
+makesifstring(T) = """\
+Header
+  CHECK KEYWORDS Warn
+  Mesh DB "." "packing"
+  Include Path ""
+  Results Directory ""
+End
+
+Simulation
+  Max Output Level = 5
+  Coordinate System = Cartesian
+  Coordinate Mapping(3) = 1 2 3
+  Simulation Type = Steady state
+  Steady State Max Iterations = 50
+  Output Intervals(1) = 1
+  Solver Input File = case.sif
+End
+
+Constants
+  Gravity(4) = 0 -1 0 9.82
+  Stefan Boltzmann = 5.670374419e-08
+  Permittivity of Vacuum = 8.85418781e-12
+  Permeability of Vacuum = 1.25663706e-6
+  Boltzmann Constant = 1.380649e-23
+  Unit Charge = 1.6021766e-19
+End
+
+Body 1
+  Target Bodies(1) = 1
+  Name = "Body 1"
+  Equation = 1
+  Material = 1
+  Initial condition = 1
+End
+
+Solver 1
+  Equation = Heat Equation
+  Variable = Temperature
+  Procedure = "HeatSolve" "HeatSolver"
+  Exec Solver = Always
+  Stabilize = True
+  Optimize Bandwidth = True
+  Steady State Convergence Tolerance = 1.0e-8
+  Nonlinear System Convergence Tolerance = 1.0e-9
+  Nonlinear System Max Iterations = 20
+  Nonlinear System Newton After Iterations = 3
+  Nonlinear System Newton After Tolerance = 1.0e-3
+  Nonlinear System Relaxation Factor = 1
+  Linear System Solver = Iterative
+  Linear System Iterative Method = BiCGStab
+  Linear System Max Iterations = 500
+  Linear System Convergence Tolerance = 1.0e-10
+  BiCGstabl polynomial degree = 2
+  Linear System Preconditioning = ILU1
+  Linear System ILUT Tolerance = 1.0e-3
+  Linear System Abort Not Converged = True
+  Linear System Residual Output = 10
+  Linear System Precondition Recompute = 1
+End
+
+Solver 2
+  Equation = SaveLine
+  Save Flux = True
+  Filename = bflux.dat
+  Flux Coefficient = Heat Conductivity
+  Flux Variable = Temperature
+  Procedure = "SaveData" "SaveLine"
+  Exec Solver = After Simulation
+  Stabilize = True
+End
+
+Equation 1
+  Name = "Conduction"
+  Active Solvers(1) = 1
+End
+
+Equation 2
+  Name = "Boundary Flux"
+  Active Solvers(1) = 2
+End
+
+Material 1
+  Name = "Solid"
+  Heat Conductivity = 1.0
+  Density = 3000.0
+End
+
+Initial Condition 1
+  Name = "State"
+  Temperature = 298.15
+End
+
+Boundary Condition 1
+  Target Boundaries(1) = 1 
+  Name = "Heat Source"
+  Temperature = $(T)
+  Save Line = False
+End
+
+Boundary Condition 2
+  Target Boundaries(1) = 2 
+  Name = "Heat Sink"
+  Heat Transfer Coefficient = 100
+  External Temperature = $(T-1.0)
+  Save Line = True
+End
+
+Boundary Condition 3
+  Target Boundaries(1) = 3 
+  Name = "Symmetry 2D"
+  Heat Flux = 0
+  Save Line = False
+End
+
+Boundary Condition 4
+  Target Boundaries(1) = 4 
+  Name = "Internal"
+  Emissivity = 1.0
+  Radiation Boundary = 1
+  Radiation Target Body = -1
+  Radiation = Diffuse Gray
+End
+"""
+
+function conductivity(T)
+    data = readdlm("bflux.dat")
+    Lx = mean(data[:, 4])
+    Tc = mean(data[:, 7])
+    qx = mean(data[:, end])
+    return -1 * qx * Lx / (T - Tc)
 end
 
-function runsolver(mpi, np, logs)
-    @info "Solving/integrating problem (may take a while)..."
-    redirect_to_files("logs/log.solver") do
-        open("ELMERSOLVER_STARTINFO", "w") do fp
-            write(fp, "case.sif\n1\n")
-        end
-        
-        if (np > 0)
-            run(`ElmerGrid 2 2 sample -partdual -metiskway $(np)`)
-            run(`$(mpi) -n $(np) ElmerSolver_mpi`)
-        else
-            run(`ElmerSolver`)
-        end
+function workflow(T)
+    @info "Running for $(T) K"
 
-        rm("ELMERSOLVER_STARTINFO"; force = true)
+    open("case.sif", "w") do fp
+        write(fp, makesifstring(T))
     end
+
+    redirect_to_files("log.solver") do
+        run(`ElmerSolver`)
+    end
+
+    return conductivity(T)
 end
 
-function cleanup(geom, logs, results; np = -1)
-    opts = (force = true, recursive = true)
-
-    isfile("ELMERSOLVER_STARTINFO") && rm("ELMERSOLVER_STARTINFO")
-
-    rm(logs; opts...)
-    rm(results; opts...)
+function workflow()
+    open("ELMERSOLVER_STARTINFO", "w") do fp
+        write(fp, "case.sif\n1\n")
+    end
     
-    return nothing
-end
+    Ts = collect(300:100:2000)
+    ks = map(workflow, Ts)
 
-function workflow(;
-        geom       = "packing",
-        np         = -1, 
-        mpi        = "mpiexec",
-        logs       = "logs",
-        results    = "results",
-        cleanstart = true
-    )
-    cleanstart && cleanup(geom, logs, results; np)
-    startlog(logs)
-    runsolver(mpi, np, logs)
+    rm("ELMERSOLVER_STARTINFO"; force = true)
     @info "DONE!"
+
+    return Ts, ks
 end
 
-# workflow()
-# cleanup("packing", "logs", "results")
 
-# using DelimitedFiles
-# using Statistics
+Ts, ks = workflow()
+fig = let
+    f = Figure()
+    ax = Axis(f[1, 1])
+    lines!(ax, Ts, ks)
+    f
+end
 
-# data = readdlm("bflux.dat")
-
-# Th = 1300
-# R = 100e-06
-
-# Ly = maximum(data[:, 5])
-# Lx = mean(data[:, 4])
-
-# As = 15π*R^2
-# At = Lx * Ly
-
-# ϕ = As / At
-
-# qx = mean(data[:, end])
-# Tc = mean(data[:, 7])
-
-# k = -1 * qx * Lx / (Th - Tc)
+save("conductivity.png", fig)
