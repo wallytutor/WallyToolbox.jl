@@ -93,7 +93,7 @@ End
 Boundary Condition 1
   Target Boundaries(1) = 1 
   Name = "Heat Source"
-  Temperature = 500.0
+  Temperature = 1300.0
   Save Line = False
 End
 
@@ -101,7 +101,7 @@ Boundary Condition 2
   Target Boundaries(1) = 2 
   Name = "Heat Sink"
   Heat Transfer Coefficient = 100
-  External Temperature = 499
+  External Temperature = 1299
   Save Line = True
 End
 
