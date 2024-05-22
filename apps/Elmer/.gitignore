@@ -29,3 +29,8 @@ partitioning.*
 
 # Execution logs
 log.*
+
+# Specific dumped projects
+/**/project/*.sif
+/**/project/*.geo
+/**/project/*.msh
