@@ -17,6 +17,7 @@ ELMERSOLVER_STARTINFO
 *.elements
 *.header
 *.nodes
+*.nodes.new
 partitioning.*
 
 # Results
