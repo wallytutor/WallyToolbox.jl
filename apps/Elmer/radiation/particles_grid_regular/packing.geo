@@ -2,7 +2,9 @@
 
 SetFactory("OpenCASCADE");
 
-R = 100e-06;
+scale = 1.0e-06;
+R = 100 * scale;
+// R = 0.005;
 f = 0.98;
 
 Nx = 6;
@@ -43,8 +45,8 @@ EndFor
 
 final = BooleanIntersection{ Surface{1}; Delete; }{ Surface{31}; Delete; };
 
-Transfinite Curve {1, 3} = 10*Ny*D;
-Transfinite Curve {2, 4} = 10*Nx*D;
+Transfinite Curve {1, 3} = 10 * Ny;
+Transfinite Curve {2, 4} = 10 * Nx;
 // Recombine Surface {final};
 
 Physical Surface(1) = {final};

@@ -2,7 +2,7 @@ Header
   CHECK KEYWORDS Warn
   Mesh DB "." "packing"
   Include Path ""
-  Results Directory ""
+  Results Directory "."
 End
 
 Simulation
@@ -40,8 +40,8 @@ Solver 1
   Exec Solver = Always
   Stabilize = True
   Optimize Bandwidth = True
-  Steady State Convergence Tolerance = 1.0e-5
-  Nonlinear System Convergence Tolerance = 1.0e-7
+  Steady State Convergence Tolerance = 1.0e-8
+  Nonlinear System Convergence Tolerance = 1.0e-9
   Nonlinear System Max Iterations = 20
   Nonlinear System Newton After Iterations = 3
   Nonlinear System Newton After Tolerance = 1.0e-3
@@ -51,9 +51,9 @@ Solver 1
   Linear System Max Iterations = 500
   Linear System Convergence Tolerance = 1.0e-10
   BiCGstabl polynomial degree = 2
-  Linear System Preconditioning = ILU0
+  Linear System Preconditioning = ILU1
   Linear System ILUT Tolerance = 1.0e-3
-  Linear System Abort Not Converged = False
+  Linear System Abort Not Converged = True
   Linear System Residual Output = 10
   Linear System Precondition Recompute = 1
 End
@@ -65,8 +65,8 @@ End
 
 Material 1
   Name = "Solid"
-  Heat Conductivity = 1.0
   Density = 3000.0
+  Heat Conductivity = 1.0
 End
 
 Initial Condition 1
@@ -83,8 +83,8 @@ End
 Boundary Condition 2
   Target Boundaries(1) = 2 
   Name = "Heat Sink"
-  External Temperature = 298.15
   Heat Transfer Coefficient = 10
+  External Temperature = 499
 End
 
 Boundary Condition 3
@@ -96,8 +96,8 @@ End
 Boundary Condition 4
   Target Boundaries(1) = 4 
   Name = "Internal"
-  Emissivity = 0.8
+  Emissivity = 0.9
+  Radiation Boundary = 1
   Radiation Target Body = -1
   Radiation = Diffuse Gray
-  Radiation Boundary = 20
 End
