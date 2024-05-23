@@ -20,34 +20,42 @@ The goal of this directory is to provide an easy way to setup a portable toolbox
 - [Blender](https://www.blender.org/download/)
 - [FreeCAD](https://www.freecad.org/downloads.php)
 - [gmsh](https://gmsh.info/#Download)
+- [gnuplot](https://sourceforge.net/projects/gnuplot/files/gnuplot/6.0.0/)
 - [ParaView](https://www.paraview.org/download/)
 - [Salome](https://www.salome-platform.org/?page_id=2430)
+
+Next deployment:
+
+- [DualSPHysics]()
+- [FreeFem++]()
 
 ### Optional deployments
 
 - [7-zip]()
+- [Cantera]()
+- [CasADi]()
+- [DWSIM]()
+- [Dyssol]()
 - [Fiji]()
 - [FileZilla]()
 - [inkscape]()
-- [pandoc]()
-- [Orange3]()
-- [puTTy]()
-- [Tabby]()
-- [MSYS2]()
-- [Octave]()
-- [Scilab]()
-- [ZeroBraneStudio (Lua)]()
-- [nteract]()
-- [nvim]()
-- [Cantera]()
-- [CasADi]()
-- [DualSPHysics]()
-- [DWSIM]()
-- [Dyssol]()
 - [Ipopt]()
 - [MUSEN]()
+- [nteract]()
+- [nvim]()
 - [OpenCALPHAD]()
+- [Octave]()
+- [Orange3]()
+- [pandoc]()
+- [puTTy]()
+- [Scilab]()
 - [strawberry-perl]()
+- [ZeroBraneStudio]()
+
+### Still thinking about
+
+- [Tabby]()
+- [MSYS2]()
 
 ## Setup of environment
 

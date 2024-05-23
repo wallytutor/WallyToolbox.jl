@@ -4,6 +4,7 @@ bin/blender*
 bin/Elmer*
 bin/FreeCAD*
 bin/gmsh*
+bin/gp*
 bin/JabRef*
 bin/julia*
 bin/ParaView*
