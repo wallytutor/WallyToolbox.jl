@@ -1,10 +1,15 @@
 # Executables
+bin/basic-miktex*
+bin/blender*
 bin/Elmer*
 bin/FreeCAD*
 bin/gmsh*
+bin/JabRef*
 bin/julia*
 bin/ParaView*
 bin/PortableGit*
 bin/SALOME*
+bin/SU2*
+bin/texstudio*
 bin/VSCode*
 bin/WPy64*

@@ -6,22 +6,22 @@ The goal of this directory is to provide an easy way to setup a portable toolbox
 
 - [VS Code](https://code.visualstudio.com/Download)
 - [Git](https://git-scm.com/download/win)
+
 - [Julia](https://julialang.org/downloads/)
 - [Python](https://github.com/winpython/winpython/releases)
-- [gmsh](https://gmsh.info/#Download)
+
+- [MikTeX](https://miktex.org/howto/portable-edition)
+- [texstudio](https://www.texstudio.org/#download)
+- [JabRef](https://www.fosshub.com/JabRef.html?dwl=JabRef-5.13.msi)
+
 - [ElmerFEM](https://www.nic.funet.fi/pub/sci/physics/elmer/bin/windows/)
+- [SU2](https://su2code.github.io/download.html)
+
+- [Blender](https://www.blender.org/download/)
+- [FreeCAD](https://www.freecad.org/downloads.php)
+- [gmsh](https://gmsh.info/#Download)
 - [ParaView](https://www.paraview.org/download/)
 - [Salome](https://www.salome-platform.org/?page_id=2430)
-- [FreeCAD](https://www.freecad.org/downloads.php)
-
-### Next deployments
-
-- [Blender]()
-- [MikTeX]()
-- [JabRef]()
-- [texstudio]()
-- [strawberry-perl]()
-- [SU2]()
 
 ### Optional deployments
 
@@ -47,6 +47,7 @@ The goal of this directory is to provide an easy way to setup a portable toolbox
 - [Ipopt]()
 - [MUSEN]()
 - [OpenCALPHAD]()
+- [strawberry-perl]()
 
 ## Setup of environment
 
@@ -67,4 +68,12 @@ Set oShell = CreateObject ("Wscript.Shell")
 Dim strArgs
 strArgs = "cmd /c bin\Code.bat"
 oShell.Run strArgs, 0, false
+```
+
+## MiKTeX tweaks
+
+To append `TEXMF` variable one can use the MiKTeX Console graphical interface and under `Settings > Directories` navigate and select the local path. Alternativelly on can add to `bin/<miktex-dir>/texmfs/install/miktex/config/miktexstartup.ini` a line as
+
+```ini
+CommonRoots=C:/Path/To/Local/TeX/Tree
 ```
