@@ -28,20 +28,6 @@ set TEXSTUDIO_VERSION=texstudio-4.8.0-win-portable-qt6
 set VSCODE_VERSION=VSCode-win32-x64-1.89.1
 
 @REM @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-@REM CONFIGURE JULIA
-@REM @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-
-set PATH=%HERE%\%JULIA_VERSION%-win64\%JULIA_VERSION%\bin;%PATH%
-set JULIA_DEPOT_PATH=%HERE%\%JULIA_VERSION%-win64\depot
-
-@REM @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-@REM CONFIGURE PYTHON
-@REM @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-
-set PATH=%HERE%\%WINPYTHON_VERSION%\%PYTHON_VERSION%;%PATH%
-set PATH=%HERE%\%WINPYTHON_VERSION%\%PYTHON_VERSION%\Scripts;%PATH%
-
-@REM @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @REM CONFIGURE GMSH
 @REM @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
@@ -88,6 +74,22 @@ set PATH=%HERE%\%TEXSTUDIO_VERSION%;%PATH%
 call %HERE%\%MIKTEX_VERSION%\miktex-portable.cmd
 set PATH=%HERE%\%MIKTEX_VERSION%\texmfs\install\miktex\bin\x64\internal;%PATH%
 set PATH=%HERE%\%MIKTEX_VERSION%\texmfs\install\miktex\bin\x64;%PATH%
+
+@REM IMPORTANT: Julia and Python come last to override others.
+
+@REM @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@REM CONFIGURE JULIA
+@REM @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+set PATH=%HERE%\%JULIA_VERSION%-win64\%JULIA_VERSION%\bin;%PATH%
+set JULIA_DEPOT_PATH=%HERE%\%JULIA_VERSION%-win64\depot
+
+@REM @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@REM CONFIGURE PYTHON
+@REM @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+set PATH=%HERE%\%WINPYTHON_VERSION%\%PYTHON_VERSION%;%PATH%
+set PATH=%HERE%\%WINPYTHON_VERSION%\%PYTHON_VERSION%\Scripts;%PATH%
 
 @REM @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @REM EOF
