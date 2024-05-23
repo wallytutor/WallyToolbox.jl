@@ -25,3 +25,5 @@ sudo mount -t drvfs Z: /mnt/z
 
 - [mathkerncmssi source file could not be found](https://tex.stackexchange.com/questions/553716/mathkerncmssi-source-file-could-not-be-found)
 - [Installing user packages and classes](https://docs.miktex.org/manual/localadditions.html)
+- [Configuring builds in VS Code with LaTeX Workshop](https://tex.stackexchange.com/questions/478865/vs-code-latex-workshop-custom-recipes-file-location)
+
