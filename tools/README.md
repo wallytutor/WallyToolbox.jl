@@ -18,6 +18,7 @@ The goal of this directory is to provide an easy way to setup a portable toolbox
 - [SU2](https://su2code.github.io/download.html)
 
 - [Blender](https://www.blender.org/download/)
+- [DualSPHysics](https://dual.sphysics.org/downloads/)
 - [FreeCAD](https://www.freecad.org/downloads.php)
 - [gmsh](https://gmsh.info/#Download)
 - [gnuplot](https://sourceforge.net/projects/gnuplot/files/gnuplot/6.0.0/)
@@ -26,8 +27,9 @@ The goal of this directory is to provide an easy way to setup a portable toolbox
 
 Next deployment:
 
-- [DualSPHysics]()
 - [FreeFem++]()
+`
+For DualSPHysics one might also want to install [this FreeCAD addon](https://github.com/DualSPHysics/DesignSPHysics) and [this Blender addon](https://github.com/EPhysLab-UVigo/VisualSPHysics).
 
 ### Optional deployments
 
@@ -56,6 +58,7 @@ Next deployment:
 
 - [Tabby]()
 - [MSYS2]()
+- [Notepad++]
 
 ## Setup of environment
 

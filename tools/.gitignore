@@ -1,6 +1,7 @@
 # Executables
 bin/basic-miktex*
 bin/blender*
+bin/DualSPHysics*
 bin/Elmer*
 bin/FreeCAD*
 bin/gmsh*

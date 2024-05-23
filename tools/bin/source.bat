@@ -10,6 +10,7 @@ set LANG="en_US.UTF-8"
 @REM @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 set BLENDER_VERSION=blender-4.1.1-windows-x64
+set DUALSPHYSICS_VERSION=DualSPHysics_v5.2.2
 set ELMER_VERSION=ElmerFEM-gui-mpi-Windows-AMD64
 set FREECAD_VERSION=FreeCAD_0.21.2-2023-12-17-conda-Windows-x86_64-py310
 set GIT_VERSION=PortableGit-2.45.1
@@ -72,6 +73,7 @@ set PATH=%HERE%\%SU2_RUN%;%PATH%
 set PATH=%HERE%\%VSCODE_VERSION%;%PATH%
 set PATH=%HERE%\%GIT_VERSION%\cmd;%PATH%
 set PATH=%HERE%\%BLENDER_VERSION%\bin;%PATH%
+set PATH=%HERE%\%DUALSPHYSICS_VERSION%\DualSPHysics_v5.2\bin\windows;%PATH%
 set PATH=%HERE%\%FREECAD_VERSION%\bin;%PATH%
 set PATH=%HERE%\%GNUPLOT_VERSION%\gnuplot\bin;%PATH%
 set PATH=%HERE%\%JABREF_VERSION%\JabRef;%PATH%
