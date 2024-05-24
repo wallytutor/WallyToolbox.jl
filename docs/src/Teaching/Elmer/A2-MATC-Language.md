@@ -268,7 +268,7 @@ One thing that in my opinion lacks in the documentation are examples of use in c
     Real MATC "1.0 - tx * (2.5E-03 - 1.2E-06 * tx)"
 ```
 
-Models can become too complex to code in a single line. Hopefully MATC provides functions which can be declared in external modules. In [this case](https://github.com/wallytutor/WallyToolbox.jl/tree/main/apps/Elmer/diffusion_solids/carburizing_slycke) there is such an example. You need to remember to call `source("module")` in `Simulation` section of SIF so that the functions can be used elsewhere. *I managed to use a single `source`, although the documentation does not state that many sources are forbidden; for some reason multiple sources work when sourcing from a file.* The call of a function become something as
+Models can become too complex to code in a single line. Hopefully MATC provides functions which can be declared in external modules. In [this case](https://github.com/wallytutor/WallyToolbox.jl/tree/main/apps/Elmer/diffusion_solids/carburizing_slycke) there is such an example. You need to remember to call `source("module")` in `Simulation` section of SIF so that the functions can be used elsewhere. *I managed to use a single `source` in SIF, although the documentation does not state that many sources are forbidden; for some reason multiple sources work when sourcing from a file.* The call of a function become something as
 
 ```C
   Concentration Diffusivity = Variable Concentration
@@ -282,3 +282,4 @@ if independent variable is concentration or for time
     Real MATC "masstransfercoef(tx)"
 ```
 
+For more complex cases such as [this one](https://github.com/wallytutor/WallyToolbox.jl/tree/main/apps/Elmer/diffusion_solids/carburizing_slycke_gui) it is worth writing actual MATC function modules; since there is no syntax highlighter available for MATC in VS Code, the `.ini` extension seems to provide better readability to the code. The problem was split in two parts: the [models](https://github.com/wallytutor/WallyToolbox.jl/blob/main/apps/Elmer/diffusion_solids/carburizing_slycke_gui/models.ini) which take care of sourcing the [conditions](https://github.com/wallytutor/WallyToolbox.jl/blob/main/apps/Elmer/diffusion_solids/carburizing_slycke_gui/conditions.ini), so that basic users could only edit the latter and run their variant calculations with no coding skills. Notice that the symbols that are used in [SIF](https://github.com/wallytutor/WallyToolbox.jl/blob/main/apps/Elmer/diffusion_solids/carburizing_slycke_gui/case.sif) are exported from [this line](https://github.com/wallytutor/WallyToolbox.jl/blob/main/apps/Elmer/diffusion_solids/carburizing_slycke_gui/models.ini#L72) instead of being set as global variables.
