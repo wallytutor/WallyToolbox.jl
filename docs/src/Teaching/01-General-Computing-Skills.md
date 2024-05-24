@@ -1,5 +1,7 @@
+# General computing skills
 
-## Mount a network drive in WSL
+## Windows Subsystem for Linux
+### Mount a network drive in WSL
 
 Here we assume we will mount drive `Z:` at `/mnt/z`:
 
@@ -28,6 +30,34 @@ sudo mount -t drvfs Z: /mnt/z
 ### MiKTeX
 
 - [mathkerncmssi source file could not be found](https://tex.stackexchange.com/questions/553716/mathkerncmssi-source-file-could-not-be-found)
+
 - [Installing user packages and classes](https://docs.miktex.org/manual/localadditions.html)
-- [Configuring builds in VS Code with LaTeX Workshop](https://tex.stackexchange.com/questions/478865/vs-code-latex-workshop-custom-recipes-file-location)
+
+### LaTeX Workshop
+
+- [Configuring builds in VS Code with LaTeX Workshop](https://tex.stackexchange.com/questions/478865/vs-code-latex-workshop-custom-recipes-file-location) for building with `pdflatex`:
+
+```JSON
+"latex-workshop.latex.recipes": [
+	{
+		"name": "pdflatex",
+		"tools": [
+		  "pdflatex"
+		]
+	}
+],
+"latex-workshop.latex.tools": [
+	{
+		"name": "pdflatex",
+		"command": "pdflatex",
+		"args": [
+			"-shell-escape",
+			"-synctex=1",
+			"-interaction=nonstopmode",
+			"-file-line-error",
+			"%DOC%.tex"
+		]
+	}
+]
+```
 
