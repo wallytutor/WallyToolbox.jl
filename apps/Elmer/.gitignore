@@ -23,11 +23,13 @@ partitioning.*
 ViewFactors.dat*
 
 # Results
-*.pvtu
+*.vtk
 *.vtu
+*.pvtu
 *.dat
 *.names
 *.result
+*.png
 *.mp4
 
 # Execution logs

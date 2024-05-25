@@ -4,10 +4,12 @@
 This was based on tutorial `t16.py` provided by `gmsh`. Notice also that in
 that tutorial the example is provided in 3D, which can be used to extende
 what is done here.
+
+Also check [this](https://gmshmodel.readthedocs.io/en/latest/) package.
 """
 from itertools import product
 import gmsh
-import pyvista as pv
+import yaml
 
 
 class StructuredSpongeMedium2D:
@@ -148,11 +150,21 @@ class StructuredSpongeMedium2D:
 
     def _mesh_domain(self):
         """ Mesh domain and dump to file. """
+        # XXX: interface this somewhere or move to context?
+        # gmsh.option.setNumber("Mesh.MeshSizeExtendFromBoundary", 1)
+        # gmsh.option.setNumber("Mesh.MeshSizeFromPoints", 1)
+        # gmsh.option.setNumber("Mesh.MeshSizeFromCurvature", 1)
+
         # Assign a mesh size to all the points and lines.
         gmsh.model.mesh.setSize(gmsh.model.getEntities(0), self.lcar)
         gmsh.model.mesh.setSize(gmsh.model.getEntities(1), self.lcar)
         gmsh.model.mesh.generate(2)
         gmsh.write(f"{self.name}.msh2")
+
+        gmsh.fltk.initialize()
+        gmsh.write(f"{self.name}.png")
+        gmsh.fltk.wait(0.01)
+        gmsh.fltk.finalize()
 
     def __enter__(self) -> "StructuredSpongeMedium2D":
         gmsh.initialize()
@@ -171,7 +183,24 @@ class StructuredSpongeMedium2D:
         gmsh.finalize()
 
 
+def create_experiment():
+    """ Create meshes for numberical experiment. """
+    common = dict(Nx=5, Ny=3, D=100)
 
-with StructuredSpongeMedium2D("porous", Nx=10, Ny=3, D=100, f=0.1) as domain:
-    print(f"Creating {domain.name}")
-    # XXX: capture I/O here if you need to manipulate it.
+    dimensions = {}
+
+    for frac in [10, 20, 30, 50, 80, 100]:
+        name = f"porous{frac:03d}"
+        f = frac / 100
+
+        with StructuredSpongeMedium2D(name, f=f, **common) as domain:
+            print(f"Creating {domain.name}")
+            dimensions[name] = {"Lx": domain.Lx, "Ly": domain.Ly}
+            # XXX: capture I/O here if you need to manipulate it.
+
+    with open("porous.yaml", "w") as fp:
+        yaml.safe_dump(dimensions, fp)
+
+
+if __name__ == "__main__":
+    create_experiment()
