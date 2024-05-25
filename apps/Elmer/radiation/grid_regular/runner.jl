@@ -7,7 +7,7 @@ using Statistics
 using WallyToolbox
 using DryUtilities: redirect_to_files
 
-const MESH = "porous100"
+const MESH = "porous050"
 
 function makesifstring(T)
     """\
@@ -93,7 +93,8 @@ function makesifstring(T)
 
     Material 1
         Name = "Solid"
-        Heat Conductivity = 1.0
+        Heat Conductivity = Variable Temperature
+          Real MATC "1.0 - (0.5 / 900.0) * tx"
         Density = 3000.0
     End
 
@@ -162,7 +163,7 @@ function workflow()
         write(fp, "case.sif\n1\n")
     end
     
-    Ts = collect(300:50:1200)
+    Ts = collect(300:100:1200)
     ks = map(workflow, Ts)
 
     rm("ELMERSOLVER_STARTINFO"; force = true)
