@@ -20,6 +20,7 @@ Other than the native `ElmerGrid`, one can try the following software for concei
 	
 ### [Salome](https://www.salome-platform.org/)
 
+- [Documentation](https://docs.salome-platform.org/latest/main/gui.html)
 - Can export UNV (8) meshes readable by Elmer
 - An extension to call Elmer directly from Salome is under development
 	
