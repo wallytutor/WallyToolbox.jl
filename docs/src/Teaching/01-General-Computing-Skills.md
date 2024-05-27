@@ -35,29 +35,55 @@ sudo mount -t drvfs Z: /mnt/z
 
 ### LaTeX Workshop
 
-- [Configuring builds in VS Code with LaTeX Workshop](https://tex.stackexchange.com/questions/478865/vs-code-latex-workshop-custom-recipes-file-location) for building with `pdflatex`:
+- [Configuring builds in VS Code with LaTeX Workshop](https://tex.stackexchange.com/questions/478865/vs-code-latex-workshop-custom-recipes-file-location) for building with `pdflatex`. Finally I ended creating my own workflows as follows:
 
-```JSON
-"latex-workshop.latex.recipes": [
-	{
-		"name": "pdflatex",
-		"tools": [
-		  "pdflatex"
-		]
-	}
-],
-"latex-workshop.latex.tools": [
-	{
-		"name": "pdflatex",
-		"command": "pdflatex",
-		"args": [
-			"-shell-escape",
-			"-synctex=1",
-			"-interaction=nonstopmode",
-			"-file-line-error",
-			"%DOC%.tex"
-		]
-	}
-]
+```json
+    "latex-workshop.latex.recipes": [
+        {
+            "name": "pdflatex",
+            "tools": [
+              "pdflatex"
+            ]
+        },
+        {
+            "name": "xelatex",
+            "tools": [
+              "xelatex",
+              "xelatex",
+              "bibtex",
+              "xelatex"
+            ]
+        }
+    ],
+    "latex-workshop.latex.tools": [
+        {
+            "name": "pdflatex",
+            "command": "pdflatex",
+            "args": [
+                "-shell-escape",
+                "-synctex=1",
+                "-interaction=nonstopmode",
+                "-file-line-error",
+                "%DOC%.tex"
+            ]
+        },
+        {
+            "name": "xelatex",
+            "command": "xelatex",
+            "args": [
+                "-shell-escape",
+                "-synctex=1",
+                "-interaction=nonstopmode",
+                "-file-line-error",
+                "%DOC%.tex"
+            ]
+        },
+        {
+            "name": "bibtex",
+            "command": "bibtex",
+            "args": [
+                "%DOC%.tex"
+            ]
+        }
+    ]
 ```
-
