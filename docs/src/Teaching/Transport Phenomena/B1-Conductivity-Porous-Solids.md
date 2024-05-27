@@ -6,7 +6,7 @@ In what follows we will briefly review some of the afore mentioned applications 
 
 ## Literature survey
 
-- ([[@Masamune1963a]]): studied the role of gas pressure below and up to atmospheric pressure over the effective thermal conductivity of a bed of spherical particles; mechanisms of heat transfer can be classified as transport through (1) conduction and radiation in voids, (2) effective solid-path and gas-path lengths, and (3) solid conduction through contacts. Although the authors acknowledge the role of radiation in heat transfer, it is not included in their expression, but low Knudsen number effects were considered for thermal conductivity when necessary.
+- ([[@Masamune1963a]]): studied the role of gas pressure below and up to atmospheric pressure over the effective thermal conductivity $k_{e}$ of a bed of spherical particles by carrying out measurements at 42 °C; mechanisms of heat transfer can be classified as transport through (1) conduction and radiation in voids, (2) effective solid-path and gas-path lengths, and (3) solid conduction through contacts. Although the authors acknowledge the role of radiation in heat transfer, it is not included in their expression, but low Knudsen number effects were considered for thermal conductivity when necessary by considering a pressure dependence in gas thermal conductivity $k_{g}^{\star}$.
 
 - ([[@Luikov1968a]]):
 
