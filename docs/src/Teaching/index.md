@@ -5,6 +5,7 @@ Notes related to my learning and teaching interests in several fields related to
 It can also be used as a general guide for introducing scientific computing as it tries to introduce the minimal skill set any scientific computing engineer or scientist should have:
 
 - Version control comes first, everything else is worthless without it, currently that means Git.
+- Next comes software documentation with Doxygen, Sphinx, and/or Documenter.jl.
 - A low(er) level programming language among C, C++, and Fortran, preferably all of them.
 - Scripting languages, as of 2024, Python is mandatory, Julia highly recommended.
 - Basic machine learning in one of the above scripts, everything is ML these days.
@@ -12,7 +13,7 @@ It can also be used as a general guide for introducing scientific computing as i
 - Typesetting equations reports and presentations (beamer) in $\LaTeX$.
 - Domain specific skills related to the field of study (CFD, DFT, MD, ML, ...).
 
-Some technologies have been mainstream or important in the past, but nowadays some of them have already died or are becoming too niche to be put in such a list. That is the case of SVN for version control. As for programming languages in science, that is the case of *matlabish* (MATLAB, Octave, Scilab) environments, which are still used by *controls and automation* people, but are incompatible with good software practices.
+Some technologies have been mainstream or important in the past, but nowadays some of them have already died or are becoming too niche to be put in such a list. That is the case of SVN for version control. As for programming languages in science, that is the case of *matlabish* (MATLAB, Octave, Scilab) environments, which are still used by *controls and automation* people, but are incompatible with good software practices and should be discouraged.
 
 ## High-performance computing
 
