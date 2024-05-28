@@ -27,7 +27,7 @@
 - Scaling of a single direction can be done with `Coordinate Scaling`
 - Time step can be changed with a list of elements in `Timestep Intervals`, *e.g.*
 
-```
+```Fortran
 ! Run 10 time-steps of 0.1 s, then 100 with 1.0 s.
 Timestep Intervals(2) = 10 100
 Timestep Sizes(2) = 0.1 1.0

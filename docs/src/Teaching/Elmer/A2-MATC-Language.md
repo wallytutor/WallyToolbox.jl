@@ -261,6 +261,10 @@ r = pow(x,y)
 
 ## Usage
 
+Although the language is pretty fast for most simple uses, it is much slower than Fortran extensions, so use with case when scalability is needed. Another point is overuse of MATC; do not use it with simple numerical expressions, *e.g.* `OneThird = Real $1.0/3.0` is much faster than its MATC counterpart `OneThird = Real MATC "1.0/3.0"`.
+
+### Direct expression coding
+
 One thing that in my opinion lacks in the documentation are examples of use in conjunction with SIF. For instance, for setting the thermal conductivity of a material as temperature-dependent one could use the following snippet and modify the string to match the desired expression. An example of its usage is provided in [this case](https://github.com/wallytutor/WallyToolbox.jl/blob/main/apps/Elmer/conduction_refractory/transient_parallel/case.sif).
 
 ```C
@@ -268,7 +272,9 @@ One thing that in my opinion lacks in the documentation are examples of use in c
     Real MATC "1.0 - tx * (2.5E-03 - 1.2E-06 * tx)"
 ```
 
-Models can become too complex to code in a single line. Hopefully MATC provides functions which can be declared in external modules. In [this case](https://github.com/wallytutor/WallyToolbox.jl/tree/main/apps/Elmer/diffusion_solids/carburizing_slycke) there is such an example. You need to remember to call `source("module")` in `Simulation` section of SIF so that the functions can be used elsewhere. *I managed to use a single `source` in SIF, although the documentation does not state that many sources are forbidden; for some reason multiple sources work when sourcing from a file.* The call of a function become something as
+### Sourcing functions from user modules
+
+Models can become too complex to code in a single line. Hopefully MATC provides functions which can be declared in external modules. I avoid coding MATC directly in SIF because their syntax is different and that can quickly lead to unmaintainable code. An example of such external sourcing is provided in [this case](https://github.com/wallytutor/WallyToolbox.jl/tree/main/apps/Elmer/diffusion_solids/carburizing_slycke). You need to remember to call `source("module")` in `Simulation` section of SIF so that the functions can be used elsewhere.  The call of a function become something as
 
 ```C
   Concentration Diffusivity = Variable Concentration
@@ -282,4 +288,13 @@ if independent variable is concentration or for time
     Real MATC "masstransfercoef(tx)"
 ```
 
+You can even use multiple variables, *e.g.*
+
+```C
+  Mass Transfer Coefficient = Variable Time, Temperature
+    Real MATC "masstransfercoef(tx(0), tx(1))"
+```
+
+ PS: *I managed to use a single `source` in SIF, although the documentation does not state that many sources are forbidden; for some reason multiple sources work when sourcing from a file.*
+	
 For more complex cases such as [this one](https://github.com/wallytutor/WallyToolbox.jl/tree/main/apps/Elmer/diffusion_solids/carburizing_slycke_gui) it is worth writing actual MATC function modules; since there is no syntax highlighter available for MATC in VS Code, the `.ini` extension seems to provide better readability to the code. The problem was split in two parts: the [models](https://github.com/wallytutor/WallyToolbox.jl/blob/main/apps/Elmer/diffusion_solids/carburizing_slycke_gui/models.ini) which take care of sourcing the [conditions](https://github.com/wallytutor/WallyToolbox.jl/blob/main/apps/Elmer/diffusion_solids/carburizing_slycke_gui/conditions.ini), so that basic users could only edit the latter and run their variant calculations with no coding skills. Notice that the symbols that are used in [SIF](https://github.com/wallytutor/WallyToolbox.jl/blob/main/apps/Elmer/diffusion_solids/carburizing_slycke_gui/case.sif) are exported from [this line](https://github.com/wallytutor/WallyToolbox.jl/blob/main/apps/Elmer/diffusion_solids/carburizing_slycke_gui/models.ini#L72) instead of being set as global variables.
