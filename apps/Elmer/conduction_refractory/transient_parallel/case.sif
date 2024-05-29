@@ -45,10 +45,10 @@ Body 2
   Initial condition = 1
 End
 
-Solver 1
+Solver 2
   Equation = Heat Equation
-  Variable = Temperature
   Procedure = "HeatSolve" "HeatSolver"
+  Variable = Temperature
   Exec Solver = Always
   Stabilize = True
   Optimize Bandwidth = True
@@ -70,23 +70,37 @@ Solver 1
   Linear System Precondition Recompute = 1
 End
 
+Solver 1
+  Equation = SaveMaterials
+  Parameter 1 = TemperatureCelsius
+  Procedure = "SaveData" "SaveMaterials"
+  Exec Solver = Always
+End
+
 Equation 1
   Name = "Conduction"
+  Active Solvers(1) = 2
+End
+
+Equation 2
+  Name = "SaveTC"
   Active Solvers(1) = 1
 End
 
 Material 1
   Name = "Portland"
-  Density = 2010
   Heat Capacity = 736
   Heat Conductivity = 0.53
+  Density = 2010
+TemperatureCelsius = Variable Temperature
+  Real MATC "tx - 273.15"
 End
 
 Material 2
   Name = "Refractory"
-  Heat Conductivity = Variable Temperature
+Heat Conductivity = Variable Temperature
     Real MATC "1.984706119175 - tx * (2.531209E-03 - 1.43E-06 * tx)"
-  Heat Capacity = Variable Temperature
+Heat Capacity = Variable Temperature
     Real
       200.0   921.0
       294.0   921.0
@@ -103,6 +117,9 @@ Material 2
       773.0  2420.0
       3000.0 2420.0
     End
+
+TemperatureCelsius = Variable Temperature
+  Real MATC "tx - 273.15"
 End
 
 Initial Condition 1
