@@ -120,12 +120,8 @@ pages = [
 
     "OpenFOAM"          => [
         "Module Docs" => "OpenFOAM/index.md",
-        "OpenFOAM 11" => "OpenFOAM/OpenFOAM11.md",
+        "OpenFOAM 11" => "OpenFOAM/01-OpenFOAM11.md",
     ],    
-
-    # "Notebooks"         => [
-    #     "Simulating DSC/TGA" => "Notebooks/dsc-tga-kaolinite.md"
-    # ],
 
     "Scientific Computing" => "Scientific Computing/index.md",
     "Transport Phenomena" => "Transport Phenomena/index.md",
@@ -137,6 +133,10 @@ pages = [
 
     "References"        => "References/index.md",
     "Table of Contents" => "toc.md",
+
+    # "Notebooks"         => [
+    #     "Simulating DSC/TGA" => "Notebooks/dsc-tga-kaolinite.md"
+    # ],
 ]
 
 ##############################################################################
