@@ -20,28 +20,24 @@ Some technologies have been mainstream or important in the past, but nowadays so
 1. [General computing skills](01-General-Computing-Skills.md)
 1. [Physically informed neural networks](02-PINNs.md)
 1. [Notes on *Data driven science and engineering*](03-Data-Driven-Science.md)
+1. [Basilisl](../Teaching/Basilisk/index.md)
+1. [OpenFOAM](../Teaching/OpenFOAM/index.md)
 
-## High-performance computing
+## External links
+
+### High-performance computing (HPC)
 
 - [Top 500](https://top500.org/): the most powerful computers on Earth
-
 - [Specification benchmarking](https://spec.org/): check of hardware specification
-
 - [Slurm](https://www.schedmd.com/): job management for multi-user systems
 
-## Version control
+### Version control
 
 - [TortoiseGIT](https://tortoisegit.org/): for Windows users, this applications add the possibility of managing version control and other features directly from the file explorer.
 
-## Simulation software
-
-- [Basilisk](Basilisk/Basilisk.md)
-
-- [OpenFOAM](OpenFOAM/index.md)
+### Simulation software
 
 - [OpenSmoke++](https://www.opensmokepp.polimi.it/) is a framework for detailed kinetics modeling of large reacting systems. This paper might be of interest:  [Dalili (2020)](https://www.tandfonline.com/doi/full/10.1080/13647830.2020.1800823) - modeling of a single droplet evaporation and combustion.
-
-- DWSIM:
-	- [Curso (Pr. Felix Monteiro Pereira)](https://sistemas.eel.usp.br/docentes/visualizar.php?id=5817066)
-	- [Curso (Pr. Delano Mendes de Santana)](https://dwsim.org/files/ENG438_Aula02_DWSIM_rev0.pdf)
-	- [YouTube Playlist](https://www.youtube.com/playlist?list=PLkdIY_5Zxa7WN-8FEYjTqvX8tEKEhjCTu)
+- [DWSIM: Curso (Pr. Felix Monteiro Pereira)](https://sistemas.eel.usp.br/docentes/visualizar.php?id=5817066)
+- [DWSIM: Curso (Pr. Delano Mendes de Santana)](https://dwsim.org/files/ENG438_Aula02_DWSIM_rev0.pdf)
+- [DWSIM: YouTube Playlist](https://www.youtube.com/playlist?list=PLkdIY_5Zxa7WN-8FEYjTqvX8tEKEhjCTu)
