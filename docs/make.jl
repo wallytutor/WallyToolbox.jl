@@ -115,10 +115,13 @@ pages = [
         "Helpers"       => "helpers.md"
     ],
 
-    "Cantera"           => "Cantera/index.md",
-    "OpenFOAM"          => "OpenFOAM/index.md",
     "RadCalNet"         => "RadCalNet/index.md",
+    "Cantera"           => "Cantera/index.md",
 
+    "OpenFOAM"          => [
+        "Module Docs" => "OpenFOAM/index.md",
+        "OpenFOAM 11" => "OpenFOAM/OpenFOAM11.md",
+    ],    
 
     # "Notebooks"         => [
     #     "Simulating DSC/TGA" => "Notebooks/dsc-tga-kaolinite.md"
@@ -128,14 +131,12 @@ pages = [
     "Transport Phenomena" => "Transport Phenomena/index.md",
 
     "Teaching"          => [
-        "OpenFOAM"            => "Teaching/OpenFOAM/index.md",
         "Elmer"               => "Teaching/Elmer/index.md",
         "Basilisk"            => "Teaching/Basilisk/index.md",
     ],
-    
+
     "References"        => "References/index.md",
     "Table of Contents" => "toc.md",
-
 ]
 
 ##############################################################################

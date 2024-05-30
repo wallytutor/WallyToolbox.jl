@@ -2,9 +2,9 @@
 
 ## Table of Contents
 
-- [Solver Modules](OpenFOAM.org/Solver-Modules.md)
-- [Physical Models](OpenFOAM.org/Physical-Models.md)
-- [Drag Models](OpenFOAM.org/Drag-Models.md)
+- [Solver Modules](02-Solver-Modules.md)
+- [Physical Models](03-Physical-Models.md)
+- [Drag Models](04-Drag-Models.md)
 
 ## Tips and reminders
 
