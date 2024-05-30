@@ -31,6 +31,9 @@
 		},
 		{
 			"include": "#moretags"
+		},
+		{
+			"include": "#morestrings"
 		}
 	],
 	"repository": {
@@ -305,9 +308,23 @@
 					"match": "[^=]*(\\s+)([a-zA-Z]+)\\n"
 				},
 				{
-					"comment": "Trying to get user-defined names (only works as first character for now)",
+					"comment": "Trying to get user-defined names (see https://stackoverflow.com/questions/70509807)",
 					"name": "invalid",
-					"match": "([a-zA-Z]+)(\\s+)[=]"
+					"match": "([a-zA-Z]+)(\\s+)*[^=]"
+				},
+				{
+					"comment": "See https://stackoverflow.com/questions/70509807 and try to get MATC syntax working",
+					"name": "invalid",
+					"match": "\\$.*"
+				}
+			]
+		},
+		"morestrings": {
+			"patterns": [
+				{
+					"comment": "same as moretags first patter but with a period (extension-like)",
+					"name": "string",
+					"match": "[^=]*(\\s+)([a-zA-Z.]+)\\n"
 				}
 			]
 		}
