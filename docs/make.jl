@@ -122,15 +122,23 @@ pages = [
         "Module Docs" => "OpenFOAM/index.md",
         "OpenFOAM 11" => "OpenFOAM/01-OpenFOAM11.md",
     ],    
+    
+    "Elmer"               => [
+        "Elmer Multiphysics"         => "Elmer/00-Elmer-Multiphysics.md",
+        "Preprocessing"              => "Elmer/01-Preprocessing.md"
+        "Solution Mode"              => "Elmer/02-Solution-Mode.md",
+        "Properties and Extensions"  => "Elmer/03-Properties-and-Extensions.md",
+        "Postprocessing"             => "Elmer/04-Postprocessing.md",
+        "Standard Input Format"      => "Elmer/A1-SIF-Specification.md",
+        "MATC Language"              => "Elmer/A2-MATC-Language.md",
+        "Fortran UDFs"               => "Elmer/A3-UDF-Specification.md",
+        "Finite Element Method"      => "Elmer/C1-Finite-Element-Method.md",
+    ],
 
     "Scientific Computing" => "Scientific Computing/index.md",
     "Transport Phenomena" => "Transport Phenomena/index.md",
 
-    "Teaching"          => [
-        "Elmer"               => "Teaching/Elmer/index.md",
-        "Basilisk"            => "Teaching/Basilisk/index.md",
-    ],
-
+    "Basilisk"            => "Basilisk/index.md",
     "References"        => "References/index.md",
     "Table of Contents" => "toc.md",
 
