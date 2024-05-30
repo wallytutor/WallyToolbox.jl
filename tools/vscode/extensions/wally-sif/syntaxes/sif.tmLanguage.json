@@ -276,9 +276,14 @@
 		"fieldsbackref": {
 			"patterns": [
 				{
+					"comment": "https://stackoverflow.com/questions/6448573/",
 					"name": "entity.name.type",
-					"_match": "\\b(((=)(\\s+))*(Variable(\\s+)(\\w+,)))\\b",
-					"match": "[^=]*(Variable)(\\s+)([0-9a-zA-Z]+((,(\\s+)[0-9a-zA-Z]+))?)\\n$"
+					"match": "[^=]*(Variable)(\\s+)([a-zA-Z]+((,(\\s+)[a-zA-Z]+))?)\\n$"
+				},
+				{
+					"comment": "What is not covered by the above...",
+					"name": "entity.name.tag",
+					"match": "[^=]*(\\s+)([a-zA-Z]+((,(\\s+)[a-zA-Z]+))?)\\n$"
 				},
 				{
 					"meta": "Solver (comes later because refers to other fields!)",
@@ -297,19 +302,12 @@
 			"patterns": [
 				{
 					"name": "entity.name.tag",
-					"match": "[^=]*(Concentration)\\n"
+					"match": "[^=]*(\\s+)([a-zA-Z]+)\\n"
 				},
 				{
-					"name": "entity.name.tag",
-					"match": "[^=]*(Temperature)\\n"
-				},
-				{
-					"name": "entity.name.tag",
-					"match": "[^=]*(Heat(\\s+)(Capacity|Conductivity))\\n"
-				},
-				{
-					"name": "entity.name.tag",
-					"match": "[^=]*(Density)\\n"
+					"comment": "Trying to get user-defined names (only works as first character for now)",
+					"name": "invalid",
+					"match": "([a-zA-Z]+)(\\s+)[=]"
 				}
 			]
 		}
