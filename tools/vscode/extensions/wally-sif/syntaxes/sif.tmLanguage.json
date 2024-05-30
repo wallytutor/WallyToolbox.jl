@@ -145,16 +145,40 @@
 			]
 		},
 		"fieldsheader": {
-			"patterns": [{
-				"name": "entity.name.function",
-				"match": "\\b(CHECK(\\s+)KEYWORDS|Mesh(\\s+)DB|Include(\\s+)Path|Results(\\s+)Directory)\\b"
-			}]
+			"patterns": [
+				{
+					"name": "entity.name.function",
+					"match": "\\b(CHECK(\\s+)KEYWORDS|Mesh(\\s+)DB|Include(\\s+)Path|Results(\\s+)Directory)\\b"
+				}
+			]
 		},
 		"fieldsconstants": {
-			"patterns": [{
-				"name": "entity.name.function",
-				"match": "\\b(Gravity|Stefan Boltzmann|Permittivity of Vacuum|Permeability of Vacuum|Boltzmann Constant|Unit Charge)\\b"
-			}]
+			"patterns": [
+				{
+					"name": "entity.name.function",
+					"match": "\\b(Gravity)\\b"
+				},
+				{
+					"name": "entity.name.function",
+					"match": "\\b(Stefan(\\s+)Boltzmann)\\b"
+				},
+				{
+					"name": "entity.name.function",
+					"match": "\\b(Permittivity(\\s+)of(\\s+)Vacuum)\\b"
+				},
+				{
+					"name": "entity.name.function",
+					"match": "\\b(Permeability(\\s+)of(\\s+)Vacuum)\\b"
+				},
+				{
+					"name": "entity.name.function",
+					"match": "\\b(Boltzmann(\\s+)Constant)\\b"
+				},
+				{
+					"name": "entity.name.function",
+					"match": "\\b(Unit(\\s+)Charge)\\b"
+				}
+			]
 		},
 		"fieldssimulation": {
 			"patterns": [{
