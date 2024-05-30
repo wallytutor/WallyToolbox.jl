@@ -46,9 +46,6 @@
 		},
 		{
 			"include": "#options"
-		},
-		{
-			"include": "#equations"
 		}
 	],
 	"repository": {
@@ -88,22 +85,60 @@
 			]
 		},
 		"datatypes": {
-			"patterns": [{
-				"name": "entity.name.class",
-				"match": "\\b(Real|Integer|Logical|String|File)\\b"
-			}]
+			"patterns": [
+				{
+					"name": "entity.name.class",
+					"match": "\\b(Real|Integer|Logical|String|File)\\b"
+				},
+				{
+					"name": "entity.name.class",
+					"match": "\\b(MATC|cubic)\\b"
+				}
+			]
 		},
 		"options": {
-			"patterns": [{
+			"patterns": [
+				{
 				"name": "entity.name.tag",
-				"match": "\\b(Warn|Cartesian|Steady state|Transient|BDF|Always|After Simulation|True|False|Iterative|BiCGStab|ILU0|Residual|Absolute Mass)\\b"
-			}]
+				"match": "\\b(Warn|Cartesian|BDF|Iterative|BiCGStab|ILU0|Residual|Absolute Mass)\\b"
+				},
+				{
+					"name": "entity.name.tag",
+					"match": "\\b(Steady state|Transient)\\b"
+				},
+				{
+					"name": "entity.name.tag",
+					"match": "\\b(True|False)\\b"
+				},
+				{
+					"name": "entity.name.tag",
+					"match": "\\b(Always|After Timestep|After Simulation)\\b"
+				},
+				{
+					"name": "entity.name.tag",
+					"match": "\\b(Idealized)\\b"
+				},
+				{
+					"name": "entity.name.tag",
+					"match": "\\b(Heat Equation|Advection Diffusion Equation)\\b"
+				},
+				{
+					"name": "entity.name.tag",
+					"match": "\\b(Flux and Gradient)\\b"
+				},
+				{
+					"name": "entity.name.tag",
+					"match": "\\b(SaveLine|SaveMaterials)\\b"
+				}
+			]
 		},
 		"sections": {
-			"patterns": [{
-				"name": "keyword.control.sif",
-				"match": "\\b(Header|Constants|Simulation|Solver(\\s+)\\d+|Body(\\s+)\\d+|Equation(\\s+)\\d+|Body Force(\\s+)\\d+|Material(\\s+)\\d+|(Initial|Boundary)(\\s+)Condition(\\s+)\\d+|Run Control|Component(\\s+)\\d+|End)\\b"
-			}]
+			"patterns": [
+				{
+					"name": "keyword.control.sif",
+					"match": "\\b(Header|Constants|Simulation|Solver(\\s+)\\d+|Body(\\s+)\\d+|Equation(\\s+)\\d+|Body Force(\\s+)\\d+|Material(\\s+)\\d+|(Initial|Boundary)(\\s+)Condition(\\s+)\\d+|Run Control|Component(\\s+)\\d+|End)\\b"
+				}
+			]
 		},
 		"fieldsheader": {
 			"patterns": [{
@@ -126,7 +161,7 @@
 		"fieldssolver": {
 			"patterns": [{
 				"name": "entity.name.function",
-				"match": "\\b((Solver(\\s+)(\\d+))*(Equation|Variable|Procedure|Exec(\\s+)Solver|Stabilize|Optimize Bandwidth|Steady State Convergence Tolerance|Steady State Convergence Measure|Nonlinear System Convergence Tolerance|Nonlinear System Max Iterations|Nonlinear System Newton After Iterations|Nonlinear System Newton After Tolerance|Nonlinear System Relaxation Factor|Nonlinear System Convergence Measure|Linear System Solver|Linear System Iterative Method|Linear System Max Iterations|Linear System Convergence Tolerance|BiCGstabl polynomial degree|Linear System Preconditioning|Linear System ILUT Tolerance|Linear System Abort Not Converged|Linear System Residual Output|Linear System Precondition Recompute|Filename|Polyline(\\s+)Coordinates|Polyline(\\s+)Divisions))\\b"
+				"match": "\\b((Solver(\\s+)(\\d+))*(Equation|Target(\\s+)Variable|Variable|Procedure|Flux(\\s+)Coefficient|Calculate(\\s+)Flux(\\s+)Magnitude|Exec(\\s+)Solver|Stabilize|Optimize Bandwidth|Steady State Convergence Tolerance|Steady State Convergence Measure|Nonlinear System Convergence Tolerance|Nonlinear System Max Iterations|Nonlinear System Newton After Iterations|Nonlinear System Newton After Tolerance|Nonlinear System Relaxation Factor|Nonlinear System Convergence Measure|Linear System Solver|Linear System Iterative Method|Linear System Max Iterations|Linear System Convergence Tolerance|BiCGstabl polynomial degree|Linear System Preconditioning|Linear System ILUT Tolerance|Linear System Abort Not Converged|Linear System Residual Output|Linear System Precondition Recompute|Filename|Polyline(\\s+)Coordinates|Polyline(\\s+)Divisions|Parameter(\\s+)(\\d+)))\\b"
 			}]
 		},
 		"fieldsbody": {
@@ -150,13 +185,7 @@
 		"fieldsconditions": {
 			"patterns": [{
 				"name": "entity.name.function",
-				"match": "\\b(Concentration|Target Boundaries|Heat Flux|Temperature)\\b"
-			}]
-		},
-		"equations": {
-			"patterns": [{
-				"name": "entity.name.tag",
-				"match": "\\b(Heat Equation|Advection Diffusion Equation|SaveLine)\\b"
+				"match": "\\b(Concentration|Target Boundaries|Heat(\\s+)Flux|Temperature|External(\\s+)Temperature|Radiation|Heat(\\s+)Transfer(\\s+)Coefficient|Emissivity)\\b"
 			}]
 		}
 	},
