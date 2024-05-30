@@ -21,7 +21,11 @@ vscode/argv.json
 vscode/extensions/*
 vscode/user-data/*
 
-# Keep extensions and user settings.
+# Keep extensions..
 !vscode/extensions/wally-*
 !vscode/extensions/README.md
-# !vscode/user-data/User/settings.json
+
+# User settings requires a few steps.
+!vscode/user-data/User/
+vscode/user-data/User/**/
+!vscode/user-data/User/settings.json
