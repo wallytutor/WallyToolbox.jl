@@ -136,7 +136,11 @@
 			"patterns": [
 				{
 					"name": "keyword.control.sif",
-					"match": "\\b(Header|Constants|Simulation|Solver(\\s+)\\d+|Body(\\s+)\\d+|Equation(\\s+)\\d+|Body Force(\\s+)\\d+|Material(\\s+)\\d+|(Initial|Boundary)(\\s+)Condition(\\s+)\\d+|Run Control|Component(\\s+)\\d+|End)\\b"
+					"match": "\\b(Header|Simulation|Constants|Run(\\s+)Control|End)\\b"
+				},
+				{
+					"name": "keyword.control.sif",
+					"match": "\\b((Solver|Equation|Material|(Body(((\\s+)Force)?))|(Initial|Boundary)(\\s+)Condition|Component)(\\s+)(\\d+))\\b"
 				}
 			]
 		},
