@@ -5,6 +5,9 @@
 set HERE=%~dp0
 set LANG="en_US.UTF-8"
 
+@REM This directory may also contain launcher scripts.
+set PATH=%HERE%;%PATH%
+
 @REM @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @REM NEW SYMBOLS
 @REM @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
