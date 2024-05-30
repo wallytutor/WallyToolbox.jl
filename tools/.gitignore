@@ -15,3 +15,13 @@ bin/SU2*
 bin/texstudio*
 bin/VSCode*
 bin/WPy64*
+
+# VSCode ignores.
+vscode/argv.json
+vscode/extensions/*
+vscode/user-data/*
+
+# Keep extensions and user settings.
+!vscode/extensions/wally-*
+!vscode/extensions/README.md
+# !vscode/user-data/User/settings.json
