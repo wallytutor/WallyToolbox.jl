@@ -20,8 +20,12 @@ Some technologies have been mainstream or important in the past, but nowadays so
 1. [General computing skills](01-General-Computing-Skills.md)
 1. [Physically informed neural networks](02-PINNs.md)
 1. [Notes on *Data driven science and engineering*](03-Data-Driven-Science.md)
-1. [Basilisk](Basilisk/index.md)
-1. [OpenFOAM](01-OpenFOAM11.md)
+
+## Applied modules
+
+1. [Basilisk](../Basilisk/index.md)
+2. [OpenFOAM](../OpenFOAM/01-OpenFOAM11.md)
+3. [Elmer Multiphysics](../Elmer/00-Elmer-Multiphysics.md)
 
 ## External links
 
