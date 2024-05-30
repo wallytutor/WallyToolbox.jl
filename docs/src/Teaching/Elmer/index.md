@@ -42,7 +42,7 @@ The goal of this page is not to supersede the [documentation](https://www.csc.fi
 ---
 ## Ongoing work
 
-- Development of a [VS Code syntax highlight extension](https://github.com/wallytutor/WallyToolbox.jl/tree/main/helpers/syntax-highlighters/sif) with help of data provided in [SOLVER.KEYWORDS](https://github.com/ElmerCSC/elmerfem/blob/devel/fem/src/SOLVER.KEYWORDS).
+- Development of a [VS Code syntax highlight extension](https://github.com/wallytutor/WallyToolbox.jl/tree/main/tools/vscode/extensions/wally-sif) with help of data provided in [SOLVER.KEYWORDS](https://github.com/ElmerCSC/elmerfem/blob/devel/fem/src/SOLVER.KEYWORDS).
 
 ---
 ## Retrieving materials
