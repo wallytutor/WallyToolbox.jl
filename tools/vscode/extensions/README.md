@@ -4,6 +4,8 @@ A collection of simple VS Code syntax highlighters for niche applications missin
 
 Basic syntax highlighting created with [Yeoman generator tool](https://yeoman.io/).
 
+Further details can be found [here](https://code.visualstudio.com/api/language-extensions/syntax-highlight-guide).
+
 ## Available syntaxes
 
 ### Elmer Multiphysics

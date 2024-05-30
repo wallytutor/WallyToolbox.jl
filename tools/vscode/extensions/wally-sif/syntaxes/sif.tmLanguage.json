@@ -28,6 +28,9 @@
 		},
 		{
 			"include": "#options"
+		},
+		{
+			"include": "#moretags"
 		}
 	],
 	"repository": {
@@ -85,8 +88,8 @@
 		"options": {
 			"patterns": [
 				{
-				"name": "entity.name.tag",
-				"match": "\\b(Warn|Cartesian|BDF|Iterative|BiCGStab|ILU0|Residual|Absolute(\\s+)Mass)\\b"
+					"name": "entity.name.tag",
+					"match": "\\b(Warn|Cartesian|BDF|Iterative|BiCGStab|ILU(\\d+)|Residual|Absolute(\\s+)Mass)\\b"
 				},
 				{
 					"name": "entity.name.tag",
@@ -210,7 +213,7 @@
 				{
 					"meta": "many",
 					"name": "entity.name.function",
-					"match": "\\b(Name|Save(\\s+)(Flux|Line))\\b"
+					"match": "\\b(Name|Save(\\s+)(Flux|Line)|Size)\\b"
 					
 				},
 				{
@@ -273,6 +276,11 @@
 		"fieldsbackref": {
 			"patterns": [
 				{
+					"name": "entity.name.type",
+					"_match": "\\b(((=)(\\s+))*(Variable(\\s+)(\\w+,)))\\b",
+					"match": "[^=]*(Variable)(\\s+)([0-9a-zA-Z]+((,(\\s+)[0-9a-zA-Z]+))?)\\n$"
+				},
+				{
 					"meta": "Solver (comes later because refers to other fields!)",
 					"name": "entity.name.function",
 					"match": "\\b((Solver(\\s+)(\\d+))*(Equation|Target(\\s+)Variable|Variable|Procedure|Exec(\\s+)Solver|Stabilize|Optimize Bandwidth|Steady State Convergence Tolerance|Steady State Convergence Measure|Nonlinear System Convergence Tolerance|Nonlinear System Max Iterations|Nonlinear System Newton After Iterations|Nonlinear System Newton After Tolerance|Nonlinear System Relaxation Factor|Nonlinear System Convergence Measure|Linear System Solver|Linear System Iterative Method|Linear System Max Iterations|Linear System Convergence Tolerance|BiCGstabl polynomial degree|Linear System Preconditioning|Linear System ILUT Tolerance|Linear System Abort Not Converged|Linear System Residual Output|Linear System Precondition Recompute|Filename|Polyline(\\s+)Coordinates|Polyline(\\s+)Divisions|Parameter(\\s+)(\\d+)))\\b"
@@ -281,10 +289,27 @@
 					"meta": "Body (comes later because refers to other fields!)",
 					"name": "entity.name.function",
 					"match": "\\b((Body(\\s+)(\\d+))*(Equation|Material|Initial(\\s+)condition))\\b"
+				}
+			]
+		},
+		"moretags": {
+			"comment": "TODO: these should match any text (non-string) after equal", 
+			"patterns": [
+				{
+					"name": "entity.name.tag",
+					"match": "[^=]*(Concentration)\\n"
 				},
 				{
 					"name": "entity.name.tag",
-					"match": "\\b(Variable(\\s+)Time)\\b"
+					"match": "[^=]*(Temperature)\\n"
+				},
+				{
+					"name": "entity.name.tag",
+					"match": "[^=]*(Heat(\\s+)(Capacity|Conductivity))\\n"
+				},
+				{
+					"name": "entity.name.tag",
+					"match": "[^=]*(Density)\\n"
 				}
 			]
 		}
