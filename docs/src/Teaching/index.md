@@ -15,6 +15,12 @@ It can also be used as a general guide for introducing scientific computing as i
 
 Some technologies have been mainstream or important in the past, but nowadays some of them have already died or are becoming too niche to be put in such a list. That is the case of SVN for version control. As for programming languages in science, that is the case of *matlabish* (MATLAB, Octave, Scilab) environments, which are still used by *controls and automation* people, but are incompatible with good software practices and should be discouraged.
 
+## Contents
+
+1. [General computing skills](01-General-Computing-Skills.md)
+1. [Physically informed neural networks](02-PINNs.md)
+1. [Notes on *Data driven science and engineering*](03-Data-Driven-Science.md)
+
 ## High-performance computing
 
 - [Top 500](https://top500.org/): the most powerful computers on Earth
