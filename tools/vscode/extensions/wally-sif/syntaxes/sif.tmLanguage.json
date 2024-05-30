@@ -177,10 +177,24 @@
 			}]
 		},
 		"fieldsmaterial": {
-			"patterns": [{
-				"name": "entity.name.function",
-				"match": "\\b(Sound speed|Youngs modulus|Heat Conductivity|Heat expansion Coefficient|Poisson ratio|Heat Capacity|Density|Concentration Diffusivity)\\b"
-			}]
+			"patterns": [
+				{
+					"name": "entity.name.function",
+					"match": "\\b(Density)\\b"
+				},
+				{
+					"name": "entity.name.function",
+					"match": "\\b(Sound(\\s+)speed|Youngs(\\s+)modulus|Poisson(\\s+)ratio)\\b"
+				},
+				{
+					"name": "entity.name.function",
+					"match": "\\b(Heat(\\s+)Capacity|Heat(\\s+)Conductivity|Heat(\\s+)expansion(\\s+)Coefficient)\\b"
+				},
+				{
+					"name": "entity.name.function",
+					"match": "\\b(Concentration(\\s+)Diffusivity)\\b"
+				}
+			]
 		},
 		"fieldsconditions": {
 			"patterns": [
