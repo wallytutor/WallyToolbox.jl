@@ -183,10 +183,24 @@
 			}]
 		},
 		"fieldsconditions": {
-			"patterns": [{
-				"name": "entity.name.function",
-				"match": "\\b(Concentration|Target Boundaries|Heat(\\s+)Flux|Temperature|External(\\s+)Temperature|Radiation|Heat(\\s+)Transfer(\\s+)Coefficient|Emissivity)\\b"
-			}]
+			"patterns": [
+				{
+					"name": "entity.name.function",
+					"match": "\\b(Target Boundaries)\\b"
+				},
+				{
+					"name": "entity.name.function",
+					"match": "\\b(((External(\\s+))?)(Concentration|Temperature))\\b"
+				},
+				{
+					"name": "entity.name.function",
+					"match": "\\b((Heat|Mass)(\\s+)Transfer(\\s+)Coefficient)\\b"
+				},
+				{
+					"name": "entity.name.function",
+					"match": "\\b(Temperature|Heat(\\s+)Flux|Radiation|Emissivity)\\b"
+				}
+			]
 		}
 	},
 	"scopeName": "source.sif"
