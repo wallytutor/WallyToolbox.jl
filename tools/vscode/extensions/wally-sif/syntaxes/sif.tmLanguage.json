@@ -15,31 +15,13 @@
 			"include": "#strings"
 	    },
 		{
-			"include": "#fieldssimulation"
+			"include": "#fields"
 		},
 		{
 			"include": "#sections"
 		},
 		{
-			"include": "#fieldsheader"
-		},
-		{
-			"include": "#fieldsconstants"
-		},
-		{
-			"include": "#fieldssolver"
-		},
-		{
-			"include": "#fieldsbody"
-		},
-		{
-			"include": "#fieldsequation"
-		},
-		{
-			"include": "#fieldsmaterial"
-		},
-		{
-			"include": "#fieldsconditions"
+			"include": "#fieldsbackref"
 		},
 		{
 			"include": "#datatypes"
@@ -50,16 +32,20 @@
 	],
 	"repository": {
 		"comments": {
-			"patterns": [{
-				"name": "comment.line.tdb",
-				"match": "#.*"
-			}]
+			"patterns": [
+				{
+					"name": "comment.line.tdb",
+					"match": "!.*"
+				}
+			]
 		},
 		"numbers": {
-			"patterns": [{
-				"name": "constant.numeric",
-				"match": "((([+-]\\s*)|(\\b))((\\d+(\\.\\d+)?)|(\\.\\d+)))(\\s*[eE]([+-]\\s*)?((\\d+(\\.\\d+)?)|(\\.\\d+)))?\\b"
-			}]
+			"patterns": [
+				{
+					"name": "constant.numeric",
+					"match": "((([+-]\\s*)|(\\b))((\\d+(\\.\\d+)?)|(\\.\\d+)))(\\s*[eE]([+-]\\s*)?((\\d+(\\.\\d+)?)|(\\.\\d+)))?\\b"
+				}
+			]
 		},
 		"operators": {
 			"patterns": [
@@ -100,7 +86,7 @@
 			"patterns": [
 				{
 				"name": "entity.name.tag",
-				"match": "\\b(Warn|Cartesian|BDF|Iterative|BiCGStab|ILU0|Residual|Absolute Mass)\\b"
+				"match": "\\b(Warn|Cartesian|BDF|Iterative|BiCGStab|ILU0|Residual|Absolute(\\s+)Mass)\\b"
 				},
 				{
 					"name": "entity.name.tag",
@@ -112,19 +98,19 @@
 				},
 				{
 					"name": "entity.name.tag",
-					"match": "\\b(Always|After Timestep|After Simulation)\\b"
+					"match": "\\b(Always|After(\\s+)Timestep|After(\\s+)Simulation)\\b"
 				},
 				{
 					"name": "entity.name.tag",
-					"match": "\\b(Idealized)\\b"
+					"match": "\\b(Idealized|Diffuse(\\s+)Gray)\\b"
 				},
 				{
 					"name": "entity.name.tag",
-					"match": "\\b(Heat Equation|Advection Diffusion Equation)\\b"
+					"match": "\\b(Heat(\\s+)Equation|Advection(\\s+)Diffusion(\\s+)Equation)\\b"
 				},
 				{
 					"name": "entity.name.tag",
-					"match": "\\b(Flux and Gradient)\\b"
+					"match": "\\b(Flux(\\s+)and(\\s+)Gradient)\\b"
 				},
 				{
 					"name": "entity.name.tag",
@@ -144,103 +130,161 @@
 				}
 			]
 		},
-		"fieldsheader": {
+		"fields": {
 			"patterns": [
 				{
+					"meta": "Header",
 					"name": "entity.name.function",
 					"match": "\\b(CHECK(\\s+)KEYWORDS|Mesh(\\s+)DB|Include(\\s+)Path|Results(\\s+)Directory)\\b"
-				}
-			]
-		},
-		"fieldsconstants": {
-			"patterns": [
+				},
 				{
+					"meta": "Constants",
 					"name": "entity.name.function",
 					"match": "\\b(Gravity)\\b"
 				},
 				{
+					"meta": "Constants",
 					"name": "entity.name.function",
 					"match": "\\b(Stefan(\\s+)Boltzmann)\\b"
 				},
 				{
+					"meta": "Constants",
 					"name": "entity.name.function",
 					"match": "\\b(Permittivity(\\s+)of(\\s+)Vacuum)\\b"
 				},
 				{
+					"meta": "Constants",
 					"name": "entity.name.function",
 					"match": "\\b(Permeability(\\s+)of(\\s+)Vacuum)\\b"
 				},
 				{
+					"meta": "Constants",
 					"name": "entity.name.function",
 					"match": "\\b(Boltzmann(\\s+)Constant)\\b"
 				},
 				{
+					"meta": "Constants",
 					"name": "entity.name.function",
 					"match": "\\b(Unit(\\s+)Charge)\\b"
-				}
-			]
-		},
-		"fieldssimulation": {
-			"patterns": [{
-				"name": "entity.name.function",
-				"match": "\\b((Simulation(\\s+))*(Max(\\s+)Output(\\s+)Level|Coordinate(\\s+)System|Coordinate(\\s+)Mapping|Simulation(\\s+)Type|Steady(\\s+)State(\\s+)Max(\\s+)Iterations|Output(\\s+)Intervals|Timestep(\\s+)intervals|Timestep(\\s+)Sizes|Timestepping(\\s+)Method|BDF(\\s+)Order|Solver(\\s+)Input(\\s+)File|Post(\\s+)File)|Newmark(\\s+)Beta)\\b"
-			}]
-		},
-		"fieldssolver": {
-			"patterns": [{
-				"name": "entity.name.function",
-				"match": "\\b((Solver(\\s+)(\\d+))*(Equation|Target(\\s+)Variable|Variable|Procedure|Flux(\\s+)Coefficient|Calculate(\\s+)Flux(\\s+)Magnitude|Exec(\\s+)Solver|Stabilize|Optimize Bandwidth|Steady State Convergence Tolerance|Steady State Convergence Measure|Nonlinear System Convergence Tolerance|Nonlinear System Max Iterations|Nonlinear System Newton After Iterations|Nonlinear System Newton After Tolerance|Nonlinear System Relaxation Factor|Nonlinear System Convergence Measure|Linear System Solver|Linear System Iterative Method|Linear System Max Iterations|Linear System Convergence Tolerance|BiCGstabl polynomial degree|Linear System Preconditioning|Linear System ILUT Tolerance|Linear System Abort Not Converged|Linear System Residual Output|Linear System Precondition Recompute|Filename|Polyline(\\s+)Coordinates|Polyline(\\s+)Divisions|Parameter(\\s+)(\\d+)))\\b"
-			}]
-		},
-		"fieldsbody": {
-			"patterns": [{
-				"name": "entity.name.function",
-				"match": "\\b((Body(\\s+)(\\d+))*(Target(\\s+)Bodies|Name|Equation|Material|Initial(\\s+)condition))\\b"
-			}]
-		},
-		"fieldsequation": {
-			"patterns": [{
-				"name": "entity.name.function",
-				"match": "\\b(Active(\\s+)Solvers|Concentration(\\s+)Units)\\b"
-			}]
-		},
-		"fieldsmaterial": {
-			"patterns": [
+				},
 				{
+					"meta": "Simulation",
+					"name": "entity.name.function",
+					"match": "\\b(((Solver(\\s+)Input|Post|Output)(\\s+)File)|(Restart(\\s+)(File|Position|Time)))\\b"
+				},
+				{
+					"meta": "Simulation",
+					"name": "entity.name.function",
+					"match": "\\b(Max(\\s+)Output(\\s+)Level)\\b"
+				},
+				{
+					"meta": "Simulation",
+					"name": "entity.name.function",
+					"match": "\\b(Coordinate(\\s+)(System|Mapping))\\b"
+				},
+				{
+					"meta": "Simulation",
+					"name": "entity.name.function",
+					"match": "\\b(Simulation(\\s+)Type)\\b"
+				},
+				{
+					"meta": "Simulation",
+					"name": "entity.name.function",
+					"match": "\\b(Steady(\\s+)State(\\s+)Max(\\s+)Iterations)\\b"
+				},
+				{
+					"meta": "Simulation",
+					"name": "entity.name.function",
+					"match": "\\b(Output(\\s+)Intervals|Timestep(\\s+)intervals|Timestep(\\s+)Sizes|Timestepping(\\s+)Method)\\b"
+				},
+				{
+					"meta": "Simulation",
+					"name": "entity.name.function",
+					"match": "\\b(BDF(\\s+)Order|Newmark(\\s+)Beta)\\b"
+				},
+				{
+					"meta": "Equation",
+					"name": "entity.name.function",
+					"match": "\\b(Active(\\s+)Solvers|Concentration(\\s+)Units)\\b"
+				},
+				{
+					"meta": "many",
+					"name": "entity.name.function",
+					"match": "\\b(Name|Save(\\s+)(Flux|Line))\\b"
+					
+				},
+				{
+					"meta": "Solver",
+					"name": "entity.name.function",
+					"match": "\\b(Flux(\\s+)(Coefficient|Variable)|Calculate(\\s+)Flux(\\s+)Magnitude)\\b"
+				},
+				{
+					"meta": "Material",
 					"name": "entity.name.function",
 					"match": "\\b(Density)\\b"
 				},
 				{
+					"meta": "Material",
 					"name": "entity.name.function",
 					"match": "\\b(Sound(\\s+)speed|Youngs(\\s+)modulus|Poisson(\\s+)ratio)\\b"
 				},
 				{
+					"meta": "Material",
 					"name": "entity.name.function",
 					"match": "\\b(Heat(\\s+)Capacity|Heat(\\s+)Conductivity|Heat(\\s+)expansion(\\s+)Coefficient)\\b"
 				},
 				{
+					"meta": "Material",
 					"name": "entity.name.function",
 					"match": "\\b(Concentration(\\s+)Diffusivity)\\b"
-				}
-			]
-		},
-		"fieldsconditions": {
-			"patterns": [
-				{
-					"name": "entity.name.function",
-					"match": "\\b(Target Boundaries)\\b"
 				},
 				{
+					"meta": "Boundary Condition",
+					"name": "entity.name.function",
+					"match": "\\b(Target(\\s+)Boundaries)\\b"
+				},
+				{
+					"meta": "Boundary Condition",
 					"name": "entity.name.function",
 					"match": "\\b(((External(\\s+))?)(Concentration|Temperature))\\b"
 				},
 				{
+					"meta": "Boundary Condition",
 					"name": "entity.name.function",
 					"match": "\\b((Heat|Mass)(\\s+)Transfer(\\s+)Coefficient)\\b"
 				},
 				{
+					"meta": "Boundary Condition",
 					"name": "entity.name.function",
-					"match": "\\b(Temperature|Heat(\\s+)Flux|Radiation|Emissivity)\\b"
+					"match": "\\b(Temperature|Heat(\\s+)Flux|Emissivity)\\b"
+				},
+				{
+					"meta": "Boundary Condition",
+					"name": "entity.name.function",
+					"match": "\\b(Radiation(((\\s+)(Boundary|Target Body))?))\\b"
+				},
+				{
+					"meta": "Body",
+					"name": "entity.name.function",
+					"match": "\\b(Target(\\s+)Bodies)\\b"
+				}
+			]
+		},
+		"fieldsbackref": {
+			"patterns": [
+				{
+					"meta": "Solver (comes later because refers to other fields!)",
+					"name": "entity.name.function",
+					"match": "\\b((Solver(\\s+)(\\d+))*(Equation|Target(\\s+)Variable|Variable|Procedure|Exec(\\s+)Solver|Stabilize|Optimize Bandwidth|Steady State Convergence Tolerance|Steady State Convergence Measure|Nonlinear System Convergence Tolerance|Nonlinear System Max Iterations|Nonlinear System Newton After Iterations|Nonlinear System Newton After Tolerance|Nonlinear System Relaxation Factor|Nonlinear System Convergence Measure|Linear System Solver|Linear System Iterative Method|Linear System Max Iterations|Linear System Convergence Tolerance|BiCGstabl polynomial degree|Linear System Preconditioning|Linear System ILUT Tolerance|Linear System Abort Not Converged|Linear System Residual Output|Linear System Precondition Recompute|Filename|Polyline(\\s+)Coordinates|Polyline(\\s+)Divisions|Parameter(\\s+)(\\d+)))\\b"
+				},
+				{
+					"meta": "Body (comes later because refers to other fields!)",
+					"name": "entity.name.function",
+					"match": "\\b((Body(\\s+)(\\d+))*(Equation|Material|Initial(\\s+)condition))\\b"
+				},
+				{
+					"name": "entity.name.tag",
+					"match": "\\b(Variable(\\s+)Time)\\b"
 				}
 			]
 		}
