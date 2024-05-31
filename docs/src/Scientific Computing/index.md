@@ -24,8 +24,9 @@ Some technologies have been mainstream or important in the past, but nowadays so
 ## Applied modules
 
 1. [Basilisk](../Basilisk/index.md)
-2. [OpenFOAM](../OpenFOAM/01-OpenFOAM11.md)
-3. [Elmer Multiphysics](../Elmer/00-Elmer-Multiphysics.md)
+1. [Elmer Multiphysics](../Elmer/00-Elmer-Multiphysics.md)
+1. [LAMMPS](04-LAMMPS.md)
+1. [OpenFOAM](../OpenFOAM/01-OpenFOAM11.md)
 
 ## External links
 

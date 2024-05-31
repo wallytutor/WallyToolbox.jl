@@ -21,6 +21,7 @@ set GMSH_VERSION=gmsh-4.13.0-Windows64-sdk
 set GNUPLOT_VERSION=gp600-win64-mingw
 set JABREF_VERSION=JabRef-5.13-portable_windows
 set JULIA_VERSION=julia-1.10.3
+set LAMMPS_VERSION=LAMMPS-64bit-Python-17Apr2024-MSMPI
 set MIKTEX_VERSION=basic-miktex-24.1-x64
 set WINPYTHON_VERSION=WPy64-31231b3
 set PARAVIEW_VERSION=ParaView-5.12.0-Windows-Python3.10-msvc2017-AMD64
@@ -61,6 +62,24 @@ set PATH=%ELMER_HOME%\lib;%PATH%
 
 set SU2_RUN=%SU2_VERSION%\bin
 set PATH=%HERE%\%SU2_RUN%;%PATH%
+
+@REM @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@REM CONFIGURE LAMMPS
+@REM @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+@REM Note that in distribution there is no package with simultaneous Python,
+@REM MPI support, and GUI. I compared the subfolders of the Python+MPI version
+@REM with the one from GUI and stripped the GUI to merge the packages. I hope
+@REM that works seamlessly. In the end I ended copying the `qt5plugins/` to
+@REM the Python+MPI directory and the additional binaries from `bin`.
+
+set LAMMPSHOME=%HERE%\%LAMMPS_VERSION%
+set PATH=%LAMMPSHOME%\bin;%PATH%
+set LAMMPS_PLUGIN_PATH=%LAMMPSHOME%\plugins
+set LAMMPS_POTENTIALS=%LAMMPSHOME%\Potentials
+set MSI2LMP_LIBRARY=%LAMMPSHOME%\frc_files
+set PLUMED_ROOT=%LAMMPSHOME%
+set PYTHONPATH=%LAMMPSHOME%\Python;%PYTHONPATH%
 
 @REM @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @REM SIMPLE PATH APPENDS

@@ -15,6 +15,7 @@ The goal of this directory is to provide an easy way to setup a portable toolbox
 - [JabRef](https://www.fosshub.com/JabRef.html?dwl=JabRef-5.13.msi)
 
 - [ElmerFEM](https://www.nic.funet.fi/pub/sci/physics/elmer/bin/windows/)
+- [LAMMPS](https://packages.lammps.org/windows.html)
 - [SU2](https://su2code.github.io/download.html)
 
 - [Blender](https://www.blender.org/download/)
@@ -65,6 +66,8 @@ For DualSPHysics one might also want to install [this FreeCAD addon](https://git
 - Extract downloaded software to their own directories; right-click the compressed packages and select the option to select to a directory (some software are compressed directly to the root of the file and can make a mess otherwise).
 
 - Enable VSCode [portable mode](https://code.visualstudio.com/docs/editor/portable) and install required extensions (Python and Julia support, ...).
+
+- Read comments in [bin/source.bat](bin/source.bat) for additional instructions, *e.g.* how to setup a Frankenstein LAMMPS installation.
 
 ## Creating a launcher
 
