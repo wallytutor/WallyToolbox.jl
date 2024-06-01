@@ -104,47 +104,51 @@ format = get_format(; latex, user, sitename)
 ##############################################################################
 
 pages = [
-    "Home" => "index.md",
+    "WallyToolbox" => [
+        "Home" => "index.md",
 
-    "Dry Packages" => [
-        "DryCombustion" => "DryCombustion/index.md",
-        "DryFlowsheet"  => "DryFlowsheet/index.md",
-        "DryGranular"   => "DryGranular/index.md",
-        "DryMaterials"  => "DryMaterials/index.md",
-        "DryTransport"  => "DryTransport/index.md",
-        "Helpers"       => "helpers.md"
+        "Julia Modules" => [
+            "DryCombustion" => "Modules/DryCombustion.md",
+            "DryFlowsheet"  => "Modules/DryFlowsheet.md",
+            "DryGranular"   => "Modules/DryGranular.md",
+            "DryMaterials"  => "Modules/DryMaterials.md",
+            "DryTransport"  => "Modules/DryTransport.md",
+            "RadCalNet"     => "Modules/RadCalNet.md",
+            "Cantera"       => "Modules/Cantera.md",
+            "OpenFOAM"      => "Modules/OpenFOAM.md",
+            "Helpers"       => "Modules/helpers.md"
+        ],
+
+        "Scientific Computing" => [
+            "Scientific Computing/index.md",
+            "Scientific Computing/OpenFOAM11.md",
+            "Scientific Computing/Elmer-Multiphysics.md",
+            "Scientific Computing/Elmer-Documentation.md",
+            "Scientific Computing/Basilisk.md",
+            "Scientific Computing/LAMMPS.md",
+            "Scientific Computing/PINNs.md",
+            "Scientific Computing/General-Computing-Skills.md",
+        ],
+
+        "Transport Phenomena" => [
+            "Transport Phenomena/01-Transport-phenomena-foundations.md",
+            "Transport Phenomena/02-Applications-to-mass-and-heat-transfer.md",
+            "Transport Phenomena/03-Applications-to-fluid-mechanics.md",
+            "Transport Phenomena/A2-Dimensionless-groups.md",
+            "Transport Phenomena/A4-Finite-Volume-Diffusion.md",
+            # "Transport Phenomena/A1-Mathematical-background.md",
+            # "Transport Phenomena/A3-Thermodynamics-Concepts.md",
+            # "Transport Phenomena/B1-Conductivity-Porous-Solids.md"
+        ],
+
+        # "Notebooks"         => [
+        #     "Simulating DSC/TGA" => "Notebooks/dsc-tga-kaolinite.md"
+        # ],
+
+        "References"        => "References/index.md",
+        # "Table of Contents" => "toc.md",
     ],
-    
-    "RadCalNet"         => "RadCalNet/index.md",
-    "Cantera"           => "Cantera/index.md",
 
-    "OpenFOAM"          => [
-        "Module Docs" => "OpenFOAM/index.md",
-        "OpenFOAM 11" => "OpenFOAM/01-OpenFOAM11.md",
-    ],    
-    
-    "Elmer"               => [
-        "Elmer Multiphysics"         => "Elmer/00-Elmer-Multiphysics.md",
-        "Preprocessing"              => "Elmer/01-Preprocessing.md",
-        "Solution Mode"              => "Elmer/02-Solution-Mode.md",
-        "Properties and Extensions"  => "Elmer/03-Properties-and-Extensions.md",
-        "Postprocessing"             => "Elmer/04-Postprocessing.md",
-        "Standard Input Format"      => "Elmer/A1-SIF-Specification.md",
-        "MATC Language"              => "Elmer/A2-MATC-Language.md",
-        "Fortran UDFs"               => "Elmer/A3-UDF-Specification.md",
-        "Finite Element Method"      => "Elmer/C1-Finite-Element-Method.md",
-    ],
-
-    "Scientific Computing" => "Scientific Computing/index.md",
-    "Transport Phenomena" => "Transport Phenomena/index.md",
-
-    "Basilisk"            => "Basilisk/index.md",
-    "References"        => "References/index.md",
-    "Table of Contents" => "toc.md",
-
-    # "Notebooks"         => [
-    #     "Simulating DSC/TGA" => "Notebooks/dsc-tga-kaolinite.md"
-    # ],
 ]
 
 ##############################################################################

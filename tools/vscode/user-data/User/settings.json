@@ -63,5 +63,6 @@
                 "%DOC%.tex"
             ]
         }
-    ]
+    ],
+    "workbench.colorTheme": "Dracula"
 }

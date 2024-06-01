@@ -1,4 +1,4 @@
-# Applications to fluid mechanics
+# Fluid mechanics
 
 ## Derivation of continuity equation
 

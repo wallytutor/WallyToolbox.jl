@@ -27,7 +27,7 @@ Below we display the quality of fitting of model. One must notice that fitting
 of emissivity still needs a few adjustments, while transmissivity is well
 predicted over the whole range.
 
-![Model testing](media/testing.png)
+![Model testing](media/RadCalNet/testing.png)
 
 ## Usage
 
@@ -117,7 +117,7 @@ using RadCalNet
 
 function sampledatabase()
     #XXX: documentation is run from root directory!
-    testname = joinpath(joinpath(@__DIR__, "src/RadCalNet/data/sample.dat"))
+    testname = joinpath(joinpath(@__DIR__, "src/Modules/data/RadCalNet/sample.dat"))
 
     # Provide a seed at start-up for *maybe* reproducible builds.
     Random.seed!(42)
@@ -270,11 +270,11 @@ end
 
 datadir = @__DIR__
 
-εfig = joinpath(datadir, "media/emissivity.png")
-αfig = joinpath(datadir, "media/absorptivity.png")
+εfig = joinpath(datadir, "media/RadCalNet/emissivity.png")
+αfig = joinpath(datadir, "media/RadCalNet/absorptivity.png")
 
-εfile = joinpath(datadir, "data/emissivity.csv")
-αfile = joinpath(datadir, "data/absorptivity.csv")
+εfile = joinpath(datadir, "data/RadCalNet/emissivity.csv")
+αfile = joinpath(datadir, "data/RadCalNet/absorptivity.csv")
 
 if !isfile(εfig)
     εdata = readdlm(εfile, ',', Float64, header = true)
@@ -296,14 +296,14 @@ end
 Below we compare computed values with those by ([[@Gorog1981a]]).
 Reference paper is found [here](https://doi.org/10.1007/BF02674758).
 
-![Emissivity](media/emissivity.png)
+![Emissivity](media/RadCalNet/emissivity.png)
 
-![Absorptivity](media/absorptivity.png)
+![Absorptivity](media/RadCalNet/absorptivity.png)
 
 At least qualitative agreement is found and orders of magnitude are right. On
 the other hand, using directly the model parameters from ([[@Tam2019]]) do
 not produce the expected results (not displayed, work in progress in this
-[draft](data/tam2019.jl)). It is not clear how the data is pre- and
+[draft](data/RadCalNet/tam2019.jl)). It is not clear how the data is pre- and
 post-processed for use with their network.
 
 ## All interfaces

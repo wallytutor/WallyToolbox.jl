@@ -206,7 +206,7 @@ julia> bed.τ ≈ Vₐ / Φ
 true
 ```
 
-Validation of Kramers' model is provided [here](kramers.md).
+Validation of Kramers' model is provided [here](validation/DryGranular/kramers.md).
 
 Finally a set of basic equations provided for process analysis.
 

@@ -6,6 +6,7 @@
 | `Data_Valid_P` | Test if parameters required by UDF have been initialized. It is a good practice to use this macro on top of UDF's to avoid crashes. |
 | `Message`      | Displays a message, to be used from host.                                                                                           |
 | `Error`        | Display and throw an error message. **Compiled only**.                                                                              |
+
 ## Macro parallelization
 
 | Macro                     | Notes                                                                                                                                                                                                                                                                                                                                                                                                             |

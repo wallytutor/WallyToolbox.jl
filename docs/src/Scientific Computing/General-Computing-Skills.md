@@ -1,6 +1,8 @@
 # General computing skills
 
+---
 ## Windows Subsystem for Linux
+
 ### Mount a network drive in WSL
 
 Here we assume we will mount drive `Z:` at `/mnt/z`:
@@ -13,6 +15,7 @@ sudo mkdir /mnt/z
 sudo mount -t drvfs Z: /mnt/z
 ```
 
+---
 ## $\LaTeX$
 
 ### Math typesetting with $\LaTeX$

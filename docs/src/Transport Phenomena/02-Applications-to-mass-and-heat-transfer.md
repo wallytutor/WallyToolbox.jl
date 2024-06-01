@@ -1,4 +1,4 @@
-# Applications to mass and energy transfer
+# Mass and energy transfer
 
 ## Derivation of conservation equations
 
