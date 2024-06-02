@@ -143,6 +143,7 @@ pages = [
 
         "Notebooks"         => [
             "Notebooks/01-Composite-Conduction.md",
+            "Notebooks/02-Part-Radiation-Heating.md",
         ],
 
         "References"        => "References/index.md",
