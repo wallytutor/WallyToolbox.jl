@@ -141,9 +141,9 @@ pages = [
             # "Transport Phenomena/B1-Conductivity-Porous-Solids.md"
         ],
 
-        # "Notebooks"         => [
-        #     "Simulating DSC/TGA" => "Notebooks/dsc-tga-kaolinite.md"
-        # ],
+        "Notebooks"         => [
+            "Notebooks/01-Composite-Conduction.md",
+        ],
 
         "References"        => "References/index.md",
         # "Table of Contents" => "toc.md",
