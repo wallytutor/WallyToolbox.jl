@@ -2,7 +2,7 @@
 
 No further words, let's start by importing the required toolset:
 
-```@example notebook
+```julia; @example notebook
 using CairoMakie
 using LinearAlgebra
 using Printf
@@ -28,7 +28,7 @@ Because the model is stated in lumped form, *i.e.* simplified to a zero-dimensio
 
 To get a dynamics that is interpretable in the real world we will start by computing reasonable orders of magnitude of the $C_{i,i}$ by providing the masses of the bodies and typical values of specific heats for the involved materials. Considering a steel sphere of 10 cm placed **floating** in a 40 cm air environment limited by a spherical refractory with outer shell of 60 cm we can estimate these masses, in the same order, as:
 
-```@example notebook
+```julia; @example notebook
 m = 1u"kg" * [4.2, 0.033, 240.0]
 
 nothing; # hide
@@ -36,7 +36,7 @@ nothing; # hide
 
 Next we provide the specific heats of the materials already multiplied by the above masses:
 
-```@example notebook
+```julia; @example notebook
 cp(T) = m[1] * 6.00e+03u"J/(kg*K)"
 cg(T) = m[2] * 1.00e+03u"J/(kg*K)"
 cw(T) = m[3] * 9.00e+02u"J/(kg*K)"
@@ -52,7 +52,7 @@ $$
 
 Setting the derivative term to be alone could be interesting for testing different time-stepping strategies, for instance. Matrix $\mathrm{C}^{-1}$ is provided by `inertiainv` below:
 
-```@example notebook
+```julia; @example notebook
 specificheat(T) = [cp(T[1]); cg(T[2]); cw(T[3])]
 
 inertiainv(T) = diagm(1 ./ specificheat(T))
@@ -62,7 +62,7 @@ nothing; # hide
 
 We inspect the inverse inertia matrix:
 
-```@example notebook
+```julia; @example notebook
 inertiainv([300.0, 300.0, 300.0])
 ```
 
@@ -78,7 +78,7 @@ $$
 
 Since this matrix does not contain any element that depends on temperature it needs to be computed only once and we will not seek an optimized way to evaluate it. The code below is generic for any *layered* structure as the one being modelled here. Notice that the pairwise interactions lead to a tridiagonal structure.
 
-```@example notebook
+```julia; @example notebook
 function stiffness(h, A)
     p = @. h * A
     q = -1 * p[1:end-1]
@@ -91,7 +91,7 @@ nothing; # hide
 
 For testing its implementation and later simulating the system we provide already the set of convective heat transfer coefficients on `h` and heat transfer areas in `A`. The order of magnitude of areas was kept compatible with the geometrical description provided before.
 
-```@example notebook
+```julia; @example notebook
 h = [100.0, 100.0, 10.0] * 1u"W/(m^2*K)"
 A = [0.032, 0.500, 1.15] * 1u"m^2"
 
@@ -109,7 +109,7 @@ h_wA_wT_a + \epsilon_{p}\sigma{}A_p(\mathcal{T}_p^4-\mathcal{T}_w^4)
 \end{bmatrix}
 $$
 
-```@example notebook
+```julia; @example notebook
 function forcing(T, h, A, Ta, ϵp, ϵw)
     f1 = -ϵp*σ*A[1]*(T[1]^4-T[3]^4)
     f3 = h[3]*A[3]*Ta - f1 - ϵw*σ*A[3]*(T[3]^4 - Ta^4)
@@ -121,7 +121,7 @@ nothing; #hide
 
 The remaining parameters to close the problem are the emissivity of the materials and external temperature, all provided below.
 
-```@example notebook
+```julia; @example notebook
 ϵp = 0.8
 ϵw = 0.3
 Ta = 313.15u"K"
@@ -159,7 +159,7 @@ $$
 
 It is useful to simplify thing until last step because it tells us what functionalities we need in a computer implementation. The problem of finding $\mathcal{T}_{n+1}$ can be seem as a nonlinear iteration $\mathcal{T}_{n+1}=L^{-1}_{n+1}(R_{n+1}+\mathcal{T}_{n})$ followed by update of both $\mathbf{L}_{n+1}$ and $\mathbf{R}_{n+1}$ with the new estimate of temperatures. Thus, we  need functions to update both these matrices during the solution. Since these rely on several parameters we can encapsulate then in a higher order function with all fixed parameters and return a function that performs the update for the new temperature estimate, as implemented below.
 
-```@example notebook
+```julia; @example notebook
 function buildlhsmatrix(τ, h, A)
     K = stiffness(h, A)
     I = diagm([1, 1, 1] * 1u"1")
@@ -169,7 +169,7 @@ end
 nothing; # hide
 ```
 
-```@example notebook
+```julia; @example notebook
 function buildrhsvector(τ, h, A, Ta, ϵp, ϵw)
     F(T) = τ * forcing(T, h, A, Ta, ϵp, ϵw)
     return (Tₖ) -> inertiainv(Tₖ) * F(Tₖ)
@@ -180,7 +180,7 @@ nothing; # hide
 
 As per the previous discussion, the following snipped emulates one time-step iteration:
 
-```@example notebook
+```julia; @example notebook
 T = [1273.0u"K", Ta, Ta]
 τ = 1.0u"s"
 
@@ -196,7 +196,7 @@ Tnew = inv(K(T)) * (B(T) .+ T)
 
 Function `steptime` below  performs up to a maximum number of iterations as illustrated above and checks for convergence of the time-step.
 
-```@example notebook
+```julia; @example notebook
 function steptime(T₀, K, B; maxiter = 50, rtol = 1.0e-12, β = 1.0)
     Tᵢ = copy(T₀)
     Tⱼ = copy(T₀)
@@ -222,7 +222,7 @@ nothing; # hide
 
 A relaxation step for eventually helping convergence was introduced above as:
 
-```@example notebook
+```julia; @example notebook
 relaxation(Tᵢ, Tⱼ, β) = @. β * Tⱼ + (1-β) * Tᵢ
 
 nothing; # hide
@@ -230,7 +230,7 @@ nothing; # hide
 
 A common choice of residual in this sort of problem is the maximum relative absolute change:
 
-```@example notebook
+```julia; @example notebook
 residual(Tᵢ, Tⱼ) = maximum(abs.(Tⱼ .- Tᵢ) ./ Tᵢ)
 
 nothing; # hide
@@ -238,7 +238,7 @@ nothing; # hide
 
 Time integration is now just a matter of repeating time-stepping and storing solution:
 
-```@example notebook
+```julia; @example notebook
 function integrate(t, T, K, B; maxiter, rtol, β)
     U = copy(T)
     nvars = length(T)
@@ -260,7 +260,7 @@ nothing; # hide
 
 This completes the tooling for simulation of the process. Below we simulate 24 hours of the dynamics starting with a hot metallic sphere and the furnace equilibrated with the external environment. 
 
-```@example notebook
+```julia; @example notebook
 tend = 24*3600
 
 T = [1273.0u"K", Ta, Ta]
@@ -279,7 +279,7 @@ rtol = 1.0e-12
 
 Below we can inspect the solution and the residuals at the end of each time-step. For the solution to make sense it is important that every single step must converge during time advancement. Note the leap in gas temperature during the first time steps resulting from the problem stiffness. As a matter of fact, a smaller time-step should have been used for properly resolving its dynamics in the early stages or even better, an adaptative time-stepping approach should have been adopted.
 
-```@example notebook
+```julia; @example notebook
 with_theme() do
     tk = t / 3600
 

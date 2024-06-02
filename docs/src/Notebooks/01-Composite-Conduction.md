@@ -2,7 +2,7 @@
 
 No further words, let's start by importing the required toolset:
 
-```@example notebook
+```julia; @example notebook
 using CairoMakie
 using LinearAlgebra
 using Printf
@@ -29,7 +29,7 @@ Our goal in what follows is to implement equation (2.12) of the reference to be 
 
 Since each component of the composite slab is characterized by a conductivity across the *element* we provide a function `conductivity` for computing $K=kAL^{-1}$. This is more expressive than simply hard-coding its definition directly in the stiffness matrix.
 
-```@example notebook
+```julia; @example notebook
 function conductivity(k, A, L)
     return k * A / L
 end
@@ -39,7 +39,7 @@ nothing; #hide
 
 Below we implement the stiffness matrix constructor in terms of the required parameters:
 
-```@example notebook
+```julia; @example notebook
 function stiffness(h, k1, k2, L1, L2; A=1)
     a1 = conductivity(k1, A, L1)
     a2 = conductivity(k2, A, L2)
@@ -55,7 +55,7 @@ nothing; #hide
 
 Similarly, the column forcing vector is given as:
 
-```@example notebook
+```julia; @example notebook
 function forcing(q, h, Ta; A=1)
     return [ q*A;  0u"W/m^2";  h*A*Ta ];
 end
@@ -65,7 +65,7 @@ nothing; #hide
 
 As model parameters one needs to specity the thermal conductivities $k$ and associated thicknesses $L$ of plates and the *known* heat transfer coefficient $h$ on the side the slab is exposed to convective heat transfer. All these values are provided below with respective physical units.
 
-```@example notebook
+```julia; @example notebook
 h = 5u"W/(m^2*K)"
 k1 = 5.0u"W/(m*K)"
 k2 = 0.5u"W/(m*K)"
@@ -77,7 +77,7 @@ nothing; #hide
 
 To complete the boundary conditions, the heat flux $q_1$ and environment temperature $T_a$ are given below.
 
-```@example notebook
+```julia; @example notebook
 q1 = 20.0u"W/m^2"
 Ta = 300.0u"K"
 
@@ -86,18 +86,18 @@ nothing; #hide
 
 Now we are able to create the problem and inspect elements.
 
-```@example notebook
+```julia; @example notebook
 M = stiffness(h, k1, k2, L1, L2)
 ```
 
-```@example notebook
+```julia; @example notebook
 f = forcing(q1, h, Ta)
 ```
 
 Solution is found by solving the linear system with the backslash operator. Because the default operator does not support `Unitful` units, an overload required [here](https://github.com/PainterQubits/Unitful.jl/issues/46#issuecomment-1338712249). Since the problem is small we will use a matrix inverse here as an alternative.
 
 
-```@example notebook
+```julia; @example notebook
 T = inv(M) * f
 ```
 
@@ -105,7 +105,7 @@ Below we inspect the solution at the nodal positions (filled dots). Since therma
 
 Temperature profile across plate with convection boundary condition.
 
-```@example notebook
+```julia; @example notebook
 with_theme() do
     fig = Figure(size = (700, 300))
     ax = Axis(fig[1, 1])
@@ -142,7 +142,7 @@ $$
 
 The radiation terms introduce the need to provide the surface emissivity $ε$:
 
-```@example notebook
+```julia; @example notebook
 ε = 0.9
 
 nothing; #hide
@@ -150,7 +150,7 @@ nothing; #hide
 
 An one-liner `globalhtc` is provided to evaluate $U$ at each iteration.
 
-```@example notebook
+```julia; @example notebook
 globalhtc(τ, Ta, h, ε) = h + ε * σ * (τ + Ta) * (τ^2 + Ta^2)
 
 @show globalhtc(300u"K", Ta, h, ε)
@@ -158,7 +158,7 @@ globalhtc(τ, Ta, h, ε) = h + ε * σ * (τ + Ta) * (τ^2 + Ta^2)
 
 Since the problem now needs to be solved iterativelly, it is worth creating a simple function that encapsulates the steps to be repeated at each iteration, *i.e* update the heat transfer coefficient, update stiffness matrix and forcing vector, solve for the new temperature estimate. Because this is a dummy problem we will not get an optimized matrix update, but simply call `stiffness` and `forcing` every iteration with the new value of `U`. Because there are many parameters, we create a function that returns another function with the fixed values allowing for a single update:
 
-```@example notebook
+```julia; @example notebook
 function createproblem(Ta, h, ε, k1, k2, L1, L2)
     function step(τ)
         U = globalhtc(τ, Ta, h, ε)
@@ -174,7 +174,7 @@ nothing; #hide
 
 The solution of the problem now is rather simple. One provides an initial guess which is used to compute a new solution estimate. Because under some circumstances the estimate could start wiggling and diverge, it is worth implementing a relaxation step interpolating the new and previous approximations as $T_{n}=βT_{n}+(1-β)T_{n-1}$. In case $\beta<1$ solution is slowly updated by giving a higher weigth to the previous estimate and the problem is said to be underrelaxed. Overelaxation is the opposite scenario but can be problematic in some cases. Some metric, here the maximum relative change in absolute value, must be used to determine solution convergence.
 
-```@example notebook
+```julia; @example notebook
 function solveproblem(T, step; maxiter = 20, rtol = 1.0e-15, β = 1.0)
     τ = copy(T)
 
@@ -198,7 +198,7 @@ nothing; #hide
 
 Below we make use of the created tooling to solve the model.
 
-```@example notebook
+```julia; @example notebook
 guess = [Ta; Ta; Ta]
 
 step = createproblem(Ta, h, ε, k1, k2, L1, L2)
@@ -208,7 +208,7 @@ T = solveproblem(guess, step)
 
 Temperature profile across plate with radiation enabled.
 
-```@example notebook
+```julia; @example notebook
 with_theme() do
     fig = Figure(size = (700, 300))
     ax = Axis(fig[1, 1])
