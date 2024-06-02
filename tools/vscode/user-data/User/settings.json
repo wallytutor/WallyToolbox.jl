@@ -3,7 +3,6 @@
         "language-julia.interrupt"
     ],
  
-    "editor.rulers": [80, 100, 120],
     "workbench.colorCustomizations": {
         "editorRuler.foreground": "#ff4081"
     },
@@ -13,6 +12,12 @@
 
     "extensions.ignoreRecommendations": true,
     "python.createEnvironment.trigger": "off",
+
+    "workbench.colorTheme": "Dracula",
+
+    //-------------------------------------------------------------------------
+    // LATEX-WORKSHOP
+    //-------------------------------------------------------------------------
 
     "latex-workshop.latex.recipes": [
         {
@@ -33,6 +38,7 @@
             ]
         }
     ],
+
     "latex-workshop.latex.tools": [
         {
             "name": "pdflatex",
@@ -64,5 +70,29 @@
             ]
         }
     ],
-    "workbench.colorTheme": "Dracula"
+
+    //-------------------------------------------------------------------------
+    // REWRAP
+    //-------------------------------------------------------------------------
+
+    "rewrap.doubleSentenceSpacing": true,
+
+    //-------------------------------------------------------------------------
+    // LANGUAGE SPECIFIC
+    //-------------------------------------------------------------------------
+
+    "[python]": {
+        "editor.rulers": [72, 79],
+        "rewrap.doubleSentenceSpacing": true
+    },
+
+    "[julia]": {
+        "editor.rulers": [72, 79],
+        "rewrap.doubleSentenceSpacing": true
+    },
+
+    "[markdown]": {
+        "editor.rulers": [79],
+        "rewrap.autoWrap.enabled": false
+    },
 }
