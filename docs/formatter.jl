@@ -26,7 +26,7 @@ end
 
 function formatequations(text)
     newgroup = s"```math\n\g<named>\n```"
-    oldgroup = r"\$\$(?<named>[^$]*)\$\$"
+    oldgroup = r"(\$\$((\s+|\n)?))(?<named>((.|\n)*?))(((\s+|\n)?)\$\$)"
     DEBUGMATCHES && matchdebugger(oldgroup, text)
     return replace(text, oldgroup => newgroup)
 end

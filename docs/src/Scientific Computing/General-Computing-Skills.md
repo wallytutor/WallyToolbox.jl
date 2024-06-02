@@ -16,6 +16,17 @@ sudo mount -t drvfs Z: /mnt/z
 ```
 
 ---
+## Regular expressions
+
+Regular expressions (or simply *regex*) processing is a must-have skill for anyone doing scientific computing. Most programs produce results or logs in plain text and do not support specific data extraction from those. There *regex* becomes your best friend. Unfortunately during the years many flavors of regex appeared, each claiming to offer advantages or to be more formal than its predecessors. Due to this, learning regex is often language-specific (most of the time you create and process regex from your favorite language) and sometimes even package-specific. Needless to say, regex may be more difficult to master than assembly programming.
+
+- Useful web applications can be found in [regex101](https://regex101.com/) and [regexr](https://regexr.com/).
+
+- Match [all characters between two strings](https://stackoverflow.com/questions/6109882/regex-match-all-characters-between-two-strings) with lookbehind and look ahead patterns. Notice that this will require the enclosing strings to be fixed (at least under PCRE). For processing `WallyTutor.jl` documentation I have used a [more generic approach](https://github.com/wallytutor/WallyToolbox.jl/blob/89603a88d54eed1d15b9f8142640ef942cfa12ca/docs/formatter.jl#L20).
+
+- Match [any character across multiple lines](https://stackoverflow.com/questions/159118) with `(.|\n)*`.
+
+---
 ## $\LaTeX$
 
 ### Math typesetting with $\LaTeX$
@@ -38,7 +49,7 @@ sudo mount -t drvfs Z: /mnt/z
 
 ### LaTeX Workshop
 
-- [Configuring builds in VS Code with LaTeX Workshop](https://tex.stackexchange.com/questions/478865/vs-code-latex-workshop-custom-recipes-file-location) for building with `pdflatex`. Finally I ended creating my own workflows as follows:
+- [Configuring builds in VS Code with LaTeX Workshop](https://tex.stackexchange.com/questions/478865/vs-code-latex-workshop-custom-recipes-file-location) for building with `pdflatex`. Finally I ended creating my own workflows as follows (full updated file [here](https://github.com/wallytutor/WallyToolbox.jl/blob/main/tools/vscode/user-data/User/settings.json)):
 
 ```json
     "latex-workshop.latex.recipes": [
