@@ -1,5 +1,27 @@
 # Drafts
 
+## Julia para cientistas
+
+1. Lacos E Condicionais
+1. Funcoes E Despacho
+1. Pacotes E Ecossistema
+1. Avaliando Performance
+1. Algebra Linear
+1. Expressoes Regulares
+1. Execucao Concorrente
+1. Trabalhando Com Arquivos
+1. Bibliotecas Graficas
+1. Graficos Para Publicacoes
+1. Tipos De Dados E Estruturas
+1. Metaprogramacao E Macros
+1. Interoperacao Com C
+1. Equações diferenciais ordinárias
+1. Equações diferenciais parciais
+1. Redes neuronais clássicas
+1. Aprendizado com suporte físico
+1. Análise quantitativa de imagens
+1. Criando seus próprios pacotes
+
 ## Basilisk
 
 ### Planned studies
