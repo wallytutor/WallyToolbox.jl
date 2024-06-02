@@ -26,6 +26,8 @@ Regular expressions (or simply *regex*) processing is a must-have skill for anyo
 
 - Match [any character across multiple lines](https://stackoverflow.com/questions/159118) with `(.|\n)*`.
 
+- Currently joining regexes in Julia might be tricky (because of escaping characters); a solution is proposed [here](https://stackoverflow.com/questions/20478823/joining-regular-expressions-in-julia) and seems to work just fine with minimal extra coding.
+
 ---
 ## $\LaTeX$
 

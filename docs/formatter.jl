@@ -7,7 +7,18 @@
 
 DEBUGMATCHES = false
 
-TESTFORMATTER = false
+TESTFORMATTER = true
+
+# See https://stackoverflow.com/questions/20478823/
+macro p_str(s) s end
+
+ANYNAME = p"(?<named>((.|\n)*?))"
+
+OJULIA  = p"(```julia;(\s+)@example(\s+)(.*)\n)"
+CJULIA  = p"(\n```)"
+
+ODOLLAR = p"(\$\$((\s+|\n)?))"
+CDOLLAR = p"(((\s+|\n)?)\$\$)"
 
 function matchdebugger(gr, text)
     if (m = match(gr, text); m !== nothing)
@@ -17,16 +28,14 @@ end
 
 function formatnotecells(text)
     newgroup = s"```@example notebook\n\g<named>\n```"
-    oldgroup = r"(```julia;(\s+)@example(\s+)(.*)\n)(?<named>(.|\n)*?)(\n```)"
-    # Using positive lookbehing might be faster but less generic...:
-    # oldgroup = r"(?<=```julia; @example notebook\n)(?<named>(.*\n)+?)(?=```)"
+    oldgroup = oldgroup = Regex(join([OJULIA, ANYNAME, CJULIA]))
     DEBUGMATCHES && matchdebugger(oldgroup, text)
     return replace(text, oldgroup => newgroup)
 end
 
 function formatequations(text)
     newgroup = s"```math\n\g<named>\n```"
-    oldgroup = r"(\$\$((\s+|\n)?))(?<named>((.|\n)*?))(((\s+|\n)?)\$\$)"
+    oldgroup = Regex(join([ODOLLAR, ANYNAME, CDOLLAR]))
     DEBUGMATCHES && matchdebugger(oldgroup, text)
     return replace(text, oldgroup => newgroup)
 end
