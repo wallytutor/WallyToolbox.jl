@@ -4,7 +4,7 @@
 
 In what follows I will be mostly guided by the [LAMPPS tutorials](https://lammpstutorials.github.io/) by [Simon Gravelle](https://scholar.google.com/citations?user=9fD2JlYAAAAJ&hl=en) in what concerns the contents, with some touches of automation by myself.
 
-The official documentation of LAMMPS can be found [here]([LAMMPS Documentation (17 Apr 2024 version) — LAMMPS documentation](https://docs.lammps.org/Manual.html)).
+The official documentation of LAMMPS can be found [here](https://docs.lammps.org/Manual.html).
 
 ## Concepts
 
