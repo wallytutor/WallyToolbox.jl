@@ -29,6 +29,7 @@ set PYTHON_VERSION=python-3.12.3.amd64
 set SALOME_VERSION=SALOME-9.12.0
 set SU2_VERSION=SU2-v8.0.1-win64-mpi
 set TEXSTUDIO_VERSION=texstudio-4.8.0-win-portable-qt6
+set VMD_VERSION=vmd194a53win64-SetupV7
 set VSCODE_VERSION=VSCode-win32-x64-1.89.1
 
 @REM @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -64,6 +65,16 @@ set SU2_RUN=%SU2_VERSION%\bin
 set PATH=%HERE%\%SU2_RUN%;%PATH%
 
 @REM @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@REM CONFIGURE VMD
+@REM @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+set VMDDIR=%HERE%%VMD_VERSION%
+set PATH=%VMDDIR%;%PATH%
+
+@REM VMD wants HKLM but I can't set it in any machine without being admin...
+@REM REG ADD "HKCU\Software\University of Illinois\VMD\1.9.4" /v VMDDIR /t REG_SZ /d %VMDDIR% /f
+
+@REM @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @REM CONFIGURE LAMMPS
 @REM @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
@@ -87,7 +98,7 @@ set PYTHONPATH=%LAMMPSHOME%\Python;%PYTHONPATH%
 
 set PATH=%HERE%\%VSCODE_VERSION%;%PATH%
 set PATH=%HERE%\%GIT_VERSION%\cmd;%PATH%
-set PATH=%HERE%\%BLENDER_VERSION%\bin;%PATH%
+set PATH=%HERE%\%BLENDER_VERSION%;%PATH%
 set PATH=%HERE%\%DUALSPHYSICS_VERSION%\DualSPHysics_v5.2\bin\windows;%PATH%
 set PATH=%HERE%\%FREECAD_VERSION%\bin;%PATH%
 set PATH=%HERE%\%GNUPLOT_VERSION%\gnuplot\bin;%PATH%

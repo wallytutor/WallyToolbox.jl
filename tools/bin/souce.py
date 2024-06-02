@@ -19,6 +19,7 @@ basepaths = {
     "MYENV_SALOME":       "SALOME-9.12.0",
     "MYENV_SU2":          "SU2-v8.0.1-win64-mpi",
     "MYENV_TEXSTUDIO":    "texstudio-4.8.0-win-portable-qt6",
+    "MYENV_VMD":          "vmd194a53win64-SetupV7",
     "MYENV_VSCODE":       "VSCode-win32-x64-1.89.1",
     "MYENV_WINPYTHON":    "WPy64-31231b3",
 }
