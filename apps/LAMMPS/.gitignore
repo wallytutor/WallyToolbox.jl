@@ -1,5 +1,9 @@
 # LAMMPS standard log file.
 log.lammps
 
-# Dumped trajectories
+# Dumped trajectories.
 *.lammpstrj
+
+# LAMMPS data file.
+*.dat
+*.data
