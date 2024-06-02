@@ -1,12 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# TODO increase robustness of solution, especially getting new lines!
-# If there are no new lines, then use simple double ticks.
-# https://stackoverflow.com/questions/14182879
-# https://tex.stackexchange.com/questions/621461
-
-DEBUGMATCHES = false
-
+DEBUGMATCHES  = false
 TESTFORMATTER = true
 
 # See https://stackoverflow.com/questions/20478823/
@@ -16,9 +10,16 @@ ANYNAME = p"(?<named>((.|\n)*?))"
 
 OJULIA  = p"(```julia;(\s+)@example(\s+)(.*)\n)"
 CJULIA  = p"(\n```)"
+SJULIA  = s"```@example notebook\n\g<named>\n```"
 
 ODOLLAR = p"(\$\$((\s+|\n)?))"
 CDOLLAR = p"(((\s+|\n)?)\$\$)"
+SDOLLAR = s"```math\n\g<named>\n```"
+
+OCITES  = p"\(\[\[@"
+CCITES  = p"\]\]\)"
+# SCITES  = s"(\g<named>)[\g<named>](@cite)"
+
 
 function matchdebugger(gr, text)
     if (m = match(gr, text); m !== nothing)
@@ -27,35 +28,29 @@ function matchdebugger(gr, text)
 end
 
 function formatnotecells(text)
-    newgroup = s"```@example notebook\n\g<named>\n```"
-    oldgroup = oldgroup = Regex(join([OJULIA, ANYNAME, CJULIA]))
+    oldgroup = Regex(join([OJULIA, ANYNAME, CJULIA]))
     DEBUGMATCHES && matchdebugger(oldgroup, text)
-    return replace(text, oldgroup => newgroup)
+    return replace(text, oldgroup => SJULIA)
 end
 
 function formatequations(text)
-    newgroup = s"```math\n\g<named>\n```"
     oldgroup = Regex(join([ODOLLAR, ANYNAME, CDOLLAR]))
     DEBUGMATCHES && matchdebugger(oldgroup, text)
-    return replace(text, oldgroup => newgroup)
+    return replace(text, oldgroup => SDOLLAR)
 end
 
-function formatcitations(text)
-    # TODO get this working:
-    # path = replace("$(@__DIR__)/tmp/References", "\\" => "/", ":" => "")
-    # path = "tmp/References"
-    # link = "[\\g<named>]($(path)/@\\g<named>.md)"
-    # newgroup = SubstitutionString("$(link) [\\g<named>](@cite)")
-    newgroup = s"(\g<named>)[\g<named>](@cite)"
-    oldgroup = r"\(\[\[@(?<named>[A-Za-z0-9]+)\]\]\)"
+function formatcitations(text, rhpath)
+    oldgroup = Regex(join([OCITES, ANYNAME, CCITES]))
     DEBUGMATCHES && matchdebugger(oldgroup, text)
-    return replace(text, oldgroup => newgroup)
+    link = "[\\g<named>]($(rhpath)/References/@\\g<named>.md)"
+    scites = SubstitutionString("$(link) [\\g<named>](@cite)")
+    return replace(text, oldgroup => scites)
 end
 
-function formatter(text)
+function formatter(text, rhpath)
     text = formatnotecells(text)
     text = formatequations(text)
-    text = formatcitations(text)
+    text = formatcitations(text, rhpath)
     return text
 end
 
@@ -80,7 +75,7 @@ if TESTFORMATTER
     ```
     """
 
-    testequation = """
+    testequation = """\
     Standard equation:
 
     \$\$
@@ -92,6 +87,11 @@ if TESTFORMATTER
     \$\$ f(x) = x^2 + 1 \$\$
     """
 
+    testcitations = """"\
+    For instance, ([[@Masamune1963a]]) studied things, but also did
+    ([[@Luikov1968a]]) and many others.
+    """
+
     @info """
     testing documenter code blocks:
     $(formatnotecells(testnote))
@@ -100,5 +100,10 @@ if TESTFORMATTER
     @info """
     testing multiline equations:
     $(formatequations(testequation))
+    """
+
+    @info """
+    testing multiline equations:
+    $(formatcitations(testcitations, "../.."))
     """
 end

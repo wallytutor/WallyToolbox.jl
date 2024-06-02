@@ -157,7 +157,6 @@ pages = [
 ##############################################################################
 
 include("formatter.jl")
-
 spath = joinpath(@__DIR__, "src")
 wpath = joinpath(@__DIR__, "tmp")
 julianizemarkdown(; formatter, spath, wpath)

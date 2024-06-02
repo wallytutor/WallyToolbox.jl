@@ -3,6 +3,7 @@ module WallyDocuments
 
 using Documenter
 using Documenter.DocMeta: setdocmeta!
+using Documenter.HTMLWriter: relhref
 
 export get_format, deployrepo, julianizemarkdown
 
@@ -46,6 +47,9 @@ function julianizemarkdown(;
     # Ensure directory exists.
     !isdir(wpath) && mkpath(wpath)
 
+    # Remove basename of wpath plus "/../" pointing above it.
+    cutl = length(splitpath(wpath)[end]) + 3 + 1 
+
     for (root, _, files) in walkdir(spath)
         for file in files
             # Absolute path of file in sources.
@@ -53,6 +57,9 @@ function julianizemarkdown(;
 
             # Relative path of file from source root.
             rpath = relpath(apath, spath)
+
+            # Path for relative markdown links.
+            rhpath = relhref(apath, wpath)[1:end-cutl]
 
             # Directories to ignore in search (in source roots only!).
             # Check if not in list of ignored paths.
@@ -70,7 +77,7 @@ function julianizemarkdown(;
             # @info("Processing $(apath)")
             if endswith(file, ".md")
                 content = open(apath) do io
-                    formatter(read(io, String))
+                    formatter(read(io, String), rhpath)
                 end
                 open(dpath, "w") do io
                     write(io, content)
