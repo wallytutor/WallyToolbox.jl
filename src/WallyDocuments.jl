@@ -6,6 +6,22 @@ using Documenter.DocMeta: setdocmeta!
 using Documenter.HTMLWriter: relhref
 
 export get_format, deployrepo, julianizemarkdown
+export formatnotecells, formatequations
+
+DEBUGMATCHES  = false
+
+# See https://stackoverflow.com/questions/20478823/
+macro p_str(s) s end
+
+ANYNAME = p"(?<named>((.|\n)*?))"
+
+OJULIA  = p"(```julia;(\s+)@example(\s+)(.*)\n)"
+CJULIA  = p"(\n```)"
+SJULIA  = s"```@example notebook\n\g<named>\n```"
+
+ODOLLAR = p"(\$\$((\s+|\n)?))"
+CDOLLAR = p"(((\s+|\n)?)\$\$)"
+SDOLLAR = s"```math\n\g<named>\n```"
 
 
 "Get format specified to generate docs."
@@ -32,10 +48,8 @@ function get_format(; latex = false, user, sitename)
     return format
 end
 
-
 "Generate a `repo` argument in the format expected by `deploydocs`."
 deployrepo(format) = last(split(format.repolink, "://")) * ".git"
-
 
 "Convert equations from dollar to Julia ticks notation."
 function julianizemarkdown(;
@@ -87,6 +101,27 @@ function julianizemarkdown(;
             end
         end
     end
+end
+
+"Helper to debug regex matches by simply printing to the screen."
+function matchdebugger(gr, text)
+    if (m = match(gr, text); m !== nothing)
+        println(m[:named])
+    end
+end
+
+"Convert cells of notebooks to Documenter format."
+function formatnotecells(text)
+    oldgroup = Regex(join([OJULIA, ANYNAME, CJULIA]))
+    DEBUGMATCHES && matchdebugger(oldgroup, text)
+    return replace(text, oldgroup => SJULIA)
+end
+
+"Convert (multiline) equations to Julia markdown."
+function formatequations(text)
+    oldgroup = Regex(join([ODOLLAR, ANYNAME, CDOLLAR]))
+    DEBUGMATCHES && matchdebugger(oldgroup, text)
+    return replace(text, oldgroup => SDOLLAR)
 end
 
 end # (module WallyDocuments)

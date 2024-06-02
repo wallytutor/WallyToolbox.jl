@@ -156,7 +156,23 @@ pages = [
 # PREPROCESS ALL
 ##############################################################################
 
-include("formatter.jl")
+"Custom formatting of references with links (project-specific)."
+function formatcitations(text, rhpath)
+    oldgroup = r"\(\[\[@(?<named>((.|\n)*?))\]\]\)"
+    link = "[\\g<named>]($(rhpath)/References/@\\g<named>.md)"
+    scites = SubstitutionString("$(link) [\\g<named>](@cite)")
+    return replace(text, oldgroup => scites)
+end
+
+function formatter(text, rhpath)
+    text = formatnotecells(text)
+    text = formatequations(text)
+    text = formatcitations(text, rhpath)
+    return text
+end
+
+# include("formatter.jl")
+
 spath = joinpath(@__DIR__, "src")
 wpath = joinpath(@__DIR__, "tmp")
 julianizemarkdown(; formatter, spath, wpath)
