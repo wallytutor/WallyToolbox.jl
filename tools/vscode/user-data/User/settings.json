@@ -95,4 +95,5 @@
         "editor.rulers": [79],
         "rewrap.autoWrap.enabled": false
     },
+    "editor.minimap.enabled": false,
 }
