@@ -1,0 +1,2 @@
+region          region_cylinder_in  cylinder z 0 0 10 INF INF side in
+region          region_cylinder_out cylinder z 0 0 10 INF INF side out

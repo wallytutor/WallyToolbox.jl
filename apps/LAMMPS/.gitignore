@@ -1,5 +1,5 @@
 # LAMMPS standard log file.
-log.lammps
+log.*
 
 # Dumped trajectories.
 *.lammpstrj

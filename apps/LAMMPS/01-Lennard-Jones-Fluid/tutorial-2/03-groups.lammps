@@ -1,0 +1,11 @@
+group           group_type_1 type 1
+group           group_type_2 type 2
+
+group           group_region_in  region region_cylinder_in
+group           group_region_out region region_cylinder_out
+
+group           group_type_1_in  intersect group_type_1 group_region_in
+group           group_type_2_out intersect group_type_2 group_region_out
+
+delete_atoms    group group_type_1_in
+delete_atoms    group group_type_2_out

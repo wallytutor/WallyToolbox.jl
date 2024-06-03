@@ -1,0 +1,38 @@
+#### 1 - Initialization #####################################################
+
+include         "01-initialize.lammps"
+
+#### 2 - System definition ##################################################
+
+read_data       "outputs-1.data"
+reset_timestep  0
+
+#### 3 - Simulation settings ################################################
+
+#### 4 - Visualization ######################################################
+
+dump            mydmp all      atom 1000 "outputs-2.lammpstrj"
+thermo          1000
+
+group           type1 type 1
+group           type2 type 2
+
+compute         coor12 type1 coord/atom cutoff 2.0 group type2
+compute         sumcoor12 all      reduce ave c_coor12
+
+fix             myat3 all      ave/time 100 1 100 c_sumcoor12 &
+file            "outputs-2-coordination.dat"
+
+#### 5 - Run ################################################################
+
+velocity        all create 1.0 285714 mom yes rot yes dist gaussian
+
+fix             mynph all      nph iso 1.0 1.0 1.0
+fix             mylgv all      langevin 1.0 1.0 0.1 857142
+
+timestep        0.005
+run             100000
+write_data      "outputs-2.data" pair ij
+undump          mydmp
+
+#### EOF ####################################################################

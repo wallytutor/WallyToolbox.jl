@@ -19,7 +19,7 @@ pair_coeff      1    1    1.0 1.0
 
 #### 4 - Visualization ######################################################
 
-dump            mydmp all      atom 100 dump.lammpstrj
+dump            mydmp all      atom 100 "outputs-1.lammpstrj"
 thermo          100
 thermo_style    custom step temp pe ke etotal press
 
