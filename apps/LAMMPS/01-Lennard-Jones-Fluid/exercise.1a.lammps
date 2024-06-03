@@ -1,0 +1,54 @@
+#### 1 - Initialization #####################################################
+
+units           lj
+dimension       3
+boundary        p p p
+atom_style      atomic
+pair_style      lj/cut 2.5
+
+#### 2 - System definition ##################################################
+
+region          simulation_box block -20 20 -20 20 -20 20
+create_box      1 simulation_box
+create_atoms    1 random 1000 341841 simulation_box
+
+#### 3 - Simulation settings ################################################
+
+mass            1    1
+pair_coeff      1    1    1.0 1.0
+
+#### 4 - Visualization ######################################################
+
+dump            mydmp all      atom 100 dump.lammpstrj
+thermo          100
+thermo_style    custom step temp pe ke etotal press
+
+#### 5 - Run ################################################################
+
+# MY SOLUTION: simply increasing relaxation then running with a smaller step
+# seems to work, but convergence rate is pretty bad. The original solution
+# that I modified below seems to be more reliable if one fixes the proposed
+# approach to keep the same physics (temperature).
+#
+#fix             mynve all      nve
+#fix             mylgv all      langevin 1.0 1.0 0.01 1530917
+#timestep        0.0001
+#run             50000
+
+# MODIFIED PROPOSED SOLUTION: the proposed solution sets a first thermostat
+# at a lower temperature, higher relaxation, and smaller time-step. Then a
+# first run is performed and the goal state is set through a change in the
+# thermostat followed by another integration. Notice that in the repository
+# the solution is changing the temperature of the final state, but I don't
+# see that as a solution since you are not keeping the same physics.
+#
+fix             mynve all      nve
+fix             mylgv all      langevin 0.001 0.001 0.01 1530917
+timestep        0.001
+run             10000
+
+fix             mylgv all      langevin 1.0 1.0 0.1 1530917
+timestep        0.005
+run             10000
+
+#### EOF ####################################################################
