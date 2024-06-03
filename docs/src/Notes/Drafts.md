@@ -1,5 +1,10 @@
 # Drafts
 
+## LAMMPS
+
+- Do exercises
+- create a diffusion cell (one side initialized to a different type of atoms)
+
 ## Julia para cientistas
 
 1. Lacos E Condicionais
