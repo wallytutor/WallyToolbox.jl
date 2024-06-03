@@ -7,3 +7,7 @@ log.lammps
 # LAMMPS data file.
 *.dat
 *.data
+
+# Generated frames.
+*.bmp
+*.gif
