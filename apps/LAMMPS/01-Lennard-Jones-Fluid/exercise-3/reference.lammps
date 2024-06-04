@@ -11,8 +11,12 @@ region          simulation_box block -20 20 -20 20 -20 20
 # small elongated box
 #region          simulation_box block -20 20 -6 6 -6 6
 
-create_box      2 simulation_box bond/types 1 extra/bond/per/atom 1
+create_box      2 simulation_box & 
+    bond/types          1        &
+    extra/bond/per/atom 1
+
 molecule        dumbell dumbell.mol
+
 create_atoms    1 random 1500 341341 simulation_box
 create_atoms    0 random 20 678865 simulation_box mol dumbell 8751
 

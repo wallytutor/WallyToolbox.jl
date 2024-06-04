@@ -1,0 +1,51 @@
+#### 1 - Initialization #####################################################
+
+units           lj
+dimension       3
+boundary        p p p
+
+atom_style      molecular
+bond_style      harmonic
+pair_style      lj/cut 2.5
+
+#### 2 - System definition ##################################################
+
+region          simulation_box block -20 20 -20 20 -20 20
+
+create_box      2 simulation_box & 
+    bond/types          1        &
+    extra/bond/per/atom 1
+
+#### 3 - Simulation settings ################################################
+
+molecule        dumbell dumbell.mol
+
+create_atoms    1 random 1000  341341  simulation_box
+create_atoms    0 random 100   678865  simulation_box mol dumbell 8751
+
+mass            1    1
+mass            2    1
+
+pair_coeff      1    1    1.0 1.0
+pair_coeff      2    2    0.5 3.0
+bond_coeff      1    5    2.0
+
+#### 4 - Visualization ######################################################
+
+#### 5 - Run ################################################################
+
+minimize        1.0e-4 1.0e-6 1000 10000
+reset_timestep  0
+
+#### 4 - Visualization ######################################################
+
+dump            mydmp all      atom 1000 "outputs-1.lammpstrj"
+thermo          1000
+
+#### 5 - Run ################################################################
+
+fix             mynve all      nve
+fix             mylgv all      langevin 1 1 0.1 94728
+run             10000
+
+#### EOF ####################################################################
