@@ -6,7 +6,6 @@ angle_style     harmonic
 pair_style      lj/cut 2.5
 boundary        p p p
 
-
 # cubic box
 region          simulation_box block -20 20 -20 20 -20 20
 

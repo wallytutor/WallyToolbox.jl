@@ -15,13 +15,81 @@ The official documentation of LAMMPS can be found [here](https://docs.lammps.org
 
 ## Workflow of a simulation
 
-- System initialization: comprises all basic definitions, such as domain boundaries specification, types of atoms, potentials, etc. This step is common to most simulations and it is worth writing parts of it as shared scripts in larger projects.
+### System initialization
 
-- Energy minimization: when atoms are placed randomly in a domain there is a high probability of *explosion* of interaction forces due to overlap; a minimization step is generally required to search a *sane* starting point before time integration.
+Comprises all basic definitions, such as domain boundaries specification, types of atoms, potentials, etc. This step is common to most simulations and it is worth writing parts of it as shared scripts in larger projects.
 
-- Integration of the equations of motion: with all interaction forces and a reasonable initial condition defined during minimization, time integration can be performed. This is generally done through the [Verlet algorithm](https://en.wikipedia.org/wiki/Verlet_integration), although there are [other methods](https://docs.lammps.org/run_style.html) available in LAMMPS. The key factor here is finding a suitable time step; as a rule-of-thumb, it is ideally about 5% of the time between collisions.
+The basic building blocks of a simulation include the definition of `units`, `dimension` and `boundary`; these are followed by a number of styles, which are responsible by defining the types of particles, how they interact between themselves, bond types, …, etc. The following snippet provides a minimal setup for a system consisting of atoms only, the simplest `atom_style`.
 
-- Trajectory visualization: prior to integration one defines the data to be stored with the simulation. A common tool (freeware but not open source) in this field is [VMD](https://www.ks.uiuc.edu/Research/vmd/), for which a tutorial is provided [here](https://lammpstutorials.github.io/sphinx/build/html/tutorials/vmd/vmd-tutorial.html#vmd-label).
+```c
+units           lj
+dimension       3
+boundary        p p p
+
+atom_style      atomic
+pair_style      lj/cut 2.5
+```
+
+For simple diatomic molecules, one needs to add a `bond_style`:
+
+```c
+...
+atom_style      molecular
+bond_style      harmonic
+...
+```
+
+And when going towards multiatomic molecules,  an `angle_style` is also needed:
+
+```c
+...
+atom_style      molecular
+bond_style      harmonic
+angle_style     harmonic
+...
+```
+
+For the creation of simulation domain one needs to declare one or more0 [`region`](https://docs.lammps.org/region.html) entities; it is possible then to perform logical operations to select intersections, …, etc. The simplest of the regions is a trivial block, with dimensions `xyz` given as a sequence of pairs of minimum and maximum as follows.
+
+```c
+#<command>      <name>         <type> <x min max> <y min max>  <z min max>
+region          simulation_box block     -20 20      -20 20       -20 20
+create_box      3 the_box
+```
+
+In the above cell we also used `create_box` with argument `3`, meaning we intend to have 3 atom types in the simulation domain. Next we can create a cylinder of radius 10 along z-axis:
+
+```c
+region          cylinder_in  cylinder z 0 0 10 INF INF side in
+region          cylinder_out cylinder z 0 0 10 INF INF side out
+```
+
+To be able to use an `INF` (infinite) dimension along a direction on must have created the block `the_box` ahead of the cylinder. Fortunately the error messages of LAMMPS are pretty expressive and one can quickly find a fix. Try commenting out the `create_box` in the script and check it. You can check the [region command](https://docs.lammps.org/region.html) for more.
+
+*Note*: here we will use a more complex version of `create_box` because this tutorial simulation aims at considering molecular species. The simplest version above is valid for atoms only.
+
+```c
+create_box      3 simulation_box &
+    bond/types             1     &
+    angle/types            1     &
+    extra/bond/per/atom    1     &
+    extra/angle/per/atom   2     &
+    extra/special/per/atom 5
+```
+
+Molecule creation syntax is provided [here](https://docs.lammps.org/molecule.html).
+
+### Energy minimization
+
+When atoms are placed randomly in a domain there is a high probability of *explosion* of interaction forces due to overlap; a minimization step is generally required to search a *sane* starting point before time integration.
+
+### Integration of the equations of motion
+
+With all interaction forces and a reasonable initial condition defined during minimization, time integration can be performed. This is generally done through the [Verlet algorithm](https://en.wikipedia.org/wiki/Verlet_integration), although there are [other methods](https://docs.lammps.org/run_style.html) available in LAMMPS. The key factor here is finding a suitable time step; as a rule-of-thumb, it is ideally about 5% of the time between collisions.
+
+### Trajectory visualization
+
+Prior to integration one defines the data to be stored with the simulation. A common tool (freeware but not open source) in this field is [VMD](https://www.ks.uiuc.edu/Research/vmd/), for which a tutorial is provided [here](https://lammpstutorials.github.io/sphinx/build/html/tutorials/vmd/vmd-tutorial.html#vmd-label).
 
 ## LAMMPS usage
 
@@ -34,7 +102,6 @@ The official documentation of LAMMPS can be found [here](https://docs.lammps.org
 ## Key concepts
 
 - Langevin thermostat, see ([[@Schneider1978a]]).
-
 ## Tutorials
 
 ### Lennard-Jones fluid

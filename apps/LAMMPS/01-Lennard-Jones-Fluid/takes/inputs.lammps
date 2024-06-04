@@ -1,0 +1,74 @@
+#### 1 - Initialization #####################################################
+
+units           lj
+dimension       3
+boundary        p p p
+
+pair_style      lj/cut 2.5
+atom_style      molecular
+bond_style      harmonic
+angle_style     harmonic
+
+#### 2 - System definition ##################################################
+
+region          the_box      block -20 20 -20 20 -20 20
+
+create_box      3 the_box           &
+          bond/types             1  &
+          angle/types            1  &
+          extra/bond/per/atom    1  &
+          extra/angle/per/atom   2  &
+          extra/special/per/atom 5
+
+region          cylinder_in  cylinder z 0 0 10 INF INF side in
+region          cylinder_out cylinder z 0 0 10 INF INF side out
+
+molecule        diatomic   "molecules/diatomic.mol"
+molecule        polyatomic "molecules/polyatomic.mol"
+
+# create_atoms    1 random 1000 100001 the_box
+create_atoms    0 random 200  100003 cylinder_out mol diatomic   4243
+create_atoms    0 random 2    100002 cylinder_in  mol polyatomic 4242
+
+# group           group_type_1 type 1
+# group           group_type_2 type 2
+
+# group           group_region_in  region region_cylinder_in
+# group           group_region_out region region_cylinder_out
+
+# group           group_type_1_in  intersect group_type_1 group_region_in
+# group           group_type_2_out intersect group_type_2 group_region_out
+
+# delete_atoms    group group_type_1_in
+# delete_atoms    group group_type_2_out
+
+
+
+#### 3 - Simulation settings ################################################
+
+mass            1    1
+mass            2    1
+mass            3    1
+
+pair_coeff      1    1    1.0 1.0
+pair_coeff      2    2    0.5 3.0
+pair_coeff      3    3    0.5 3.0
+
+bond_coeff      1    5    2.5
+# bond_coeff      2    5    2.0
+
+angle_coeff     1    2    180
+
+
+#### 4 - Visualization ######################################################
+
+thermo          1000
+dump            mydmp all      atom 1000 "outputs.lammpstrj"
+
+minimize        1.0e-4 1.0e-6 1000 10000
+
+#### 5 - Run ################################################################
+
+
+
+#### EOF ####################################################################
