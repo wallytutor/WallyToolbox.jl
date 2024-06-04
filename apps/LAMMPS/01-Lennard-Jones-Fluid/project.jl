@@ -15,7 +15,11 @@ function run_tutorial(; script, wd, force = false)
     @info("Running $(script) at $(wd) (see $(logname))")
 
     return redirect_to_files(logname) do
-        run(Cmd(`lmp -in $(script)`, dir=wd))
+        try
+            run(Cmd(`lmp -in $(script)`, dir=wd))
+        catch err
+            @error(err)
+        end
     end
 end
 
@@ -31,8 +35,11 @@ project = [
     (script = "inputs-2.lammps",  wd = "exercise-2"),
     (script = "inputs-3.lammps",  wd = "exercise-2"),
     (script = "reference.lammps", wd = "exercise-2"),
-    # (script = "inputs-1.lammps",  wd = "exercise-3"),
-    # (script = "reference.lammps", wd = "exercise-3"),
+    (script = "inputs-1.lammps",  wd = "exercise-3"),
+    (script = "reference.lammps", wd = "exercise-3"),
+    (script = "inputs-1.lammps",  wd = "exercise-4"),
+    (script = "reference.lammps", wd = "exercise-4"),
+    (script = "inputs.lammps",    wd = "takes"),
 ]
 
 for simulation in project
