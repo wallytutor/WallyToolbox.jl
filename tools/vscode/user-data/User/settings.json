@@ -13,7 +13,7 @@
     "extensions.ignoreRecommendations": true,
     "python.createEnvironment.trigger": "off",
 
-    "workbench.colorTheme": "Dracula",
+    "workbench.colorTheme": "GitHub Light",
 
     //-------------------------------------------------------------------------
     // LATEX-WORKSHOP
