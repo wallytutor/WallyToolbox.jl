@@ -1,0 +1,3 @@
+# Theoretical Physics
+
+This notes track my studies of theoretical physics rather than providing content by themselves. Currently I am following the text by ([[@Joos1958]]) because of its self-contained aspects. The text assumes previous knowledge of Calculus, and the reader familiar with the subject may simply skim the first part; in some topics the author provide better physical context than normal Calculus textbooks, what may be interesting.

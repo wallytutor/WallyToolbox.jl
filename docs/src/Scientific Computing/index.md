@@ -33,3 +33,17 @@ Some technologies have been mainstream or important in the past, but nowadays so
 - [DWSIM: Curso (Pr. Felix Monteiro Pereira)](https://sistemas.eel.usp.br/docentes/visualizar.php?id=5817066)
 - [DWSIM: Curso (Pr. Delano Mendes de Santana)](https://dwsim.org/files/ENG438_Aula02_DWSIM_rev0.pdf)
 - [DWSIM: YouTube Playlist](https://www.youtube.com/playlist?list=PLkdIY_5Zxa7WN-8FEYjTqvX8tEKEhjCTu)
+
+### Mathematical software
+
+- [Mathics](https://mathics.org/)
+
+### Computational thermodynamics
+
+- [sundmanbo/opencalphad](https://github.com/sundmanbo/opencalphad)
+- [pycalphad/pycalphad](https://github.com/pycalphad/pycalphad)
+- [materialsgenomefoundation/kawin](https://github.com/materialsgenomefoundation/kawin)
+- [ORNL-CEES/thermochimica](https://github.com/ORNL-CEES/thermochimica)
+- [ORNL/Equilipy](https://github.com/ORNL/Equilipy)
+- [hasundue/Calmato.jl](https://github.com/hasundue/Calmato.jl)
+- [npaulson/pduq](https://github.com/npaulson/pduq)
