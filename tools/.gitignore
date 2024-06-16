@@ -7,8 +7,9 @@ bin/FreeCAD*
 bin/gmsh*
 bin/gp*
 bin/JabRef*
-bin/LAMMPS*
 bin/julia*
+bin/LAMMPS*
+bin/OpenModelica*
 bin/ParaView*
 bin/PortableGit*
 bin/SALOME*
