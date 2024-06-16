@@ -14,6 +14,7 @@ basepaths = {
     "MYENV_JULIA":        "julia-1.10.3",
     "MYENV_LAMMPS":       "LAMMPS-64bit-Python-17Apr2024-MSMPI",
     "MYENV_MIKTEX":       "basic-miktex-24.1-x64",
+    "MYENV_MODELICA":     "OpenModelica1.23.0-64bit",
     "MYENV_PARAVIEW":     "ParaView-5.12.0-Windows-Python3.10-msvc2017-AMD64",
     "MYENV_PYTHON":       "python-3.12.3.amd64",
     "MYENV_SALOME":       "SALOME-9.12.0",

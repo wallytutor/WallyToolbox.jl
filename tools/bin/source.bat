@@ -22,6 +22,7 @@ set GNUPLOT_VERSION=gp600-win64-mingw
 set JABREF_VERSION=JabRef-5.13-portable_windows
 set JULIA_VERSION=julia-1.10.3
 set LAMMPS_VERSION=LAMMPS-64bit-Python-17Apr2024-MSMPI
+set MODELICA_VERSION=OpenModelica1.23.0-64bit
 set MIKTEX_VERSION=basic-miktex-24.1-x64
 set WINPYTHON_VERSION=WPy64-31231b3
 set PARAVIEW_VERSION=ParaView-5.12.0-Windows-Python3.10-msvc2017-AMD64
@@ -43,16 +44,16 @@ set VSCODESETTINGS=%HERE%..\vscode\user-data
 @REM CONFIGURE GMSH
 @REM @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-set PATH=%HERE%\%GMSH_VERSION%\bin;%PATH%
-set PATH=%HERE%\%GMSH_VERSION%\lib;%PATH%
-set JULIA_LOAD_PATH=%HERE%\%GMSH_VERSION%\lib;%JULIA_LOAD_PATH%
-set PYTHONPATH=%HERE%\%GMSH_VERSION%\lib;%PYTHONPATH%
+set PATH=%HERE%%GMSH_VERSION%\bin;%PATH%
+set PATH=%HERE%%GMSH_VERSION%\lib;%PATH%
+set JULIA_LOAD_PATH=%HERE%%GMSH_VERSION%\lib;%JULIA_LOAD_PATH%
+set PYTHONPATH=%HERE%%GMSH_VERSION%\lib;%PYTHONPATH%
 
 @REM @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @REM CONFIGURE ELMER
 @REM @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-set ELMER_HOME=%HERE%\%ELMER_VERSION%
+set ELMER_HOME=%HERE%%ELMER_VERSION%
 set ELMERGUI_HOME=%ELMER_HOME%\share\ElmerGUI
 set PATH=%ELMER_HOME%\bin;%PATH%
 set PATH=%ELMER_HOME%\lib;%PATH%
@@ -62,7 +63,7 @@ set PATH=%ELMER_HOME%\lib;%PATH%
 @REM @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 set SU2_RUN=%SU2_VERSION%\bin
-set PATH=%HERE%\%SU2_RUN%;%PATH%
+set PATH=%HERE%%SU2_RUN%;%PATH%
 
 @REM @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @REM CONFIGURE VMD
@@ -84,36 +85,47 @@ set PATH=%VMDDIR%;%PATH%
 @REM that works seamlessly. In the end I ended copying the `qt5plugins/` to
 @REM the Python+MPI directory and the additional binaries from `bin`.
 
-set LAMMPSHOME=%HERE%\%LAMMPS_VERSION%
-set PATH=%LAMMPSHOME%\bin;%PATH%
+set LAMMPSHOME=%HERE%%LAMMPS_VERSION%
 set LAMMPS_PLUGIN_PATH=%LAMMPSHOME%\plugins
 set LAMMPS_POTENTIALS=%LAMMPSHOME%\Potentials
 set MSI2LMP_LIBRARY=%LAMMPSHOME%\frc_files
 set PLUMED_ROOT=%LAMMPSHOME%
 set PYTHONPATH=%LAMMPSHOME%\Python;%PYTHONPATH%
+set PATH=%LAMMPSHOME%\bin;%PATH%
+
+@REM @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@REM CONFIGURE OPENMODELICAL
+@REM @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+set OPENMODELICAHOME=%HERE%%MODELICA_VERSION%
+set PATH=%OPENMODELICAHOME%\bin;%PATH%
+
+REG ADD "HKCU\Software\OpenModelica" /v InstallMode    /t REG_SZ /d CurrentUser /f
+REG ADD "HKCU\Software\OpenModelica" /v Path           /t REG_SZ /d %OPENMODELICAHOME% /f
+REG ADD "HKCU\Software\OpenModelica" /v StartMenuGroup /t REG_SZ /d OpenModelica /f
 
 @REM @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @REM SIMPLE PATH APPENDS
 @REM @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-set PATH=%HERE%\%VSCODE_VERSION%;%PATH%
-set PATH=%HERE%\%GIT_VERSION%\cmd;%PATH%
-set PATH=%HERE%\%BLENDER_VERSION%;%PATH%
-set PATH=%HERE%\%DUALSPHYSICS_VERSION%\DualSPHysics_v5.2\bin\windows;%PATH%
-set PATH=%HERE%\%FREECAD_VERSION%\bin;%PATH%
-set PATH=%HERE%\%GNUPLOT_VERSION%\gnuplot\bin;%PATH%
-set PATH=%HERE%\%JABREF_VERSION%\JabRef;%PATH%
-set PATH=%HERE%\%PARAVIEW_VERSION%\bin;%PATH%
-set PATH=%HERE%\%SALOME_VERSION%;%PATH%
-set PATH=%HERE%\%TEXSTUDIO_VERSION%;%PATH%
+set PATH=%HERE%%VSCODE_VERSION%;%PATH%
+set PATH=%HERE%%GIT_VERSION%\cmd;%PATH%
+set PATH=%HERE%%BLENDER_VERSION%;%PATH%
+set PATH=%HERE%%DUALSPHYSICS_VERSION%\DualSPHysics_v5.2\bin\windows;%PATH%
+set PATH=%HERE%%FREECAD_VERSION%\bin;%PATH%
+set PATH=%HERE%%GNUPLOT_VERSION%\gnuplot\bin;%PATH%
+set PATH=%HERE%%JABREF_VERSION%\JabRef;%PATH%
+set PATH=%HERE%%PARAVIEW_VERSION%\bin;%PATH%
+set PATH=%HERE%%SALOME_VERSION%;%PATH%
+set PATH=%HERE%%TEXSTUDIO_VERSION%;%PATH%
 
 @REM @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @REM ACTIVATE LATEX
 @REM @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-call %HERE%\%MIKTEX_VERSION%\miktex-portable.cmd
-set PATH=%HERE%\%MIKTEX_VERSION%\texmfs\install\miktex\bin\x64\internal;%PATH%
-set PATH=%HERE%\%MIKTEX_VERSION%\texmfs\install\miktex\bin\x64;%PATH%
+call %HERE%%MIKTEX_VERSION%\miktex-portable.cmd
+set PATH=%HERE%%MIKTEX_VERSION%\texmfs\install\miktex\bin\x64\internal;%PATH%
+set PATH=%HERE%%MIKTEX_VERSION%\texmfs\install\miktex\bin\x64;%PATH%
 
 @REM IMPORTANT: Julia and Python come last to override others.
 
@@ -121,15 +133,15 @@ set PATH=%HERE%\%MIKTEX_VERSION%\texmfs\install\miktex\bin\x64;%PATH%
 @REM CONFIGURE JULIA
 @REM @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-set PATH=%HERE%\%JULIA_VERSION%-win64\%JULIA_VERSION%\bin;%PATH%
-set JULIA_DEPOT_PATH=%HERE%\%JULIA_VERSION%-win64\depot
+set PATH=%HERE%%JULIA_VERSION%-win64\%JULIA_VERSION%\bin;%PATH%
+set JULIA_DEPOT_PATH=%HERE%%JULIA_VERSION%-win64\depot
 
 @REM @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @REM CONFIGURE PYTHON
 @REM @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-set PATH=%HERE%\%WINPYTHON_VERSION%\%PYTHON_VERSION%;%PATH%
-set PATH=%HERE%\%WINPYTHON_VERSION%\%PYTHON_VERSION%\Scripts;%PATH%
+set PATH=%HERE%%WINPYTHON_VERSION%\%PYTHON_VERSION%;%PATH%
+set PATH=%HERE%%WINPYTHON_VERSION%\%PYTHON_VERSION%\Scripts;%PATH%
 
 @REM @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @REM EOF

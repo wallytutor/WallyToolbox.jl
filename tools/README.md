@@ -16,6 +16,7 @@ The goal of this directory is to provide an easy way to setup a portable toolbox
 
 - [ElmerFEM](https://www.nic.funet.fi/pub/sci/physics/elmer/bin/windows/)
 - [LAMMPS](https://packages.lammps.org/windows.html)
+- [OpenModelica](https://openmodelica.org/download/download-windows/)
 - [SU2](https://su2code.github.io/download.html)
 
 - [Blender](https://www.blender.org/download/)
