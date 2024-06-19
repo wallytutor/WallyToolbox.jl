@@ -70,6 +70,8 @@ For DualSPHysics one might also want to install [this FreeCAD addon](https://git
 
 - Read comments in [bin/source.bat](bin/source.bat) for additional instructions, *e.g.* how to setup a Frankenstein LAMMPS installation.
 
+- Globally install [`pip install Pygments`](https://pygments.org/) for enabling syntax highlight in LaTeX using `minted`.
+
 ## Creating a launcher
 
 ```batch
