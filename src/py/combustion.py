@@ -90,18 +90,26 @@ class HydrocarbonHeatingValue:
     @staticmethod
     def select_hydrocarbons(
             gas: ct.Solution,
-            fuel: dict[str, float]
+            fuel: dict[str, float] | str,
         ) -> list[str]:
         """ Select hydrocarbons present in fuel dictionary. """
         keep = []
 
+        # Use fuel dict because if fuel is provided as a string the
+        # check in loop below leads to unexpected behavior.
+        X_orig = gas.X
+        gas.TPX = None, None, fuel
+        fuel_dict = gas.mole_fraction_dict()
+
         for species in gas.species():
-            if species.name not in fuel:
+            if species.name not in fuel_dict:
                 continue
 
             atoms = sorted(species.composition.keys())
             if atoms == ["C", "H"] or atoms == ["H"]:
                 keep.append(species.name)
+
+        gas.TPX = None, None, X_orig
 
         return keep
 
@@ -127,6 +135,14 @@ class HydrocarbonHeatingValue:
         corr = self.hydrocarbon_mass_fraction(self._gas, fuel)
 
         return corr * lhv, corr * hhv
+
+    def hydrocarbon_heating_values(self,
+            fuel: dict[str, float],
+            oxid: dict[str, float],
+            basis: Optional[str] = "mole"
+        ) -> float:
+        """ Heating value before correction of impurities. """
+        return self._heating_values(fuel, oxid, basis=basis)
 
 
 class BurnerFlowRatesCalculator:
