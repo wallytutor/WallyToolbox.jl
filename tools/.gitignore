@@ -10,6 +10,7 @@ bin/JabRef*
 bin/julia*
 bin/LAMMPS*
 bin/OpenModelica*
+bin/pandoc*
 bin/ParaView*
 bin/PortableGit*
 bin/SALOME*

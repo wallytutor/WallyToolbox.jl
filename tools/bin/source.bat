@@ -38,6 +38,7 @@ set SU2_VERSION=SU2-v8.0.1-win64-mpi
 set JABREF_VERSION=JabRef-5.13-portable_windows
 set MIKTEX_VERSION=basic-miktex-24.1-x64
 set TEXSTUDIO_VERSION=texstudio-4.8.0-win-portable-qt6
+set PANDOC_VERSION=pandoc-3.2
 
 @REM Main languages
 set JULIA_VERSION=julia-1.10.3
@@ -131,6 +132,7 @@ set PATH=%HERE%%JABREF_VERSION%\JabRef;%PATH%
 set PATH=%HERE%%PARAVIEW_VERSION%\bin;%PATH%
 set PATH=%HERE%%SALOME_VERSION%;%PATH%
 set PATH=%HERE%%TEXSTUDIO_VERSION%;%PATH%
+set PATH=%HERE%%PANDOC_VERSION%;%PATH%
 
 @REM @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @REM ACTIVATE LATEX
