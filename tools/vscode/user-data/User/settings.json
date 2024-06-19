@@ -1,4 +1,6 @@
 {
+    "update.mode": "none",
+
     "terminal.integrated.commandsToSkipShell": [
         "language-julia.interrupt"
     ],

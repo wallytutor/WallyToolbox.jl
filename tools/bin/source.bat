@@ -12,26 +12,39 @@ set PATH=%HERE%;%PATH%
 @REM NEW SYMBOLS
 @REM @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-set BLENDER_VERSION=blender-4.1.1-windows-x64
-set DUALSPHYSICS_VERSION=DualSPHysics_v5.2.2
-set ELMER_VERSION=ElmerFEM-gui-mpi-Windows-AMD64
-set FREECAD_VERSION=FreeCAD_0.21.2-2023-12-17-conda-Windows-x86_64-py310
+@REM Coding environment
 set GIT_VERSION=PortableGit-2.45.1
+set VSCODE_VERSION=VSCode-win32-x64-1.89.1
+
+@REM Molecular dynamics
+set LAMMPS_VERSION=LAMMPS-64bit-Python-17Apr2024-MSMPI
+set VMD_VERSION=vmd194a53win64-SetupV7
+
+@REM Pre/postprocessing
+set BLENDER_VERSION=blender-4.1.1-windows-x64
+set FREECAD_VERSION=FreeCAD_0.21.2-2023-12-17-conda-Windows-x86_64-py310
 set GMSH_VERSION=gmsh-4.13.0-Windows64-sdk
 set GNUPLOT_VERSION=gp600-win64-mingw
-set JABREF_VERSION=JabRef-5.13-portable_windows
-set JULIA_VERSION=julia-1.10.3
-set LAMMPS_VERSION=LAMMPS-64bit-Python-17Apr2024-MSMPI
-set MODELICA_VERSION=OpenModelica1.23.0-64bit
-set MIKTEX_VERSION=basic-miktex-24.1-x64
-set WINPYTHON_VERSION=WPy64-31231b3
 set PARAVIEW_VERSION=ParaView-5.12.0-Windows-Python3.10-msvc2017-AMD64
-set PYTHON_VERSION=python-3.12.3.amd64
 set SALOME_VERSION=SALOME-9.12.0
+
+@REM Simulation software
+set DUALSPHYSICS_VERSION=DualSPHysics_v5.2.2
+set ELMER_VERSION=ElmerFEM-gui-mpi-Windows-AMD64
+set MODELICA_VERSION=OpenModelica1.23.0-64bit
 set SU2_VERSION=SU2-v8.0.1-win64-mpi
+
+@REM LaTeX environment
+set JABREF_VERSION=JabRef-5.13-portable_windows
+set MIKTEX_VERSION=basic-miktex-24.1-x64
 set TEXSTUDIO_VERSION=texstudio-4.8.0-win-portable-qt6
-set VMD_VERSION=vmd194a53win64-SetupV7
-set VSCODE_VERSION=VSCode-win32-x64-1.89.1
+
+@REM Main languages
+set JULIA_VERSION=julia-1.10.3
+set WINPYTHON_VERSION=WPy64-31180
+set PYTHON_VERSION=python-3.11.8.amd64
+@REM set WINPYTHON_VERSION=WPy64-31231b3
+@REM set PYTHON_VERSION=python-3.12.3.amd64
 
 @REM @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @REM CONFIGURE VSCODE
