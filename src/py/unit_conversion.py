@@ -41,7 +41,7 @@ class FlowUnits:
             mw: float
         ) -> float:
         """ Convert flow given in Nm³/h to kg/s for a solution.
-        
+
         Parameters
         ----------
         q: float
@@ -58,7 +58,7 @@ class FlowUnits:
 
     @classmethod
     def standard_flow_to_gas_speed(
-            cls, 
+            cls,
             q: float,
             T_work: Optional[float] = 298.15,
             P_work: Optional[float] = 101325.0,
@@ -88,9 +88,8 @@ class FlowUnits:
         scaler = cls.P_STANDARD / cls.T_STANDARD
         Q = q * min_per_sec * m3_per_cm3 * (T_work / P_work)
         u = scaler * Q / A_cross
-        
-        return u
 
+        return u
 
 
 class TimeUnits:
@@ -180,3 +179,8 @@ class ThermalPropertiesUnits:
                        TemperatureUnits.FARENHEIT_PER_KELVIN)
             cls.bu_to_si_specific_heat_f = factor
         return cls.bu_to_si_specific_heat_f * cp
+
+
+def normal_flow_to_mass_flow(q: float, sol: "ct.Solution"):
+    """ Wrapper around Cantera Solution object for `FlowUnits`. """
+    return FlowUnits.normal_flow_to_mass_flow(q, sol.mean_molecular_weight)
