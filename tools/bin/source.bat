@@ -29,6 +29,7 @@ set PARAVIEW_VERSION=ParaView-5.12.0-Windows-Python3.10-msvc2017-AMD64
 set SALOME_VERSION=SALOME-9.12.0
 
 @REM Simulation software
+set CANTERA_VERSION=Cantera-3.0.0
 set DUALSPHYSICS_VERSION=DualSPHysics_v5.2.2
 set ELMER_VERSION=ElmerFEM-gui-mpi-Windows-AMD64
 set MODELICA_VERSION=OpenModelica1.23.0-64bit
@@ -108,7 +109,7 @@ set PYTHONPATH=%LAMMPSHOME%\Python;%PYTHONPATH%
 set PATH=%LAMMPSHOME%\bin;%PATH%
 
 @REM @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-@REM CONFIGURE OPENMODELICAL
+@REM CONFIGURE OPENMODELICA
 @REM @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 set OPENMODELICAHOME=%HERE%%MODELICA_VERSION%
@@ -117,6 +118,18 @@ set PATH=%OPENMODELICAHOME%\bin;%PATH%
 REG ADD "HKCU\Software\OpenModelica" /v InstallMode    /t REG_SZ /d CurrentUser /f
 REG ADD "HKCU\Software\OpenModelica" /v Path           /t REG_SZ /d %OPENMODELICAHOME% /f
 REG ADD "HKCU\Software\OpenModelica" /v StartMenuGroup /t REG_SZ /d OpenModelica /f
+
+@REM @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@REM CONFIGURE CANTERA
+@REM @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+set CANTERA_HOME=%HERE%%CANTERA_VERSION%
+set CANTERA_SHARED=%CANTERA_HOME%\lib\cantera_shared.lib
+
+set PATH=%CANTERA_HOME%\bin;%PATH%
+set PATH=%CANTERA_HOME%\lib;%PATH%
+
+REG ADD "HKCU\Software\Cantera\Cantera 3.0" /v InstallDir /t REG_SZ /d %CANTERA_HOME% /f
 
 @REM @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @REM SIMPLE PATH APPENDS

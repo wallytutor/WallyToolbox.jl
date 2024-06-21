@@ -4,6 +4,7 @@ from pathlib import Path
 
 basepaths = {
     "MYENV_BLENDER":      "blender-4.1.1-windows-x64",
+    "MYENV_CANTERA":      "Cantera-3.0.0",
     "MYENV_DUALSPHYSICS": "DualSPHysics_v5.2.2",
     "MYENV_ELMER":        "ElmerFEM-gui-mpi-Windows-AMD64",
     "MYENV_FREECAD":      "FreeCAD_0.21.2-2023-12-17-conda-Windows-x86_64-py310",
