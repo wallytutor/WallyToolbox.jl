@@ -32,6 +32,7 @@ set SALOME_VERSION=SALOME-9.12.0
 set CANTERA_VERSION=Cantera-3.0.0
 set DUALSPHYSICS_VERSION=DualSPHysics_v5.2.2
 set ELMER_VERSION=ElmerFEM-gui-mpi-Windows-AMD64
+set FREEFEM_VERSION=FreeFem++-4.14-dev
 set MODELICA_VERSION=OpenModelica1.23.0-64bit
 set SU2_VERSION=SU2-v8.0.1-win64-mpi
 
@@ -130,6 +131,14 @@ set PATH=%CANTERA_HOME%\bin;%PATH%
 set PATH=%CANTERA_HOME%\lib;%PATH%
 
 REG ADD "HKCU\Software\Cantera\Cantera 3.0" /v InstallDir /t REG_SZ /d %CANTERA_HOME% /f
+
+@REM @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@REM CONFIGURE FREEFEM
+@REM @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+set %FREEFEM_HOME%=%HERE%%FREEFEM_VERSION%
+
+set PATH=%FREEFEM_HOME%;%PATH%
 
 @REM @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @REM SIMPLE PATH APPENDS

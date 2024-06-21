@@ -8,6 +8,7 @@ basepaths = {
     "MYENV_DUALSPHYSICS": "DualSPHysics_v5.2.2",
     "MYENV_ELMER":        "ElmerFEM-gui-mpi-Windows-AMD64",
     "MYENV_FREECAD":      "FreeCAD_0.21.2-2023-12-17-conda-Windows-x86_64-py310",
+    "MYENV_FREEFEM":      "FreeFem++-4.14-dev",
     "MYENV_GIT":          "PortableGit-2.45.1",
     "MYENV_GMSH":         "gmsh-4.13.0-Windows64-sdk",
     "MYENV_GNUPLOT":      "gp600-win64-mingw",

@@ -5,6 +5,7 @@ bin/Cantera*
 bin/DualSPHysics*
 bin/Elmer*
 bin/FreeCAD*
+bin/FreeFem*
 bin/gmsh*
 bin/gp*
 bin/JabRef*
