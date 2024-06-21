@@ -15,7 +15,7 @@
     "extensions.ignoreRecommendations": true,
     "python.createEnvironment.trigger": "off",
 
-    "workbench.colorTheme": "GitHub Light",
+    "workbench.colorTheme": "Monokai Dimmed",
 
     //-------------------------------------------------------------------------
     // LATEX-WORKSHOP
