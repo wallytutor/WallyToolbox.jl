@@ -811,71 +811,71 @@ Vejamos agora alguns exemplos do impacto no tempo de execução de se prover val
 
     A *macro* `@benchmark` vai executar o código algumas vezes e retornar estatísticas de execução. Não se preocupe com ela por agora, vamos voltar na temática de *benchmarking* muito em breve.
 
-```julia; @example notebook
-using BenchmarkTools, Statistics
-@benchmark a::Vector{Int64} = collect(1:10)
+```no julia; @example notebook
+# using BenchmarkTools, Statistics
+# @benchmark a::Vector{Int64} = collect(1:10)
 ```
 
 Vemos que o tempo de execução é da ordem de 30 ns. Abaixo repetimos essa avaliação para algumas ordens de grandeza de tamanho de *arrays*. Vemos que o tempo de execução para a criação dos objetos escala com o logaritmo na base 10 do número de elementos.
 
-```julia; @example notebook
-scalability = [
-    mean((@benchmark a::Vector{Int64} = collect(1:10^1)).times)
-    mean((@benchmark a::Vector{Int64} = collect(1:10^2)).times)
-    mean((@benchmark a::Vector{Int64} = collect(1:10^3)).times)
-    mean((@benchmark a::Vector{Int64} = collect(1:10^4)).times)
-]
-log10.(scalability)
+```no julia; @example notebook
+#scalability = [
+#    mean((@benchmark a::Vector{Int64} = collect(1:10^1)).times)
+#    mean((@benchmark a::Vector{Int64} = collect(1:10^2)).times)
+#    mean((@benchmark a::Vector{Int64} = collect(1:10^3)).times)
+#    mean((@benchmark a::Vector{Int64} = collect(1:10^4)).times)
+#]
+#log10.(scalability)
 ```
 
 Tentemos agora criar um vetor de `Float64` usando o mesmo método.
 
 
-```julia; @example notebook
-@benchmark a::Vector{Float64} = collect(1:10)
+```no julia; @example notebook
+#@benchmark a::Vector{Float64} = collect(1:10)
 ```
 
 O tempo de execução mais que dobrou e a memória estimada foi multiplicada por dois! Isso ocorre porque ao lado direito da expressão fornecemos números inteiros e o compilador é *obrigado* a incluir uma etapa de conversão de tipos, o que adiciona operações e alocações de memória.
 
 Se na criação do *range* utilizarmos o tipo esperado de dados voltamos a linha de base da alocação do vetor de inteiros, da ordem de 30 ns e 144 bytes.
 
-```julia; @example notebook
-@benchmark b::Vector{Float64} = collect(1.0:10.0)
+```no julia; @example notebook
+#@benchmark b::Vector{Float64} = collect(1.0:10.0)
 ```
 
 Repetimos o *benchmark* para comparar a criação de vetores de dupla-precisão inicializados por inteiros e números de dupla precisão. Incluímos no novo *benchmark* um vetor com um único elemento para entendermos um pouco mais do processo.
 
-```julia; @example notebook
-with_conversion = let
-    scalability = [
-        mean((@benchmark a::Vector{Float64} = collect(1:10^0)).times)
-        mean((@benchmark a::Vector{Float64} = collect(1:10^1)).times)
-        mean((@benchmark a::Vector{Float64} = collect(1:10^2)).times)
-        mean((@benchmark a::Vector{Float64} = collect(1:10^3)).times)
-    ]
-    scalability
-end
+```no julia; @example notebook
+# with_conversion = let
+#     scalability = [
+#         mean((@benchmark a::Vector{Float64} = collect(1:10^0)).times)
+#         mean((@benchmark a::Vector{Float64} = collect(1:10^1)).times)
+#         mean((@benchmark a::Vector{Float64} = collect(1:10^2)).times)
+#         mean((@benchmark a::Vector{Float64} = collect(1:10^3)).times)
+#     ]
+#     scalability
+# end
 ```
 
-```julia; @example notebook
-without_conversion = let
-    scalability = [
-        mean((@benchmark a::Vector{Float64} = collect(1.0:10.0^0)).times)
-        mean((@benchmark a::Vector{Float64} = collect(1.0:10.0^1)).times)
-        mean((@benchmark a::Vector{Float64} = collect(1.0:10.0^2)).times)
-        mean((@benchmark a::Vector{Float64} = collect(1.0:10.0^3)).times)
-    ]
-    scalability
-end
+```no julia; @example notebook
+# without_conversion = let
+#     scalability = [
+#         mean((@benchmark a::Vector{Float64} = collect(1.0:10.0^0)).times)
+#         mean((@benchmark a::Vector{Float64} = collect(1.0:10.0^1)).times)
+#         mean((@benchmark a::Vector{Float64} = collect(1.0:10.0^2)).times)
+#         mean((@benchmark a::Vector{Float64} = collect(1.0:10.0^3)).times)
+#     ]
+#     scalability
+# end
 ```
 
 O vetor `with_conversion` contém os tempos de execução para a criação de vetores de 1, 10, 100, 1000 e 10000 elementos com conversão de valores de inteiros para dupla-precisão. Observe que os dois primeiros elementos levaram um tempo (aqui em nano-segundos) quase idênticos: existe uma constante de tempo da criação do vetor propriamente dito, a criação dos 10 primeiros elementos é quase negligível nesse caso.
 
 Abaixo calculamos a diferença de tempo entre os dois processos e nos deparamos com mais uma surpresa: para 100 elementos, o tempo de alocação COM conversão é MENOR que o tempo SEM conversão. Ainda é muito cedo e fora de contexto para entrarmos no código LLVM gerado por Julia para entendermos a razão dessa *anomalia*. O importante a reter aqui é que para vetores de tamanhos importantes (> 1000 elementos) um tempo adicional de execução é adicionado por elemento e isso deve ser levado em conta quando escrevendo código científico.
 
-```julia; @example notebook
-time_diff = (without_conversion - with_conversion)
-time_diff_per_element = time_diff ./ [10^k for k = 0:3]
+```no julia; @example notebook
+# time_diff = (without_conversion - with_conversion)
+# time_diff_per_element = time_diff ./ [10^k for k = 0:3]
 ```
 
 Espero que a decisão de incluir essas divagações um pouco cedo no aprendizado não sejam deletérias para a motivação do estudante, mas que criem curiosidade quanto aos tópicos mais avançados que veremos mais tarde.
