@@ -125,7 +125,7 @@ REG ADD "HKCU\Software\OpenModelica" /v StartMenuGroup /t REG_SZ /d OpenModelica
 @REM @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 set CANTERA_HOME=%HERE%%CANTERA_VERSION%
-set CANTERA_SHARED=%CANTERA_HOME%\lib\cantera_shared.lib
+set CANTERA_SHARED=%CANTERA_HOME%\bin\cantera_shared.dll
 
 set PATH=%CANTERA_HOME%\bin;%PATH%
 set PATH=%CANTERA_HOME%\lib;%PATH%
