@@ -1,4 +1,4 @@
-## Programming
+# Programming
 
 Those new to programming can find a quite interesting environment at [Exercism](https://exercism.org/).
 
@@ -71,6 +71,6 @@ Useful links for doing numerical stuff in Rust:
 
 ## Scilab
 
-## Other programming materials
+## Other materials
 
 - [Why Futhark?](https://futhark-lang.org/index.html)

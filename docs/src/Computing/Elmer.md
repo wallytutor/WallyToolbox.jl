@@ -222,21 +222,19 @@ End
 Another situation that can be frequently found is unit conversion for temperature. It was chosen to implement it in [this case](https://github.com/wallytutor/WallyToolbox.jl/tree/main/apps/Elmer/conduction_refractory/transient_parallel) because it is multi-material; that is a reminder that in such cases the new variable needs to be created for all materials (as this is a tweak, since the temperature is not a material property, but a global field). If forgotten in one material, an error will show up in ParaView telling you that the field is not available in some regions.
 
 ---
-## Elmer documentation
-
-### Solver Input Files (SIF)
+## Solver Input Files (SIF)
 
 Once you get serious with Elmer it is a natural evolution to prefer to work with SIF files instead of the GUI most of the time. This is also true in a majority of scientific computing software. The documentation of SIF is spread over the whole documentation of Elmer and this page tries to consolidate the most of it. For the beginner, this [video](https://www.youtube.com/watch?v=iXVEqKTq5TE) is a good starting point, this page being more of a reference manual.
 
 Because syntax highlighting is important for productivity, I am working in a minimalistic extension for VS Code. Its partial development can be found [here](https://github.com/wallytutor/WallyToolbox.jl/tree/main/helpers/syntax-highlighters/sif). After cloning the repository, simply copy the `sif/` directory under `%USERPROFILE%/.vscode/extensions`  on in the equivalent directory documented [here](https://code.visualstudio.com/docs/editor/extension-marketplace#_where-are-extensions-installed).
 
-### MATC
+## MATC
 
 Elmer provides a few extension methods. For complex models you might be prompted to use directly Fortran 90. For simpler things, such as providing temperature dependent thermophysical properties, it has its own parser for use in SIF, the metalanguage MATC. Expressions provided in MATC can be evaluated when file is read or during simulation execution.
 
 Because it is quite concise, I summarized the whole of MATC syntax and functions in this page. For the official documentation please refer to [this document](https://www.nic.funet.fi/pub/sci/physics/elmer/doc/MATCManual.pdf).
 
-#### Declaring variables
+### Declaring variables
 
 Variables in MATC can be matrices and strings; nonetheless, both are stored as double precision arrays so creating large arrays of strings can represent a waste of memory. For some weird reason I could not yet figure out, MATC language can be quite counterintuitive.
 
@@ -278,7 +276,7 @@ Finally, logical indexing is also allowed:
 x(x < 0.05) = 0.05
 ```
 
-#### Control structures
+### Control structures
 
 MATC provides conditionals and loops as control structures. Below we have the `if-else` statement, which can be declared inline of using a C-style declaration using braces.
 
@@ -319,7 +317,7 @@ while( expr )
 }
 ```
 
-#### Operators
+### Operators
 
 Assume the following definitions:
 
@@ -351,7 +349,7 @@ Assume the following definitions:
 | `b = n m % a`                        | resize a to matrix of size n by m.                                                                                                                                            |
 | `b = a`                              | assigning a to b.                                                                                                                                                             |
 
-#### Function definitions
+### Function definitions
 
 The syntax of the function definition is similar to that of Julia and is given below. The function body is enclosed by braces. Instead of using a `return` statement, the resulting value is attributed to a variable named after the function with a leading underscore. Notice the `!` denoting comments in the description of the function.
 
@@ -384,9 +382,9 @@ function mult(a, b)
 
 You can get element (3,5) of the `a` times `b` matrix with `mult(x,y)[3,5]` or the diagonal values of the same matrix by `diag(mult(x, y))`.
 
-#### Built-in functions
+### Built-in functions
 
-##### C-style math
+#### C-style math
 
 The following listing provides a series of mathematical functions which follow a their meaning in C. The only exceptions are `ln` denoting the natural logarithm and `log` used here for base 10 logarithms.
 
@@ -426,7 +424,7 @@ r = abs(x)
 r = pow(x,y) 
 ```
 
-##### General utilities
+#### General utilities
 
 |                                      |                                                                                                         |
 | ------------------------------------ | :------------------------------------------------------------------------------------------------------ |
@@ -440,7 +438,7 @@ r = pow(x,y)
 | `who`                                | Give list of currently defined variables.                                                               |
 | `help` or `help("symbol")`           | First form of the command gives list of available commands. Second form gives help on specific routine. |
 
-##### String and I/O functions
+#### String and I/O functions
 
 |                                      |                                                                                                                                                                                                                                                                                       |
 | ------------------------------ | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
@@ -458,7 +456,7 @@ r = pow(x,y)
 | `save(name, a[,ascii_flag])`   | Close file previously opened with `fopen` or `freopen`.                                                                                                                                                                                                                               |
 | `r = load(name)`               | Load matrix from a file given name and in format used by `save` command.                                                                                                                                                                                                              |
 
-##### Numerical utilities
+#### Numerical utilities
 
 |                                      |                                                                                                                                                                                                                        |
 | --------------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -476,7 +474,7 @@ r = pow(x,y)
 | `r = matcvt(matrix, type)`  | Makes a type conversion from MATC matrix double precision array to given type, which can be one of the following: `"int"`, `"char"` or `"float"`.                                                                      |
 | `r = cvtmat(special, type)` | Makes a type conversion from given type to MATC matrix. Type can be one of the following: `"int"`, `"char"` or `"float"`.                                                                                              |
 
-##### Linear algebra
+#### Linear algebra
 
 |                                      |                                                                                                                                                                      |
 | ------------------------------------ | :------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -491,11 +489,11 @@ r = pow(x,y)
 | `r = hesse(matrix)`                  | Return the upper hessenberg form of given matrix.                                                                                                                    |
 | `r = eye(n)`                         | Return n by n identity matrix.                                                                                                                                       |
 
-#### Usage
+### Usage
 
 Although the language is pretty fast for most simple uses, it is much slower than Fortran extensions, so use with case when scalability is needed. Another point is overuse of MATC; do not use it with simple numerical expressions, *e.g.* `OneThird = Real $1.0/3.0` is much faster than its MATC counterpart `OneThird = Real MATC "1.0/3.0"`.
 
-##### Direct expression coding
+#### Direct expression coding
 
 One thing that in my opinion lacks in the documentation are examples of use in conjunction with SIF. For instance, for setting the thermal conductivity of a material as temperature-dependent one could use the following snippet and modify the string to match the desired expression. An example of its usage is provided in [this case](https://github.com/wallytutor/WallyToolbox.jl/blob/main/apps/Elmer/conduction_refractory/transient_parallel/case.sif).
 
@@ -504,7 +502,7 @@ One thing that in my opinion lacks in the documentation are examples of use in c
     Real MATC "1.0 - tx * (2.5E-03 - 1.2E-06 * tx)"
 ```
 
-##### Sourcing functions from user modules
+#### Sourcing functions from user modules
 
 Models can become too complex to code in a single line. Hopefully MATC provides functions which can be declared in external modules. I avoid coding MATC directly in SIF because their syntax is different and that can quickly lead to unmaintainable code. An example of such external sourcing is provided in [this case](https://github.com/wallytutor/WallyToolbox.jl/tree/main/apps/Elmer/diffusion_solids/carburizing_slycke). You need to remember to call `source("module")` in `Simulation` section of SIF so that the functions can be used elsewhere.  The call of a function become something as
 
@@ -531,6 +529,6 @@ You can even use multiple variables, *e.g.*
 	
 For more complex cases such as [this one](https://github.com/wallytutor/WallyToolbox.jl/tree/main/apps/Elmer/diffusion_solids/carburizing_slycke_gui) it is worth writing actual MATC function modules; since there is no syntax highlighter available for MATC in VS Code, the `.ini` extension seems to provide better readability to the code. The problem was split in two parts: the [models](https://github.com/wallytutor/WallyToolbox.jl/blob/main/apps/Elmer/diffusion_solids/carburizing_slycke_gui/models.ini) which take care of sourcing the [conditions](https://github.com/wallytutor/WallyToolbox.jl/blob/main/apps/Elmer/diffusion_solids/carburizing_slycke_gui/conditions.ini), so that basic users could only edit the latter and run their variant calculations with no coding skills. Notice that the symbols that are used in [SIF](https://github.com/wallytutor/WallyToolbox.jl/blob/main/apps/Elmer/diffusion_solids/carburizing_slycke_gui/case.sif) are exported from [this line](https://github.com/wallytutor/WallyToolbox.jl/blob/main/apps/Elmer/diffusion_solids/carburizing_slycke_gui/models.ini#L72) instead of being set as global variables.
 
-### User-defined functions
+## User-defined functions
 
 TODO
