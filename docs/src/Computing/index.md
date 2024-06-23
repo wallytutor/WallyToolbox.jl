@@ -15,6 +15,55 @@ It can also be used as a general guide for introducing scientific computing as i
 
 Some technologies have been mainstream or important in the past, but nowadays some of them have already died or are becoming too niche to be put in such a list. That is the case of SVN for version control. As for programming languages in science, that is the case of *matlabish* (MATLAB, Octave, Scilab) environments, which are still used by *controls and automation* people, but are incompatible with good software practices and should be discouraged.
 
+---
+## Programming
+
+Those new to programming can find a quite interesting environment at [Exercism](https://exercism.org/).
+
+### C++
+
+### Cuda
+
+- [GPU-optimized AI, Machine Learning, & HPC Software | NVIDIA NGC](https://catalog.ngc.nvidia.com/?filters=&orderBy=weightPopularDESC&query=&page=&pageSize=)
+
+### Fortran
+
+### Haskell
+
+  - [GHCup](https://www.haskell.org/ghcup/)
+- [Haskell for Numerics?](https://idontgetoutmuch.wordpress.com/2017/06/02/1090/)
+- [Course by Dmitrii Kovanikov](https://github.com/haskell-beginners-2022/course-plan)
+
+### Lisp
+
+### Octave
+
+### OpenCL
+
+### Pascal
+
+- [Free Pascal Docs](https://www.freepascal.org/docs.html)
+- [Free Pascal Wiki](https://wiki.freepascal.org/Main_Page)
+- [Pascal Wikibook](https://en.wikibooks.org/wiki/Pascal_Programming)
+
+### Python
+
+General stuff:
+
+- [8 surprising ways how to use Jupyter Notebook](https://mljar.com/blog/how-to-use-jupyter-notebook/)
+
+Some (yet crude) visual programming in Python:
+
+- [Barfi](https://barfi.readthedocs.io/en/latest/)
+- [nodezator](https://nodezator.com/)
+
+All you need is a package:
+
+- [casadi](https://web.casadi.org/): Optimal control and MPC.
+- [mip](https://www.python-mip.com/): Mixed-integer linear programming.
+
+
+---
 ## External links
 
 ### High-performance computing (HPC)
