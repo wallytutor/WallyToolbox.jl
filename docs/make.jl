@@ -120,12 +120,16 @@ pages = [
         ],
 
         "Computing" => [
-            "Computing/index.md",
+            "Computing/01-Scientific-Computing.md",
+            "Computing/02-General-Computing-Skills.md",
+            "Computing/03-Programming-Languages.md",
+            "Computing/04-Geometry-and-Preprocessing.md",
+            "Computing/05-Postprocessing.md",
+            "Computing/06-Domain-Specific-Software.md",
+            "Computing/Elmer.md",
             "Computing/OpenFOAM11.md",
-            "Computing/Elmer-Multiphysics.md",
             "Computing/Basilisk.md",
             "Computing/LAMMPS.md",
-            "Computing/General-Computing-Skills.md",
         ],
 
         "Science" => [

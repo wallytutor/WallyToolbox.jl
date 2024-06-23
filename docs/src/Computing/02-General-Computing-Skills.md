@@ -3,6 +3,10 @@
 ---
 ## Git version control
 
+### Version control in Windows
+
+- [TortoiseGIT](https://tortoisegit.org/): for Windows users, this applications add the possibility of managing version control and other features directly from the file explorer.
+
 ### Adding submodules
 
 Generally speaking adding a submodule to a repository should be a simple matter of:
@@ -64,55 +68,4 @@ Regular expressions (or simply *regex*) processing is a must-have skill for anyo
 
 ### LaTeX Workshop
 
-- [Configuring builds in VS Code with LaTeX Workshop](https://tex.stackexchange.com/questions/478865/vs-code-latex-workshop-custom-recipes-file-location) for building with `pdflatex`. Finally I ended creating my own workflows as follows (full updated file [here](https://github.com/wallytutor/WallyToolbox.jl/blob/main/tools/vscode/user-data/User/settings.json)):
-
-```json
-    "latex-workshop.latex.recipes": [
-        {
-            "name": "pdflatex",
-            "tools": [
-              "pdflatex"
-            ]
-        },
-        {
-            "name": "xelatex",
-            "tools": [
-              "xelatex",
-              "xelatex",
-              "bibtex",
-              "xelatex"
-            ]
-        }
-    ],
-    "latex-workshop.latex.tools": [
-        {
-            "name": "pdflatex",
-            "command": "pdflatex",
-            "args": [
-                "-shell-escape",
-                "-synctex=1",
-                "-interaction=nonstopmode",
-                "-file-line-error",
-                "%DOC%.tex"
-            ]
-        },
-        {
-            "name": "xelatex",
-            "command": "xelatex",
-            "args": [
-                "-shell-escape",
-                "-synctex=1",
-                "-interaction=nonstopmode",
-                "-file-line-error",
-                "%DOC%.tex"
-            ]
-        },
-        {
-            "name": "bibtex",
-            "command": "bibtex",
-            "args": [
-                "%DOC%.tex"
-            ]
-        }
-    ]
-```
+- [Configuring builds in VS Code with LaTeX Workshop](https://tex.stackexchange.com/questions/478865/vs-code-latex-workshop-custom-recipes-file-location) for building with `pdflatex`. Finally I ended creating my own workflows in this [file](https://github.com/wallytutor/WallyToolbox.jl/blob/main/tools/vscode/user-data/User/settings.json).

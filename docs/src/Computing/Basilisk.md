@@ -1,4 +1,3 @@
-
 # Basilisk
 
 The goal of this material is to provide support to teaching introductory computational fluid mechanics with aid of [Basilisk](http://basilisk.fr/). The studies are based on commented tutorials and a documentation guide extending what is already provided with the package.

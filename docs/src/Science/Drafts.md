@@ -1,4 +1,41 @@
 
+Courses to follow:
+
+\item\href{https://ocw.mit.edu/courses/mathematics/18-075-advanced-calculus-for-engineers-fall-2004/}{Advanced Calculus}
+
+\item\href{https://ocw.mit.edu/courses/mechanical-engineering/2-06-fluid-dynamics-spring-2013/}{Fluid Dynamics}:
+
+\item\href{https://ocw.mit.edu/courses/mechanical-engineering/2-25-advanced-fluid-mechanics-fall-2013/}{Advanced Fluid Mecanics}
+
+\item\href{https://ocw.mit.edu/courses/mechanical-engineering/2-27-turbulent-flow-and-transport-spring-2002/}{Turbulent Flow and Transport}
+
+\item\href{https://ocw.mit.edu/courses/mechanical-engineering/2-051-introduction-to-heat-transfer-fall-2015/}{Introduction to Heat Transfer}
+
+\item\href{https://ocw.mit.edu/courses/mechanical-engineering/2-51-intermediate-heat-and-mass-transfer-fall-2008/}{Intermediate Heat Transfer}
+
+\item\href{https://ocw.mit.edu/courses/mechanical-engineering/2-58j-radiative-transfer-spring-2006/}{Radiative Transfer}
+
+\item\href{https://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-336j-introduction-to-numerical-simulation-sma-5211-fall-2003/}{Introduction to Simulation}
+
+\item\href{https://ocw.mit.edu/courses/aeronautics-and-astronautics/16-920j-numerical-methods-for-partial-differential-equations-sma-5212-spring-2003/}{Numerical Methods for PDE}
+
+\item\href{https://ocw.mit.edu/courses/mechanical-engineering/2-29-numerical-fluid-mechanics-spring-2015/}{Numerical Fluid Mechanics}
+
+\item\href{https://ppc.cs.aalto.fi/}{Programming Parallel Computers} (and its extension to \href{https://github.com/parallel-rust-cpp}{Rust})
+
+\item\href{https://www.youtube.com/playlist?list=PLfF--3o8i4r82vJ0kjCVYgqKgyVM5QwN0}{Fluid Mechanics (classical)}
+
+\item\href{https://www.youtube.com/playlist?list=PL6S8U84PCLB27bdd15l1xnTSQKf3AOOoj}{Turbulent mixing conference (ICTP)}
+
+\item\href{https://www.youtube.com/playlist?list=PL80xBr8Wq0b5qXRPwyTxmGDOhO4obKOiC}{Turbulent flows}
+
+\item\href{https://www.youtube.com/playlist?list=PLp0hSY2uBeP8rhCbecD1Icahfbr6GSZ19}{Mathematical methods (ICTP)}
+
+\item\href{https://www.youtube.com/playlist?list=PLp0hSY2uBeP_7jL7uqlsxDmvimK2q6eF5}{Fluid dynamics (ICTP)}
+
+\item\href{https://www.youtube.com/channel/UCYlD7XynaJIBuYvmXlRBtnQ}{Pr. Dr. Carlos Thompson channel}
+
+
 - [ ] Proof of mean value theorem (null integral implies null integrand)
 - [ ] Derivation of Gauss (divergence) theorem
 
