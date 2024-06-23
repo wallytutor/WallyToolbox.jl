@@ -119,26 +119,25 @@ pages = [
             "Helpers"       => "Modules/helpers.md"
         ],
 
-        "Scientific Computing" => [
-            "Scientific Computing/index.md",
-            "Scientific Computing/OpenFOAM11.md",
-            "Scientific Computing/Elmer-Multiphysics.md",
-            "Scientific Computing/Elmer-Documentation.md",
-            "Scientific Computing/Basilisk.md",
-            "Scientific Computing/LAMMPS.md",
-            "Scientific Computing/PINNs.md",
-            "Scientific Computing/General-Computing-Skills.md",
+        "Computing" => [
+            "Computing/index.md",
+            "Computing/OpenFOAM11.md",
+            "Computing/Elmer-Multiphysics.md",
+            "Computing/Basilisk.md",
+            "Computing/LAMMPS.md",
+            "Computing/General-Computing-Skills.md",
         ],
 
-        "Transport Phenomena" => [
-            "Transport Phenomena/01-Transport-phenomena-foundations.md",
-            "Transport Phenomena/02-Applications-to-mass-and-heat-transfer.md",
-            "Transport Phenomena/03-Applications-to-fluid-mechanics.md",
-            "Transport Phenomena/A2-Dimensionless-groups.md",
-            "Transport Phenomena/A4-Finite-Volume-Diffusion.md",
-            # "Transport Phenomena/A1-Mathematical-background.md",
-            # "Transport Phenomena/A3-Thermodynamics-Concepts.md",
-            # "Transport Phenomena/B1-Conductivity-Porous-Solids.md"
+        "Science" => [
+            "Science/01-Theoretical-Physics.md",
+            "Science/02-Density-Functional-Theory.md",
+            "Science/03-Molecular-Dynamics.md",
+            "Science/04-Continuum-Mechanics.md",
+            "Science/05-Machine-Learning.md",
+            "Science/06-Dimensionless-groups.md",
+            "Science/07-Finite-Volume-Method.md",
+            "Science/08-Conductivity-Porous-Solids.md",
+            "Science/09-Finite-Element-Method.md",
         ],
 
         "Notebooks"         => [

@@ -1,3 +1,11 @@
+
+- [ ] Proof of mean value theorem (null integral implies null integrand)
+- [ ] Derivation of Gauss (divergence) theorem
+
+## Thermodynamics quick review
+
+- When order increases entropy decreases.
+- An endothermic process is a process that absorbs heat from its surroundings; on the other hand, an exothermic process releases heat to its surroundings.
 ## Granular flows
 
 - **Parcel** is a computational particle unit that may be composed of several particles which are all identical sharing a state, which include velocity, size, temperature, etc. See ([[@ORourke2010]]) for details.
