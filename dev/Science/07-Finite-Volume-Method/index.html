@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Finite Volume Method · WallyToolbox.jl</title><meta name="title" content="Finite Volume Method · WallyToolbox.jl"/><meta property="og:title" content="Finite Volume Method · WallyToolbox.jl"/><meta property="twitter:title" content="Finite Volume Method · WallyToolbox.jl"/><meta name="description" content="Documentation for WallyToolbox.jl."/><meta property="og:description" content="Documentation for WallyToolbox.jl."/><meta property="twitter:description" content="Documentation for WallyToolbox.jl."/><meta property="og:url" content="https://wallytutor.github.io/WallyToolbox.jl/Science/07-Finite-Volume-Method/"/><meta property="twitter:url" content="https://wallytutor.github.io/WallyToolbox.jl/Science/07-Finite-Volume-Method/"/><link rel="canonical" href="https://wallytutor.github.io/WallyToolbox.jl/Science/07-Finite-Volume-Method/"/><script data-outdated-warner src="../../assets/warner.js"></script><link href="https://cdnjs.cloudflare.com/ajax/libs/lato-font/3.0.0/css/lato-font.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/juliamono/0.050/juliamono.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL="../.."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="../../assets/documenter.js"></script><script src="../../search_index.js"></script><script src="../../siteinfo.js"></script><script src="../../../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/documenter-dark.css" data-theme-name="documenter-dark" data-theme-primary-dark/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="../../assets/themeswap.js"></script></head><body><div id="documenter"><nav class="docs-sidebar"><div class="docs-package-name"><span class="docs-autofit"><a href="../../">WallyToolbox.jl</a></span></div><button class="docs-search-query input is-rounded is-small is-clickable my-2 mx-auto py-1 px-2" id="documenter-search-query">Search docs (Ctrl + /)</button><ul class="docs-menu"><li><span class="tocitem">WallyToolbox</span><ul><li><a class="tocitem" href="../../">Home</a></li><li><input class="collapse-toggle" id="menuitem-1-2" type="checkbox"/><label class="tocitem" for="menuitem-1-2"><span class="docs-label">Julia Modules</span><i class="docs-chevron"></i></label><ul class="collapsed"><li><a class="tocitem" href="../../Modules/DryCombustion/">DryCombustion</a></li><li><a class="tocitem" href="../../Modules/DryFlowsheet/">DryFlowsheet</a></li><li><a class="tocitem" href="../../Modules/DryGranular/">DryGranular</a></li><li><a class="tocitem" href="../../Modules/DryMaterials/">DryMaterials</a></li><li><a class="tocitem" href="../../Modules/DryTransport/">DryTransport</a></li><li><a class="tocitem" href="../../Modules/RadCalNet/">RadCalNet</a></li><li><a class="tocitem" href="../../Modules/Cantera/">Cantera</a></li><li><a class="tocitem" href="../../Modules/OpenFOAM/">OpenFOAM</a></li><li><a class="tocitem" href="../../Modules/helpers/">Helpers</a></li></ul></li><li><input class="collapse-toggle" id="menuitem-1-3" type="checkbox"/><label class="tocitem" for="menuitem-1-3"><span class="docs-label">Computing</span><i class="docs-chevron"></i></label><ul class="collapsed"><li><a class="tocitem" href="../../Computing/">Scientific Computing</a></li><li><a class="tocitem" href="../../Computing/OpenFOAM11/">OpenFOAM 11</a></li><li><a class="tocitem" href="../../Computing/Elmer-Multiphysics/">Elmer Multiphysics</a></li><li><a class="tocitem" href="../../Computing/Basilisk/">Basilisk</a></li><li><a class="tocitem" href="../../Computing/LAMMPS/">LAMMPS</a></li><li><a class="tocitem" href="../../Computing/General-Computing-Skills/">General computing skills</a></li></ul></li><li><input class="collapse-toggle" id="menuitem-1-4" type="checkbox" checked/><label class="tocitem" for="menuitem-1-4"><span class="docs-label">Science</span><i class="docs-chevron"></i></label><ul class="collapsed"><li><a class="tocitem" href="../01-Theoretical-Physics/">Theoretical Physics</a></li><li><a class="tocitem" href="../02-Density-Functional-Theory/">Density Functional Theory (DFT)</a></li><li><a class="tocitem" href="../03-Molecular-Dynamics/">Molecular Dynamics (MD)</a></li><li><a class="tocitem" href="../04-Continuum-Mechanics/">Continuum Mechanics</a></li><li><a class="tocitem" href="../05-Machine-Learning/">Machine Learning</a></li><li><a class="tocitem" href="../06-Dimensionless-groups/">Dimensionless groups</a></li><li class="is-active"><a class="tocitem" href>Finite Volume Method</a><ul class="internal"><li><a class="tocitem" href="#Formulations-of-heat-conduction"><span>Formulations of heat conduction</span></a></li></ul></li><li><a class="tocitem" href="../08-Conductivity-Porous-Solids/">Thermal conductivity of porous solids</a></li><li><a class="tocitem" href="../09-Finite-Element-Method/">Finite Element Method</a></li></ul></li><li><input class="collapse-toggle" id="menuitem-1-5" type="checkbox"/><label class="tocitem" for="menuitem-1-5"><span class="docs-label">Notebooks</span><i class="docs-chevron"></i></label><ul class="collapsed"><li><a class="tocitem" href="../../Notebooks/01-Composite-Conduction/">Steady-state heat transfer</a></li><li><a class="tocitem" href="../../Notebooks/02-Part-Radiation-Heating/">Transient heat transfer</a></li><li><a class="tocitem" href="../../Notebooks/A1-Julia-para-Cientistas/">Julia para Cientistas</a></li></ul></li><li><a class="tocitem" href="../../References/">References</a></li></ul></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><a class="docs-sidebar-button docs-navbar-link fa-solid fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a><nav class="breadcrumb"><ul class="is-hidden-mobile"><li><a class="is-disabled">WallyToolbox</a></li><li><a class="is-disabled">Science</a></li><li class="is-active"><a href>Finite Volume Method</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href>Finite Volume Method</a></li></ul></nav><div class="docs-right"><a class="docs-navbar-link" href="https://github.com/wallytutor/WallyToolbox.jl" title="View the repository on GitHub"><span class="docs-icon fa-brands"></span><span class="docs-label is-hidden-touch">GitHub</span></a><a class="docs-navbar-link" href="https://github.com/wallytutor/WallyToolbox.jl/blob/main/docs/tmp/Science/07-Finite-Volume-Method.md" title="Edit source on GitHub"><span class="docs-icon fa-solid"></span></a><a class="docs-settings-button docs-navbar-link fa-solid fa-gear" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-article-toggle-button fa-solid fa-chevron-up" id="documenter-article-toggle-button" href="javascript:;" title="Collapse all docstrings"></a></div></header><article class="content" id="documenter-page"><h1 id="Finite-Volume-Method"><a class="docs-heading-anchor" href="#Finite-Volume-Method">Finite Volume Method</a><a id="Finite-Volume-Method-1"></a><a class="docs-heading-anchor-permalink" href="#Finite-Volume-Method" title="Permalink"></a></h1><h2 id="Formulations-of-heat-conduction"><a class="docs-heading-anchor" href="#Formulations-of-heat-conduction">Formulations of heat conduction</a><a id="Formulations-of-heat-conduction-1"></a><a class="docs-heading-anchor-permalink" href="#Formulations-of-heat-conduction" title="Permalink"></a></h2><h3 id="Temperature-formulation"><a class="docs-heading-anchor" href="#Temperature-formulation">Temperature formulation</a><a id="Temperature-formulation-1"></a><a class="docs-heading-anchor-permalink" href="#Temperature-formulation" title="Permalink"></a></h3><p>Before attempting to derive heat conduction equation in terms of enthalpy, it is worth warming up with its handling in temperature formulation. In this case, the equation is solved directly in terms of temperature as dependent variable which is also used in the governing potential (Fourier&#39;s law). This simple case is applicable to many engineering problems. First we formulate the problem with constant thermophysical properties before proceeding to variable density and specific heat.</p><h4 id="Constant-thermophysical-properties"><a class="docs-heading-anchor" href="#Constant-thermophysical-properties">Constant thermophysical properties</a><a id="Constant-thermophysical-properties-1"></a><a class="docs-heading-anchor-permalink" href="#Constant-thermophysical-properties" title="Permalink"></a></h4><p>Heat equation formulated with temperature as dependent variable applied to constant density <span>$\rho$</span> and specific heat <span>$c_{p}$</span> can be stated as:</p><p class="math-container">\[\rho{}c_{p}\frac{\partial{}T}{\partial{}t}=\nabla\cdotp{}(k\nabla{}T)\]</p><p>Applying the divergence operator to the right hand side to a single coordinate and expanding the gradient term for different coordinate systems (cartesian, cylindrical, and spherical) leads to the following expressions. <em>Notice that coordinate was expressed as <span>$r$</span> even in cartesian coordinates for homogeneity of notation in what follows.</em></p><p class="math-container">\[\rho{}c_{p}\dfrac{\partial{}T}{\partial{}t}=\begin{cases}
+\dfrac{\partial}{\partial{}r}
+\left(k\dfrac{\partial{}T}{\partial{}r}\right) &amp; \text{cartesian}\\[12pt]
+%
+\dfrac{1}{r}\dfrac{\partial}{\partial{}r}
+\left(rk\dfrac{\partial{}T}{\partial{}r}\right) &amp; \text{cylindrical}\\[12pt]
+%
+\dfrac{1}{r^2}\dfrac{\partial}{\partial{}r}
+\left(r^2k\dfrac{\partial{}T}{\partial{}r}\right) &amp; \text{spherical}
+\end{cases}\]</p><p>Stated this way the problem can be reformulated with a simpler notation as</p><p class="math-container">\[\rho{}c_{p}\dfrac{\partial{}T}{\partial{}t}=
+\dfrac{1}{\beta}\dfrac{\partial}{\partial{}r}
+\left(\beta{}k\dfrac{\partial{}T}{\partial{}r}\right)
+\qquad\text{where}\qquad\beta=
+\begin{cases}
+1 &amp; \text{cartesian}\\[12pt]
+%
+r &amp; \text{cylindrical}\\[12pt]
+%
+r^2 &amp; \text{spherical}
+\end{cases}\]</p><p>To proceed with the finite volume discretization we perform the integration of both sides of the equation over the relevant variables. The order of integration is chosen according to the nature of the derivative term, as discussed by <a href="../../References/@Patankar1980/">Patankar1980</a> [<a href="../../References/#Patankar1980">23</a>]. Care must be taken in the definition of the space integration - which is non-trivial in cylindrical and spherical coordinates systems - and must be carried over the differential volume <span>$dV$</span>.</p><p class="math-container">\[\int_{V}\int_{0}^{\tau}
+\rho{}c_{p}\dfrac{\partial{}T}{\partial{}t}dtdV=
+\int_{0}^{\tau}\int_{V}
+\frac{1}{\beta}\dfrac{\partial}{\partial{}r}
+\left(\beta{}k\dfrac{\partial{}T}{\partial{}r}\right)dVdt\]</p><p class="math-container">\[dV=
+\begin{cases}
+drdydz &amp; \text{cartesian}\\[12pt]
+%
+rdr{}d\theta{}dz &amp; \text{cylindrical}\\[12pt]
+%
+r^2\sin\phi{}dr{}d\theta{}d\phi &amp; \text{spherical}
+\end{cases}\]</p><p>The components of volume integration not explicitly appearing in the 1-D differential formulation can be moved out of the integrand. For cartesian coordinates the terms leads to the area of the perpendicular plane; for cylindrical coordinates this corresponds to the azimuth and axial components and integration produces a factor <span>$2\pi{}z$</span>; lastly, for spherical coordinates we have the polar and azimuth components moved out and a factor <span>$4\pi$</span>. Since these terms appear in both sides of the equation, they end by cancelling out.</p><p class="math-container">\[\Phi=
+\begin{cases}
+A&amp;=\displaystyle\int_{0}^{Z}\int_{0}^{Y}dydz
+&amp; \text{cartesian}\\[12pt]
+%
+2\pi{}z&amp;=\displaystyle\int_{0}^{z}\int_{0}^{2\pi}d\theta{}dz
+&amp; \text{cylindrical}\\[12pt]
+%
+4\pi&amp;=\displaystyle\int_{0}^{\pi}\int_{0}^{2\pi}\sin\phi{}d\theta{}d\phi
+&amp; \text{spherical}
+\end{cases}\]</p><p>Applying the remaining component of differential volume to the equations lead to the following expressions. <em>Notice that the meaning of <span>$\beta$</span> is now clear:  it is simply the factor multiplying <span>$dr$</span> in the different coordinate systems. It will make the multiplied factor simplify in the right-hand side and appear back in the left-hand side. You should try performing this step by yourself to get a full insight of what is happening here.</em> So far the equations remain formulated identically.</p><p class="math-container">\[\int_{s}^{n}\int_{0}^{\tau}
+\beta\rho{}c_{p}\dfrac{\partial{}T}{\partial{}t}dtdr=
+\displaystyle\int_{0}^{\tau}\int_{s}^{n}
+\dfrac{\partial}{\partial{}r}
+\left(\beta{}k\dfrac{\partial{}T}{\partial{}r}\right)drdt\]</p><p>In the above expression, instead of integrating over the full domain, we applied limits over the <em>north</em> and <em>south</em> interfaces of a single finite volume cell (logically using a cell-centered formulation). Because <span>$\beta$</span> is not time-dependent, we can effect the integration of the inner term and move out constant terms from the integrals, leading to:</p><p class="math-container">\[\rho{}c_{p}\left(T_P^{\tau}-T_P^{0}\right)\int_{s}^{n}\beta{}dr=
+\int_{0}^{\tau}
+\left(\beta{}k\frac{\partial{}T}{\partial{}r}\right)\bigg\vert_{s}^{n}dt\]</p><p>For simplicity, in what follows we use an unbounded first-order approximation scheme for space derivatives, <em>i.e.</em> they are approximated as:</p><p class="math-container">\[\frac{\partial{}T}{\partial{}r}\approx\frac{T_{i+1}-T_{i}}{\delta_{i,i+1}}
+\qquad\text{where}\qquad{}
+\delta_{i,i+1}=r_{i+1}-r_{i}\]</p><p>Applying a general Crank-Nicolson <a href="../../References/@Crank1996/">Crank1996</a> [<a href="../../References/#Crank1996">24</a>] scheme we integrate numerically the right-hand side. The weighting factor <span>$f$</span> introduces the implicit degree: for <span>$f=1$</span> we have a fully implicit solution, which <span>$f=0$</span> represents a standard Euler integration. It should be self evident that <span>$\sum{}f^{(I)}=1$</span>. <em>Notice that the parenthetical superscript notation <span>$(I)$</span> does not imply exponentiation, but the instant at which the corresponding values are to be evaluated.</em></p><p class="math-container">\[\frac{\rho{}c_{p}}{\tau}\left(T_P^{\tau}-T_P^{0}\right)\int_{s}^{n}\beta{}dr=
+\sum_{I=\{0,\tau\}}
+%
+f^{(I)}\left[
+    \beta_n{}k_n^{(I)}\frac{T_N^{(I)}-T_P^{(I)}}{\delta_{P,N}}-
+    \beta_s{}k_s^{(I)}\frac{T_P^{(I)}-T_S^{(I)}}{\delta_{P,S}}
+\right]\]</p><p>Integration of the remaining space integral is trivial given the definition of <span>$\beta$</span>; to remain generic no matter what coordinate system we introduce the constant <span>$\gamma$</span>. Notice that for cartesian coordinates this corresponds simply to the cell length and for other coordinate systems other relationships associated to cell volume can be interpreted.</p><p class="math-container">\[\int_{s}^{n}\beta{}dr=\frac{r_n^\gamma}{\gamma}-\frac{r_s^\gamma}{\gamma}
+\qquad\text{where}\qquad\gamma=
+\begin{cases}
+1 &amp; \text{cartesian}\\[12pt]
+%
+2 &amp; \text{cylindrical}\\[12pt]
+%
+3 &amp; \text{spherical}
+\end{cases}\]</p><p>Putting it all together leads to the final expression:</p><p class="math-container">\[\frac{\rho{}c_{p}}{\tau}\left(T_P^{\tau}-T_P^{0}\right)
+\left(\frac{r_n^\gamma}{\gamma}-\frac{r_s^\gamma}{\gamma}\right)=
+\sum_{I=\{0,\tau\}}
+f^{I}\left[
+    \beta_n{}k_n^{I}\frac{T_N^{I}-T_P^{I}}{\delta_{P,N}}-
+    \beta_s{}k_s^{I}\frac{T_P^{I}-T_S^{I}}{\delta_{P,S}}
+\right]\]</p><p>Some coefficients appearing in the above equations are now grouped. Notice that for thermal conductivity <span>$k$</span> which is a function of temperature, the corresponding instant <span>$(I)$</span> temperature must be used for its evaluation. <em>For <span>$\kappa_{j}$</span> the lower case <span>$j$</span> represents the evaluation at the interface with control volume <span>$J$</span>, a very specific notation used here.</em></p><p class="math-container">\[\begin{aligned}
+    \alpha_{P}  &amp; = \frac{\rho{}c_{p}}{\gamma\tau}\left(r_n^\gamma-r_s^\gamma\right)\\[8pt]
+    \kappa_{j}   &amp; = \frac{\beta_j{}k_j}{\delta_{P,J}}
+\end{aligned}\]</p><p>Using these definitions the equation can be reworked as:</p><p class="math-container">\[\alpha_{P}\left(T_P^{\tau}-T_P^{0}\right)=
+\sum_{I=\{0,\tau\}}
+f^{(I)}\left[
+    \kappa_{n}^{(I)}\left(T_N^{(I)}-T_P^{(I)}\right)-
+    \kappa_{s}^{(I)}\left(T_P^{(I)}-T_S^{(I)}\right)
+\right]\]</p><p>To get the matrix form of the problem we start by expanding all products. For conciseness we make <span>$f=f^{(0)}$</span> and <span>$g=f^{(\tau)}$</span>;  also everything that is evaluated at <span>$t=\tau$</span> has the superscript dropped; using these ideas the expression is rewritten as:</p><p class="math-container">\[-f\kappa_{s}T_S+
+(\alpha_{P}+f\kappa_{n}+f\kappa_{s})T_P
+-f\kappa_{n}T_N
+=
+g\kappa_{s}^{(0)}T_S^{(0)}+
+(\alpha_{P}-g\kappa_{n}^{(0)}-g\kappa_{s}^{(0)})T_P^{(0)}+
+g\kappa_{n}^{(0)}T_N^{(0)}\]</p><p>For the fully implicit time-stepping scheme <span>$f=1$</span> the expression reduces to</p><p class="math-container">\[-\kappa_{s}T_S+
+(\alpha_{P}+\kappa_{n}+\kappa_{s})T_P
+-\kappa_{n}T_N
+=
+a_{P}^{(0)}T_P^{(0)}\]</p><p>where the following coefficients are identified</p><p class="math-container">\[\begin{aligned}
+    a_{S} &amp; = -\kappa_{s}\\[8pt]
+    a_{N} &amp; = -\kappa_{n}\\[8pt]
+    a_{P} &amp; = \alpha_{P}+\kappa_{n}+\kappa_{s}\\[8pt]
+    a_{P}^{(0)} &amp;= \alpha_{P}
+\end{aligned}\]</p><p>and the standard finite volume formalism discretization is reached</p><p class="math-container">\[a_ST_S + a_PT_P + a_NT_N = a_{P}^{(0)}T_P^{(0)}\]</p><p>The interested reader may wish to derive the boundary conditions to this case. We will refrain from that here because it will be done for the rather more general case in the following sections.</p><hr/><h4 id="Variable-thermophysical-properties"><a class="docs-heading-anchor" href="#Variable-thermophysical-properties">Variable thermophysical properties</a><a id="Variable-thermophysical-properties-1"></a><a class="docs-heading-anchor-permalink" href="#Variable-thermophysical-properties" title="Permalink"></a></h4><p>To enter the variable thermophysical properties formulation it is worth saying a few words ahead of time about the next subject, the enthalpy formulation. That is because for variable density <span>$\rho(T)$</span> and specific heat capacity <span>$c_{p}(T)$</span> under constant pressure the left-hand side of heat equation can be better expressed in terms of enthalpy <span>$H(T)=\rho(T)h(T)=\rho(T){}c_{p}(T)T$</span>. Such a formulation is a requirement when dealing with phase change, such as solidification and melting - where we find discontinuities in enthalpy function; it is also needed in situations where material properties change above a certain degree for which constant properties could no longer be assumed over the foreseeable temperature range.</p><div class="admonition is-info"><header class="admonition-header">Info</header><div class="admonition-body"><p>In practical applications, especially in high-dimensional problems coupled to fluid dynamics, it is worth performing a sensitivity analysis with different sampling points over <span>$\rho(T){}c_{p}(T)$</span> to determine whether solving the problem with temperature-dependent properties is really required. For most cases this can lead to impressive speed-ups in simulations.</p></div></div><p>Although of high practical relevance, it is almost incredible that most standard engineering textbooks ignore this sort of development. A recent paper by <a href="../../References/@Hristov2023/">Hristov2023</a> [<a href="../../References/#Hristov2023">25</a>] tries to handle this sort of formalism analytically with properties expanded as simple temperature functions. Expanding the left-hand side of heat equation formulated in <span>$H(T)$</span> leads to</p><p class="math-container">\[\frac{\partial{}H}{\partial{}t}=
+\rho{}c_{p}\frac{\partial{}T}{\partial{}t}+
+c_{p}T\frac{\partial{}\rho}{\partial{}t}+
+\rho{}T\frac{\partial{}c_{p}}{\partial{}t}\]</p><p>If (continuous) relationships for <span>$\rho(T)$</span> and <span>$c_{p}(T)$</span> are available, it can be expanded to</p><p class="math-container">\[\frac{\partial{}H}{\partial{}t}=
+\left(
+	\rho{}c_{p}+
+	c_{p}T\frac{\partial{}\rho}{\partial{}T}+
+	\rho{}T\frac{\partial{}c_{p}}{\partial{}T}
+\right)
+\frac{\partial{}T}{\partial{}t}\]</p><p>so that heat equation writes with the proper divergence operator as</p><p class="math-container">\[\left(
+	\rho{}c_{p}+
+	c_{p}T\frac{\partial{}\rho}{\partial{}T}+
+	\rho{}T\frac{\partial{}c_{p}}{\partial{}T}
+\right)
+\frac{\partial{}T}{\partial{}t}=
+\nabla\cdotp{}(k\nabla{}T)\]</p><p>It is worth mentioning here, although we will not develop further for now, that in materials science and other fields, when involving a phase transformation kinetics described by an Avrami-like formalism such as discussed by <a href="../../References/@Shirzad2023/">Shirzad2023</a> [<a href="../../References/#Shirzad2023">26</a>], we could end with a system of coupled partial differential equations. For instance, if density only is changed through an arbitrary kinetics <span>$f(t,\rho,T,\dot{T})$</span>, the next (unrealistic) model would arise. In fact, as discussed by <a href="../../References/@Mittemeijer1988/">Mittemeijer1988</a> [<a href="../../References/#Mittemeijer1988">27</a>], we should solve for a new non-equilibrium thermodynamic state <span>$\beta$</span> for the kinetics and analytically evaluate a JMAK expression for density, but that is beyond our scope here (for now!).</p><p class="math-container">\[\begin{align}
+\left(
+	\rho{}c_{p}+
+	\rho{}T\frac{\partial{}c_{p}}{\partial{}T}
+\right)\frac{\partial{}T}{\partial{}t}
+&amp;=\nabla\cdotp{}(k\nabla{}T)-c_{p}T\frac{\partial{}\rho}{\partial{}t}\\[12pt]
+\frac{\partial{}\rho}{\partial{}t}&amp;=f(t,\rho,T,\dot{T})
+\end{align}\]</p><p>The base development of the integral form of the heat equation in different coordinate systems being already treated in the previous sections, we use that result here to get</p><p class="math-container">\[\int_{s}^{n}\int_{0}^{\tau}
+\beta
+\left(
+	\rho{}c_{p}+
+	c_{p}T\frac{\partial{}\rho}{\partial{}T}+
+	\rho{}T\frac{\partial{}c_{p}}{\partial{}T}
+\right)
+\dfrac{\partial{}T}{\partial{}t}dtdr=
+\displaystyle\int_{0}^{\tau}\int_{s}^{n}
+\dfrac{\partial}{\partial{}r}
+\left(\beta{}k\dfrac{\partial{}T}{\partial{}r}\right)drdt\]</p><p>Solving left-hand side of this integral is non-trivial and we will skip it for now; consider then the non-expanded version of the enthalpy problem:</p><p class="math-container">\[\int_{s}^{n}\int_{0}^{\tau}
+\beta
+\dfrac{\partial{}(\rho{}c_{p}T)}{\partial{}t}dtdr=
+\displaystyle\int_{0}^{\tau}\int_{s}^{n}
+\dfrac{\partial}{\partial{}r}
+\left(\beta{}k\dfrac{\partial{}T}{\partial{}r}\right)drdt\]</p><p>Next we integrate both sides of the equation at once and apply a fully implicit interpolation to the right-hand side; for the analogous details provided for constant thermophysical properties, please check the previous section. This leads to the following discrete equation:</p><p class="math-container">\[\frac{r_n^\gamma-r_s^\gamma}{\gamma\tau}
+\left[(\rho{}c_{p}T_P)-(\rho{}c_{p}T_P)^{0}\right]
+=
+\beta_n{}k_n\frac{T_N-T_P}{\delta_{P,N}}-
+\beta_s{}k_s\frac{T_P-T_S}{\delta_{P,S}}\]</p><p>where we can identify the following coefficients (not exactly the same as before!):</p><p class="math-container">\[\begin{aligned}
+\alpha_{P}  &amp; = \frac{r_n^\gamma-r_s^\gamma}{\gamma\tau}\\[8pt]
+\kappa_{j}   &amp; = \frac{\beta_j{}k_j}{\delta_{P,J}}
+\end{aligned}\]</p><p class="math-container">\[-\kappa_n{}T_N
++(\alpha_{P}(\rho{}c_{p})^{(\star)}+\kappa_n{}+\kappa_s{})T_P
+-\kappa_s{}T_S
+=
+\alpha_{P}(\rho{}c_{p})^{(0)}T_P^{(0)}\]</p><p>where the following coefficients are identified</p><p class="math-container">\[\begin{aligned}
+    a_{S} &amp; = -\kappa_{s}\\[8pt]
+    a_{N} &amp; = -\kappa_{n}\\[8pt]
+    a_{P} &amp; = \alpha_{P}(\rho{}c_{p})^{(\star)}+\kappa_{n}+\kappa_{s}\\[8pt]
+    a_{P}^{(0)} &amp;= \alpha_{P}(\rho{}c_{p})^{(0)}
+\end{aligned}\]</p><p>There are two main differences in the above coefficients with respect to the constant properties case: both <span>$a_{P}$</span> and <span>$a_{P}^{(0)}$</span> need to be updated. Since the previous case already considered variable thermal conductivity, it was intrinsically non-linear and solution should already be iterative. In that sense, using a <span>$(\star)$</span> superscript in <span>$(\rho{}c_{p})^{(\star)}$</span> is not needed because the <span>$\kappa$</span> already need to be updated on a iteration basis until time-step convergence; nonetheless, it was kept to emphasize the different in the present formulation. The final problem statement remains the same, say</p><p class="math-container">\[a_ST_S + a_PT_P + a_NT_N = a_{P}^{(0)}T_P^{(0)}\]</p><h5 id="Boundary-conditions"><a class="docs-heading-anchor" href="#Boundary-conditions">Boundary conditions</a><a id="Boundary-conditions-1"></a><a class="docs-heading-anchor-permalink" href="#Boundary-conditions" title="Permalink"></a></h5><p>TODO</p><h5 id="Special-cases-coordinates"><a class="docs-heading-anchor" href="#Special-cases-coordinates">Special cases coordinates</a><a id="Special-cases-coordinates-1"></a><a class="docs-heading-anchor-permalink" href="#Special-cases-coordinates" title="Permalink"></a></h5><p>For cylindrical and spherical systems, a condition for symmetry is that no flux traverses the center of the cylinder at <span>$r=0$</span>. That implies that <em>south</em> derivatives in discrete form of the equation must vanish to enforce <span>$\dot{q}(0,t)=0$</span>, so the first row of the problem is modified to</p><p class="math-container">\[a_1T_P + a_NT_N = \alpha_{P}T_P^{0}\quad\text{where}\quad{}a_1=\alpha_{P}+\beta_{n}\]</p><p class="math-container">\[a_1T_P + a_NT_N = \alpha_{P}T_P^{0}\quad\text{where}\quad{}a_1=\alpha_{P}+\beta_{n}\]</p><p>Over the external radius <span>$r=R$</span> a Robin boundary condition is imposed. In this case the heat flux <span>$\dot{q}=U(T_\infty-T_P)$</span> takes the place of <em>north</em> term in FVM discretization and the equation writes</p><p class="math-container">\[a_ST_S + a_RT_P = \alpha_{P}T_P^{0}+UT_\infty\quad\text{where}\quad{}a_R=\alpha_{P}+U+\beta_{s}\]</p><p>It must be noted here that <span>$U=\beta{}h$</span>, where the actual heat transfer coefficient is <span>$h$</span>. This should be self-evident from a dimensional analysis.</p><hr/><div class="admonition is-danger"><header class="admonition-header">Danger</header><div class="admonition-body"><p>From here on everything is in draft mode.</p></div></div><hr/><h3 id="Enthalpy-formulation"><a class="docs-heading-anchor" href="#Enthalpy-formulation">Enthalpy formulation</a><a id="Enthalpy-formulation-1"></a><a class="docs-heading-anchor-permalink" href="#Enthalpy-formulation" title="Permalink"></a></h3><p>Enthalpy formulation is less trivial from the perspective that both sides of the equation do not use the same variable; balance is performed over enthalpy while driving force remains the temperature gradient (as per Fourier&#39;s law). In this case an extra step is added to the solution, solve a (generally) nonlinear equation for <span>$T=f(h)$</span>. Quite often this is formulated as a root finding problem stated as <span>$h-\hat{h}(T)=0$</span>, where <span>$h$</span> represents the integrate enthalpy in a control volume and <span>$\hat{h}$</span> the provided function relating temperature to enthalpy. The equation is this case is stated as:</p><p class="math-container">\[\frac{\partial{}(\rho{}h)}{\partial{}t}=\nabla\cdotp{}(k\nabla{}T)\]</p><h4 id="Spherical-coordinates-1-D"><a class="docs-heading-anchor" href="#Spherical-coordinates-1-D">Spherical coordinates 1-D</a><a id="Spherical-coordinates-1-D-1"></a><a class="docs-heading-anchor-permalink" href="#Spherical-coordinates-1-D" title="Permalink"></a></h4><p>For computing the heating dynamics in a sphere, using the definition of divergence in spherical coordinates and using the gradient expansion over the radius we have</p><p class="math-container">\[\rho{}\frac{\partial{}h}{\partial{}t}=
+\frac{1}{r^2}\frac{\partial}{\partial{}r}
+\left(r^2k\frac{\partial{}T}{\partial{}r}\right)\]</p><p>This is now integrated over the differential volume <span>$dV$</span> as described in previous sections and for conciseness we skip that discussion. The integration over radial coordinate introduces the <span>$r^2dr$</span> factor from the differential volume and we get the final form of the equation to integrate.</p><p class="math-container">\[\int_{s}^{n}\int_{0}^{\tau}
+\rho{}\frac{\partial{}h}{\partial{}t}r^2dtdr=
+\int_{0}^{\tau}\int_{s}^{n}
+\frac{\partial}{\partial{}r}
+\left(r^2k\frac{\partial{}T}{\partial{}r}\right)drdt\]</p><p>After effecting the inner integrations and moving out constant terms from the integrals and expanding the evaluation of the definite integral between control volume boundaries <span>$s$</span> and <span>$n$</span> and performing a Crank-Nicolson integration of the right-hand side one gets</p><p class="math-container">\[\begin{align}
+\frac{\rho{}}{\tau}
+\left(h_P^{\tau}-h_P^{0}\right)
+\left(\frac{r_n^3}{3}-\frac{r_s^3}{3}\right)
+&amp;=f\left[
+r_n^2k_n\frac{T_N^{\tau}-T_P^{\tau}}{\delta_{P,N}}-
+r_s^2k_s\frac{T_P^{\tau}-T_S^{\tau}}{\delta_{P,S}}
+\right]\\[8pt]
+&amp;+(1-f)\left[
+r_n^2k_n\frac{T_N^{0}-T_P^{0}}{\delta_{P,N}}-
+r_s^2k_s\frac{T_P^{0}-T_S^{0}}{\delta_{P,S}}
+\right]
+\end{align}\]</p><p>Some coefficients appearing in the above equations are now grouped. Notice that for thermal conductivity <span>$k$</span> which is a function of temperature, the corresponding time-step temperature must be used for its evaluation. For <span>$\beta_{j}$</span> the lower case <span>$j$</span> represents the evaluation at the interface with control volume <span>$J$</span>, what is a very specific notation.</p><p class="math-container">\[\begin{align}
+\alpha_{P}  &amp; = \frac{\rho{}}{3\tau}\left(r_n^3-r_s^3\right)\\[8pt]
+\beta_{j}   &amp; = \frac{r_j^2k_j}{\delta_{P,J}}
+\end{align}\]</p><p>For conciseness we make <span>$g=(1-f)$</span> and simplify the expression with the new coefficients as</p><p class="math-container">\[\begin{align}
+\alpha_{P}h_P^{\tau}-\alpha_{P}h_P^{0}
+
+&amp;=f\beta_{n}T_N^{\tau}-f(\beta_{n}+\beta_{s})T_P^{\tau}-f\beta_{s}T_S^{\tau}
+\\[8pt]
+&amp;+g\beta_{n}T_N^{0}-g(\beta_{n}+\beta_{s})T_P^{0}-g\beta_{s}T_S^{0}
+\end{align}\]</p><p>For the fully implicit time-stepping scheme <span>$f=1$</span> and making <span>$\gamma_{j}^{k}=\alpha_{P}^{-1}\beta_{j}^{k}$</span> one gets</p><p class="math-container">\[h_P^{\tau}-h_P^{0}-\gamma_{n}^{k}T_N^{\tau,k}+(\gamma_{n}^{k}+\gamma_{s}^{k})T_P^{\tau,k}-\gamma_{s}^{k}T_S^{\tau,k}=0\]</p><p>A condition for symmetry is that no flux traverses the center of the sphere at <span>$r=0$</span>. That implies that <em>south</em> derivatives in discretizes form of the equation must vanish to enforce <span>$\dot{q}(0,t)=0$</span>, so the first row of the problem is modified to</p><p class="math-container">\[h_P^{\tau}-h_P^{0}-\gamma_{n}^{k}T_N^{\tau,k}+\gamma_{n}^{k}T_P^{\tau,k}=0\]</p><p>Over the external radius <span>$r=R$</span> a Robin boundary condition is imposed. In this case the heat flux <span>$\dot{q}=U(T_\infty-T_P)$</span> takes the place of <em>north</em> term in FVM discretization and the equation writes</p><p class="math-container">\[h_P^{\tau}-h_P^{0}-\alpha_{P}^{-1}UT_{\infty}+(\alpha_{P}^{-1}U+\gamma_{s}^{k})T_P^{\tau,k}-\gamma_{s}^{k}T_S^{\tau,k}=0\]</p><p>It must be noted here that <span>$U=R^2h$</span>, where the actual heat transfer coefficient is <span>$h$</span>. This should be self-evident from a dimensional analysis.</p><p>This is no longer a linear problem and thus cannot be solved directly. We need now an strategy for solving this coupled system of nonlinear equations. The iterative solution of the problem is indicated in the above equations through the introduction of superscript <span>$k$</span> indicating the iteration number. One can rework the system as</p><p class="math-container">\[\begin{align}
+-\gamma_{1,2}^{k}T_2^{\tau,k}+\gamma_{1,2}^{k}T_1^{\tau,k}+h_1^{\tau}&amp;=h_1^{0}\\
+&amp;\dots \\
+-\gamma_{n}^{k}T_N^{\tau,k}+(\gamma_{n}^{k}+\gamma_{s}^{k})T_P^{\tau,k}-\gamma_{s}^{k}T_S^{\tau,k}+h_P^{\tau}&amp;=h_P^{0}\\
+&amp;\dots \\
+(\alpha_{K}^{-1}U+\gamma_{K-1,K}^{k})T_K^{\tau,k}-\gamma_{K-1,K}^{k}T_{K-1}^{\tau,k}+h_K^{\tau}&amp;=h_K^{0}+\alpha_{K}^{-1}UT_{\infty}
+\end{align}\]</p><p>It is clear now that for implementation purposes one can store the required coefficients in a tridiagonal matrix <span>$A^{k}$</span>. Making <span>$\Gamma_{i}=(\gamma_{i-1,i}+\gamma_{i,i+1})$</span> and <span>$\tilde{U}=\alpha_{K}^{-1}U$</span> we can identify the terms in</p><p class="math-container">\[\begin{pmatrix}
+H_{1}^{k}    \\
+H_{2}^{k}    \\
+H_{3}^{k}    \\
+\vdots   \\
+H_{K-1}^{k}  \\
+H_{K}^{k}    \\
+\end{pmatrix}
+=
+\begin{pmatrix}
+ \gamma_{1,2}^{k} &amp; -\gamma_{1,2}^{k} &amp;  0                &amp; \dots  &amp; 0 &amp; 0 \\
+-\gamma_{1,2}^{k} &amp;  \Gamma_{2}^{k}   &amp; -\gamma_{2,3}^{k} &amp; \dots  &amp; 0 &amp; 0 \\
+ 0 &amp; -\gamma_{2,3}^{k} &amp;  \Gamma_{3}^{k} &amp; -\gamma_{3,4}^{k}\ddots &amp;  0 &amp;  0 \\
+\vdots  &amp; \ddots &amp; \ddots &amp; \ddots &amp; \ddots  &amp; \vdots \\
+ 0 &amp;  0 &amp; 0 &amp; -\gamma_{K-2,K-1}^{k} &amp;  \Gamma_{K-1}^{k}   &amp; -\gamma_{K-1,K}^{k} \\
+ 0      &amp;  0     &amp;  0     &amp;  0     &amp; -\gamma_{K-1,K}^{k} &amp; \tilde{U}+\gamma_{K-1,K}^{k} \\
+\end{pmatrix}
+\begin{pmatrix}
+T_{1}^{\tau,k}   \\
+T_{2}^{\tau,k}   \\
+T_{3}^{\tau,k}   \\
+\vdots           \\
+T_{K-1}^{\tau,k} \\
+T_{N}^{\tau,k}   \\
+\end{pmatrix}\]</p><p>Since the temperature vector <span>$T^{\tau,k}$</span> is updated every iteration, the coefficients of <span>$A^{k}$</span> must also be updated. With the intermediate vector <span>$H^{\tau,k}$</span> the nonlinear problem is rewritten as</p><p class="math-container">\[\begin{pmatrix}
+H_{1}^{k}    \\
+H_{2}^{k}    \\
+H_{3}^{k}    \\
+\vdots       \\
+H_{K-1}^{k}  \\
+H_{K}^{k}    \\
+\end{pmatrix}
++
+\begin{pmatrix}
+h_{1}^{\tau}   \\
+h_{2}^{\tau}   \\
+h_{3}^{\tau}   \\
+\vdots         \\
+h_{K-1}^{\tau} \\
+h_{K}^{\tau}   \\
+\end{pmatrix}
+=
+\begin{pmatrix}
+h_1^{0}                 \\
+h_2^{0}                 \\
+h_3^{0}                 \\
+\vdots                  \\
+h_{K-1}^{0}             \\
+h_{K}^{0} + \tilde{U}T_{\infty} \\
+\end{pmatrix}\]</p><p>The choice not to write the problem in this format reflects the fact that the term <span>$H^{\tau,k}$</span> on the left-hand side is updated on a iteration basis, while the vector <span>$b^{0}$</span> is computed once per time step. This last vector was called <span>$b^{0}$</span> instead of <span>$h^{0}$</span> because it also includes the boundary condition in its last element. This is useful for the conception of the inner and outer loop functions used for solution update.</p><p>The traditional approach to solve this sort of problems is to provide a <em>initial guess</em> <span>$T^{\tau,0}=T^{0}$</span>.</p><p class="math-container">\[\begin{align}
+h^{\tau,0}               &amp;= b^{0}-A^{0}T^{\tau,0}\\
+h(T^{\tau,1})-h^{\tau,0} &amp;= 0\\
+\Delta{}T                &amp;= T^{\tau,1}-T^{\tau,0}\\
+T^{\tau,1}               &amp;= T^{\tau,0}+(1-\alpha)\Delta{}T\\
+\varepsilon^{1}          &amp;= \vert\Delta{}T\vert\\
+&amp;\text{repeat}\\
+h^{\tau,1}               &amp;= b^{0}-A^{1}T^{\tau,1}\\
+h(T^{\tau,2})-h^{\tau,1} &amp;= 0\\
+\Delta{}T                &amp;= T^{\tau,2}-T^{\tau,1}\\
+T^{\tau,2}               &amp;= T^{\tau,1}+(1-\alpha)\Delta{}T\\
+\varepsilon^{2}          &amp;= \vert\Delta{}T\vert\\
+&amp;\dots\\
+h^{\tau,k}                 &amp;= b^{0}-A^{k}T^{\tau,k}\\
+h(T^{\tau,k+1})-h^{\tau,k} &amp;= 0\\
+\Delta{}T                  &amp;= T^{\tau,k+1}-T^{\tau,k}\\
+T^{\tau,k+1}               &amp;= T^{\tau,k}+(1-\alpha)\Delta{}T\\
+\varepsilon^{k+1}          &amp;= \vert\Delta{}T\vert\\
+\end{align}\]</p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../06-Dimensionless-groups/">« Dimensionless groups</a><a class="docs-footer-nextpage" href="../08-Conductivity-Porous-Solids/">Thermal conductivity of porous solids »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.4.1 on <span class="colophon-date" title="Sunday 23 June 2024 08:06">Sunday 23 June 2024</span>. Using Julia version 1.10.4.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
