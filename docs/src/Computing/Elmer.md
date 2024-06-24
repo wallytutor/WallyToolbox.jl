@@ -21,6 +21,8 @@ The goal of this page is not to supersede the [documentation](https://www.csc.fi
 
 - Currently the GUI is not able to import SIF files generated manually because it stores its state in a XML file; to be able to re-run cases from the GUI users need to create the equivalent case (eventually using the free text fields) in the GUI itself before regenerating a SIF file. Notice that this will overwrite the SIF file, so keep in mind to backup the file in another directory; that is especially required for highly customized cases.
 
+- When exporting meshes from `gmsh`, consider using the extension `.msh` and not `.msh2` as is often seen as a reminder of format 2 mesh; Elmer GUI is unable to render the mesh in this case. Notice that this has apparently no effect if running from command line.
+
 ### Ongoing work
 
 - Development of a [VS Code syntax highlight extension](https://github.com/wallytutor/WallyToolbox.jl/tree/main/tools/vscode/extensions/wally-sif) with help of data provided in [SOLVER.KEYWORDS](https://github.com/ElmerCSC/elmerfem/blob/devel/fem/src/SOLVER.KEYWORDS).
