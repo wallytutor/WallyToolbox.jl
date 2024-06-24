@@ -167,18 +167,22 @@ set PATH=%HERE%%MIKTEX_VERSION%\texmfs\install\miktex\bin\x64;%PATH%
 @REM IMPORTANT: Julia and Python come last to override others.
 
 @REM @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@REM CONFIGURE PYTHON
+@REM @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+set PYTHON_HOME=%HERE%%WINPYTHON_VERSION%\%PYTHON_VERSION%
+set PATH=%PYTHON_HOME%;%PATH%
+set PATH=%PYTHON_HOME%\Scripts;%PATH%
+
+@REM @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @REM CONFIGURE JULIA
 @REM @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 set PATH=%HERE%%JULIA_VERSION%-win64\%JULIA_VERSION%\bin;%PATH%
 set JULIA_DEPOT_PATH=%HERE%%JULIA_VERSION%-win64\depot
 
-@REM @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-@REM CONFIGURE PYTHON
-@REM @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-
-set PATH=%HERE%%WINPYTHON_VERSION%\%PYTHON_VERSION%;%PATH%
-set PATH=%HERE%%WINPYTHON_VERSION%\%PYTHON_VERSION%\Scripts;%PATH%
+@REM Jupyter to be used with IJulia.
+@REM set JUPYTER=%PYTHON_HOME%/Scripts
 
 @REM @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @REM EOF
