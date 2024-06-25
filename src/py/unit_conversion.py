@@ -57,6 +57,28 @@ class FlowUnits:
         return cls.normal_concentration() * mw * q / 3600
 
     @classmethod
+    def mass_flow_to_normal_flow(
+            cls,
+            m: float,
+            mw: float
+        ) -> float:
+        """ Convert flow given in kg/s to Nm³/h for a solution.
+
+        Parameters
+        ----------
+        m: float
+            Flow rate to be converted in kg/s.
+        mw: float
+            Solution mean molecular weight in kg/kmol.
+
+        Returns
+        -------
+        float
+            Flow rate converted to Nm³/h.
+        """
+        return 3600 * m / (cls.normal_concentration() * mw)
+
+    @classmethod
     def standard_flow_to_gas_speed(
             cls,
             q: float,
@@ -181,6 +203,11 @@ class ThermalPropertiesUnits:
         return cls.bu_to_si_specific_heat_f * cp
 
 
-def normal_flow_to_mass_flow(q: float, sol: "ct.Solution"):
+def normal_flow_to_mass_flow(q: float, sol: "ct.Solution") -> float:
     """ Wrapper around Cantera Solution object for `FlowUnits`. """
     return FlowUnits.normal_flow_to_mass_flow(q, sol.mean_molecular_weight)
+
+
+def mass_flow_to_normal_flow(m: float, sol: "ct.Solution") -> float:
+    """ Wrapper around Cantera Solution object for `FlowUnits`. """
+    return FlowUnits.mass_flow_to_normal_flow(m, sol.mean_molecular_weight)
