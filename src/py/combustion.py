@@ -160,7 +160,7 @@ class BurnerFlowRatesCalculator:
         self._mixt = ct.Solution(self._mech)
 
         # Normal concentration in [kmol/Nm³] to [mol/Nm³]
-        self._normal_conc = FlowUnits().normal_concentration
+        self._normal_conc = FlowUnits().normal_concentration()
         self._normal_conc *= 1000
 
     def _get_molar_amounts(self) -> list[float]:
