@@ -14,6 +14,8 @@ The goal of this directory is to provide an easy way to setup a portable toolbox
 - [texstudio](https://www.texstudio.org/#download)
 - [JabRef](https://www.fosshub.com/JabRef.html?dwl=JabRef-5.13.msi)
 
+- [Cantera](https://github.com/Cantera/cantera/releases/tag/v3.0.0)
+- [DWSIM](https://dwsim.org/index.php/download/)
 - [ElmerFEM](https://www.nic.funet.fi/pub/sci/physics/elmer/bin/windows/)
 - [LAMMPS](https://packages.lammps.org/windows.html)
 - [OpenModelica](https://openmodelica.org/download/download-windows/)
@@ -24,26 +26,25 @@ The goal of this directory is to provide an easy way to setup a portable toolbox
 - [FreeCAD](https://www.freecad.org/downloads.php)
 - [gmsh](https://gmsh.info/#Download)
 - [gnuplot](https://sourceforge.net/projects/gnuplot/files/gnuplot/6.0.0/)
+- [inkscape](https://inkscape.org/release/inkscape-1.3.2/windows/64-bit/)
 - [ParaView](https://www.paraview.org/download/)
 - [Salome](https://www.salome-platform.org/?page_id=2430)
 
 Next deployment:
 
 - [FreeFem++]()
-`
+
 For DualSPHysics one might also want to install [this FreeCAD addon](https://github.com/DualSPHysics/DesignSPHysics) and [this Blender addon](https://github.com/EPhysLab-UVigo/VisualSPHysics).
 
 ### Optional deployments
 
 - [7-zip]()
-- [Cantera]()
 - [CasADi]()
-- [DWSIM]()
 - [Dyssol]()
 - [Fiji]()
 - [FileZilla]()
-- [inkscape]()
 - [Ipopt]()
+- [lazarus]()
 - [MUSEN]()
 - [nteract]()
 - [nvim]()

@@ -25,6 +25,7 @@ set BLENDER_VERSION=blender-4.1.1-windows-x64
 set FREECAD_VERSION=FreeCAD_0.21.2-2023-12-17-conda-Windows-x86_64-py310
 set GMSH_VERSION=gmsh-4.13.0-Windows64-sdk
 set GNUPLOT_VERSION=gp600-win64-mingw
+set INKSCAPE_VERSION=inkscape-1.3.2_2023-11-25_091e20e-x64
 set PARAVIEW_VERSION=ParaView-5.12.0-Windows-Python3.10-msvc2017-AMD64
 set SALOME_VERSION=SALOME-9.12.0
 
@@ -89,7 +90,7 @@ set VMDDIR=%HERE%%VMD_VERSION%
 set PATH=%VMDDIR%;%PATH%
 
 @REM VMD wants HKLM but I can't set it in any machine without being admin...
-@REM REG ADD "HKCU\Software\University of Illinois\VMD\1.9.4" /v VMDDIR /t REG_SZ /d %VMDDIR% /f
+REG ADD "HKCU\Software\University of Illinois\VMD\1.9.4" /v VMDDIR /t REG_SZ /d %VMDDIR% /f
 
 @REM @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @REM CONFIGURE LAMMPS
@@ -150,6 +151,7 @@ set PATH=%HERE%%BLENDER_VERSION%;%PATH%
 set PATH=%HERE%%DUALSPHYSICS_VERSION%\DualSPHysics_v5.2\bin\windows;%PATH%
 set PATH=%HERE%%FREECAD_VERSION%\bin;%PATH%
 set PATH=%HERE%%GNUPLOT_VERSION%\gnuplot\bin;%PATH%
+set PATH=%HERE%%INKSCAPE_VERSION%\inkscape\bin;%PATH%
 set PATH=%HERE%%JABREF_VERSION%\JabRef;%PATH%
 set PATH=%HERE%%PARAVIEW_VERSION%\bin;%PATH%
 set PATH=%HERE%%SALOME_VERSION%;%PATH%

@@ -3,14 +3,17 @@ bin/basic-miktex*
 bin/blender*
 bin/Cantera*
 bin/DualSPHysics*
+bin/DWSIM*
 bin/Elmer*
 bin/FreeCAD*
 bin/FreeFem*
 bin/gmsh*
 bin/gp*
+bin/inkscape*
 bin/JabRef*
 bin/julia*
 bin/LAMMPS*
+bin/obsidian*
 bin/OpenModelica*
 bin/pandoc*
 bin/ParaView*
@@ -21,6 +24,7 @@ bin/texstudio*
 bin/vmd*
 bin/VSCode*
 bin/WPy64*
+bin/Winpython*
 
 # VSCode ignores.
 vscode/argv.json
