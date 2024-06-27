@@ -1,6 +1,9 @@
 # Editors
 .vscode/
 
+# Conda (PythonCall)
+.CondaPkg/
+
 # Scripts
 build.ps1
 

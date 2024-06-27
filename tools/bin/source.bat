@@ -44,7 +44,7 @@ set TEXSTUDIO_VERSION=texstudio-4.8.0-win-portable-qt6
 set PANDOC_VERSION=pandoc-3.2
 
 @REM Main languages
-set JULIA_VERSION=julia-1.10.3
+set JULIA_VERSION=julia-1.10.4
 set WINPYTHON_VERSION=WPy64-31180
 set PYTHON_VERSION=python-3.11.8.amd64
 @REM set WINPYTHON_VERSION=WPy64-31231b3
