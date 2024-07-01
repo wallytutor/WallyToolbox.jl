@@ -30,12 +30,24 @@
             ]
         },
         {
-            "name": "xelatex",
+            "name": "xelatex-bibtex",
             "tools": [
                 "xelatex",
                 "xelatex",
                 "bibtex",
                 "xelatex",
+                "bibtex",
+                "xelatex"
+            ]
+        },
+        {
+            "name": "xelatex-biber",
+            "tools": [
+                "xelatex",
+                "xelatex",
+                "biber",
+                "xelatex",
+                "biber",
                 "xelatex"
             ]
         }
@@ -68,7 +80,14 @@
             "name": "bibtex",
             "command": "bibtex",
             "args": [
-                "%DOC%.tex"
+                "%DOC%"
+            ]
+        },
+        {
+            "name": "biber",
+            "command": "biber",
+            "args": [
+                "%DOC%"
             ]
         }
     ],
