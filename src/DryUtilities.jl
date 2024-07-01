@@ -64,23 +64,23 @@ plot axes limits. The returned values provide the string for
 modifying the axis label and the associated scaling factor.
 """
 function axesunitscaler(x::Number)::Tuple{String, Int64}
-	# Find the floor of log10 of number.
-	m = convert(Int64, x |> log10 |> floor)
+    # Find the floor of log10 of number.
+    m = convert(Int64, x |> log10 |> floor)
 
-	# Get the order of magnitude number.
-	n = div(m, 3)
+    # Get the order of magnitude number.
+    n = div(m, 3)
 
-	# Find scaling factor.
-	p = 1000^(n)
+    # Find scaling factor.
+    p = 1000^(n)
 
-	return (n == 0) ? ("", 1) : ("[×$(1000^n)]", p)
+    return (n == 0) ? ("", 1) : ("[×$(1000^n)]", p)
 end
 
 ##############################################################################
 # Discontinuous functions
 ##############################################################################
 
-""" 
+"""
     heaviside(t)
 
 Provides a Heaviside function compatible with automatic differentiation.
