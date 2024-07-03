@@ -65,6 +65,8 @@ $$
 \frac{\partial{}b}{\partial{}t} + \nabla\cdotp{\vec{F}} - B_{v} = 0
 $$
 
+Physically speaking this expression simply puts that the rate of accumulation equals the inflow (notice that this assumes a balance according to normal vector convection established above) plus the rate of production inside the control volume. This expression serves as the basis to the governing equations of different transport phenomena when **constitutive relationships** are included for describing a certain physics.
+
 ### Conservation at system boundaries
 
 So far we have a PDE describing the conservation *inside* the RVE of the system being described. To be able to solve such a system we also need to provide a description of its interactions with its surroundings through the specification of *boundary conditions*.
