@@ -27,13 +27,27 @@ $$
 
 ### General conservation equation
 
-The most general statement of conservation of this quantity $b$ writes then:
+Using the above definitions and the conventions presented in the next figure, the most general statement of conservation of this quantity $b$ writes then:
 
 $$
 \frac{d}{dt}\left(\int_{V}bdV\right) = -\int_{\Omega}\vec{n}\cdotp\vec{F}dA+\int_{V}B_{v}dV
 $$
 
-Using divergence theorem this can be converted into:
+Using the previous notation for units it is important to notice that each term of the above equation is given in units of *quantity* $\#$ per volume per time.
+
+![](figures/10/images_TUT_010101_divergence.svg)
+
+#divergence-theorem
+
+This multivariate vector equation describe transport in three-dimensional space. To be able to process further this expression one needs to incorporate the **divergence theorem** ideas to be able to formulate it in terms of volume only.
+
+Say we have the vector field $\vec{F}$, represented above by a number of lines; this could be any flow of some conserved quantity in the system being analyzed, as we shall see later. A control volume (CV) with a volume of $V$ and a surface area of $A$ is illustrated with a boundary $\Omega$ denoted by the outward pointing unit normal $\hat{n}$ at each point on the surface. The **divergence theorem** states:
+
+$$
+\int_{V}\nabla\cdotp{\vec{F}}dV=\int_{\Omega}\vec{n}\cdotp\vec{F}dA
+$$
+
+In this expression,   $\nabla\cdotp\vec{F}$ at each interior point inside $V$ – a scalar quantity – gives the rate at which the conserved quantity *spreads out* from that point, while $\hat{n}\cdotp\vec{F}$ at each boundary point on $A$ – also a scalar quantity – gives the rate at which the conserved quantity *leaks out* at that point. Thus we may summarize the divergence theorem by saying that there are two equally valid ways to compute the _total_ rate at which the conserved quantity leaves the control volume: either by integrating $\nabla\cdotp\vec{F}$ at each _interior point_ over $V$, or by integrating $\hat{n}\cdotp\vec{F}$ at each _boundary point_ over $A$. Using this ideas the previous conservation law can be converted into:
 
 $$
 \frac{d}{dt}\left(\int_{V}bdV\right) = -\int_{V}\nabla\cdotp{\vec{F}}dV+\int_{V}B_{v}dV
@@ -281,6 +295,8 @@ For incompressible flows (constant $\rho_{m}$) the time derivative is by definit
 $$
 \nabla\cdotp\left(\rho_{m}\vec{v}_{m}\right)=\rho_{m}\nabla\vec{v}_{m}+\vec{v}_{m}\nabla\rho_{m}=0
 $$
+
+#incompressible-flow
 
 Since $\rho_{m}$ is constant, this simplifies to the so-called *incompressible fluid continuity equation*
 
