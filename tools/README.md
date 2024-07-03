@@ -17,6 +17,7 @@ The goal of this directory is to provide an easy way to setup a portable toolbox
 - [Cantera](https://github.com/Cantera/cantera/releases/tag/v3.0.0)
 - [DWSIM](https://dwsim.org/index.php/download/)
 - [ElmerFEM](https://www.nic.funet.fi/pub/sci/physics/elmer/bin/windows/)
+- [FreeFem++](https://github.com/FreeFem/FreeFem-sources/releases)
 - [LAMMPS](https://packages.lammps.org/windows.html)
 - [OpenModelica](https://openmodelica.org/download/download-windows/)
 - [SU2](https://su2code.github.io/download.html)
@@ -30,16 +31,16 @@ The goal of this directory is to provide an easy way to setup a portable toolbox
 - [ParaView](https://www.paraview.org/download/)
 - [Salome](https://www.salome-platform.org/?page_id=2430)
 
-Next deployment:
-
-- [FreeFem++]()
-
 For DualSPHysics one might also want to install [this FreeCAD addon](https://github.com/DualSPHysics/DesignSPHysics) and [this Blender addon](https://github.com/EPhysLab-UVigo/VisualSPHysics).
+
+### Ongoing work
+
+- [CasADi](https://web.casadi.org/get/)
+- [Octave](https://octave.org/download)
 
 ### Optional deployments
 
 - [7-zip]()
-- [CasADi]()
 - [Dyssol]()
 - [Fiji]()
 - [FileZilla]()
@@ -49,7 +50,6 @@ For DualSPHysics one might also want to install [this FreeCAD addon](https://git
 - [nteract]()
 - [nvim]()
 - [OpenCALPHAD]()
-- [Octave]()
 - [Orange3]()
 - [pandoc]()
 - [puTTy]()
