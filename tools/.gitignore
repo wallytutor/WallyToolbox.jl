@@ -26,6 +26,9 @@ bin/VSCode*
 bin/WPy64*
 bin/Winpython*
 
+# Jupyter ignores
+jupyter/
+
 # VSCode ignores.
 vscode/argv.json
 vscode/extensions/*

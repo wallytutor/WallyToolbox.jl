@@ -184,7 +184,12 @@ set PATH=%HERE%%JULIA_VERSION%-win64\%JULIA_VERSION%\bin;%PATH%
 set JULIA_DEPOT_PATH=%HERE%%JULIA_VERSION%-win64\depot
 
 @REM Jupyter to be used with IJulia.
-@REM set JUPYTER=%PYTHON_HOME%/Scripts
+set JUPYTER=%PYTHON_HOME%\Scripts\jupyter.exe
+set JUPYTER_DATA_DIR=%HERE%..\jupyter
+@REM set JUPYTER=%JULIA_DEPOT_PATH%\conda\3\x86_64\Scripts\jupyter.exe
+@REM set JUPYTER_CONFIG_DIR=%JULIA_DEPOT_PATH%/.jupyter
+
+set WALLYROOT=%HERE%..\..\
 
 @REM @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @REM EOF
