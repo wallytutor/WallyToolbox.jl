@@ -2,7 +2,7 @@
 
 julia_version = "1.10.4"
 manifest_format = "2.0"
-project_hash = "53559415fc2083787ab3f7b69f2c447735aea58f"
+project_hash = "c14f3d3009d9e3d61af284b876a7e933ec14563a"
 
 [[deps.ADTypes]]
 git-tree-sha1 = "7a6b285f217ba92b5b474b783b4c2e8cf8218aaa"
@@ -1016,6 +1016,12 @@ version = "2.23.1"
     BlockBandedMatrices = "ffab5731-97b5-5995-9138-79e8c1846df0"
     StaticArrays = "90137ffa-7385-5640-81b9-e52037218182"
 
+[[deps.FiniteDifferences]]
+deps = ["ChainRulesCore", "LinearAlgebra", "Printf", "Random", "Richardson", "SparseArrays", "StaticArrays"]
+git-tree-sha1 = "06d76c780d657729cf20821fb5832c6cc4dfd0b5"
+uuid = "26cc04aa-876d-5657-8c51-4c34ba976000"
+version = "0.12.32"
+
 [[deps.FiniteVolumeMethod]]
 deps = ["ChunkSplitters", "CommonSolve", "DelaunayTriangulation", "LinearAlgebra", "PreallocationTools", "PrecompileTools", "SciMLBase", "SparseArrays"]
 git-tree-sha1 = "c4e31b97cd404f6c823f6d5a3937383abb655e54"
@@ -1630,6 +1636,12 @@ deps = ["Distributions", "DocStringExtensions", "FFTW", "Interpolations", "Stats
 git-tree-sha1 = "7d703202e65efa1369de1279c162b915e245eed1"
 uuid = "5ab0869b-81aa-558d-bb23-cbf5423bbe9b"
 version = "0.6.9"
+
+[[deps.KissSmoothing]]
+deps = ["FFTW", "LinearAlgebra", "SparseArrays", "Statistics"]
+git-tree-sha1 = "6d4c314981c5f1df153c23b69dfa295c5286e247"
+uuid = "23b0397c-cd08-4270-956a-157331f0528f"
+version = "1.0.8"
 
 [[deps.Krylov]]
 deps = ["LinearAlgebra", "Printf", "SparseArrays"]
@@ -2805,6 +2817,12 @@ deps = ["CodeTracking", "Distributed", "FileWatching", "JuliaInterpreter", "LibG
 git-tree-sha1 = "85ddd93ea15dcd8493400600e09104a9e94bb18d"
 uuid = "295af30f-e4ad-537b-8983-00126c2a3abe"
 version = "3.5.15"
+
+[[deps.Richardson]]
+deps = ["LinearAlgebra"]
+git-tree-sha1 = "48f038bfd83344065434089c2a79417f38715c41"
+uuid = "708f8203-808e-40c0-ba2d-98a6953ed40d"
+version = "1.4.2"
 
 [[deps.Rmath]]
 deps = ["Random", "Rmath_jll"]
