@@ -22,6 +22,7 @@ O objetivo final da série é progressivamente introduzir complexidate em termos
 - O precedente com inclusão da entalpia de fusão no sólido.
 - O precedente com inclusão de cinética química no gás.
 
+
 # Introdução
 
 
