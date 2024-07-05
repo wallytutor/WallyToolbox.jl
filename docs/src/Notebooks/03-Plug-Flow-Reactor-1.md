@@ -1,4 +1,29 @@
-# Reator pistão - introdução
+# Reator pistão
+
+
+#plug-flow 
+
+Neste tópico abordamos modelos de reatores de uma ótica que pode ser simultâneamente útil em Engenharia Química e Engenharia Mecânica. Os modelos de reator estudados incluem em alguns casos aspectos voltados a engenharia dos aspectos térmicos e em outros elementos de cinética química. Isso inclui modelos 0-D de reatores perfeitamente agitados, modelos 1-D de reatores pistão, e outros tópicos mais avançados.
+
+O objetivo final da série é progressivamente introduzir complexidate em termos da física considerada, mas também na organização de ferramentas para a concepção e extensão de modelos genéricos de reators para integração dos modelos com maturidade suficiente nos módulos principais.
+
+- Introdução: solução térmica de um reator incompressível formulado em termos da temperatura. O objetivo é de realizar a introdução ao modelo de reator pistão sem entrar em detalhes involvendo não-linearidades como a dependência da densidade em termos da temperatura ou composição. Ademais, essa forma permite uma solução analítica. Introduz o uso de ModelingToolkit e do método dos volumes finitos.
+
+- Formulação entálpica do reator pistão: casos práticos de aplicação de reatores normalmente envolvem fluidos com propriedades que dependem da temperatura, especialmente o calor específico. Em geral a sua solução  é tratada de forma mais conveniente com uma formulação em termos da entalpia. Continuamos com o mesmo caso elaborado no estudo introdutório modificando as equações para que a solução seja realizada com a entalpia como variável dependente.
+
+- Reatores em contra corrente: o precedente para um par de reatores em contra-corrente.
+- Trocas em fluidos supercríticos: suporte à fluidos supercríticos (água, dióxido de carbono).
+- O precedente generalizado para um sólido e um gás (compressível).
+- O precedente com coeficiente HTC dependente da posição.
+- O precedente com trocas térmicas com o ambiente externo.
+- O precedente com inclusão de perda de carga na fase gás.
+- O precedente com um modelo de trocas térmicas com meio poroso.
+- O precedente com um modelo de efeitos difusivos axiais no sólido.
+- O precedente com inclusão da entalpia de fusão no sólido.
+- O precedente com inclusão de cinética química no gás.
+
+# Introdução
+
 
 Este é o primeiro notebook de uma série abordando reatores do tipo *pistão* (*plug-flow*) no qual os efeitos advectivos são preponderantes sobre o comportamento difusivo, seja de calor, massa, ou espécies. O estudo e modelagem desse tipo de reator apresentar diversos interesses para a pesquisa fundamental e na indústria. Muitos reatores tubulares de síntese laboratorial de materiais apresentam aproximadamente um comportamento como tal e processos nas mais diversas indústrias podem ser aproximados por um ou uma rede de reatores pistão e reatores agitados interconectados.
 

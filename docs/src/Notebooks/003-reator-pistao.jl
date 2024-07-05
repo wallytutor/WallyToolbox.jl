@@ -7,7 +7,9 @@ using InteractiveUtils
 # ╔═╡ fe2c3680-5b91-11ee-282c-c74d3b01ef9b
 begin
 	@info "Importando ferramentas..."
-	
+    import Pkg
+    Pkg.activate(Base.current_project())
+    
 	using CairoMakie
 	using DocStringExtensions
 	using PlutoUI
