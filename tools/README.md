@@ -9,12 +9,14 @@ The goal of this directory is to provide an easy way to setup a portable toolbox
 
 - [Julia](https://julialang.org/downloads/)
 - [Python](https://github.com/winpython/winpython/releases)
+- [Octave](https://octave.org/download)
 
 - [MikTeX](https://miktex.org/howto/portable-edition)
 - [texstudio](https://www.texstudio.org/#download)
 - [JabRef](https://www.fosshub.com/JabRef.html?dwl=JabRef-5.13.msi)
 
 - [Cantera](https://github.com/Cantera/cantera/releases/tag/v3.0.0)
+- [CasADi](https://web.casadi.org/get/)
 - [DWSIM](https://dwsim.org/index.php/download/)
 - [ElmerFEM](https://www.nic.funet.fi/pub/sci/physics/elmer/bin/windows/)
 - [FreeFem++](https://github.com/FreeFem/FreeFem-sources/releases)
@@ -32,11 +34,6 @@ The goal of this directory is to provide an easy way to setup a portable toolbox
 - [Salome](https://www.salome-platform.org/?page_id=2430)
 
 For DualSPHysics one might also want to install [this FreeCAD addon](https://github.com/DualSPHysics/DesignSPHysics) and [this Blender addon](https://github.com/EPhysLab-UVigo/VisualSPHysics).
-
-### Ongoing work
-
-- [CasADi](https://web.casadi.org/get/)
-- [Octave](https://octave.org/download)
 
 ### Optional deployments
 

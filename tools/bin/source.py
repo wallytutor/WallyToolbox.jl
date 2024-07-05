@@ -5,6 +5,7 @@ from pathlib import Path
 basepaths = {
     "MYENV_BLENDER":      "blender-4.1.1-windows-x64",
     "MYENV_CANTERA":      "Cantera-3.0.0",
+    "MYENV_CASADI":       "casadi-3.6.5-windows64-octave7.3.0",
     "MYENV_DUALSPHYSICS": "DualSPHysics_v5.2.2",
     "MYENV_ELMER":        "ElmerFEM-gui-mpi-Windows-AMD64",
     "MYENV_FREECAD":      "FreeCAD_0.21.2-2023-12-17-conda-Windows-x86_64-py310",
@@ -17,6 +18,7 @@ basepaths = {
     "MYENV_LAMMPS":       "LAMMPS-64bit-Python-17Apr2024-MSMPI",
     "MYENV_MIKTEX":       "basic-miktex-24.1-x64",
     "MYENV_MODELICA":     "OpenModelica1.23.0-64bit",
+    "MYENV_OCTAVE":       "octave-8.4.0-w64",
     "MYENV_PANDOC":       "pandoc-3.2",
     "MYENV_PARAVIEW":     "ParaView-5.12.0-Windows-Python3.10-msvc2017-AMD64",
     "MYENV_PYTHON":       "python-3.12.3.amd64",

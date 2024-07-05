@@ -2,6 +2,7 @@
 bin/basic-miktex*
 bin/blender*
 bin/Cantera*
+bin/casadi*
 bin/DualSPHysics*
 bin/DWSIM*
 bin/Elmer*
@@ -14,6 +15,7 @@ bin/JabRef*
 bin/julia*
 bin/LAMMPS*
 bin/obsidian*
+bin/octave*
 bin/OpenModelica*
 bin/pandoc*
 bin/ParaView*
