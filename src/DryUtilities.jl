@@ -161,4 +161,18 @@ function redirect_to_files(dofunc, outfile; errfile = nothing)
     end
 end
 
+"Run all assertions before throwing an error."
+function test_exhaustive(tests)
+    messages = []
+
+    for (evaluation, message) in tests
+        !evaluation && push!(messages, message)
+    end
+    
+    if !isempty(messages)
+        @error join(messages, "\n")
+        throw(ArgumentError("Check previous warnings"))
+    end
+end
+
 end # (module DryUtilities)

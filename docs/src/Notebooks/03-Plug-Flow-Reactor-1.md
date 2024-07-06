@@ -22,9 +22,8 @@ O objetivo final da série é progressivamente introduzir complexidate em termos
 - O precedente com inclusão da entalpia de fusão no sólido.
 - O precedente com inclusão de cinética química no gás.
 
-
+---
 # Introdução
-
 
 Este é o primeiro notebook de uma série abordando reatores do tipo *pistão* (*plug-flow*) no qual os efeitos advectivos são preponderantes sobre o comportamento difusivo, seja de calor, massa, ou espécies. O estudo e modelagem desse tipo de reator apresentar diversos interesses para a pesquisa fundamental e na indústria. Muitos reatores tubulares de síntese laboratorial de materiais apresentam aproximadamente um comportamento como tal e processos nas mais diversas indústrias podem ser aproximados por um ou uma rede de reatores pistão e reatores agitados interconectados.
 
@@ -32,150 +31,69 @@ Começaremos por um caso simples considerando um fluido incompressível e ao lon
 
 Nesta *Parte 1* vamos estuda a formulação na temperatura da equação de conservação de energia.
 
-```julia; @example notebook
-@info "Importando ferramentas..."
+```julia
+using WallyToolbox
+using DryTransport
 
 using CairoMakie
 using DelimitedFiles
 using DifferentialEquations: solve
 using ModelingToolkit
-using PlutoUI
 using Printf
+using Roots
 using SparseArrays
-
 nothing; #hide
 ```
 
 No que se segue vamos implementar a forma mais simples de um reator pistão. Para este primeiro estudo o foco será dado apenas na solução da equação da energia. As etapas globais implementadas aqui seguem o livro de [Kee *et al.* (2017)](https://www.wiley.com/en-ie/Chemically+Reacting+Flow%3A+Theory%2C+Modeling%2C+and+Simulation%2C+2nd+Edition-p-9781119184874), seção 9.2.
-
 ## Etapas preliminares
 
 Da forma simplificada como tratado, o problema oferece uma solução analítica análoga à [lei do resfriamento de Newton](https://pt.wikipedia.org/wiki/Lei_do_resfriamento_de_Newton), o que é útil para a verificação do problema. Antes de partir a derivação do modelo, os cálculos do número de Nusselt para avaliação do coeficiente de transferência de calor são providos no que se segue com expressões de Gnielinski e Dittus-Boelter discutidas [aqui](https://en.wikipedia.org/wiki/Nusselt_number).
 
-```julia; @example notebook
-"Função auxiliar para avaliação exaustiva de critérios de validação."
-function testall(tests)
-    messages = []
+Abaixo realizamos uma série de testes para verificação dos cálculos do número de Nusselt dadas as múltiplas configurações de parâmetros (complexidade ciclomática) possíveis. As implementatações se encontram no módulo `DryTransport`.
 
-    for (evaluation, message) in tests
-        !evaluation && push!(messages, message)
-    end
+```julia
+nu_gn = NusseltGnielinski()
+nu_db = NusseltDittusBoelter()
 
-    if !isempty(messages)
-        @error join(messages, "\n")
-        throw(ArgumentError("Check previous warnings"))
-    end
-end
+aspect_ratio = 100.0
+validate = true
 
-"Equação de Gnielinski para número de Nusselt."
-function Nu_gnielinski(Re, Pr)
-    testall([
-        (3000.0 <= Re <= 5.0e+06, "* Re = $(Re) ∉ [3000, 5×10⁶]"),
-        (0.5 <= Pr <= 2000.0, "* Pr = $(Pr) ∉ [0.5, 2000]"),
-    ])
-
-    f = (0.79 * log(Re) - 1.64)^(-2)
-    g = f / 8
-
-    num = g * (Re - 1000) * Pr
-    den = 1.0 + 12.7 * (Pr^(2 / 3) - 1) * g^(1 / 2)
-
-    return num / den
-end
-
-"Equação de Dittus-Boelter para número de Nusselt."
-function Nu_dittusboelter(Re, Pr, L, D; what = :heating)
-    testall([
-        (Re >= 10000.0, "* Re = $(Re) < 10000"),
-        (0.6 <= Pr <= 160.0, "* Pr = $(Pr) ∉ [0.6, 160]"),
-        (L / D > 10.0, "* L/D = $(L/D) < 10.0"),
-    ])
-
-    n = (what == :heating) ? 0.4 : 0.3
-
-    return 0.023 * Re^(4 // 5) * Pr^n
-end
-
-"Avalia número de Nusselt com correlação escolhida."
-function Nu(Re, Pr; method = :gnielinski, kw...)
-    # Valor para escoamento interno laminar.
-    Nu = 3.66
-
-    # Modifica valor com método se turbulento.
-    if Re > 3000.0
-        if method == :gnielinski
-            Nu = Nu_gnielinski(Re, Pr)
-        elseif method == :dittusboelter
-            what = get(kw, :what, :heating)
-            Nu = Nu_dittusboelter(Re, Pr, kw[:L], kw[:D]; what)
-        else
-            throw(ArgumentError("Unknown method $(method)"))
-        end
-    end
-
-    return Nu
-end
-
+try nusselt(nu_gn, 5.0e+07, 0.7; validate)                     catch end
+try nusselt(nu_gn, 5.0e+03, 0.4; validate)                     catch end
+try nusselt(nu_gn, 5.0e+07, 0.4; validate)                     catch end
+try nusselt(nu_db, 5.0e+03, 0.7; validate, aspect_ratio)       catch end
+try nusselt(nu_db, 5.0e+04, 0.5; validate, aspect_ratio)       catch end
+try nusselt(nu_db, 5.0e+04, 0.7; validate, aspect_ratio = 1.0) catch end
 nothing; #hide
 ```
 
-Abaixo realizamos uma série de testes para verificação dos cálculos do número de Nusselt dadas as múltiplas configurações de parâmetros (complexidade ciclomática) possívels.
+Para cobrir toda uma gama de números de Reynolds, a função `htc` avalia  `Nu` com seletor segundo valor de `Re` para o cálculo do número de Nusselt e uma funcionalidade para reportar os resultados, o que pode ser útil na pré-análise do problema.
 
-```julia; @example notebook
-L = 100.0
-D = 1.0
-
-try Nu(5.0e+07, 0.7; method = :gnielinski)              catch end
-try Nu(5.0e+03, 0.4; method = :gnielinski)              catch end
-try Nu(5.0e+07, 0.4; method = :gnielinski)              catch end
-try Nu(5.0e+03, 0.7; method = :dittusboelter, L, D)     catch end
-try Nu(5.0e+04, 0.5; method = :dittusboelter, L, D)     catch end
-try Nu(5.0e+04, 0.7; method = :dittusboelter, L = D, D) catch end
-nothing; #hide
-```
-
-Para cobrir toda uma gama de números de Reynolds, a função `heattransfercoef` abaixo usa a função `Nu` com seletor segundo valor de `Re` para o cálculo do número de Nusselt e uma funcionalidade para reportar os resultados, o que pode ser útil na pré-análise do problema.
-
-```julia; @example notebook
-"Estima coeficiente de troca convectiva do escoamento."
-function heattransfercoef(L, D, u, ρ, μ, cₚ, Pr; kw...)
-    Re_val = ρ * u * D / μ
-    Nu_val = Nu(Re_val, Pr; kw...)
-
-    k = cₚ * μ / Pr
-    h = Nu_val * k / D
-
-    if get(kw, :verbose, false)
-        @info("""\
-            Reynolds ................... $(Re_val)
-            Nusselt .................... $(Nu_val)
-            k .......................... $(k) W/(m.K)
-            h .......................... $(h) W/(m².K)\
-            """)
-    end
-
-    return h
+```julia
+let
+    L  = 100.0
+    D  = 1.0
+    u  = 1.0
+    ρ  = 1000.0
+    μ  = 0.01
+    cₚ = 4200.0
+    θ  = 298.15
+    kw = (verbose = true,)
+    
+    pr = ConstantPrandtl(0.7)
+    re = ReynoldsPipeFlow()
+    nu = NusseltGnielinski()
+    
+    hf = HtcPipeFlow(re, nu, pr)
+    htc(h_pf, θ, u, D, ρ, μ, cₚ; kw...)
+    hf
 end
-
-nothing; #hide
-```
-
-```julia; @example notebook
-L = 100.0
-D = 1.0
-u = 1.0
-ρ = 1000.0
-μ = 0.01
-cₚ = 4200.0
-Pr = 0.7
-kw = (verbose = true,)
-
-heattransfercoef(L, D, u, ρ, μ, cₚ, Pr; kw...)
 ```
 
 ## Condições compartilhadas
 
-```julia; @example notebook
+```julia
 # Comprimento do reator [m]
 L = 10.0
 
@@ -209,17 +127,17 @@ P = π * D
 # Área da seção circula do reator [m²]
 A = π * (D / 2)^2
 
+# Cria objeto para avaliação do coeficiente de troca convectiva.
+hf = HtcPipeFlow(ReynoldsPipeFlow(), NusseltGnielinski(), ConstantPrandtl(Pr))
+
 # Coeficiente convectivo de troca de calor [W/(m².K)]
-ĥ = heattransfercoef(L, D, u, ρ, μ, cₚ, Pr; verbose = true)
+ĥ = htc(hf, Tₛ, u, D, ρ, μ, cₚ; verbose = true)
 
 # Coordenadas espaciais da solução [m]
 z = LinRange(0, L, 10_000)
-
 nothing; #hide
 ```
-
 ## Derivação do modelo
-
 
 A primeira etapa no estabelecimento do modelo concerne as equações de conservação necessárias. No presente caso, com a ausência de reações químicas e trocas de matéria com o ambiente - o reator é um tubo fechado - precisamos estabelecer a conservação de massa e energia apenas. Como dito, o reator em questão conserva a massa transportada, o que é matematicamente expresso pela ausência de variação axial do fluxo de matéria, ou seja
 
@@ -306,12 +224,9 @@ Vamos agora empregar esse modelo para o cálculo da distribuição axial de
 temperatura ao longo do reator. No que se segue assume-se um reator tubular de
 seção circular de raio $R$ e todos os parâmetros do modelo são constantes.
 
-
 ## Métodos de solução
 
-
 ### Solução analítica da EDO
-
 
 O problema tratado aqui permite uma solução analítica simples que desenvolvemos de maneira um pouco abrupta no que se segue. Separando os termos em $T$ (variável dependente) e $z$ (variável independente) e integrando sobre os limites adequados obtemos
 
@@ -339,7 +254,7 @@ $$
 T=T_{w}-(T_{w}-T_{0})\exp\left(-\frac{\hat{h}P}{\rho{}u{}c_{p}A_{c}}z\right)
 $$
 
-```julia; @example notebook
+```julia
 "Solução analítica do modelo de reator pistão."
 function analyticalthermalpfr(; P, A, Tₛ, Tₚ, ĥ, u, ρ, cₚ, z)
     return @. Tₛ - (Tₛ - Tₚ) * exp(-z * (ĥ * P) / (ρ * u * cₚ * A))
@@ -349,12 +264,12 @@ nothing; #hide
 
 O bloco abaixo resolve o problema para um conjunto de condições que você pode consultar nos anexos e expandindo o seu código. Observe abaixo da célula um *log* do cálculo dos números adimensionais relevantes ao problema e do coeficiente de transferência de calor convectivo associado. Esses elementos são tratados por funções externas que se encontram em um arquivo de suporte a esta série e são tidos como conhecimentos *a priori* para as discussões.
 
-```julia; @example notebook
-Tₐ = analyticalthermalpfr(; P, A, Tₛ, Tₚ, ĥ, u, ρ, cₚ, z)
-Tend = @sprintf("%.2f", Tₐ[end])
-yrng = (300, 400)
-
+```julia
 with_theme() do
+    Tₐ = analyticalthermalpfr(; P, A, Tₛ, Tₚ, ĥ, u, ρ, cₚ, z)
+    Tend = @sprintf("%.2f", Tₐ[end])
+    yrng = (300, 400)
+        
     fig = Figure(size = (720, 500))
     ax = Axis(fig[1, 1])
     lines!(ax, z, Tₐ, color = :red, linewidth = 5, label = "Analítica")
@@ -372,12 +287,11 @@ end
 
 ### Integração numérica da EDO
 
-
 Neste exemplo tivemos *sorte* de dispor de uma solução analítica. Esse problema pode facilmente tornar-se intratável se considerarmos uma dependência arbitrária do calor específico com a temperatura ou se a parede do reator tem uma dependência na coordenada axial. É importante dispor de meios numéricos para o tratamento deste tipo de problema.
 
 No caso de uma equação diferencial ordinária (EDO) como no presente caso, a abordagem mais simples é a de se empregar um integrador numérico. Para tanto é prática comum estabelecer uma função que representa o *lado direito* do problema isolando a(s) derivada(s) no lado esquerdo. Em Julia dispomos do *framework* de `ModelingToolkit` que provê uma forma simbólica de representação de problemas e interfaces com diversos integradores. A estrutura `DifferentialEquationPFR` abaixo implementa o problema diferencial desta forma.
 
-```julia; @example notebook
+```julia
 pfr = let
     @info "Criação do modelo diferencial"
 
@@ -410,13 +324,13 @@ end;
 
 Uma funcionalidade bastante interessante de `ModelingToolkit` é sua capacidade de representar diretamente em com $\LaTeX$ as equações implementadas. Antes de proceder a solução verificamos na célula abaixo que a equação estabelecida no modelo está de acordo com a formulação que derivamos para o problema diferencial. Verifica-se que a ordem dos parâmetros pode não ser a mesma, mas o modelo é equivalente.
 
-```julia; @example notebook
+```julia
 pfr
 ```
 
 Para integração do modelo simbólico necessitamos substituir os parâmetros por valores numéricos e fornecer a condição inicial e intervalo de integração ao integrador que vai gerir o problema. A interface `solveodepfr` realiza essas etapas. É importante mencionar aqui que a maioria dos integradores numéricos vai *amostrar* pontos na coordenada de integração segundo a *rigidez numérica* do problema, de maneira que a solução retornada normalmente não está sobre pontos equi-espaçados. Podemos fornecer um parâmetro opcional para recuperar a solução sobre os pontos desejados, o que pode facilitar, por exemplo, comparação com dados experimentais.
 
-```julia; @example notebook
+```julia
 "Integra o modelo diferencial de reator pistão"
 function solvemtkpfr(; pfr, P, A, Tₛ, Tₚ, ĥ, u, ρ, cₚ, z)
     T₀ = [pfr.T => Tₚ]
@@ -441,14 +355,14 @@ nothing; #hide
 
 Com isso podemos proceder à integração com ajuda de `solveodepfr` concebida acima e aproveitamos para traçar o resultado em conjunto com a solução analítica.
 
-```julia; @example notebook
-Tₐ = analyticalthermalpfr(; P, A, Tₛ, Tₚ, ĥ, u, ρ, cₚ, z)
-Tₒ = solvemtkpfr(; pfr, P, A, Tₛ, Tₚ, ĥ, u, ρ, cₚ, z)[:T]
-
-Tend = @sprintf("%.2f", Tₐ[end])
-yrng = (300, 400)
-
+```julia
 with_theme() do
+    Tₐ = analyticalthermalpfr(; P, A, Tₛ, Tₚ, ĥ, u, ρ, cₚ, z)
+    Tₒ = solvemtkpfr(; pfr, P, A, Tₛ, Tₚ, ĥ, u, ρ, cₚ, z)[:T]
+    
+    Tend = @sprintf("%.2f", Tₐ[end])
+    yrng = (300, 400)
+    
     fig = Figure(size = (720, 500))
     ax = Axis(fig[1, 1])
     lines!(ax, z, Tₐ, color = :red, linewidth = 5, label = "Analítica")
@@ -466,7 +380,6 @@ end
 ```
 
 ### Método dos volumes finitos
-
 
 Quando integrando apenas um reator, o método de integração numérica da equação é geralmente a escolha mais simples. No entanto, em situações nas quais desejamos integrar trocas entre diferentes reatores aquela abordagem pode se tornar
 proibitiva. Uma dificuldade que aparece é a necessidade de solução iterativa até convergência dados os fluxos pelas paredes do reator, o que demandaria um código extremamente complexo para se gerir em integração direta. Outro caso são
@@ -598,7 +511,7 @@ $$
 A dependência de $E$ somente em $P$ faz com que tenhamos uma matriz diagonal inferior, aonde os $-A^{-}$ são os coeficientes de $T_{P}$ na formulação algébrica anterior. A condição inicial modifica o primeiro elemento do vetor
 constante à direita da igualdade. A construção e solução deste problema é provida em `solvefvmpfr` abaixo.
 
-```julia; @example notebook
+```julia
 "Integra o modelo diferencial de reator pistão"
 function solvefvmpfr(; P, A, Tₛ, Tₚ, ĥ, u, ρ, cₚ, z)
     N = length(z) - 1
@@ -627,18 +540,18 @@ nothing; #hide
 
 Abaixo adicionamos a solução do problema sobre malhas grosseiras sobre as soluções desenvolvidas anteriormente. A ideia de se representar sobre malhas grosseiras é simplesmente ilustrar o caráter discreto da solução, que é representada como constante no interior de uma célula. Adicionalmente representamos no gráfico um resultado interpolado de uma simulação CFD 3-D de um reator tubular em condições *supostamente identicas* as representadas aqui, o que mostra o bom acordo de simulações 1-D no limite de validade do modelo.
 
-```julia; @example notebook
-data = readdlm("data/fluent-reference/postprocess.dat", Float64)
-x, Tᵣ = data[:, 1], data[:, 2]
-
-Tₐ = analyticalthermalpfr(; P, A, Tₛ, Tₚ, ĥ, u, ρ, cₚ, z)
-Tₒ = solvemtkpfr(; P, A, Tₛ, Tₚ, ĥ, u, ρ, cₚ, z, pfr)[:T]
-Tₑ = solvefvmpfr(; P, A, Tₛ, Tₚ, ĥ, u, ρ, cₚ, z)
-
-Tend = @sprintf("%.2f", Tₐ[end])
-yrng = (300, 400)
-
+```julia
 with_theme() do
+    data = readdlm("data/fluent-reference/postprocess.dat", Float64)
+    x, Tᵣ = data[:, 1], data[:, 2]
+    
+    Tₐ = analyticalthermalpfr(; P, A, Tₛ, Tₚ, ĥ, u, ρ, cₚ, z)
+    Tₒ = solvemtkpfr(; P, A, Tₛ, Tₚ, ĥ, u, ρ, cₚ, z, pfr)[:T]
+    Tₑ = solvefvmpfr(; P, A, Tₛ, Tₚ, ĥ, u, ρ, cₚ, z)
+    
+    Tend = @sprintf("%.2f", Tₐ[end])
+    yrng = (300, 400)
+    
     fig = Figure(size = (720, 500))
     ax = Axis(fig[1, 1])
     lines!(ax, z, Tₐ, color = :red, linewidth = 5, label = "Analítica")
@@ -659,13 +572,13 @@ end
 
 Podemos também réalizar um estudo de sensibilidade a malha:
 
-```julia; @example notebook
-Tₐ = analyticalthermalpfr(; P, A, Tₛ, Tₚ, ĥ, u, ρ, cₚ, z)
-
-Tend = @sprintf("%.2f", Tₐ[end])
-yrng = (300, 400)
-
+```julia
 with_theme() do
+    Tₐ = analyticalthermalpfr(; P, A, Tₛ, Tₚ, ĥ, u, ρ, cₚ, z)
+
+    Tend = @sprintf("%.2f", Tₐ[end])
+    yrng = (300, 400)
+    
     fig = Figure(size = (720, 500))
     ax = Axis(fig[1, 1])
     lines!(ax, z, Tₐ, color = :red, linewidth = 5, label = "Analítica")
@@ -690,7 +603,6 @@ end
 
 ## Conclusões
 
-
 Com isso encerramos essa primeira introdução a modelagem de reatores do tipo pistão. Estamos ainda longe de um modelo generalizado para estudo de casos de produção, mas os principais blocos de construção foram apresentados. Os pontos principais a reter deste estudo são:
 
 - A equação de conservação de massa é o ponto chave para a expansão e   simplificação das demais equações de conservação. Note que isso é uma consequência de qua a massa corresponde à aplicação do [Teorema de Transporte de Reynolds](https://pt.wikipedia.org/wiki/Teorema_de_transporte_de_Reynolds) sobre a *unidade 1*.
@@ -699,4 +611,375 @@ Com isso encerramos essa primeira introdução a modelagem de reatores do tipo p
 
 - Uma implementação em volumes finitos será desejável quando um acoplamento com   outros modelos seja envisajada. Neste caso a gestão da solução com uma EDO a parâmetros variáveis pode se tornar computacionalmente proibitiva, seja em   complexidade de código ou tempo de cálculo.
 
-Isso é tudo para esta sessão de estudo! Até a próxima!
+---
+# Formulação na entalpia
+
+#plug-flow
+
+Neste notebook damos continuidade ao precedente através da extensão do modelo para a resolução da conservação de energia empregando a entalpia do fluido como variável independente. O caso tratado será o mesmo estudado anteriormente para que possamos ter uma base de comparação da solução. Realizada a primeira introdução, os notebooks da série se tornam mais concisos e focados cada vez mais em código ao invés de derivações, exceto quando implementando novas físicas.
+
+
+Dado seu uso restrito, não adicionamos `analyticalthermalpfr` ao módulo acima.
+
+```julia
+"Solução analítica do modelo de reator pistão."
+function analyticalthermalpfr(; P, A, Tₛ, Tₚ, ĥ, u, ρ, cₚ, z)
+    return @. Tₛ - (Tₛ - Tₚ) * exp(-z * (ĥ * P) / (ρ * u * cₚ * A))
+end
+nothing; #hide
+```
+## Condições compartilhadas
+
+Na próxima célula provemos as mesmas condições do problema tradado no notebook precedente. Uma discretização espacial mais grosseira é utilizada aqui e a
+função entalpia compatível com o calor específico do fluido é provida.
+
+Para que os resultados sejam comparáveis as soluções precedentes, definimos 
+
+$$
+h(T)=c_{p}T+ h_{ref}
+$$
+
+O valor de $h_{ref}$ é arbitrário e não afeta a solução.
+
+```julia
+# Comprimento do reator [m]
+L = 10.0
+
+# Diâmetro do reator [m]
+D = 0.01
+
+# Mass específica do fluido [kg/m³]
+ρ = 1000.0
+
+# Viscosidade do fluido [Pa.s]
+μ = 0.001
+
+# Calor específico do fluido [J/(kg.K)]
+cₚ = 4182.0
+
+# Número de Prandtl do fluido
+Pr = 6.9
+
+# Velocidade do fluido [m/s]
+u = 1.0
+
+# Temperatura de entrada do fluido [K]
+Tₚ = 300.0
+
+# Temperatura da parede do reator [K]
+Tₛ = 400.0
+
+# Perímetro da seção circular do reator [m]
+P = π * D
+
+# Área da seção circula do reator [m²]
+A = π * (D / 2)^2
+
+# Cria objeto para avaliação do coeficiente de troca convectiva.
+hf = HtcPipeFlow(ReynoldsPipeFlow(), NusseltGnielinski(), ConstantPrandtl(Pr))
+
+# Coeficiente convectivo de troca de calor [W/(m².K)]
+ĥ = htc(hf, Tₛ, u, D, ρ, μ, cₚ; verbose = true)
+
+# Coordenadas espaciais da solução [m]
+z = LinRange(0, L, 500)
+
+# Entalpia com constante arbitrária [J/kg]
+h(T) = cₚ * T + 1000.0
+
+nothing; #hide
+```
+
+## Modelo na entalpia
+
+Em diversos casos a forma expressa na temperatura não é conveniente. Esse geralmente é o caso quando se inclui transformações de fase no sistema. Nessas situações a solução não suporta integração direta e devemos recorrer a um método iterativo baseado na entalpia. Isso se dá pela adição de uma etapa suplementar da solução de equações não lineares para se encontrar a temperatura à qual a entalpia corresponde para se poder avaliar as trocas térmicas.
+
+Para se efetuar a integração partimos do modelo derivado anteriormente numa etapa antes da simplificação final para solução na temperatura e agrupamos os parâmetros livres em $$a$$
+
+$$
+\frac{dh}{dz}=\frac{\hat{h}P}{\rho{}u{}A_{c}}(T_{s}-T^{\star})=a(T_{s}-T^{\star})
+$$
+
+É interessante observar que toda a discussão precedente acerca de porque não integrar sobre $$T^{\star}$$ perde seu sentido aqui: a temperatura é claramente um parâmetro.
+
+$$
+\int_{h_P}^{h_N}dh=a^{\prime}\int_{0}^{\delta}(T_{s}-T^{\star})dz
+$$
+
+
+Seguindo um procedimento de integração similar ao aplicado na formulação usando a temperatura chegamos a equação do gradiente fazendo $a=a^{\prime}\delta$
+
+$$$
+h_{E}-h_{P}=aT_{s}-aT^{\star}
+$$
+
+Seguindo a mesma lógica discutida na formulação na temperatura, introduzimos a relação de interpolação $T^{\star}=(1/2)(T_{E}+T_{P})$ e aplicando-se esta expressão na forma numérica final, após manipulação chega-se à
+
+$$
+-2h_{P}+2h_{E}=2aT_{s}-aT_{E}-aT_{P}
+$$ 
+
+Essa expressão permite a solução da entalpia e a atualização do campo de temperaturas se faz através da solução de uma equação não linear do tipo $h(T_{P})-h_{P}=0$ por célula.
+
+Substituindo a temperatura inicial $T_{0}$ e sua entalpia associada $h_{0}$ na forma algébrica do problema encontramos a primeira linha da matriz que explicita as modificações para se implementar a condição inicial do problema
+
+$$
+2h_{1}=2aT_{s}-aT_{1}-aT_{0}-2h_{0}
+$$
+
+Completamos assim as derivações para se escrever a forma matricial
+
+$$
+\begin{bmatrix}
+ 2      &  0     &  0     & \dots  &  0      &  0      \\
+-2      &  2     &  0     & \dots  &  0      &  0      \\
+ 0      & -2     &  2     & \ddots &  0      &  0      \\
+\vdots  & \ddots & \ddots & \ddots & \ddots  & \vdots  \\
+ 0      &  0     &  0     & -2     &  2      &  0     \\
+ 0      &  0     &  0     &  0     & -2      &  2 \\
+\end{bmatrix}
+\begin{bmatrix}
+h_{1}    \\
+h_{2}    \\
+h_{3}    \\
+\vdots   \\
+h_{N-1}  \\
+h_{N}    \\
+\end{bmatrix}
+=
+\begin{bmatrix}
+f_{0,1} + 2h(T_{0}) \\
+f_{1,2}     \\
+f_{2,3}      \\
+\vdots                       \\
+f_{N-2,N-1}  \\
+f_{N-1,N}    \\
+\end{bmatrix}
+$$
+
+No vetor do lado direito introduzimos uma função de $f$ dada por
+
+$$
+f_{i,j} = 2aT_{s} - a(T_{i}+T_{j})
+$$
+
+## Solução em volumes finitos
+
+Como as temperaturas usadas no lado direito da equação não são conhecidas inicialmente, o problema tem um carater iterativo intrínsico. Initializamos o lado direito da equação para em seguida resolver o problema na entalpia, que
+deve ser invertida (equações não lineares) para se atualizar as temperaturas. Isso se repete até que a solução entre duas iterações consecutivas atinja um *critério de convergência*.
+
+Como a estimativa inicial do campo de temperaturas pode ser extremamente ruim, usamos um método com relaxações consecutivas da solução no caminho da convergência. A ideia de base é evitar atualizações bruscas que podem gerar temperaturas negativas ou simplesmente divergir para o infinito. A cada passo, partindo das temperaturas $T^{(m)}$, aonde $m$ é o índice da iteração, resolvemos o sistema não-linear para encontrar $T^{(m+1)^\prime}$. Pelas razões citadas, não é razoável utilizar essa solução diretamente, portanto realizamos a ponderação, dita relaxação, que se segue
+
+$$
+T^{(m+1)}=(1-\alpha)T^{(m+1)^\prime}+αT^{(m)}
+$$
+
+O fator $\alpha$ representa neste caso a *fração* de contribuição da solução anterior a nova estimativa. Essa é somente a ponta do iceberg em termos de relaxação e ao longo da série veremos em mais detalhes o conceito. Como critério de parada do cálculo, o que chamamos convergência, queremos que a máxima *atualização* $\Delta{}T$ relativa do campo de temperaturas seja menor que um critério $\varepsilon$, ou seja
+
+$$
+\max\frac{\vert{}T^{(m+1)}-T^{(m)}\vert}{\vert{}\max{T^{(m)}}\vert}=
+\max\biggr\vert{}\frac{\Delta{}T{}}{\max{}T^{(m)}}\biggr\vert<\varepsilon
+$$
+
+Para evitar cálculos separados da nova temperatura e então da variação, podemos usar as definições acima para chegar à
+
+$$
+\Delta{}T{} = (1-\alpha)(T^{(m+1)^\prime}-T^{(m)})
+$$
+
+e então atualizar a solução com $T^{(m+1)}=T^{(m)}+\Delta{}T{}$.
+
+A solução integrando esses passos foi implementada em `solventhalpypfr`. Para simplificar a leitura do código o problema é implementado em diversos blocos de funções para montagem da função gerindo a solução do modelo.
+
+```julia
+"Calcula matriz advectiva do lado esquedo da equação."
+function fvmlhs(N)
+    return 2spdiagm(-1 => -ones(N - 1), 0 => ones(N))
+end
+nothing; #hide
+```
+
+```julia
+"Calcula parte constante do vetor do lado direito da equação."
+function fvmrhs(N; bₐ, b₁)
+    b = bₐ * ones(N)
+    b[1] += b₁
+    return b
+end
+nothing; #hide
+```
+
+```julia
+"Relaxa solução em termos da entalpia."
+function relaxenthalpy(h̄, hₘ, Tₘ, α)
+    Δ = (1 - α) * (h̄ - hₘ[2:end])
+    m = maximum(hₘ)
+
+    hₘ[2:end] += Δ
+
+    # Solução das temperaturas compatíveis com hm.
+    Tₘ[2:end] = map((Tₖ, hₖ) -> find_zero(t -> h(t) - hₖ, Tₖ), Tₘ[2:end], hₘ[2:end])
+
+    return Tₘ, Δ, m
+end
+nothing; #hide
+```
+
+```julia
+"Relaxa solução em termos da temperatura."
+function relaxtemperature(h̄, hₘ, Tₘ, α)
+    # Solução das temperaturas compatíveis com h̄.
+    Uₘ = map((Tₖ, hₖ) -> find_zero(t -> h(t) - hₖ, Tₖ), Tₘ[2:end], h̄)
+
+    Δ = (1 - α) * (Uₘ - Tₘ[2:end])
+    m = maximum(Tₘ)
+
+    Tₘ[2:end] += Δ
+
+    return Tₘ, Δ, m
+end
+nothing; #hide
+```
+
+```julia
+"Realiza uma iteração usando a relaxação especificada."
+function steprelax(h̄, hₘ, Tₘ, α, how)
+    return (how == :h) ? relaxenthalpy(h̄, hₘ, Tₘ, α) : relaxtemperature(h̄, hₘ, Tₘ, α)
+end
+nothing; #hide
+```
+
+```julia
+"Integra o modelo diferencial de reator pistão"
+function solvefvmpfr(; P, A, Tₛ, Tₚ, ĥ, u, ρ, h, z, kw...)
+    N = length(z) - 1
+
+    # Parâmetros para o solver.
+    M = get(kw, :M, 100)
+    α = get(kw, :α, 0.4)
+    ε = get(kw, :ε, 1.0e-12)
+    relax = get(kw, :relax, :h)
+    verbose = get(kw, :verbose, true)
+
+    # Vamos tratar somente o caso equi-espaçado aqui!
+    δ = z[2] - z[1]
+
+    a = (ĥ * P * δ) / (ρ * u * A)
+
+    Tₘ = Tₚ * ones(N + 1)
+    hₘ = h.(Tₘ)
+
+    K = fvmlhs(N)
+    b = fvmrhs(N; bₐ = 2a * Tₛ, b₁ = 2h(Tₚ))
+
+    # Aloca e inicia em negativo o vetor de residuos. Isso
+    # é interessante para o gráfico aonde podemos eliminar
+    # os elementos negativos que não tem sentido físico.
+    residual = -ones(M)
+
+    verbose && @info "Usando relaxação do tipo $(relax)"
+
+    @time for niter = 1:M
+        # Calcula o vetor `b` do lado direito e resolve o sistema.
+        h̄ = K \ (b - a * (Tₘ[1:end-1] + Tₘ[2:end]))
+
+        # Relaxa solução para gerir não linearidades.
+        Tₘ, Δ, m = steprelax(h̄, hₘ, Tₘ, α, relax)
+
+        # Verifica status da convergência.
+        residual[niter] = maximum(abs.(Δ / m))
+
+        if (residual[niter] <= ε)
+            verbose && @info("Convergiu após $(niter) iterações")
+            break
+        end
+    end
+
+    return Tₘ, residual
+end
+nothing; #hide
+```
+
+Usamos agora essa função para uma última simulação do problema. Verificamos abaixo que a solução levou um certo número de iterações para convergir. Para concluir vamos averiguar a qualidade da convergência ao longo das iterações na parte inferior do gráfico.
+
+Introduzimos também a possibilidade de se utilizar a relaxação diretamente na entalpia, resolvendo o problema não linear apenas para encontrar diretamente a nova estimação do campo de temperaturas. A figura que segue ilustas o
+comportamento de convergência. Neste caso específico (e usando a métrica de convergência em questão) a relaxação em entalpia não apresenta vantagens, mas veremos em outras ocasiões que esta é a maneira mais simples de se fazer convergir uma simulação.
+
+```julia
+α = 0.4
+ε = 1.0e-12
+
+# Uma chamada para pre-compilação...
+verbose = false
+solvefvmpfr(; P, A, Tₛ, Tₚ, ĥ, u, ρ, h, z, α, ε, relax = :T, verbose)
+solvefvmpfr(; P, A, Tₛ, Tₚ, ĥ, u, ρ, h, z, α, ε, relax = :h, verbose)
+
+Tₕ, εₕ = solvefvmpfr(; P, A, Tₛ, Tₚ, ĥ, u, ρ, h, z, α, ε, relax = :h)
+Tₜ, εₜ = solvefvmpfr(; P, A, Tₛ, Tₚ, ĥ, u, ρ, h, z, α, ε, relax = :T)
+Tₐ = analyticalthermalpfr(; P, A, Tₛ, Tₚ, ĥ, u, ρ, cₚ, z)
+
+Tend = @sprintf("%.2f", Tₐ[end])
+yrng = (300, 400)
+
+nothing; #hide
+```
+
+```julia
+with_theme() do
+    fig = Figure(size = (720, 600))
+
+    ax = Axis(fig[1, 1])
+    lines!(ax, z, Tₐ, color = :red, linewidth = 5, label = "Analítica")
+    lines!(ax, z, Tₕ, color = :blue, linewidth = 2, label = "FVM (H)")
+    lines!(ax, z, Tₜ, color = :cyan, linewidth = 2, label = "FVM (T)")
+    xlims!(ax, (0, L))
+    ax.title = "Temperatura final = $(Tend) K"
+    ax.xlabel = "Posição [m]"
+    ax.ylabel = "Temperatura [K]"
+    ax.xticks = range(0.0, L, 6)
+    ax.yticks = range(yrng..., 6)
+    ylims!(ax, yrng)
+    axislegend(position = :rb)
+
+    ax = Axis(fig[2, 1], height = 120)
+    lines!(ax, log10.(εₕ[εₕ.>0]), color = :blue, label = "FVM (H)")
+    lines!(ax, log10.(εₜ[εₜ.>0]), color = :cyan, label = "FVM (T)")
+    ax.xlabel = "Iteração"
+    ax.ylabel = "log10(ε)"
+    ax.xticks = vcat(1, collect(5:5:30))
+    ax.yticks = -12:3:0
+    xlims!(ax, 1, 30)
+    axislegend(position = :rt)
+
+    fig
+end
+```
+
+---
+# Next!
+
+## Test
+
+```julia
+
+```
+
+```julia
+
+```
+
+```julia
+
+```
+
+```julia
+
+```
+
+```julia
+
+```
+
+```julia
+
+```
