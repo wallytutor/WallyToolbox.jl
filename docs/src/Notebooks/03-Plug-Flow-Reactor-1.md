@@ -998,10 +998,6 @@ Como desejamos simular simultâneamente dois reatores, é interessante encapsula
 abstract type AbstractPlugFlowReactor end
 ```
 
-```julia
-
-```
-
 ````julia
 """
 Descrição de um reator pistão formulado na entalpia.
