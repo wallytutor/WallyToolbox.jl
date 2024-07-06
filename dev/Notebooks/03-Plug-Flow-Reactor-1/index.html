@@ -5,10 +5,16 @@ using DryTransport
 using CairoMakie
 using DelimitedFiles
 using DifferentialEquations: solve
+using DocStringExtensions
+using Interpolations
 using ModelingToolkit
+using Polynomials
 using Printf
 using Roots
 using SparseArrays
+using SparseArrays: spdiagm
+using SteamTables
+   
 nothing; #hide</code></pre><p>No que se segue vamos implementar a forma mais simples de um reator pistão. Para este primeiro estudo o foco será dado apenas na solução da equação da energia. As etapas globais implementadas aqui seguem o livro de <a href="https://www.wiley.com/en-ie/Chemically+Reacting+Flow%3A+Theory%2C+Modeling%2C+and+Simulation%2C+2nd+Edition-p-9781119184874">Kee <em>et al.</em> (2017)</a>, seção 9.2.</p><h2 id="Etapas-preliminares"><a class="docs-heading-anchor" href="#Etapas-preliminares">Etapas preliminares</a><a id="Etapas-preliminares-1"></a><a class="docs-heading-anchor-permalink" href="#Etapas-preliminares" title="Permalink"></a></h2><p>Da forma simplificada como tratado, o problema oferece uma solução analítica análoga à <a href="https://pt.wikipedia.org/wiki/Lei_do_resfriamento_de_Newton">lei do resfriamento de Newton</a>, o que é útil para a verificação do problema. Antes de partir a derivação do modelo, os cálculos do número de Nusselt para avaliação do coeficiente de transferência de calor são providos no que se segue com expressões de Gnielinski e Dittus-Boelter discutidas <a href="https://en.wikipedia.org/wiki/Nusselt_number">aqui</a>.</p><p>Abaixo realizamos uma série de testes para verificação dos cálculos do número de Nusselt dadas as múltiplas configurações de parâmetros (complexidade ciclomática) possíveis. As implementatações se encontram no módulo <code>DryTransport</code>.</p><pre><code class="language-julia hljs">nu_gn = NusseltGnielinski()
 nu_db = NusseltDittusBoelter()
 
@@ -491,4 +497,632 @@ nothing; #hide</code></pre><pre><code class="language-julia hljs">with_theme() d
     axislegend(position = :rt)
 
     fig
-end</code></pre><hr/><h1 id="Next!"><a class="docs-heading-anchor" href="#Next!">Next!</a><a id="Next!-1"></a><a class="docs-heading-anchor-permalink" href="#Next!" title="Permalink"></a></h1><h2 id="Test"><a class="docs-heading-anchor" href="#Test">Test</a><a id="Test-1"></a><a class="docs-heading-anchor-permalink" href="#Test" title="Permalink"></a></h2><pre><code class="language-julia hljs"></code></pre><pre><code class="language-julia hljs"></code></pre><pre><code class="language-julia hljs"></code></pre><pre><code class="language-julia hljs"></code></pre><pre><code class="language-julia hljs"></code></pre><pre><code class="language-julia hljs"></code></pre></article><nav class="docs-footer"><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.4.1 on <span class="colophon-date" title="Saturday 6 July 2024 10:34">Saturday 6 July 2024</span>. Using Julia version 1.10.4.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+end</code></pre><hr/><h1 id="Reatores-em-contra-corrente"><a class="docs-heading-anchor" href="#Reatores-em-contra-corrente">Reatores em contra corrente</a><a id="Reatores-em-contra-corrente-1"></a><a class="docs-heading-anchor-permalink" href="#Reatores-em-contra-corrente" title="Permalink"></a></h1><p>As ideias gerais para a simulação de um reator formulado na entalpia tendo sido introduzidas na <em>Parte 2</em>, vamos agora aplicar o mesmo algoritmo de solução para um problema menos trivial: integração de reatores em contra-corrente com trocas térmicas. Esse é o caso, por exemplo, em uma serpentina dupla em contato mecânico. Esse sistema pode ser aproximado por um par de reatores pistão em contra-corrente se tomada propriamente em conta a resistência térmica dos dutos.</p><p>Outro caso clássico que pode ser as vezes tratado desta forma é o modelo de forno rotativo para produção de cimento, como discutido por <a href="https://doi.org/10.1080/17436753.2017.1303261">Hanein <em>et al.</em> (2017)</a>. Outro exemplo é fornecido por <a href="https://doi.org/10.1039/C8CP07077F">Bulfin (2019)</a> para a síntese de ceria. <a href="https://doi.org/10.1016/j.ces.2006.12.047">Kerkhof (2007)</a> apresenta uma abordagem mais geral introduzindo troca de massa entre partículas.</p><p>Ainda precisamos tratar de tópicos mais básicos antes de implementar modelos similares ao longo dessa série, mas espero que a literatura citada sirva como motivação para o estudo.</p><p>Neste notebook trataremos dois casos:</p><ol><li>Um par de fluidos que diferem unicamente por seu calor específicos.</li><li>Um fluido condensado e um gás com propriedades dependentes da temperatura.</li></ol><h2 id="Concepção-do-programa"><a class="docs-heading-anchor" href="#Concepção-do-programa">Concepção do programa</a><a id="Concepção-do-programa-1"></a><a class="docs-heading-anchor-permalink" href="#Concepção-do-programa" title="Permalink"></a></h2><p>Não há nada de diferente em termos do modelo de cada reator em relação ao tópico anterior abordando um reator pistão em termos da entalpia. O objetivo principal do programa a conceber neste notebook é usar os conhecimentos adquiridos na etapa anterior para implementar uma solução para um par de reatores que trocam energia entre si. Para simplificar a implementação vamos considerar que as paredes externas dos reatores são adiabáticas e que estes trocam calor somente entre eles mesmos. Algumas ideias chave são necessárias para uma implementação efetiva:</p><ol><li><p>É importante lembrar que as coordenadas dos reatores são invertidas entre elas. Se o reator <span>$r₁$</span> está orientado no sentido do eixo <span>$z$</span>, então para um par de reatores de comprimento <span>$L$</span> as coordenadas das células homólogas em <span>$r₂$</span> são <span>$L-z$</span>.</p></li><li><p>Falando em células homólogas, embora seja possível implementar reatores conectados por uma parede com discretizações distintas, é muito mais fácil de se conceber um programa com reatores que usam a mesma malha espacial. Ademais, isso evita possíveis erros numéricos advindos da escolha de um método de interpolação.</p></li><li><p>Embora uma solução acoplada seja possível, normalmente isso torna o programa mais complexo para se extender a um número arbitrário de reatores e pode conduzir a matrizes com <a href="https://en.wikipedia.org/wiki/Condition_number">condição</a> pobre. Uma ideia para resolver o problema é realizar uma iteração em cada reator com o outro mantido constante (como no problema precedente) mas desta vez considerando que a <em>condição limite</em> da troca térmica possui uma dependência espacial.</p></li></ol><p>Os blocos que se seguem implementam as estruturas necessárias com elementos reutilizáveis de maneira que ambos os reatores possam ser conectados facilmente.</p><h3 id="Modelo-de-reator-pistão"><a class="docs-heading-anchor" href="#Modelo-de-reator-pistão">Modelo de reator pistão</a><a id="Modelo-de-reator-pistão-1"></a><a class="docs-heading-anchor-permalink" href="#Modelo-de-reator-pistão" title="Permalink"></a></h3><p>Como desejamos simular simultâneamente dois reatores, é interessante encapsular a construção dos elementos descrevendo um reator em uma estrutura. Desta forma evitamos código duplicado.</p><pre><code class="language-julia hljs">&quot;Tipo para qualquer reator pistão.&quot;
+abstract type AbstractPlugFlowReactor end</code></pre><pre><code class="language-julia hljs"></code></pre><pre><code class="language-julia hljs">&quot;&quot;&quot;
+Descrição de um reator pistão formulado na entalpia.
+
+```math
+\\frac{dh}{dz}=a(T_{s}(z)-T^{\\star})
+\\qquad\\text{aonde}\\qquad
+a=\\frac{\\hat{h}P}{\\rho{}u{}A_{c}}
+```
+
+O modelo é representado em volumes finitos como ``Kh=b`` tal
+como discutido no notebook anterior. Os parâmetros da estrutura
+listado abaixo visam manter uma representação tão próxima quanto
+possível da expressão matemática do modelo.
+&quot;&quot;&quot;
+struct ConstDensityEnthalpyPFRModel &lt;: AbstractPlugFlowReactor
+    &quot;Tamanho do problema linear.&quot;
+    N::Int64
+
+	&quot;Matriz do problema.&quot;
+	K::SparseMatrixCSC{Float64, Int64}
+
+    &quot;Vetor do problema.&quot;
+    b::Vector{Float64}
+
+    &quot;Solução do problema.&quot;
+    x::Vector{Float64}
+
+	&quot;Coeficiente do modelo.&quot;
+	a::Float64
+	
+	&quot;Coordenadas espaciais das células do reator.&quot;
+	z::Vector{Float64}
+
+    &quot;Coeficiente de troca térmica convectiva [W/(m².K)].&quot;
+    ĥ::Float64
+
+    &quot;Fluxo mássico através do reator [kg/s].&quot;
+    ṁ::Float64
+
+    &quot;Entalpia em função da temperatura [J/kg].&quot;
+    h::Function
+	
+	&quot;&quot;&quot; Construtor do modelo de reator pistão.
+
+	`N::Int64`
+		Número de células no sistema sem a condição inicial.
+	`L::Float64`
+		Comprimento total do reator [m].
+	`P::Float64`
+		Perímetro da de troca de calor do reator [m].
+	`A::Float64`
+		Área da seção transversal do reator [m²].
+	`T::Float64`
+		Temperatura inicial do fluido [K].
+	`ĥ::Float64`
+		Coeficiente de troca convectiva [W/(m².K)].
+	`u::Float64`
+		Velocidade do fluido [m/s].
+	`ρ::Float64`
+		Densidade do fluido [kg/m³].
+	`h::Function`
+		Entalpia em função da temperatura [J/kg].
+	&quot;&quot;&quot;
+	function ConstDensityEnthalpyPFRModel(;
+			N::Int64,
+			L::Float64,
+			P::Float64,
+			A::Float64,
+			T::Float64,
+			ĥ::Float64,
+			u::Float64,
+			ρ::Float64,
+			h::Function
+		)
+		# Aloca memória para o problema linear.
+        K = 2spdiagm(0 =&gt; ones(N), -1 =&gt; -ones(N-1))
+        b = ones(N+0)
+        x = ones(N+1)
+
+		# Discretização do espaço, N+1 para condição inicial.
+		z = LinRange(0, L, N+1)
+		δ = z[2] - z[1]
+
+		# Coeficiente do problema.
+		ṁ = ρ * u * A
+		a = (ĥ * P * δ) / ṁ
+		
+		# Inicializa solução constante.
+		x[1:end] .= T
+
+		return new(N, K, b, x, a, z, ĥ, ṁ, h)
+	end
+end</code></pre><h3 id="Acoplando-reatores"><a class="docs-heading-anchor" href="#Acoplando-reatores">Acoplando reatores</a><a id="Acoplando-reatores-1"></a><a class="docs-heading-anchor-permalink" href="#Acoplando-reatores" title="Permalink"></a></h3><pre><code class="language-julia hljs">&quot;Representa um par de reatores em contrafluxo.&quot;
+struct CounterFlowPFRModel
+    this::AbstractPlugFlowReactor
+    that::AbstractPlugFlowReactor
+end</code></pre><pre><code class="language-julia hljs">&quot;Acesso ao perfil de temperatura do primeiro reator em um par.&quot;
+thistemperature(cf::CounterFlowPFRModel) = cf.this.x
+
+&quot;Acesso ao perfil de temperatura do segundo reator em um par.&quot;
+thattemperature(cf::CounterFlowPFRModel) = cf.that.x |&gt; reverse</code></pre><p>No que se segue não se fará hipótese de que ambos os escoamentos se dão com o mesmo fluido ou que no caso de mesmo fluido as velocidades são comparáveis. Neste caso mais geral, o número de Nusselt de cada lado da interface difere e portanto o coeficiente de troca térmica convectiva. É portanto necessário estabelecer-se uma condição de fluxo constante na interface das malhas para assegurar a conservação global da energia no sistema... <strong>TODO (escrever, já programado)</strong></p><pre><code class="language-julia hljs">&quot;Perfil de temperatura na parede entre dois fluidos respeitando fluxo.&quot;
+function surfacetemperature(cf::CounterFlowPFRModel)
+    T1 = thistemperature(cf)
+    T2 = thattemperature(cf)
+
+    ĥ1 = cf.this.ĥ
+    ĥ2 = cf.that.ĥ
+
+    Tw1 = 0.5 * (T1[1:end-1] + T1[2:end])
+    Tw2 = 0.5 * (T2[1:end-1] + T2[2:end])
+
+    return (ĥ1 * Tw1 + ĥ2 * Tw2) / (ĥ1 + ĥ2)
+end
+
+&quot;Conservação de entalpia entre dois reatores em contra-corrente.&quot;
+function enthalpyresidual(cf::CounterFlowPFRModel)
+    enthalpyrate(r) = r.ṁ * (r.h(r.x[end]) - r.h(r.x[1]))
+
+    Δha = enthalpyrate(cf.this)
+    Δhb = enthalpyrate(cf.that)
+	
+    return abs(Δhb + Δha) / abs(Δha)
+end
+
+&quot;Método de relaxação baseado na entalpia.&quot;
+function relaxenthalpy!(Tm, hm, h̄, α, f)
+    # Calcula erro e atualização antes!
+    Δ = (1-α) * (h̄ - hm[2:end])
+    ε = maximum(abs.(Δ)) / abs(maximum(hm))
+
+    # Autaliza solução antes de resolver NLP.
+    hm[2:end] += Δ
+
+    # Solução das temperaturas compatíveis com hm.
+    Tm[2:end] = map(f, Tm[2:end], hm[2:end])
+
+    return ε
+end
+
+&quot;Método de relaxação baseado na temperatura.&quot;
+function relaxtemperature!(Tm, hm, h̄, α, f)
+    # XXX: manter hm na interface para compabilidade com relaxenthalpy!
+    # Solução das temperaturas compatíveis com h̄.
+    Um = map(f, Tm[2:end], h̄)
+
+    # Calcula erro e atualização depois!
+    Δ = (1-α) * (Um - Tm[2:end])
+    ε = maximum(abs.(Δ)) / abs(maximum(Tm))
+
+    # Autaliza solução com resultado do NLP.
+    Tm[2:end] += Δ
+
+    return ε
+end</code></pre><h3 id="Gestão-de-resíduos"><a class="docs-heading-anchor" href="#Gestão-de-resíduos">Gestão de resíduos</a><a id="Gestão-de-resíduos-1"></a><a class="docs-heading-anchor-permalink" href="#Gestão-de-resíduos" title="Permalink"></a></h3><h3 id="Laços-de-solução"><a class="docs-heading-anchor" href="#Laços-de-solução">Laços de solução</a><a id="Laços-de-solução-1"></a><a class="docs-heading-anchor-permalink" href="#Laços-de-solução" title="Permalink"></a></h3><pre><code class="language-julia hljs">&quot;Laço interno da solução de reatores em contra-corrente.&quot;
+function innerloop(
+        # residual::ResidualsRaw
+		;
+        cf::CounterFlowPFRModel,
+        inneriter::Int64,
+        α::Float64,
+        ε::Float64,
+        method::Symbol
+    )::Int64
+	
+    relax = (method == :h) ? relaxenthalpy! : relaxtemperature!
+
+    S = surfacetemperature(cf)
+    f = (Tₖ, hₖ) -&gt; find_zero(t -&gt; cf.this.h(t) - hₖ, Tₖ)
+
+    K = cf.this.K
+    b = cf.this.b
+    T = cf.this.x
+    a = cf.this.a
+    h = cf.this.h
+
+    Tm = T
+    hm = h.(Tm)
+
+    b[1:end] = 2a * S
+    b[1] += 2h(Tm[1])
+
+	εm = 1.0e+300
+	
+    for niter in 1:inneriter
+        h̄ = K \ (b - a * (Tm[1:end-1] + Tm[2:end]))
+        εm = relax(Tm, hm, h̄, α, f)
+        # feedinnerresidual(residual, εm)
+
+        if (εm &lt;= ε)
+            return niter
+        end
+    end
+
+    @warn &quot;Não convergiu após $(inneriter) passos $(εm)&quot;
+    return inneriter
+end</code></pre><pre><code class="language-julia hljs">&quot;Laço externo da solução de reatores em contra-corrente.&quot;
+function outerloop(
+        cf::CounterFlowPFRModel;
+        inneriter::Int64 = 50,
+        outeriter::Int64 = 500,
+        Δhmax::Float64 = 1.0e-10,
+        α::Float64 = 0.6,
+        ε::Float64 = 1.0e-10,
+		method::Symbol = :h
+    )#::Tuple{ResidualsProcessed, ResidualsProcessed}
+    ra = cf
+    rb = CounterFlowPFRModel(cf.that, cf.this)
+
+    # resa = ResidualsRaw(inner, outer)
+    # resb = ResidualsRaw(inner, outer)
+
+    @time for nouter in 1:outeriter
+        # ca = innerloop(resa; cf = ra, shared...)
+        # cb = innerloop(resb; cf = rb, shared...)
+        ca = innerloop(; cf = ra, inneriter, α, ε, method)
+        cb = innerloop(; cf = rb, inneriter, α, ε, method)
+
+        # resa.innersteps[nouter] = ca
+        # resb.innersteps[nouter] = cb
+
+        if enthalpyresidual(cf) &lt; Δhmax
+            @info(&quot;Laço externo convergiu após $(nouter) iterações&quot;)
+            break
+        end
+    end
+
+	hres = @sprintf(&quot;%.1e&quot;, enthalpyresidual(cf))
+    @info(&quot;Conservação da entalpia = $(hres)&quot;)
+    # return ResidualsProcessed(resa), ResidualsProcessed(resb)
+end</code></pre><h3 id="Pós-processamento"><a class="docs-heading-anchor" href="#Pós-processamento">Pós-processamento</a><a id="Pós-processamento-1"></a><a class="docs-heading-anchor-permalink" href="#Pós-processamento" title="Permalink"></a></h3><pre><code class="language-julia hljs">&quot;Ilustração padronizada para a simulação exemplo.&quot;
+function plotpfrpair(cf::CounterFlowPFRModel; ylims, loc, func = lines!)
+    z1 = cf.this.z
+    T1 = thistemperature(cf)
+    T2 = thattemperature(cf)
+
+    fig = Figure(size = (720, 500))
+    ax = Axis(fig[1, 1])
+	
+    func(ax, z1, T1, label = &quot;r₁ →&quot;, color = :blue)#, step = :center)
+    func(ax, z1, T2, label = &quot;r₂ ←&quot;, color = :red)#,  step = :center)
+
+    ax.xticks = range(0.0, z1[end], 6)
+    ax.yticks = range(ylims..., 6)
+    ax.xlabel = &quot;Posição [m]&quot;
+    ax.ylabel = &quot;Temperatura [K]&quot;
+    xlims!(ax, (0, z1[end]))
+    ylims!(ax, ylims)
+    axislegend(position = loc)
+
+    return fig
+end</code></pre><h2 id="Estudo-de-caso-I"><a class="docs-heading-anchor" href="#Estudo-de-caso-I">Estudo de caso I</a><a id="Estudo-de-caso-I-1"></a><a class="docs-heading-anchor-permalink" href="#Estudo-de-caso-I" title="Permalink"></a></h2><p>O par escolhido para exemplificar o comportamento de contra-corrente dos reatores pistão tem por característica de que cada reator ocupa a metade de um cilindro de diâmetro <span>$D$</span> m de forma que o perímetro de troca é igual o diâmetro e a área transversal a metade daquela do cilindro.</p><p>A temperatura inicial do fluido no reator (1) que escoa da esquerda para a direita é de <span>$(T₁)$</span> K e naquele em contra-corrente (2) é de <span>$(T₂)$</span> K.</p><p>O fluido do reator (2) tem um calor específico que é o triplo daquele do reator (1).</p><pre><code class="language-julia hljs">@info &quot;Condições para o caso I&quot;
+
+# Número de células no sistema.
+N =  100
+
+# Comprimento do reator [m]
+L = 10.0
+
+# Diâmetro do reator [m]
+D = 0.01
+
+# Mass específica dos fluidos [kg/m³]
+ρ = 1000.0
+
+# Viscosidade dos fluidos [Pa.s]
+μ = 0.001
+
+# Número de Prandtl dos fluidos
+Pr = 6.9
+
+# Calor específico do fluido [J/(kg.K)]
+cₚ₁ = 1000.0
+cₚ₂ = 3cₚ₁
+
+# Velocidade do fluido [m/s]
+u₁ = 1.0
+u₂ = 2.0
+
+# Temperatura de entrada do fluido [K]
+T₁ = 300.0
+T₂ = 400.0
+
+# Perímetro troca térmica de cada reator [m]
+# XXX: neste casa igual o diâmetro, ver descrição.
+P = D
+
+# Área da seção circula de cada reator [m²]
+A = (1 // 2) * π * (D / 2)^2
+
+# Diâmetro equivalente a seção para cada reator.
+d = 2√(A/π)
+
+# Cria objeto para avaliação do coeficiente de troca convectiva.
+hf = HtcPipeFlow(ReynoldsPipeFlow(), NusseltGnielinski(), ConstantPrandtl(Pr))
+
+# Coeficiente convectivo de troca de calor [W/(m².K)]
+ĥ₁ = htc(hf, T₁, u, D, ρ, μ, cₚ; verbose = true)
+ĥ₂ = htc(hf, T₂, u, D, ρ, μ, cₚ; verbose = true)
+
+# Entalpia com constante arbitrária [J/kg]
+h₁(T) = cₚ₁ * T + 1000.0
+h₂(T) = cₚ₂ * T + 1000.0
+nothing; #hide</code></pre><pre><code class="language-julia hljs">let
+	common = (N = N, L = L, P = P, A = A, ρ = ρ)
+	param₁ = (T = T₁, ĥ = ĥ₁, u = u₁, h = h₁)
+	param₂ = (T = T₂, ĥ = ĥ₂, u = u₂, h = h₂)
+	
+	r₁ = ConstDensityEnthalpyPFRModel(; common..., param₁...)
+	r₂ = ConstDensityEnthalpyPFRModel(; common..., param₂...)
+	cf = CounterFlowPFRModel(r₁, r₂)
+
+	outerloop(cf)
+
+	plotpfrpair(cf; ylims = (300, 400), loc = :rb)
+end</code></pre><h2 id="Estudo-de-caso-II-(draft)"><a class="docs-heading-anchor" href="#Estudo-de-caso-II-(draft)">Estudo de caso II (draft)</a><a id="Estudo-de-caso-II-(draft)-1"></a><a class="docs-heading-anchor-permalink" href="#Estudo-de-caso-II-(draft)" title="Permalink"></a></h2><pre><code class="language-julia hljs">#     # Condições operatórias do gás.
+#     p₃ = 101325.0
+#     h₃ = integrate(fluid3.cₚpoly)
+#     M̄₃ = 0.02897530345830224
+
+#     fluid₃ = (
+#         ρ = (p₃ * M̄₃) / (GAS_CONSTANT * operations3.Tₚ),
+#         μ = fluid3.μpoly(operations3.Tₚ),
+#         cₚ = fluid3.cₚpoly(operations3.Tₚ),
+#         Pr = fluid3.Pr
+#     )
+
+#     # Condições modificadas do fluido condensado.
+#     operations₁ = (
+#         u = operations3.u * (fluid₃.ρ / fluid1.ρ),
+#         Tₚ = operations1.Tₚ
+#     )
+
+#     shared = (
+#         N = N,
+#         L = reactor.L,
+#         P = reactor.D,
+#         A = 0.5π * (reactor.D/2)^2,
+#         ρ = fluid1.ρ
+#     )
+
+#     ĥ₁ = computehtc(; reactor..., fluid1..., u = operations₁.u, verbose = false)
+#     ĥ₃ = computehtc(; reactor..., fluid₃..., u = operations3.u, verbose = false)
+
+#     r₁ = IncompressibleEnthalpyPFRModel(;
+#         shared...,
+#         T = operations₁.Tₚ,
+#         u = operations₁.u,
+#         ĥ = ĥ₁,
+#         h = (T) -&gt; 1.0fluid1.cₚ * T + 1000.0
+#     )
+
+#     r₃ = IncompressibleEnthalpyPFRModel(;
+#         shared...,
+#         T = operations3.Tₚ,
+#         u = operations3.u,
+#         ĥ = ĥ₃,
+#         h = (T) -&gt; h₃(T),
+#     )
+
+#     r₁, r₂ = createprfpair2(; N = 1000)
+#     cf = CounterFlowPFRModel(r₁, r₂)
+
+#     resa, resb = outerloop(cf;
+#         inner = 100,
+#         outer = 200,
+#         relax = 0.6,
+#         Δhmax = 1.0e-10,
+#         rtol  = 1.0e-10
+#     )
+
+#     fig1 = plotpfrpair(cf, ylims = (300, 400))
+#     fig2 = plotreactorresiduals(resa, resb)
+
+
+# &quot;Gera grafico com resíduos da simulação&quot;
+# function plotreactorresiduals(ra, rb)
+#     function getreactordata(r)
+#         xg = 1:r.counter
+#         xs = r.finalsteps
+#         yg = log10.(r.residuals)
+#         ys = log10.(r.finalresiduals)
+#         return xg, xs, yg, ys
+#     end
+
+#     function axlimitmax(niter)
+#         rounder = 10^floor(log10(niter))
+#         return convert(Int64, rounder * ceil(niter/rounder))
+#     end
+
+#     niter = max(ra.counter, rb.counter)
+#     xga, xsa, yga, ysa = getreactordata(ra)
+#     xgb, xsb, ygb, ysb = getreactordata(rb)
+
+#     fig = Figure(resolution = (720, 500))
+#     ax = Axis(fig[1, 1], yscale = identity)
+
+#     ax.xlabel = &quot;Iteração global&quot;
+#     ax.ylabel = &quot;log10(Resíduo)&quot;
+#     ax.title = &quot;Histórico de convergência&quot;
+
+#     ax.yticks = -12:2:0
+#     xlims!(ax, (0, axlimitmax(niter)))
+#     ylims!(ax, (-12, 0))
+
+#     lines!(ax, xga, yga, color = :blue,  linewidth = 0.9, label = &quot;r₁&quot;)
+#     lines!(ax, xgb, ygb, color = :red, linewidth = 0.9, label = &quot;r₂&quot;)
+
+#     scatter!(ax, xsa, ysa, color = :black, markersize = 6)
+#     scatter!(ax, xsb, ysb, color = :black, markersize = 6)
+
+#     axislegend(position = :rt)
+#     return fig
+# end
+
+
+# &quot;Dados usados nos notebooks da série.&quot;
+# const notedata = (
+#     c03 = (
+#         fluid3 = (
+#             # Viscosidade do fluido [Pa.s]
+#             μpoly = Polynomial([
+#                 1.7e-05 #TODO copy good here!
+#             ], :T),
+#             # Calor específico do fluido [J/(kg.K)]
+#             cₚpoly = Polynomial([
+#                     959.8458126240355,
+#                     0.3029051601580761,
+#                     3.988896105280984e-05,
+#                     -6.093647929461819e-08,
+#                     1.0991100692950414e-11
+#                 ], :T),
+#             # Número de Prandtl do fluido
+#             Pr = 0.70
+#         ),
+#         operations3 = (
+#             u = 2.5,      # Velocidade do fluido [m/s]
+#             Tₚ = 380.0,   # Temperatura de entrada do fluido [K]
+#         )
+#     ),
+# )
+
+# &quot;Calcula a potência de `x` mais próxima de `v`.&quot;
+# function closestpowerofx(v::Number; x::Number = 10)::Number
+#     rounder = x^floor(log(x, v))
+#     return convert(Int64, rounder * ceil(v/rounder))
+# end
+
+# &quot;Gestor de resíduos durante uma simulação.&quot;
+# mutable struct ResidualsRaw
+#     inner::Int64
+#     outer::Int64
+#     counter::Int64
+#     innersteps::Vector{Int64}
+#     residuals::Vector{Float64}
+#     function ResidualsRaw(inner::Int64, outer::Int64)
+#         innersteps = -ones(Int64, outer)
+#         residuals = -ones(Float64, outer * inner)
+#         return new(inner, outer, 0, innersteps, residuals)
+#     end
+# end
+
+# &quot;Resíduos de uma simulação processados.&quot;
+# struct ResidualsProcessed
+#     counter::Int64
+#     innersteps::Vector{Int64}
+#     residuals::Vector{Float64}
+#     finalsteps::Vector{Int64}
+#     finalresiduals::Vector{Float64}
+
+#     function ResidualsProcessed(r::ResidualsRaw)
+#         innersteps = r.innersteps[r.innersteps .&gt; 0.0]
+#         residuals = r.residuals[r.residuals .&gt; 0.0]
+
+#         finalsteps = cumsum(innersteps)
+#         finalresiduals = residuals[finalsteps]
+
+#         return new(r.counter, innersteps, residuals,
+#                    finalsteps, finalresiduals)
+#     end
+# end
+
+# &quot;Alimenta resíduos da simulação no laço interno.&quot;
+# function feedinnerresidual(r::ResidualsRaw, ε::Float64)
+#     # TODO: add resizing test here!
+#     r.counter += 1
+#     r.residuals[r.counter] = ε
+# end</code></pre><h1 id="Trocas-em-fluidos-supercríticos"><a class="docs-heading-anchor" href="#Trocas-em-fluidos-supercríticos">Trocas em fluidos supercríticos</a><a id="Trocas-em-fluidos-supercríticos-1"></a><a class="docs-heading-anchor-permalink" href="#Trocas-em-fluidos-supercríticos" title="Permalink"></a></h1><h2 id="O-estado-supercrítico"><a class="docs-heading-anchor" href="#O-estado-supercrítico">O estado supercrítico</a><a id="O-estado-supercrítico-1"></a><a class="docs-heading-anchor-permalink" href="#O-estado-supercrítico" title="Permalink"></a></h2><p>A condição supercrítica não implica uma transição de fase de primeira ordem propriamente dita. Usando o pacote <code>SteamTables</code> implementa propriedades da água em acordo com a <em>IAPWS Industrial Formulation (1997)</em> recuperamos a seguinte curva de massa específica.</p><pre><code class="language-julia hljs">with_theme() do
+    P = 0.1 * 270.0
+    T = collect(400.0:5:1000.0)
+    ρ = map((t)-&gt;1.0 / SpecificV(P, t), T)
+
+
+	fig = Figure(size = (720, 500))
+	ax = Axis(fig[1, 1])
+	lines!(ax, T, ρ; color = :black)
+	ax.xlabel = &quot;Temperatura [K]&quot;
+	ax.ylabel = &quot;Mass específica [kg/m³]&quot;
+	ax.xticks = 300:100:1200
+	ax.yticks = 000:200:1000
+	xlims!(ax, (400, 1000))
+	ylims!(ax, (000, 1000))
+    fig
+end</code></pre><p>De maneira análoga verificamos a transição progressiva na entalpia. Como buscamos desenvolver um modelo de reator formulado em termos da entalpia, provemos uma função de interpolação para uma pressão dada abaixo. No caso mais geral (com perda de carga) a entalpia deverá ser avaliada para cada célula no domínio do reator.</p><pre><code class="language-julia hljs">with_theme() do
+    P = 27.0
+    
+    T = collect(300.0:5.0:1200.0)
+    h = map((t)-&gt;SpecificH(P, t), T)
+    
+    T_interp = collect(300.0:10.0:1200.0)
+    h_interp = linear_interpolation(T, h)
+    
+    fig = Figure(size = (720, 500))
+    ax = Axis(fig[1, 1])
+    scatter!(ax, T_interp, h_interp(T_interp); color = :red, alpha = 0.7)
+    lines!(ax, T, h; color = :black)
+    ax.xlabel = &quot;Temperatura [K]&quot;
+    ax.ylabel = &quot;Entalpia específica [kJ/kg]&quot;
+    ax.xticks = 400:100:1000
+    ax.yticks = 000:500:4000
+    xlims!(ax, (400, 1000))
+    ylims!(ax, (500, 4000))
+    fig
+end</code></pre><pre><code class="language-julia hljs"># &quot;Integra reator pistão circular no espaço das entalpias.&quot;
+# function solveenthalpypfr(; mesh::AbstractDomainFVM, P::T, A::T, Tₛ::T, Tₚ::T,
+#                             ĥ::T, u::T, ρ::T, h::Function, M::Int64 = 100,
+#                             α::Float64 = 0.4, ε::Float64 = 1.0e-10,
+#                             alg::Any = Order16(), vars...) where T
+#     N = length(mesh.z) - 1
+
+#     Tm = Tₚ * ones(N + 1)
+#     hm = h.(Tm)
+
+#     a = (ĥ * P * mesh.δ) / (ρ * u * A)
+#     K = 2spdiagm(-1 =&gt; -ones(N-1), 0 =&gt; ones(N))
+
+#     b = (2a * Tₛ) * ones(N)
+#     b[1] += 2h(Tₚ)
+
+#     residual = -ones(M)
+
+#     @time for niter in 1:M
+#         Δ = (1-α) * (K\(b - a * (Tm[1:end-1] + Tm[2:end])) - hm[2:end])
+#         hm[2:end] += Δ
+
+#         Tm[2:end] = map(
+#             (Tₖ, hₖ) -&gt; find_zero(t -&gt; h(t) - hₖ, Tₖ, alg, atol=0.1),
+#             Tm[2:end], hm[2:end]
+#         )
+
+#         residual[niter] = maximum(abs.(Δ))
+
+#         if (residual[niter] &lt;= ε)
+#             @info(&quot;Convergiu após $(niter) iterações&quot;)
+#             break
+#         end
+#     end
+
+#     return Tm, residual
+# end
+
+# let
+#     L = 3.0
+#     mesh = ImmersedConditionsFVM(; L = L, N = 3000)
+
+#     D = 0.0254 / 2
+#     P = π * D
+#     A = π * D^2 / 4
+
+#     Tₛ = 873.15
+#     ṁ = 60.0 / 3600.0
+
+#     Pₚ = 27.0
+#     Tₚ = 300.0
+#     ρₚ = 1.0 / SpecificV(Pₚ, Tₚ)
+#     uₚ = ṁ / (ρₚ * A)
+
+#     h_interp = let
+#         T = collect(300.0:5.0:2000.0)
+#         h = map((t)-&gt;SpecificH(Pₚ, t), T)
+#         linear_interpolation(T, h)
+#     end
+
+#     z = mesh.z
+#     ĥ = 4000.0
+
+#     # TODO search literature for supercritical!
+#     # ĥ = computehtc(; reactor..., fluid..., u = operations.u)
+
+#     h(t) = 1000h_interp(t)
+
+#     pars = (
+#         mesh = mesh,
+#         P = P,
+#         A = A,
+#         Tₛ = Tₛ,
+#         Tₚ = Tₚ,
+#         ĥ = ĥ,
+#         u = uₚ,
+#         ρ = ρₚ,
+#         h = h,
+#         M = 1000,
+#         α = 0.85,
+#         ε = 1.0e-06,
+#         alg = Order16()
+#     )
+
+#     T, residuals = solveenthalpypfr(; pars...)
+
+#     fig1 = let
+#         yrng = (300.0, 900.0)
+
+#         Tend = @sprintf(&quot;%.2f&quot;, T[end])
+#         fig = Figure(resolution = (720, 500))
+#         ax = Axis(fig[1, 1])
+#         stairs!(ax, z, T,
+#                 color = :red, linewidth = 2,
+#                 label = &quot;Numérica&quot;, step = :center)
+#         xlims!(ax, (0, L))
+#         ax.title = &quot;Temperatura final = $(Tend) K&quot;
+#         ax.xlabel = &quot;Posição [m]&quot;
+#         ax.ylabel = &quot;Temperatura [K]&quot;
+#         ax.xticks = range(0.0, L, 5)
+#         ax.yticks = range(yrng..., 7)
+#         ylims!(ax, yrng)
+#         axislegend(position = :rb)
+#         fig
+#     end
+# end</code></pre></article><nav class="docs-footer"><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.4.1 on <span class="colophon-date" title="Saturday 6 July 2024 12:00">Saturday 6 July 2024</span>. Using Julia version 1.10.4.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
