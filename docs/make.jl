@@ -61,7 +61,7 @@ modules = [
     RadCalNet,
 ]
 
-bibtex = joinpath(@__DIR__, "../data/bibtex/references.bib")
+bibtex = joinpath(@__DIR__, "..", "data", "bibtex", "references.bib")
 
 format = get_format(; latex, user, sitename)
 
@@ -117,7 +117,7 @@ pages = [
             "Notebooks/A2-Ciencia-Colaborativa-e-Julia.md",
         ],
 
-        "References"        => "References/index.md",
+        "References" => "References/index.md",
         # "Table of Contents" => "toc.md",
     ],
 
@@ -157,10 +157,8 @@ spath = joinpath(@__DIR__, "src")
 wpath = joinpath(@__DIR__, "tmp")
 julianizemarkdown(; formatter, spath, wpath)
 
-# convert_pluto(nblist;
-#     root  = joinpath(@__DIR__, "..", "script"),
-#     force = false
-# )
+ppath = joinpath(wpath, "Notebooks", "Pluto")
+convert_pluto(nblist; root = ppath, force = false)
 
 ##############################################################################
 # THE DOCUMENTATION
