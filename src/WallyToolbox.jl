@@ -3,7 +3,8 @@ module WallyToolbox
 
 function __init__()
     # Make other modules available, that's all!
-    @info "Activating WallyToolbox at $(@__DIR__)"
+    verbose = parse(Int64, get(ENV, "WALLYTOOLBOX_VERBOSITY", "0"))
+    verbose > 0 && @info("Activating WallyToolbox at $(@__DIR__)")
     push!(LOAD_PATH, @__DIR__)
 end
 
