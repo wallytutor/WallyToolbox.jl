@@ -61,7 +61,7 @@ $$
 DryTransport.prandtl
 ```
 
-[Péclet](https://en.wikipedia.org/wiki/Péclet_number) *Jean-Claude-Eugene Peclet (pronounced "Pay-clay" with the second syllable accented) (1793-1857) authored several books including one on heat conduction*  ([[@Bird2001]]). This number is nothing more than the multiplication of Reynolds and Prandtl or Schmidt numbers. By simplifying factors one easily determines that it represents the ratio of convective by diffusive transport (thermal or species). High $\mathrm{Pe}$ limit represents the plug-flow behavior.  
+[Péclet](https://en.wikipedia.org/wiki/Péclet_number) *Jean-Claude-Eugene Peclet (pronounced "Pay-clay" with the second syllable accented) (1793-1857) authored several books including one on heat conduction*  ([[@Bird2001]]). This number is nothing more than the multiplication of Reynolds and Prandtl or Schmidt numbers. By simplifying factors one easily determines that it represents the ratio of convective by diffusive transport (thermal or species). High $\mathrm{Pe}$ limit represents the #plug-flow behavior.  
 
 $$
 \mathrm{Pe}_{th} = \mathrm{Re} \mathrm{Pr}\qquad
