@@ -7,6 +7,26 @@ export reynolds
 export nusselt
 
 ##############################################################################
+# DEFINITIONS
+##############################################################################
+
+"Evaluate an arbitrary Nusselt number relationship."
+function nusselt(obj::AbstractNusseltPipeFlow, Re, Pr; kw...)
+    get(kw, :validate, false) && validate(obj, Re, Pr; kw...)
+    return Re < get(kw, :Re_crit, 3000.0) ? 3.66 : obj(Re, Pr; kw...)
+end
+
+"Evaluate Prandtl number relationship."
+function prandtl(obj::AbstractPrandtlNumber, θ)
+    return obj(θ)
+end
+
+"Evaluate Reynolds number relationship."
+function reynolds(obj::AbstractReynoldsPipeFlow, u, D, ν)
+    return obj(u, D, ν)
+end
+
+##############################################################################
 # PRANDTL NUMBER
 ##############################################################################
 
@@ -20,11 +40,6 @@ struct ConstantPrandtl <: AbstractPrandtlNumber
     function ConstantPrandtl(pr)
         return new(pr)
     end
-end
-
-"Evaluate Prandtl number relationship."
-function prandtl(obj::AbstractPrandtlNumber, θ)
-    return obj(θ)
 end
 
 function (obj::ConstantPrandtl)(θ)
@@ -43,17 +58,6 @@ struct NusseltGnielinski <: AbstractNusseltPipeFlow end
 
 "Dittus-Boelter's relationship for Nusselt number."
 struct NusseltDittusBoelter <: AbstractNusseltPipeFlow end
-
-"Evaluate Reynolds number relationship."
-function reynolds(obj::AbstractReynoldsPipeFlow, u, D, ν)
-    return obj(u, D, ν)
-end
-
-"Evaluate an arbitrary Nusselt number relationship."
-function nusselt(obj::AbstractNusseltPipeFlow, Re, Pr; kw...)
-    get(kw, :validate, false) && validate(obj, Re, Pr; kw...)
-    return Re < get(kw, :Re_crit, 3000.0) ? 3.66 : obj(Re, Pr; kw...)
-end
 
 function (obj::ReynoldsPipeFlow)(u, D, ν)
     return u * D / ν

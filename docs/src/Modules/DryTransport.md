@@ -8,8 +8,32 @@ end
 EditURL = "https://github.com/wallytutor/WallyToolbox.jl/blob/main/docs/src/DryTransport/index.md"
 ```
 
-## Documentation
+## Dimensionless groups
 
-```@autodocs
-Modules = [ DryTransport ]
+### Groups by definition
+
+
+```@docs
+DryTransport.nusselt
+DryTransport.prandtl
+DryTransport.reynolds
+```
+
+### Groups by application
+
+```@docs
+DryTransport.ConstantPrandtl
+```
+
+```@docs
+DryTransport.ReynoldsPipeFlow
+DryTransport.NusseltGnielinski
+DryTransport.NusseltDittusBoelter
+```
+
+## Heat transfer coefficients
+
+```@docs
+DryTransport.HtcPipeFlow
+DryTransport.htc
 ```
