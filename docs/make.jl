@@ -104,7 +104,6 @@ pages = [
             "Science/03-Molecular-Dynamics.md",
             "Science/04-Continuum-Mechanics.md",
             "Science/05-Machine-Learning.md",
-            "Science/06-Dimensionless-groups.md",
             "Science/07-Finite-Volume-Method.md",
             "Science/08-Conductivity-Porous-Solids.md",
             "Science/09-Finite-Element-Method.md",

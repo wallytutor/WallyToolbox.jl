@@ -2,29 +2,56 @@ export ConstantPrandtl
 export ReynoldsPipeFlow
 export NusseltGnielinski
 export NusseltDittusBoelter
+export grashof
+export nusselt
 export prandtl
 export reynolds
-export nusselt
 
 ##############################################################################
 # DEFINITIONS
 ##############################################################################
 
-"Evaluate an arbitrary Nusselt number relationship."
+grashof(g, β, ΔT, L, ν) = g * β * ΔT * L^3 / ν^2
+
+grashof(g, β, ΔT, L, μ, ρ) = grashof(g, β, ΔT, L, μ/ρ)
+
+nusselt(h, L, k) = h * L / k   
+
+prandtl(cₚ) = cₚ / (cₚ + (5//4) * GAS_CONSTANT)
+
+prandtl(ν, α) = ν / α
+
+prandtl(cₚ, μ, k) = cₚ * μ / k
+
+reynolds(u, L, ν) = u * L / ν
+
+reynolds(u, L, μ, ρ) = reynolds(u, L, μ/ρ)
+
+##############################################################################
+# APPLICATION INTERFACES
+##############################################################################
+
 function nusselt(obj::AbstractNusseltPipeFlow, Re, Pr; kw...)
     get(kw, :validate, false) && validate(obj, Re, Pr; kw...)
     return Re < get(kw, :Re_crit, 3000.0) ? 3.66 : obj(Re, Pr; kw...)
 end
 
-"Evaluate Prandtl number relationship."
 function prandtl(obj::AbstractPrandtlNumber, θ)
     return obj(θ)
 end
 
-"Evaluate Reynolds number relationship."
 function reynolds(obj::AbstractReynoldsPipeFlow, u, D, ν)
     return obj(u, D, ν)
 end
+
+##############################################################################
+# DOCS
+##############################################################################
+
+@doc "Evaluate Grashof number relationship."  grashof
+@doc "Evaluate Nusselt number relationship."  nusselt
+@doc "Evaluate Prandtl number relationship."  prandtl
+@doc "Evaluate Reynolds number relationship." reynolds
 
 ##############################################################################
 # PRANDTL NUMBER
@@ -60,7 +87,7 @@ struct NusseltGnielinski <: AbstractNusseltPipeFlow end
 struct NusseltDittusBoelter <: AbstractNusseltPipeFlow end
 
 function (obj::ReynoldsPipeFlow)(u, D, ν)
-    return u * D / ν
+    return reynolds(u, D, ν)
 end
 
 function (obj::NusseltGnielinski)(Re, Pr; kw...)
