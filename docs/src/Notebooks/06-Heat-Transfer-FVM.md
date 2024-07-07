@@ -1,3 +1,5 @@
+
+```julia
 # -*- coding: utf-8 -*-
 using CairoMakie
 using DelaunayTriangulation
@@ -100,3 +102,4 @@ let
     resize_to_layout!(fig)
     fig
 end
+```
