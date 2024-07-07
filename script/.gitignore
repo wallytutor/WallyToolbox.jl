@@ -3,6 +3,7 @@
 *.png
 *.mp4
 *.md
+*.html
 
 # Local scripts
 *.bat

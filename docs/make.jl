@@ -2,7 +2,6 @@
 using Documenter
 using Documenter.DocMeta: setdocmeta!
 using DocumenterCitations
-import PlutoStaticHTML
 
 ##############################################################################
 # THE DOCUMENTED *PACKAGES*
@@ -33,39 +32,6 @@ using DryTransport
 using DryUtilities
 using OpenFOAM
 using RadCalNet
-
-##############################################################################
-# DRAFT
-##############################################################################
-
-# "Generate documentation for notebooks."
-# function docplutonotebooks(example_dir, notebooks;
-#                            distributed = true, force = true)
-#     notebookmd = [splitext(notebook)[1] * ".md" for notebook in notebooks]
-#     output_format = PlutoStaticHTML.documenter_output
-
-#     oopts = PlutoStaticHTML.OutputOptions(; append_build_context = false)
-#     bopts = PlutoStaticHTML.BuildOptions(example_dir; output_format)
-
-#     session = PlutoStaticHTML.Pluto.ServerSession()
-#     session.options.server.disable_writing_notebook_files = true
-#     session.options.server.show_file_system = false
-#     session.options.server.launch_browser = false
-#     session.options.server.dismiss_update_notification = true
-#     session.options.evaluation.workspace_use_distributed = distributed
-
-#     PlutoStaticHTML.build_notebooks(bopts, notebooks, oopts; session)
-
-#     for nb in notebookmd
-#         src = joinpath(example_dir, nb)
-#         dst = joinpath(@__DIR__, "src/Notebooks", nb);
-#         mv(src, dst; force)
-#     end
-# end
-
-# docplutonotebooks(joinpath(@__DIR__, "..", "script"), [
-#     "dsc-tga-kaolinite.jl",
-# ])
 
 ##############################################################################
 # THE CONFIGURATION
@@ -147,7 +113,9 @@ pages = [
         "Notebooks"         => [
             "Notebooks/01-Composite-Conduction.md",
             "Notebooks/02-Part-Radiation-Heating.md",
+            "Notebooks/03-Plug-Flow-Reactor-1.md",
             "Notebooks/A1-Julia-para-Cientistas.md",
+            "Notebooks/A2-Ciencia-Colaborativa-e-Julia.md",
         ],
 
         "References"        => "References/index.md",
@@ -155,6 +123,13 @@ pages = [
     ],
 
 ]
+
+nblist = map(n->splitext(n)[1], [
+    "dsc-tga-kaolinite.jl",
+    # "dsc-tga-model-demo.jl",
+    "kramers-model-demo.jl",
+    "process-balances.jl",
+])
 
 ##############################################################################
 # PREPROCESS ALL
@@ -180,6 +155,11 @@ end
 spath = joinpath(@__DIR__, "src")
 wpath = joinpath(@__DIR__, "tmp")
 julianizemarkdown(; formatter, spath, wpath)
+
+# convert_pluto(nblist;
+#     root  = joinpath(@__DIR__, "..", "script"),
+#     force = false
+# )
 
 ##############################################################################
 # THE DOCUMENTATION

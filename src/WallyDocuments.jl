@@ -10,6 +10,7 @@ using Pluto: generate_html
 
 export get_format, deployrepo, julianizemarkdown
 export formatnotecells, formatequations
+export convert_pluto
 
 DEBUGMATCHES  = false
 
@@ -128,21 +129,27 @@ function formatequations(text)
 end
 
 "Convert Pluto notebook into a static HTML file."
-function convert_pluto(nblist::Vector{String}; force=false, verbose=2)
+function convert_pluto(nblist::Vector{String};
+        root=pwd(), distributed=true, force=false, verbose=2)
+
     s = ServerSession()
     s.options.server.launch_browser = false
+    s.options.server.dismiss_update_notification = true
+    s.options.server.disable_writing_notebook_files = true
+    s.options.server.show_file_system = false
+    s.options.evaluation.workspace_use_distributed = distributed
 
     for nbname in nblist
-        nbpath = joinpath(@__DIR__, "$(nbname).jl")
-        pgpath = joinpath(@__DIR__, "$(nbname).html")
+        nbpath = joinpath(root, "$(nbname).jl")
+        pgpath = joinpath(root, "$(nbname).html")
         
         if !format_file(nbpath)
-            @warn "file not formatted: $(nbpath)"
+            @warn("file not formatted: $(nbpath)")
         end
         
         if isfile(pgpath) && !force
-            verbose > 1 && @info "file exists: $(pgpath)"
-            return
+            verbose > 1 && @info("file exists: $(pgpath)")
+            continue
         end
         
         verbose > 0 && @info "working on $(nbname)"
