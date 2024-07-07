@@ -124,9 +124,11 @@ pages = [
 
 ]
 
+# XXX: only files that properly execute in the current environment are
+# added here: some error handling is still required in converter.
 nblist = map(n->splitext(n)[1], [
     "dsc-tga-kaolinite.jl",
-    # "dsc-tga-model-demo.jl",
+    "dsc-tga-model-demo.jl",
     "kramers-model-demo.jl",
     "process-balances.jl",
 ])

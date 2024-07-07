@@ -7,7 +7,14 @@ using InteractiveUtils
 # This Pluto notebook uses @bind for interactivity. When running this notebook outside of Pluto, the following 'mock version' of @bind gives bound variables a default value (instead of an error).
 macro bind(def, element)
     quote
-        local iv = try Base.loaded_modules[Base.PkgId(Base.UUID("6e696c72-6542-2067-7265-42206c756150"), "AbstractPlutoDingetjes")].Bonds.initial_value catch; b -> missing; end
+        local iv = try
+            Base.loaded_modules[Base.PkgId(
+                Base.UUID("6e696c72-6542-2067-7265-42206c756150"),
+                "AbstractPlutoDingetjes",
+            )].Bonds.initial_value
+        catch
+            b -> missing
+        end
         local el = $(esc(element))
         global $(esc(def)) = Core.applicable(Base.get, el) ? Base.get(el) : iv(el)
         el
@@ -19,7 +26,7 @@ begin
     @info "Loading tools..."
     import Pkg
     Pkg.activate(Base.current_project())
-    
+
     using CairoMakie
     using DifferentialEquations: solve
     using ModelingToolkit
@@ -28,7 +35,7 @@ begin
     using PrettyPrinting
     using Printf: @sprintf
     using Trapz: trapz
-    
+
     using WallyToolbox
     using DryConstants
 end
@@ -174,36 +181,36 @@ md"""
 
 # ╔═╡ 687e7d85-cde4-46c9-b776-eaf7cca4a973
 function assemblymodel(cpx, cpy)
-    β = (az / ax) * (Mz / Mx);
+    β = (az / ax) * (Mz / Mx)
 
-    D = Differential(t);
+    D = Differential(t)
 
-    @variables ṁ(t) c(t) k(t) ḣ(t) q̇(t);
+    @variables ṁ(t) c(t) k(t) ḣ(t) q̇(t)
 
     eqs = [
         # Temperature increases at constant rate [K].
         T ~ T₀ + θ̇ * t,
 
         # Track mass of system for TGA/DSC analysis [kg].
-        M ~ (1-β) * m₀ + β * m,
+        M ~ (1 - β) * m₀ + β * m,
 
         # Mass weighted specific heat [J/(kg.K)].
-        c ~ (m * cpx(T) + (M-m) * cpy(T)) / M,
+        c ~ (m * cpx(T) + (M - m) * cpy(T)) / M,
 
         # Arrhenius kinetics rate law [1/s].
         k ~ A * exp(-E / (GAS_CONSTANT * T)),
 
         # Store problem derivative for analysis [kg/s].
-        ṁ ~ -k * m₀^(1-n) * m^n,
+        ṁ ~ -k * m₀^(1 - n) * m^n,
 
         # Reaction enthalpy heat rate [W].
         ḣ ~ ΔH * ṁ,
 
         # Track required heat input to justify θ̇ [W].
-        q̇  ~ M * c * θ̇ + ḣ,
+        q̇ ~ M * c * θ̇ + ḣ,
 
         #  Finally stack the derivative to the problem [kg/s].
-        D(m) ~ ṁ
+        D(m) ~ ṁ,
     ]
     return eqs
 end;
@@ -263,7 +270,7 @@ begin
     @show val_m₀ = 16.0e-06
 
     # Heating rate (θ̇ °C/min) * (1min / 60s).
-    @show val_θ̇  = 40.0 / 60.0
+    @show val_θ̇ = 40.0 / 60.0
 
     # Initial temperature in K.
     @show val_T₀ = 273.15 + 25.0
@@ -282,18 +289,18 @@ Values for reaction enthalpy and kinetics rate are taken from the [literature](h
 # ╔═╡ 9f54bfef-e045-4fca-b696-b00d18825d82
 begin
     pars = [
-        ΔH  => -891_000.0,
-        n   => 1.00,
-        A   => 1.00e+07,
-        E   => 1.45e+05,
-        m₀  => val_m₀,
-        ax  => 1.0,
-        az  => 2.0,
-        Mx  => 0.257902462000,
-        Mz  => 0.018010564683,
-        θ̇   => val_θ̇,
-        T₀  => val_T₀,
-    ];
+        ΔH => -891_000.0,
+        n => 1.00,
+        A => 1.00e+07,
+        E => 1.45e+05,
+        m₀ => val_m₀,
+        ax => 1.0,
+        az => 2.0,
+        Mx => 0.257902462000,
+        Mz => 0.018010564683,
+        θ̇ => val_θ̇,
+        T₀ => val_T₀,
+    ]
     pprint(pars)
 end
 
@@ -368,7 +375,7 @@ fig = let
     τ = (val_T₁ - val_T₀) / val_θ̇
 
     # Create and solve ODE problem with stiff algorithm.
-    prob = ODEProblem(model_final, u0, (0.0, τ), pars);
+    prob = ODEProblem(model_final, u0, (0.0, τ), pars)
     sol = solve(prob; alg = :stiff, dtmax = 0.001τ)
 
     # Standard post-processing of results.
@@ -425,18 +432,18 @@ let
     val_θ̇ = θ̇slider / 60.0
 
     pars = [
-        ΔH  => -ΔHslider,
-        n   => 1.00,
-        A   => 1.00e+07,
-        E   => 1.45e+05,
-        m₀  => val_m₀,
-        ax  => 1.0,
-        az  => rslider,
-        Mx  => 0.250,
-        Mz  => 0.025,
-        θ̇   => val_θ̇,
-        T₀  => val_T₀,
-    ];
+        ΔH => -ΔHslider,
+        n => 1.00,
+        A => 1.00e+07,
+        E => 1.45e+05,
+        m₀ => val_m₀,
+        ax => 1.0,
+        az => rslider,
+        Mx => 0.250,
+        Mz => 0.025,
+        θ̇ => val_θ̇,
+        T₀ => val_T₀,
+    ]
 
     T₁ = 1400
 
@@ -451,7 +458,7 @@ let
     τ = (T₁ - val_T₀) / val_θ̇
 
     # Create and solve ODE problem with stiff algorithm.
-    prob = ODEProblem(model_final, u0, (0.0, τ), pars);
+    prob = ODEProblem(model_final, u0, (0.0, τ), pars)
     sol = solve(prob; alg = :stiff, dtmax = 0.001τ)
 
     # Standard post-processing of results.

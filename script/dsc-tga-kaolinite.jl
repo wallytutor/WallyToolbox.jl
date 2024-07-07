@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.19.40
+# v0.19.43
 
 using Markdown
 using InteractiveUtils
@@ -7,7 +7,14 @@ using InteractiveUtils
 # This Pluto notebook uses @bind for interactivity. When running this notebook outside of Pluto, the following 'mock version' of @bind gives bound variables a default value (instead of an error).
 macro bind(def, element)
     quote
-        local iv = try Base.loaded_modules[Base.PkgId(Base.UUID("6e696c72-6542-2067-7265-42206c756150"), "AbstractPlutoDingetjes")].Bonds.initial_value catch; b -> missing; end
+        local iv = try
+            Base.loaded_modules[Base.PkgId(
+                Base.UUID("6e696c72-6542-2067-7265-42206c756150"),
+                "AbstractPlutoDingetjes",
+            )].Bonds.initial_value
+        catch
+            b -> missing
+        end
         local el = $(esc(element))
         global $(esc(def)) = Core.applicable(Base.get, el) ? Base.get(el) : iv(el)
         el
@@ -76,11 +83,11 @@ Polynomials for specific heat are those of [Schieltz and Soliman (1964)](https:/
 # ╔═╡ 241f2150-c134-4951-b87d-d820727b8269
 "Materials for considered phases."
 const materials = [
-    DM.PureWater();
-    DM.getkaolinite();
-    DM.getmetakaolin();
-    DM.getspinel();
-    DM.getamorphoussilica();	
+    DM.PureWater()
+    DM.getkaolinite()
+    DM.getmetakaolin()
+    DM.getspinel()
+    DM.getamorphoussilica()
 ]
 
 # ╔═╡ 5bc5d31b-9f3a-44e5-a271-12d9e8ffa7de
@@ -93,7 +100,7 @@ const Mₘ = map(DM.molecularmass, materials)
 
 Retrieve specific heat for all species
 """
-specificheat(T) = map(m->DM.specificheat(m, T, P_REF), materials)
+specificheat(T) = map(m -> DM.specificheat(m, T, P_REF), materials)
 
 # ╔═╡ 9d98242a-7487-447b-89a4-5b5acb957ff6
 """
@@ -147,7 +154,7 @@ In matrix notation one can write ``\dot{\omega}=\nu\cdotp{}r``, as it will be im
 
 # ╔═╡ 19196b8d-566d-4598-acdf-363ffac7a49f
 "Solid state stoichiometric coefficients"
-const ν = [-1  0  0; 0 -1  0; 0  1 -2; 0  0  1; 0  0  1]
+const ν = [-1 0 0; 0 -1 0; 0 1 -2; 0 0 1; 0 0 1]
 
 # ╔═╡ a35454c1-4641-48b2-8038-7dbc2a0da6ec
 """
@@ -209,7 +216,7 @@ which is the form we will implement here. Notice that the computation of ``\dot{
 
 Compute balance equation for species with varying system mass.
 """
-speciesbalance(ṁ, ω̇, m, Y) = (1/m) * (ω̇ - Y .* ṁ)
+speciesbalance(ṁ, ω̇, m, Y) = (1 / m) * (ω̇ - Y .* ṁ)
 
 # ╔═╡ 1d66b415-a683-4415-9911-0c3fbbbeb084
 md"""
@@ -412,7 +419,7 @@ function plotmodel(model, sol)
     Y3 = sol[model.Y[3]] * 100
     Y4 = sol[model.Y[4]] * 100
     Y5 = sol[model.Y[5]] * 100
-    q  = sol[model.q̇]
+    q = sol[model.q̇]
 
     Y1max = maximum(Y1)
     y1 = 100Y1 / Y1max
@@ -430,19 +437,18 @@ function plotmodel(model, sol)
     ax3 = Axis(f[3, 1])
     ax4 = Axis(f[3, 1])
 
-    lines!(ax1, Tk, y1; color = :blue,  label = label_water)
+    lines!(ax1, Tk, y1; color = :blue, label = label_water)
     lines!(ax1, Tk, Y2; color = :black, label = "Kaolinite")
     lines!(ax1, Tk, Y3; color = :green, label = "Metakaolin")
-    lines!(ax1, Tk, Y4; color = :red,   label = "Spinel")
-    lines!(ax1, Tk, Y5; color = :cyan,  label = "Silica (A)")
+    lines!(ax1, Tk, Y4; color = :red, label = "Spinel")
+    lines!(ax1, Tk, Y5; color = :cyan, label = "Silica (A)")
     lines!(ax2, Tk, TGA; color = :black, label = "TGA")
     l3 = lines!(ax3, Tk, DSC; color = :black)
     l4 = lines!(ax4, Tk, δH; color = :red)
 
     axislegend(ax1; position = :ct, orientation = :horizontal)
     axislegend(ax2; position = :rt, orientation = :horizontal)
-    axislegend(ax3, [l3, l4], ["DSC", "ΔH"], position = :lt,
-               orientation = :horizontal)
+    axislegend(ax3, [l3, l4], ["DSC", "ΔH"], position = :lt, orientation = :horizontal)
 
     ax1.ylabel = "Mass content [%]"
     ax2.ylabel = "Residual mass [%]"
@@ -484,7 +490,7 @@ Standard interface for solving the `ThermalAnalysis` model.
 """
 function solvemodel(model, τ, Θ̇, m₀, Y₀)
     u0 = [
-        model.m    => m₀,
+        model.m => m₀,
         model.Y[1] => Y₀[1],
         model.Y[2] => Y₀[2],
         model.Y[3] => Y₀[3],
@@ -500,7 +506,7 @@ function solvemodel(model, τ, Θ̇, m₀, Y₀)
     dtmax = 0.001τ
 
     # Create and solve ODE problem with stiff algorithm.
-    prob = ODEProblem(model, u0, (0.0, τ), pars);
+    prob = ODEProblem(model, u0, (0.0, τ), pars)
     return solve(prob; alg = :stiff, abstol, reltol, dtmax)
 end
 
@@ -537,7 +543,7 @@ sol, fig = let
     τ = 1175.0 / Θ̇
 
     # Assembly array of initial states.
-    Y₀ = [h, 1.0-h, 0.0, 0.0, 0.0]
+    Y₀ = [h, 1.0 - h, 0.0, 0.0, 0.0]
 
     # Call model solution routine.
     sol = solvemodel(model, τ, Θ̇, m₀, Y₀)

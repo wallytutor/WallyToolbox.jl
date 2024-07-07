@@ -81,19 +81,29 @@ struct CooledCrusherInputs
     T_in_cool::Unitful.Quantity{Float64}
 
     "Outlet temperature of cooling fluid (forced mode)."
-    T_out_cool::Union{Nothing, Unitful.Quantity{Float64}}
+    T_out_cool::Union{Nothing,Unitful.Quantity{Float64}}
 
     "Inlet temperature of product in separator (forced mode)."
-    T_in_sep::Union{Nothing, Unitful.Quantity{Float64}}
+    T_in_sep::Union{Nothing,Unitful.Quantity{Float64}}
 
     "Outlet temperature of product in recirculation (forced mode)."
-    T_out_rec::Union{Nothing, Unitful.Quantity{Float64}}
+    T_out_rec::Union{Nothing,Unitful.Quantity{Float64}}
 
     "Crushing outlet temperature for simulation initial guess."
-    T_out_crush::Union{Nothing, Unitful.Quantity{Float64}}
+    T_out_crush::Union{Nothing,Unitful.Quantity{Float64}}
 
-    function CooledCrusherInputs(; T_env, ηseparator, power_crusher, ṁ_cooler,
-            ṁ_clinker, ṁ_cru_air, ṁ_sep_air, ṁ_par_air, ṁ_tot_air, kwargs...)
+    function CooledCrusherInputs(;
+        T_env,
+        ηseparator,
+        power_crusher,
+        ṁ_cooler,
+        ṁ_clinker,
+        ṁ_cru_air,
+        ṁ_sep_air,
+        ṁ_par_air,
+        ṁ_tot_air,
+        kwargs...,
+    )
 
         kw = Dict(kwargs)
 
@@ -114,7 +124,7 @@ struct CooledCrusherInputs
             kelvin_or_na(get(kw, :T_out_cool, nothing)),
             kelvin_or_na(get(kw, :T_in_sep, nothing)),
             kelvin_or_na(get(kw, :T_out_rec, nothing)),
-            kelvin_or_na(get(kw, :T_out_crush, nothing))
+            kelvin_or_na(get(kw, :T_out_crush, nothing)),
         )
     end
 end
@@ -145,9 +155,9 @@ struct CooledCrusherSolverPars
         kw = Dict(kwargs)
         return new(
             get(kw, :max_iter, 100),
-            get(kw, :T_tol,    1.0e-10),
-            get(kw, :ṁ_tol,    1.0e-10),
-            get(kw, :verbose,  true)
+            get(kw, :T_tol, 1.0e-10),
+            get(kw, :ṁ_tol, 1.0e-10),
+            get(kw, :verbose, true),
         )
     end
 end
@@ -221,28 +231,28 @@ struct CooledCrusherUnits
         kw = Dict(kwargs)
 
         # Strip physical units.
-        T_env         = ustrip(inputs.T_env)
-        P_env         = ustrip(inputs.P_env)
-        T_in_cool     = ustrip(inputs.T_in_cool)
+        T_env = ustrip(inputs.T_env)
+        P_env = ustrip(inputs.P_env)
+        T_in_cool = ustrip(inputs.T_in_cool)
         power_crusher = ustrip(inputs.power_crusher)
-        ṁ_cooler      = ustrip(inputs.ṁ_cooler)
-        ṁ_clinker     = ustrip(inputs.ṁ_clinker)
-        ṁ_cru_air     = ustrip(inputs.ṁ_cru_air)
-        ṁ_sep_air     = ustrip(inputs.ṁ_sep_air)
-        ṁ_par_air     = ustrip(inputs.ṁ_par_air)
-        ṁ_tot_air     = ustrip(inputs.ṁ_tot_air)
+        ṁ_cooler = ustrip(inputs.ṁ_cooler)
+        ṁ_clinker = ustrip(inputs.ṁ_clinker)
+        ṁ_cru_air = ustrip(inputs.ṁ_cru_air)
+        ṁ_sep_air = ustrip(inputs.ṁ_sep_air)
+        ṁ_par_air = ustrip(inputs.ṁ_par_air)
+        ṁ_tot_air = ustrip(inputs.ṁ_tot_air)
 
         val_or_na(qty) = isnothing(qty) ? qty : ustrip(qty)
 
-        T_out_cool    = val_or_na(inputs.T_out_cool)
-        T_in_sep      = val_or_na(inputs.T_in_sep)
-        T_out_rec     = val_or_na(inputs.T_out_rec)
-        T_out_crush   = val_or_na(inputs.T_out_crush)
+        T_out_cool = val_or_na(inputs.T_out_cool)
+        T_in_sep = val_or_na(inputs.T_in_sep)
+        T_out_rec = val_or_na(inputs.T_out_rec)
+        T_out_crush = val_or_na(inputs.T_out_crush)
 
         # Get material streams.
-        cooler, Y_cool     = get(kw, :cooler,  (PureAir(),     [1.0]))
+        cooler, Y_cool = get(kw, :cooler, (PureAir(), [1.0]))
         clinker, Y_clinker = get(kw, :clinker, (PureMineral(), [1.0, 0.0]))
-        air, Y_air         = get(kw, :air,     (PureAir(),     [0.0, 1.0]))
+        air, Y_air = get(kw, :air, (PureAir(), [0.0, 1.0]))
 
         pipe_cool = StreamPipeline([cooler])
         pipe_prod = StreamPipeline([clinker, air])
@@ -254,33 +264,27 @@ struct CooledCrusherUnits
         milling_power = EnergyStream(power_crusher)
 
         # Cooling material stream.
-        cooling_stream = MaterialStream(
-            ṁ_cooler, T_in_cool, P_env, Y_cool, pipe_cool)
+        cooling_stream = MaterialStream(ṁ_cooler, T_in_cool, P_env, Y_cool, pipe_cool)
 
         # Clinker material stream.
-        clinker_stream = MaterialStream(
-            ṁ_clinker, T_env, P_env, Y_clinker, pipe_prod)
+        clinker_stream = MaterialStream(ṁ_clinker, T_env, P_env, Y_clinker, pipe_prod)
 
         # Milling air stream.
-        crusher_air_stream = MaterialStream(
-            ṁ_cru_air, T_env, P_env, Y_air, pipe_prod)
+        crusher_air_stream = MaterialStream(ṁ_cru_air, T_env, P_env, Y_air, pipe_prod)
 
         # Separator air stream.
-        separator_air_stream = MaterialStream(
-            ṁ_sep_air, T_env, P_env, Y_air, pipe_prod)
+        separator_air_stream = MaterialStream(ṁ_sep_air, T_env, P_env, Y_air, pipe_prod)
 
         # Air leaks in mill.
-        parasite_air_stream = MaterialStream(
-            ṁ_par_air, T_env, P_env, Y_air, pipe_prod)
+        parasite_air_stream = MaterialStream(ṁ_par_air, T_env, P_env, Y_air, pipe_prod)
 
         # Dummy recirculation for initialization.
-        recirc_stream = MaterialStream(
-            0.0, T_env, P_env, Y_clinker, pipe_prod)
+        recirc_stream = MaterialStream(0.0, T_env, P_env, Y_clinker, pipe_prod)
 
         # XXX Experimental code.
         htc_sep = get(kw, :htc_pipe_sep, nothing)
         htc_rec = get(kw, :htc_pipe_rec, nothing)
-        htc_cru = get(kw, :htc_cooling,  nothing)
+        htc_cru = get(kw, :htc_cooling, nothing)
         # temp_cru = T_out_crush
 
         # Premix meal that is not iterated upon.
@@ -300,12 +304,12 @@ struct CooledCrusherUnits
         # Tentative
         if !isnothing(htc_cru)
             _, T_out_cool, T_out_crush = cooled_crushing(
-                product  = meal_stream + recirc_stream,
-                coolant  = cooling_stream,
-                power    = milling_power,
+                product = meal_stream + recirc_stream,
+                coolant = cooling_stream,
+                power = milling_power,
                 temp_out = T_out_cool,
                 temp_cru = T_out_crush,
-                glob_htc = nothing
+                glob_htc = nothing,
             )
         end
 
@@ -316,12 +320,12 @@ struct CooledCrusherUnits
             # Add crushing energy and cool down system.
             # TODO T_out_crush can be actually *computed*!
             mid_crusher, T_out_cool, T_out_crush = cooled_crushing(
-                product  = product,
-                coolant  = cooling_stream,
-                power    = milling_power,
+                product = product,
+                coolant = cooling_stream,
+                power = milling_power,
                 temp_out = T_out_cool,
                 temp_cru = T_out_crush,
-                glob_htc = htc_cru
+                glob_htc = htc_cru,
             )
 
             # Mix crusher product with *dilution air*
@@ -331,7 +335,7 @@ struct CooledCrusherUnits
                 mid_crusher.coolant,
                 mid_crusher.power,
                 mid_crusher.loss,
-                mid_crusher.globalhtc
+                mid_crusher.globalhtc,
             )
 
             # Loose some heat in vertical pipeline.
@@ -370,8 +374,8 @@ struct CooledCrusherUnits
         cyclone = SolidsSeparator(separator.others; η = 1.0)
 
         # Total air leaving the system (after cyclone)
-        balance_air_stream = MaterialStream(
-            ṁ_tot_air - cyclone.others.ṁ, T, P, Y_air, pipe_prod)
+        balance_air_stream =
+            MaterialStream(ṁ_tot_air - cyclone.others.ṁ, T, P, Y_air, pipe_prod)
 
         return new(
             pipe_cool,
@@ -389,7 +393,7 @@ struct CooledCrusherUnits
             separator,
             cyclone,
             transport_sep,
-            transport_rec
+            transport_rec,
         )
     end
 end
@@ -415,11 +419,31 @@ struct CooledCrusherModel
     "*De facto* process integration model."
     unitops::CooledCrusherUnits
 
-    function CooledCrusherModel(; T_env, ṁ_cooler, ṁ_clinker, ṁ_cru_air,
-        ṁ_sep_air, ṁ_par_air, ṁ_tot_air, power_crusher, ηseparator, kwargs...)
+    function CooledCrusherModel(;
+        T_env,
+        ṁ_cooler,
+        ṁ_clinker,
+        ṁ_cru_air,
+        ṁ_sep_air,
+        ṁ_par_air,
+        ṁ_tot_air,
+        power_crusher,
+        ηseparator,
+        kwargs...,
+    )
 
-        inputs = CooledCrusherInputs(; T_env, ηseparator, power_crusher, ṁ_cooler,
-            ṁ_clinker, ṁ_cru_air, ṁ_sep_air, ṁ_par_air, ṁ_tot_air, kwargs...)
+        inputs = CooledCrusherInputs(;
+            T_env,
+            ηseparator,
+            power_crusher,
+            ṁ_cooler,
+            ṁ_clinker,
+            ṁ_cru_air,
+            ṁ_sep_air,
+            ṁ_par_air,
+            ṁ_tot_air,
+            kwargs...,
+        )
 
         solver = CooledCrusherSolverPars(; kwargs...)
 
@@ -440,7 +464,7 @@ begin
     @info "Postprocessing implementation"
 
     "Default slider with displayed value."
-    slider(rng, def) = PlutoUI.Slider(rng, default=def, show_value=true)
+    slider(rng, def) = PlutoUI.Slider(rng, default = def, show_value = true)
 
     "Standardized report for `CooledCrusherModel`."
     function report(model::CooledCrusherModel; show_tree = true)
@@ -492,11 +516,11 @@ begin
 
         # For @svg
         height = get(kwargs_dict, :height, 300)
-        width  = get(kwargs_dict, :width, 700)
+        width = get(kwargs_dict, :width, 700)
         saveas = get(kwargs_dict, :saveas, "crusher.svg")
 
         # Display control
-        showcrusher   = get(kwargs_dict, :showcrusher, true)
+        showcrusher = get(kwargs_dict, :showcrusher, true)
         showseparator = get(kwargs_dict, :showseparator, true)
 
         Luxor.@svg let
@@ -551,8 +575,10 @@ begin
                 Luxor.line(Luxor.Point(100, -30))
                 Luxor.line(Luxor.Point(-50, -30))
                 Luxor.closepath()
-                Luxor.sethue("orange"); Luxor.fillpreserve()
-                Luxor.sethue("black"); Luxor.strokepath()
+                Luxor.sethue("orange")
+                Luxor.fillpreserve()
+                Luxor.sethue("black")
+                Luxor.strokepath()
             end
 
             let # Cooling system.
@@ -603,8 +629,10 @@ begin
                 Luxor.line(Luxor.Point(110, -114))
                 Luxor.line(Luxor.Point(140, -114))
                 Luxor.closepath()
-                Luxor.sethue("gray"); Luxor.fillpreserve()
-                Luxor.sethue("black"); Luxor.strokepath()
+                Luxor.sethue("gray")
+                Luxor.fillpreserve()
+                Luxor.sethue("black")
+                Luxor.strokepath()
             end
 
             let # Packing products.
@@ -639,8 +667,10 @@ begin
                 Luxor.line(Luxor.Point(185, -114))
                 Luxor.line(Luxor.Point(215, -114))
                 Luxor.closepath()
-                Luxor.sethue("gray"); Luxor.fillpreserve()
-                Luxor.sethue("black"); Luxor.strokepath()
+                Luxor.sethue("gray")
+                Luxor.fillpreserve()
+                Luxor.sethue("black")
+                Luxor.strokepath()
             end
 
             let # Joining points.
@@ -657,9 +687,9 @@ begin
                 inp = model.inputs
                 ops = model.unitops
 
-                crusher   = ops.crusher
+                crusher = ops.crusher
                 separator = ops.separator
-                cyclone   = ops.cyclone
+                cyclone = ops.cyclone
 
                 trans_sep = ops.transport_sep
                 trans_rec = ops.transport_rec
@@ -693,80 +723,154 @@ begin
                     q_cooling = "$(round1(air_flow(ops.cooling_stream.ṁ))) Nm³/h (0)"
                 end
 
-                T_env     = celsius(inp.T_env)
-                T_crush1  = celsius(crusher.rawmeal.T)
-                T_crush2  = celsius(crusher.product.T)
+                T_env = celsius(inp.T_env)
+                T_crush1 = celsius(crusher.rawmeal.T)
+                T_crush2 = celsius(crusher.product.T)
                 T_coolant = celsius(crusher.coolant.T)
                 T_recircs = celsius(separator.solids.T)
-                T_in_sep  = celsius(trans_sep.product.T)
+                T_in_sep = celsius(trans_sep.product.T)
                 T_out_rec = celsius(trans_rec.product.T)
 
                 let # Controls
                     Luxor.sethue("black")
 
-                    Luxor.text("Environment at $(T_env) °C",
-                         Luxor.Point(-340, -140); valign, halign = :left)
+                    Luxor.text(
+                        "Environment at $(T_env) °C",
+                        Luxor.Point(-340, -140);
+                        valign,
+                        halign = :left,
+                    )
 
-                    Luxor.text("Crushing @ $(crush_power) kW",
-                         Luxor.Point(25, -20); valign, halign = :center)
+                    Luxor.text(
+                        "Crushing @ $(crush_power) kW",
+                        Luxor.Point(25, -20);
+                        valign,
+                        halign = :center,
+                    )
 
-                    Luxor.text("Cooling @ $(-1cooling_power) kW",
-                         Luxor.Point(25, 10); valign, halign = :center)
+                    Luxor.text(
+                        "Cooling @ $(-1cooling_power) kW",
+                        Luxor.Point(25, 10);
+                        valign,
+                        halign = :center,
+                    )
 
-                    Luxor.text(q_cooling,
-                         Luxor.Point(75, 65);  valign, halign = :left, angle = π/2)
+                    Luxor.text(
+                        q_cooling,
+                        Luxor.Point(75, 65);
+                        valign,
+                        halign = :left,
+                        angle = π / 2,
+                    )
 
-                    Luxor.text("$(q_tot_air) Nm³/h (5)",
-                         Luxor.Point(255, -100); valign, halign = :left)
+                    Luxor.text(
+                        "$(q_tot_air) Nm³/h (5)",
+                        Luxor.Point(255, -100);
+                        valign,
+                        halign = :left,
+                    )
 
-                    Luxor.text("$(q_sep_air) Nm³/h (4)",
-                         Luxor.Point(96,  -70);  valign, halign = :right)
+                    Luxor.text(
+                        "$(q_sep_air) Nm³/h (4)",
+                        Luxor.Point(96, -70);
+                        valign,
+                        halign = :right,
+                    )
 
-                    Luxor.text("$(q_cru_air) Nm³/h (3)",
-                         Luxor.Point(100, -45);  valign, halign = :right)
+                    Luxor.text(
+                        "$(q_cru_air) Nm³/h (3)",
+                        Luxor.Point(100, -45);
+                        valign,
+                        halign = :right,
+                    )
 
-                    Luxor.text("$(q_par_air) Nm³/h (2)",
-                         Luxor.Point(-269, -50); valign, halign = :right)
+                    Luxor.text(
+                        "$(q_par_air) Nm³/h (2)",
+                        Luxor.Point(-269, -50);
+                        valign,
+                        halign = :right,
+                    )
 
-                    Luxor.text("$(ṁ_clinker) kg/h (1)",
-                         Luxor.Point(-269, 50); valign, halign = :right)
+                    Luxor.text(
+                        "$(ṁ_clinker) kg/h (1)",
+                        Luxor.Point(-269, 50);
+                        valign,
+                        halign = :right,
+                    )
 
-                    Luxor.text("$(q_oth_air) Nm³/h (6)",
-                         Luxor.Point(240, -70); valign, halign = :left, angle = π/2)
+                    Luxor.text(
+                        "$(q_oth_air) Nm³/h (6)",
+                        Luxor.Point(240, -70);
+                        valign,
+                        halign = :left,
+                        angle = π / 2,
+                    )
 
-                    Luxor.text("$(ṁ_product) kg/h",
-                         Luxor.Point(210, -70); valign, halign = :left, angle = π/2)
+                    Luxor.text(
+                        "$(ṁ_product) kg/h",
+                        Luxor.Point(210, -70);
+                        valign,
+                        halign = :left,
+                        angle = π / 2,
+                    )
                 end
 
                 let # Measurements
                     Luxor.sethue("#FF2299")
 
-                    Luxor.text("$(T_coolant) °C",
-                         Luxor.Point(-25, 65); valign, halign = :left, angle = π/2)
+                    Luxor.text(
+                        "$(T_coolant) °C",
+                        Luxor.Point(-25, 65);
+                        valign,
+                        halign = :left,
+                        angle = π / 2,
+                    )
 
-                    Luxor.text("$(T_out_rec) °C",
-                         Luxor.Point(-90, -40); valign, halign = :left, angle = π/2)
+                    Luxor.text(
+                        "$(T_out_rec) °C",
+                        Luxor.Point(-90, -40);
+                        valign,
+                        halign = :left,
+                        angle = π / 2,
+                    )
 
-                    Luxor.text("$(T_in_sep) °C",
-                         Luxor.Point(135, -69); valign, halign = :left, angle = π/2)
+                    Luxor.text(
+                        "$(T_in_sep) °C",
+                        Luxor.Point(135, -69);
+                        valign,
+                        halign = :left,
+                        angle = π / 2,
+                    )
                 end
 
                 let # Fitted
                     Luxor.sethue("#9922FF")
 
-                    Luxor.text("$(ṁ_recircs) kg/h @ $(T_recircs) °C",
-                         Luxor.Point(25, -110); valign, halign = :center)
+                    Luxor.text(
+                        "$(ṁ_recircs) kg/h @ $(T_recircs) °C",
+                        Luxor.Point(25, -110);
+                        valign,
+                        halign = :center,
+                    )
                 end
 
                 let # Main result
                     Luxor.sethue("#FF0000")
                     Luxor.fontsize(16)
 
-                    Luxor.text("$(T_crush1) °C",
-                         Luxor.Point(-55, 15); valign, halign = :right)
+                    Luxor.text(
+                        "$(T_crush1) °C",
+                        Luxor.Point(-55, 15);
+                        valign,
+                        halign = :right,
+                    )
 
-                    Luxor.text("$(T_crush2) °C",
-                         Luxor.Point(105, 15); valign, halign = :left)
+                    Luxor.text(
+                        "$(T_crush2) °C",
+                        Luxor.Point(105, 15);
+                        valign,
+                        halign = :left,
+                    )
                 end
             end
 
@@ -777,14 +881,14 @@ end;
 # ╔═╡ 03017a47-11a1-4ada-9068-dfafd9f1201d
 let
     M = [
-        21.2   1.2   13.0  56.0;
-        18.8   1.1   10.0  55.0;
-        19.6   1.4   17.0  56.0;
-        18.6   1.5   10.0  55.0;
-        19.0   1.2   11.0  53.0;
-        20.0   1.4   19.0  55.0;
-        20.0   1.4   18.0  55.0;
-        20.0   1.4   17.0  54.0;
+        21.2 1.2 13.0 56.0
+        18.8 1.1 10.0 55.0
+        19.6 1.4 17.0 56.0
+        18.6 1.5 10.0 55.0
+        19.0 1.2 11.0 53.0
+        20.0 1.4 19.0 55.0
+        20.0 1.4 18.0 55.0
+        20.0 1.4 17.0 54.0
     ]
 
     h(T) = SpecificH(P_REF * u"Pa", T)
@@ -813,19 +917,19 @@ end
 begin
     @info "Reference measured data"
 
-    const ϕ             = 77.64
-    const ηseparator    = 47.65
+    const ϕ = 77.64
+    const ηseparator = 47.65
 
-    const T_env         = 7.0
-    const T_out_cool    = 75.0
-    const T_in_sep      = 73.0
-    const T_out_rec     = 39.0
+    const T_env = 7.0
+    const T_out_cool = 75.0
+    const T_in_sep = 73.0
+    const T_out_rec = 39.0
 
-    const q̇_tot_air     = 3600.0
-    const q̇_cru_air     = 1881.0
-    const q̇_sep_air     = 431.0
+    const q̇_tot_air = 3600.0
+    const q̇_cru_air = 1881.0
+    const q̇_sep_air = 431.0
 
-    const ṁ_clinker     = 820.0
+    const ṁ_clinker = 820.0
     const power_crusher = 107.0
 
     # Flow rate at cooling system outlet
@@ -852,20 +956,20 @@ refmodel, reffig = let
     q̇_par_air = (q̇_tot_air - q̇_cru_air - q̇_sep_air) * ϕ / 100
 
     model = CooledCrusherModel(;
-        ηseparator    = ηseparator,
-        T_env         = T_env * u"°C",
-        ṁ_cooler      = nm3_h_to_kg_h(Q̇cool, M_AIR) * u"kg/hr",
-        ṁ_clinker     = ṁ_clinker * u"kg/hr",
-        ṁ_cru_air     = nm3_h_to_kg_h(q̇_cru_air, M_AIR) * u"kg/hr",
-        ṁ_sep_air     = nm3_h_to_kg_h(q̇_sep_air, M_AIR) * u"kg/hr",
-        ṁ_par_air     = nm3_h_to_kg_h(q̇_par_air, M_AIR) * u"kg/hr",
-        ṁ_tot_air     = nm3_h_to_kg_h(q̇_tot_air, M_AIR) * u"kg/hr",
+        ηseparator = ηseparator,
+        T_env = T_env * u"°C",
+        ṁ_cooler = nm3_h_to_kg_h(Q̇cool, M_AIR) * u"kg/hr",
+        ṁ_clinker = ṁ_clinker * u"kg/hr",
+        ṁ_cru_air = nm3_h_to_kg_h(q̇_cru_air, M_AIR) * u"kg/hr",
+        ṁ_sep_air = nm3_h_to_kg_h(q̇_sep_air, M_AIR) * u"kg/hr",
+        ṁ_par_air = nm3_h_to_kg_h(q̇_par_air, M_AIR) * u"kg/hr",
+        ṁ_tot_air = nm3_h_to_kg_h(q̇_tot_air, M_AIR) * u"kg/hr",
         power_crusher = power_crusher * u"kW",
-        T_in_cool     = T_env * u"°C",
-        T_out_cool    = T_out_cool * u"°C",
-        T_in_sep      = T_in_sep * u"°C",
-        T_out_rec     = T_out_rec * u"°C",
-        verbose       = false
+        T_in_cool = T_env * u"°C",
+        T_out_cool = T_out_cool * u"°C",
+        T_in_sep = T_in_sep * u"°C",
+        T_out_rec = T_out_rec * u"°C",
+        verbose = false,
     )
 
     report(model; show_tree = false)
