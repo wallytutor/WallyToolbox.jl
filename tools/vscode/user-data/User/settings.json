@@ -114,7 +114,7 @@
 
     "[markdown]": {
         "editor.wordWrap": "wordWrapColumn",
-        "editor.wordWrapColumn": 100,
+        "editor.wordWrapColumn": 80,
         "editor.rulers": [79],
         "rewrap.autoWrap.enabled": false
     },
