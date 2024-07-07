@@ -3,16 +3,23 @@
 
 #plug-flow 
 
-Neste tópico abordamos modelos de reatores de uma ótica que pode ser simultâneamente útil em Engenharia Química e Engenharia Mecânica. Os modelos de reator estudados incluem em alguns casos aspectos voltados a engenharia dos aspectos térmicos e em outros elementos de cinética química. Isso inclui modelos 0-D de reatores perfeitamente agitados, modelos 1-D de reatores pistão, e outros tópicos mais avançados.
+Neste tópico abordamos modelos de reatores pistão em níveis progressivos de complexidade.. Os modelos de reator estudados incluem em alguns casos aspectos voltados aos aspectos térmicos e em outros elementos de cinética química. O objetivo final é progressivamente introduzir complexidate em termos da física considerada, mas também em termos das estratégias numéricas empregadas na sua implementação
 
-O objetivo final da série é progressivamente introduzir complexidate em termos da física considerada, mas também na organização de ferramentas para a concepção e extensão de modelos genéricos de reators para integração dos modelos com maturidade suficiente nos módulos principais.
+## Indice de tópicos
+
+### Disponíveis atualmente
 
 - Introdução: solução térmica de um reator incompressível formulado em termos da temperatura. O objetivo é de realizar a introdução ao modelo de reator pistão sem entrar em detalhes involvendo não-linearidades como a dependência da densidade em termos da temperatura ou composição. Ademais, essa forma permite uma solução analítica. Introduz o uso de ModelingToolkit e do método dos volumes finitos.
 
 - Formulação entálpica do reator pistão: casos práticos de aplicação de reatores normalmente envolvem fluidos com propriedades que dependem da temperatura, especialmente o calor específico. Em geral a sua solução  é tratada de forma mais conveniente com uma formulação em termos da entalpia. Continuamos com o mesmo caso elaborado no estudo introdutório modificando as equações para que a solução seja realizada com a entalpia como variável dependente.
 
+### Em fase de concepção
+
 - Reatores em contra corrente: o precedente para um par de reatores em contra-corrente.
 - Trocas em fluidos supercríticos: suporte à fluidos supercríticos (água, dióxido de carbono).
+
+### Planejados
+
 - O precedente generalizado para um sólido e um gás (compressível).
 - O precedente com coeficiente HTC dependente da posição.
 - O precedente com trocas térmicas com o ambiente externo.
@@ -23,7 +30,7 @@ O objetivo final da série é progressivamente introduzir complexidate em termos
 - O precedente com inclusão de cinética química no gás.
 
 ---
-# Introdução
+## Introdução
 
 Este é o primeiro notebook de uma série abordando reatores do tipo *pistão* (*plug-flow*) no qual os efeitos advectivos são preponderantes sobre o comportamento difusivo, seja de calor, massa, ou espécies. O estudo e modelagem desse tipo de reator apresentar diversos interesses para a pesquisa fundamental e na indústria. Muitos reatores tubulares de síntese laboratorial de materiais apresentam aproximadamente um comportamento como tal e processos nas mais diversas indústrias podem ser aproximados por um ou uma rede de reatores pistão e reatores agitados interconectados.
 
@@ -52,7 +59,6 @@ nothing; #hide
 ```
 
 No que se segue vamos implementar a forma mais simples de um reator pistão. Para este primeiro estudo o foco será dado apenas na solução da equação da energia. As etapas globais implementadas aqui seguem o livro de [Kee *et al.* (2017)](https://www.wiley.com/en-ie/Chemically+Reacting+Flow%3A+Theory%2C+Modeling%2C+and+Simulation%2C+2nd+Edition-p-9781119184874), seção 9.2.
-## Etapas preliminares
 
 Da forma simplificada como tratado, o problema oferece uma solução analítica análoga à [lei do resfriamento de Newton](https://pt.wikipedia.org/wiki/Lei_do_resfriamento_de_Newton), o que é útil para a verificação do problema. Antes de partir a derivação do modelo, os cálculos do número de Nusselt para avaliação do coeficiente de transferência de calor são providos no que se segue com expressões de Gnielinski e Dittus-Boelter discutidas [aqui](https://en.wikipedia.org/wiki/Nusselt_number).
 
@@ -92,12 +98,12 @@ let
     nu = NusseltGnielinski()
     
     hf = HtcPipeFlow(re, nu, pr)
-    htc(h_pf, θ, u, D, ρ, μ, cₚ; kw...)
+    htc(hf, θ, u, D, ρ, μ, cₚ; kw...)
     hf
 end
 ```
 
-## Condições compartilhadas
+### Condições compartilhadas
 
 ```julia
 # Comprimento do reator [m]
@@ -143,7 +149,7 @@ ĥ = htc(hf, Tₛ, u, D, ρ, μ, cₚ; verbose = true)
 z = LinRange(0, L, 10_000)
 nothing; #hide
 ```
-## Derivação do modelo
+### Derivação do modelo
 
 A primeira etapa no estabelecimento do modelo concerne as equações de conservação necessárias. No presente caso, com a ausência de reações químicas e trocas de matéria com o ambiente - o reator é um tubo fechado - precisamos estabelecer a conservação de massa e energia apenas. Como dito, o reator em questão conserva a massa transportada, o que é matematicamente expresso pela ausência de variação axial do fluxo de matéria, ou seja
 
@@ -181,7 +187,6 @@ $$
 \int_{V}\nabla\cdotp(\rho{}h\mathbf{V})dV
 $$
 
-
 Nos resta ainda determinar $\dot{Q}$. O tipo de interação com ambiente, numa escala macroscópica, não pode ser representado por leis físicas fundamentais. Para essa representação necessitamos de uma *lei constitutiva* que modela o fenômeno em questão. Para fluxos térmicos convectivos à partir de uma parede com
 temperatura fixa $T_{s}$ a forma análoga a uma condição limite de Robin expressa o $\dot{Q}$ como
 
@@ -196,9 +201,7 @@ $$
 \hat{h}(Pdz)(T_{w}-T)
 $$
 
-Em uma dimensão $z$ o divergente é simplemente a derivada nessa coordenada.
-Usando a relação diverencial $\delta{}V=A_{c}dz$ podemos simplificar a equação
-para a forma diferencial como se segue
+Em uma dimensão $z$ o divergente é simplemente a derivada nessa coordenada. Usando a relação diverencial $\delta{}V=A_{c}dz$ podemos simplificar a equação para a forma diferencial como se segue
 
 $$
 \frac{d(\rho{}u{}h)}{dz}=
@@ -208,29 +211,22 @@ $$
 \frac{\hat{h}P}{A_{c}}(T_{w}-T)
 $$
 
-A expressão acima já consitui um modelo para o reator pistão, mas sua forma não
-é facilmente tratável analiticamente. Empregando a propriedade multiplicativa da
-diferenciaÇão podemos expandir o lado esquedo da equação como
+A expressão acima já consitui um modelo para o reator pistão, mas sua forma não é facilmente tratável analiticamente. Empregando a propriedade multiplicativa da diferenciaÇão podemos expandir o lado esquedo da equação como
 
 $$
 \rho{}u{}\frac{dh}{dz}+h\frac{d(\rho{}u)}{dz}=
 \frac{\hat{h}P}{A_{c}}(T_{w}-T)
 $$
 
-O segundo termo acima é nulo em razão da conservação da matéria, como discutimos
-anteriormente. Da definição diferencial de entalpia $dh=c_{p}dT$ chegamos a
-formulação do modelo na temperatura como dado no título dessa seção.
+O segundo termo acima é nulo em razão da conservação da matéria, como discutimos anteriormente. Da definição diferencial de entalpia $dh=c_{p}dT$ chegamos a formulação do modelo na temperatura como dado no título dessa seção.
 
 $$
 \rho{}u{}c_{p}A_{c}\frac{dT}{dz}=
 \hat{h}P(T_{w}-T)
 $$
 
-Vamos agora empregar esse modelo para o cálculo da distribuição axial de
-temperatura ao longo do reator. No que se segue assume-se um reator tubular de
-seção circular de raio $R$ e todos os parâmetros do modelo são constantes.
+Vamos agora empregar esse modelo para o cálculo da distribuição axial de temperatura ao longo do reator. No que se segue assume-se um reator tubular de seção circular de raio $R$ e todos os parâmetros do modelo são constantes.
 
-## Métodos de solução
 
 ### Solução analítica da EDO
 
@@ -299,8 +295,6 @@ No caso de uma equação diferencial ordinária (EDO) como no presente caso, a a
 
 ```julia
 pfr = let
-    @info "Criação do modelo diferencial"
-
     @variables z
     D = Differential(z)
 
@@ -607,8 +601,6 @@ with_theme() do
 end
 ```
 
-## Conclusões
-
 Com isso encerramos essa primeira introdução a modelagem de reatores do tipo pistão. Estamos ainda longe de um modelo generalizado para estudo de casos de produção, mas os principais blocos de construção foram apresentados. Os pontos principais a reter deste estudo são:
 
 - A equação de conservação de massa é o ponto chave para a expansão e   simplificação das demais equações de conservação. Note que isso é uma consequência de qua a massa corresponde à aplicação do [Teorema de Transporte de Reynolds](https://pt.wikipedia.org/wiki/Teorema_de_transporte_de_Reynolds) sobre a *unidade 1*.
@@ -618,28 +610,16 @@ Com isso encerramos essa primeira introdução a modelagem de reatores do tipo p
 - Uma implementação em volumes finitos será desejável quando um acoplamento com   outros modelos seja envisajada. Neste caso a gestão da solução com uma EDO a parâmetros variáveis pode se tornar computacionalmente proibitiva, seja em   complexidade de código ou tempo de cálculo.
 
 ---
-# Formulação na entalpia
+## Formulação na entalpia
 
 #plug-flow
 
 Neste notebook damos continuidade ao precedente através da extensão do modelo para a resolução da conservação de energia empregando a entalpia do fluido como variável independente. O caso tratado será o mesmo estudado anteriormente para que possamos ter uma base de comparação da solução. Realizada a primeira introdução, os notebooks da série se tornam mais concisos e focados cada vez mais em código ao invés de derivações, exceto quando implementando novas físicas.
 
 
-Dado seu uso restrito, não adicionamos `analyticalthermalpfr` ao módulo acima.
+### Condições compartilhadas
 
-```julia
-"Solução analítica do modelo de reator pistão."
-function analyticalthermalpfr(; P, A, Tₛ, Tₚ, ĥ, u, ρ, cₚ, z)
-    return @. Tₛ - (Tₛ - Tₚ) * exp(-z * (ĥ * P) / (ρ * u * cₚ * A))
-end
-nothing; #hide
-```
-## Condições compartilhadas
-
-Na próxima célula provemos as mesmas condições do problema tradado no notebook precedente. Uma discretização espacial mais grosseira é utilizada aqui e a
-função entalpia compatível com o calor específico do fluido é provida.
-
-Para que os resultados sejam comparáveis as soluções precedentes, definimos 
+Salvo pela discretização espacial mais grosseira e a função entalpia compatível com o calor específico do fluido provida, continuaremos com os parâmetros empregados no estudo precedente. Para que os resultados sejam comparáveis, definimos 
 
 $$
 h(T)=c_{p}T+ h_{ref}
@@ -648,55 +628,15 @@ $$
 O valor de $h_{ref}$ é arbitrário e não afeta a solução.
 
 ```julia
-# Comprimento do reator [m]
-L = 10.0
-
-# Diâmetro do reator [m]
-D = 0.01
-
-# Mass específica do fluido [kg/m³]
-ρ = 1000.0
-
-# Viscosidade do fluido [Pa.s]
-μ = 0.001
-
-# Calor específico do fluido [J/(kg.K)]
-cₚ = 4182.0
-
-# Número de Prandtl do fluido
-Pr = 6.9
-
-# Velocidade do fluido [m/s]
-u = 1.0
-
-# Temperatura de entrada do fluido [K]
-Tₚ = 300.0
-
-# Temperatura da parede do reator [K]
-Tₛ = 400.0
-
-# Perímetro da seção circular do reator [m]
-P = π * D
-
-# Área da seção circula do reator [m²]
-A = π * (D / 2)^2
-
-# Cria objeto para avaliação do coeficiente de troca convectiva.
-hf = HtcPipeFlow(ReynoldsPipeFlow(), NusseltGnielinski(), ConstantPrandtl(Pr))
-
-# Coeficiente convectivo de troca de calor [W/(m².K)]
-ĥ = htc(hf, Tₛ, u, D, ρ, μ, cₚ; verbose = true)
-
 # Coordenadas espaciais da solução [m]
 z = LinRange(0, L, 500)
 
 # Entalpia com constante arbitrária [J/kg]
 h(T) = cₚ * T + 1000.0
-
 nothing; #hide
 ```
 
-## Modelo na entalpia
+### Modelo na entalpia
 
 Em diversos casos a forma expressa na temperatura não é conveniente. Esse geralmente é o caso quando se inclui transformações de fase no sistema. Nessas situações a solução não suporta integração direta e devemos recorrer a um método iterativo baseado na entalpia. Isso se dá pela adição de uma etapa suplementar da solução de equações não lineares para se encontrar a temperatura à qual a entalpia corresponde para se poder avaliar as trocas térmicas.
 
@@ -711,7 +651,6 @@ $$
 $$
 \int_{h_P}^{h_N}dh=a^{\prime}\int_{0}^{\delta}(T_{s}-T^{\star})dz
 $$
-
 
 Seguindo um procedimento de integração similar ao aplicado na formulação usando a temperatura chegamos a equação do gradiente fazendo $a=a^{\prime}\delta$
 
@@ -769,7 +708,7 @@ $$
 f_{i,j} = 2aT_{s} - a(T_{i}+T_{j})
 $$
 
-## Solução em volumes finitos
+### Solução em volumes finitos
 
 Como as temperaturas usadas no lado direito da equação não são conhecidas inicialmente, o problema tem um carater iterativo intrínsico. Initializamos o lado direito da equação para em seguida resolver o problema na entalpia, que
 deve ser invertida (equações não lineares) para se atualizar as temperaturas. Isso se repete até que a solução entre duas iterações consecutivas atinja um *critério de convergência*.
@@ -802,20 +741,14 @@ A solução integrando esses passos foi implementada em `solventhalpypfr`. Para 
 function fvmlhs(N)
     return 2spdiagm(-1 => -ones(N - 1), 0 => ones(N))
 end
-nothing; #hide
-```
 
-```julia
 "Calcula parte constante do vetor do lado direito da equação."
 function fvmrhs(N; bₐ, b₁)
     b = bₐ * ones(N)
     b[1] += b₁
     return b
 end
-nothing; #hide
-```
 
-```julia
 "Relaxa solução em termos da entalpia."
 function relaxenthalpy(h̄, hₘ, Tₘ, α)
     Δ = (1 - α) * (h̄ - hₘ[2:end])
@@ -828,10 +761,7 @@ function relaxenthalpy(h̄, hₘ, Tₘ, α)
 
     return Tₘ, Δ, m
 end
-nothing; #hide
-```
 
-```julia
 "Relaxa solução em termos da temperatura."
 function relaxtemperature(h̄, hₘ, Tₘ, α)
     # Solução das temperaturas compatíveis com h̄.
@@ -844,10 +774,7 @@ function relaxtemperature(h̄, hₘ, Tₘ, α)
 
     return Tₘ, Δ, m
 end
-nothing; #hide
-```
 
-```julia
 "Realiza uma iteração usando a relaxação especificada."
 function steprelax(h̄, hₘ, Tₘ, α, how)
     return (how == :h) ? relaxenthalpy(h̄, hₘ, Tₘ, α) : relaxtemperature(h̄, hₘ, Tₘ, α)
@@ -885,21 +812,26 @@ function solvefvmpfr(; P, A, Tₛ, Tₚ, ĥ, u, ρ, h, z, kw...)
 
     verbose && @info "Usando relaxação do tipo $(relax)"
 
-    @time for niter = 1:M
-        # Calcula o vetor `b` do lado direito e resolve o sistema.
-        h̄ = K \ (b - a * (Tₘ[1:end-1] + Tₘ[2:end]))
-
-        # Relaxa solução para gerir não linearidades.
-        Tₘ, Δ, m = steprelax(h̄, hₘ, Tₘ, α, relax)
-
-        # Verifica status da convergência.
-        residual[niter] = maximum(abs.(Δ / m))
-
-        if (residual[niter] <= ε)
-            verbose && @info("Convergiu após $(niter) iterações")
-            break
+    loop() =  begin
+        for niter = 1:M
+            # Calcula o vetor `b` do lado direito e resolve o sistema.
+            h̄ = K \ (b - a * (Tₘ[1:end-1] + Tₘ[2:end]))
+    
+            # Relaxa solução para gerir não linearidades.
+            Tₘ, Δ, m = steprelax(h̄, hₘ, Tₘ, α, relax)
+    
+            # Verifica status da convergência.
+            residual[niter] = maximum(abs.(Δ / m))
+    
+            if (residual[niter] <= ε)
+                verbose && @info("Convergiu após $(niter) iterações")
+                break
+            end
         end
     end
+
+    
+    get(kw, :timeit, false) ? (@time loop()) : loop()
 
     return Tₘ, residual
 end
@@ -912,26 +844,26 @@ Introduzimos também a possibilidade de se utilizar a relaxação diretamente na
 comportamento de convergência. Neste caso específico (e usando a métrica de convergência em questão) a relaxação em entalpia não apresenta vantagens, mas veremos em outras ocasiões que esta é a maneira mais simples de se fazer convergir uma simulação.
 
 ```julia
-α = 0.4
-ε = 1.0e-12
-
-# Uma chamada para pre-compilação...
-verbose = false
-solvefvmpfr(; P, A, Tₛ, Tₚ, ĥ, u, ρ, h, z, α, ε, relax = :T, verbose)
-solvefvmpfr(; P, A, Tₛ, Tₚ, ĥ, u, ρ, h, z, α, ε, relax = :h, verbose)
-
-Tₕ, εₕ = solvefvmpfr(; P, A, Tₛ, Tₚ, ĥ, u, ρ, h, z, α, ε, relax = :h)
-Tₜ, εₜ = solvefvmpfr(; P, A, Tₛ, Tₚ, ĥ, u, ρ, h, z, α, ε, relax = :T)
-Tₐ = analyticalthermalpfr(; P, A, Tₛ, Tₚ, ĥ, u, ρ, cₚ, z)
-
-Tend = @sprintf("%.2f", Tₐ[end])
-yrng = (300, 400)
-
-nothing; #hide
-```
-
-```julia
 with_theme() do
+    α = 0.4
+    ε = 1.0e-12
+
+    # Referência
+    Tₐ = analyticalthermalpfr(; P, A, Tₛ, Tₚ, ĥ, u, ρ, cₚ, z)
+
+    # Uma chamada para pre-compilação...
+    verbose = false
+    solvefvmpfr(; P, A, Tₛ, Tₚ, ĥ, u, ρ, h, z, α, ε, relax = :T, verbose)
+    solvefvmpfr(; P, A, Tₛ, Tₚ, ĥ, u, ρ, h, z, α, ε, relax = :h, verbose)
+    
+    # Chamadas para avaliação de performance...
+    timeit = true
+    Tₕ, εₕ = solvefvmpfr(; P, A, Tₛ, Tₚ, ĥ, u, ρ, h, z, α, ε, relax = :h, timeit)
+    Tₜ, εₜ = solvefvmpfr(; P, A, Tₛ, Tₚ, ĥ, u, ρ, h, z, α, ε, relax = :T, timeit)
+    
+    Tend = @sprintf("%.2f", Tₐ[end])
+    yrng = (300, 400)
+    
     fig = Figure(size = (720, 600))
 
     ax = Axis(fig[1, 1])
@@ -962,7 +894,7 @@ end
 ```
 
 ---
-# Reatores em contra corrente
+## Reatores em contra corrente
 
 As ideias gerais para a simulação de um reator formulado na entalpia tendo sido introduzidas na *Parte 2*, vamos agora aplicar o mesmo algoritmo de solução para um problema menos trivial: integração de reatores em contra-corrente com trocas térmicas. Esse é o caso, por exemplo, em uma serpentina dupla em contato mecânico. Esse sistema pode ser aproximado por um par de reatores pistão em contra-corrente se tomada propriamente em conta a resistência térmica dos dutos.
 
@@ -976,7 +908,7 @@ Neste notebook trataremos dois casos:
 1. Um fluido condensado e um gás com propriedades dependentes da temperatura.
 
 
-## Concepção do programa
+### Concepção do programa
 
 Não há nada de diferente em termos do modelo de cada reator em relação ao tópico anterior abordando um reator pistão em termos da entalpia. O objetivo principal do programa a conceber neste notebook é usar os conhecimentos adquiridos na etapa anterior para implementar uma solução para um par de reatores que trocam energia entre si. Para simplificar a implementação vamos considerar que as paredes externas dos reatores são adiabáticas e que estes trocam calor somente entre eles mesmos. Algumas ideias chave são necessárias para uma implementação efetiva:
 
@@ -987,9 +919,6 @@ Não há nada de diferente em termos do modelo de cada reator em relação ao t�
 1. Embora uma solução acoplada seja possível, normalmente isso torna o programa mais complexo para se extender a um número arbitrário de reatores e pode conduzir a matrizes com [condição](https://en.wikipedia.org/wiki/Condition_number) pobre. Uma ideia para resolver o problema é realizar uma iteração em cada reator com o outro mantido constante (como no problema precedente) mas desta vez considerando que a *condição limite* da troca térmica possui uma dependência espacial.
 
 Os blocos que se seguem implementam as estruturas necessárias com elementos reutilizáveis de maneira que ambos os reatores possam ser conectados facilmente.
-
-
-### Modelo de reator pistão
 
 Como desejamos simular simultâneamente dois reatores, é interessante encapsular a construção dos elementos descrevendo um reator em uma estrutura. Desta forma evitamos código duplicado.
 
@@ -1094,7 +1023,7 @@ struct ConstDensityEnthalpyPFRModel <: AbstractPlugFlowReactor
 end
 ````
 
-### Acoplando reatores
+As próximas células implementam um mapa entre as condições *vistas* por ambos os reatores.
 
 ```julia
 "Representa um par de reatores em contrafluxo."
@@ -1102,14 +1031,14 @@ struct CounterFlowPFRModel
     this::AbstractPlugFlowReactor
     that::AbstractPlugFlowReactor
 end
-```
 
-```julia
 "Acesso ao perfil de temperatura do primeiro reator em um par."
 thistemperature(cf::CounterFlowPFRModel) = cf.this.x
 
 "Acesso ao perfil de temperatura do segundo reator em um par."
 thattemperature(cf::CounterFlowPFRModel) = cf.that.x |> reverse
+
+nothing; #hide
 ```
 
 No que se segue não se fará hipótese de que ambos os escoamentos se dão com o mesmo fluido ou que no caso de mesmo fluido as velocidades são comparáveis. Neste caso mais geral, o número de Nusselt de cada lado da interface difere e portanto o coeficiente de troca térmica convectiva. É portanto necessário estabelecer-se uma condição de fluxo constante na interface das malhas para assegurar a conservação global da energia no sistema... **TODO (escrever, já programado)**
@@ -1169,11 +1098,10 @@ function relaxtemperature!(Tm, hm, h̄, α, f)
 
     return ε
 end
+nothing; #hide
 ```
 
-### Gestão de resíduos
-
-### Laços de solução
+Finalmente provemos a lógica dos laços interno e externo para a solução do problema não linear.
 
 ```julia
 "Laço interno da solução de reatores em contra-corrente."
@@ -1219,6 +1147,7 @@ function innerloop(
     @warn "Não convergiu após $(inneriter) passos $(εm)"
     return inneriter
 end
+nothing; #hide
 ```
 
 ```julia
@@ -1257,9 +1186,8 @@ function outerloop(
     @info("Conservação da entalpia = $(hres)")
     # return ResidualsProcessed(resa), ResidualsProcessed(resb)
 end
+nothing; #hide
 ```
-
-### Pós-processamento
 
 ```julia
 "Ilustração padronizada para a simulação exemplo."
@@ -1284,9 +1212,10 @@ function plotpfrpair(cf::CounterFlowPFRModel; ylims, loc, func = lines!)
 
     return fig
 end
+nothing; #hide
 ```
 
-## Estudo de caso I
+### Estudo de caso I
 
 O par escolhido para exemplificar o comportamento de contra-corrente dos reatores
 pistão tem por característica de que cada reator ocupa a metade de um cilindro de diâmetro $D$ m de forma que o perímetro de troca é igual o diâmetro e a área transversal a metade daquela do cilindro.
@@ -1367,7 +1296,7 @@ let
 end
 ```
 
-## Estudo de caso II (draft)
+### Estudo de caso II (draft)
 
 ```julia
 #     # Condições operatórias do gás.
@@ -1545,55 +1474,45 @@ end
 # end
 ```
 
-# Trocas em fluidos supercríticos
+## Trocas em fluidos supercríticos
 
 
-## O estado supercrítico
+### O estado supercrítico
 
-A condição supercrítica não implica uma transição de fase de primeira ordem propriamente dita. Usando o pacote `SteamTables` implementa propriedades da água em acordo com a *IAPWS Industrial Formulation (1997)* recuperamos a seguinte curva de massa específica.
+A condição supercrítica não implica uma transição de fase de primeira ordem propriamente dita. Usando o pacote `SteamTables` implementa propriedades da água em acordo com a *IAPWS Industrial Formulation (1997)* recuperamos a seguinte curva de massa específica. De maneira análoga verificamos a transição progressiva na entalpia. Como buscamos desenvolver um modelo de reator formulado em termos da entalpia, provemos uma função de interpolação para uma pressão dada abaixo. No caso mais geral (com perda de carga) a entalpia deverá ser avaliada para cada célula no domínio do reator.
 
 ```julia
 with_theme() do
     P = 0.1 * 270.0
-    T = collect(400.0:5:1000.0)
-    ρ = map((t)->1.0 / SpecificV(P, t), T)
-
-
-	fig = Figure(size = (720, 500))
-	ax = Axis(fig[1, 1])
-	lines!(ax, T, ρ; color = :black)
-	ax.xlabel = "Temperatura [K]"
-	ax.ylabel = "Mass específica [kg/m³]"
-	ax.xticks = 300:100:1200
-	ax.yticks = 000:200:1000
-	xlims!(ax, (400, 1000))
-	ylims!(ax, (000, 1000))
-    fig
-end
-```
-
-De maneira análoga verificamos a transição progressiva na entalpia. Como buscamos desenvolver um modelo de reator formulado em termos da entalpia, provemos uma função de interpolação para uma pressão dada abaixo. No caso mais geral (com perda de carga) a entalpia deverá ser avaliada para cada célula no domínio do reator.
-
-```julia
-with_theme() do
-    P = 27.0
+    T = collect(300.0:5:1200.0)
     
-    T = collect(300.0:5.0:1200.0)
+    ρ = map((t)->1.0 / SpecificV(P, t), T)
     h = map((t)->SpecificH(P, t), T)
     
-    T_interp = collect(300.0:10.0:1200.0)
+    T_interp = collect(400.0:25.0:1200.0)
     h_interp = linear_interpolation(T, h)
     
-    fig = Figure(size = (720, 500))
-    ax = Axis(fig[1, 1])
-    scatter!(ax, T_interp, h_interp(T_interp); color = :red, alpha = 0.7)
-    lines!(ax, T, h; color = :black)
-    ax.xlabel = "Temperatura [K]"
-    ax.ylabel = "Entalpia específica [kJ/kg]"
-    ax.xticks = 400:100:1000
-    ax.yticks = 000:500:4000
-    xlims!(ax, (400, 1000))
-    ylims!(ax, (500, 4000))
+	fig = Figure(size = (720, 600))
+    
+	ax1 = Axis(fig[1, 1])
+	lines!(ax1, T, ρ; color = :black)
+	ax1.xlabel = "Temperatura [K]"
+	ax1.ylabel = "Mass específica [kg/m³]"
+	ax1.xticks = 300:100:1200
+	ax1.yticks = 000:200:1000
+	xlims!(ax1, (400, 1000))
+	ylims!(ax1, (000, 1000))
+
+    ax2 = Axis(fig[2, 1])
+    scatter!(ax2, T_interp, h_interp(T_interp); color = :red, alpha = 0.7)
+    lines!(ax2, T, h; color = :black)
+    ax2.xlabel = "Temperatura [K]"
+    ax2.ylabel = "Entalpia específica [kJ/kg]"
+    ax2.xticks = 400:100:1000
+    ax2.yticks = 000:500:4000
+    xlims!(ax2, (400, 1000))
+    ylims!(ax2, (500, 4000))
+    
     fig
 end
 ```
