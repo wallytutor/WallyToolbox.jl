@@ -31,8 +31,14 @@ function get_kernel_file()
 end
 
 function get_kernel_spec()
+    # XXX: current_project does not seem to be the reliable choice here,
+    # it is based on the first Project.toml found in path. Check it!
+    # if isnothing(Base.current_project())
+    #     throw(ErrorException("Must be called from an active project"))
+    # end
+
     julia_path    = joinpath(Sys.BINDIR, "julia")
-    project_path  = dirname(Base.current_project())
+    project_path  = dirname(Base.active_project())
     ijulia_kernel = joinpath(dirname(pathof(IJulia)), "kernel.jl")
     
     kernel_spec = Dict(
@@ -69,6 +75,11 @@ end
 function launch_notebook()
     dump_kernel_spec()
     notebook(dir=pwd(), detached=true)
+end
+
+function launch_jupyterlab()
+    dump_kernel_spec()
+    jupyterlab(dir=pwd(), detached=true)
 end
 
 end # (WallyNotebook)
