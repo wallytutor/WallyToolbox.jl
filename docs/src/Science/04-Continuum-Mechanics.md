@@ -89,7 +89,10 @@ $$
 \vec{n}\left(\vec{F}_{2}-\vec{F}_{1}\right)=B_{s}
 $$
 
-This expression has a very straightforward interpretation. If there is no creation rate $B_{s}$ at the interface, flux is continuous across interface; otherwise some arbitrary form of discontinuity should arise, whose form would depend on the volume governing equations at each side of $S$.
+This expression has a very straightforward interpretation. If there is no creation rate $B_{s}$ at the interface, flux is continuous across interface; otherwise some arbitrary form of discontinuity should arise, whose form would depend on the volume governing equations at each side of $S$. Below we have an illustration of a non-zero value of $B_{s}$ at the interface, with a net increase in the flow in region 2.
+
+![[images_TY_010105.svg]]
+
 
 > [!todo] The following is something I need to abstract better, although I fully understand the mathematical origins. The argument that it is formulated in the interface reference frame but viewed from the observer frame bothers me.
 	
@@ -106,6 +109,10 @@ v_{s} = \frac{\vec{n}\left(\vec{F}_{2}-\vec{F}_{1}\right)-B_{s}}{b_{2}-b_{1}}
 $$
 
 > [!todo] In the growing and shrinking bubble example, Pr. Bazant comes up with a variant of this expression where the fluxes are given by $\rho{}v$, but I cannot realize how can the velocity $v_{1}\neq{}v_{2}\neq{}v_{s}$ in this case.
+
+For instance, consider the case that $\vec{F}_{2}-\vec{F}_{1}=0$ and $B_{s}<0$, then the interface is consuming $b$; because the quantity cannot be supplied through fluxes, then the interface $S$ moves towards the side richer in $b$.
+
+> [!todo] Complete this paragraph with water solidification example.
 
 ---
 ## Mass and energy transfer
