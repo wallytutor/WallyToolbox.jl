@@ -122,5 +122,4 @@
     "editor.minimap.enabled": false,
     "workbench.tree.indent": 12,
     "terminal.integrated.enableMultiLinePasteWarning": false,
-    "editor.wordWrap": "wordWrapColumn",
 }
