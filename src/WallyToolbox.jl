@@ -18,11 +18,11 @@ function __init__()
 end
 
 # Direct includes.
-# include("jl/main/abstract.jl")
-# include("jl/main/utilities.jl")
+# include(joinpath(WALLYTOOLBOXPATH, "jl/main/abstract.jl"))
+# include(joinpath(WALLYTOOLBOXPATH, "jl/main/utilities.jl"))
 
 # Sub-modules.
-include("jl/main/documents.jl")
-include("jl/main/notebook.jl")
+include(joinpath(WALLYTOOLBOXPATH, "jl/main/documents.jl"))
+include(joinpath(WALLYTOOLBOXPATH, "jl/main/notebook.jl"))
 
 end # (module WallyToolbox)
