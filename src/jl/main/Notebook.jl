@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
-module WallyNotebook
-using Pkg
+module Notebook
+
 using IJulia
 using JSON
+using Pkg
 
-export launch_notebook
+export launch_notebook, launch_jupyterlab
 
 function ensure_jupyter_data()
     jupyter_dir = get(ENV, "JUPYTER_DATA_DIR", nothing)
@@ -82,4 +83,4 @@ function launch_jupyterlab()
     jupyterlab(dir=pwd(), detached=true)
 end
 
-end # (WallyNotebook)
+end # (Notebook)

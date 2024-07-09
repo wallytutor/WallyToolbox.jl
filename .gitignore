@@ -19,6 +19,11 @@ sandbox*
 # Local trash for external drives
 .trash/
 
+# RADCAL things
+RADCAL.IN
+RADCAL.OUT
+TRANS_CASE.TEC
+
 #############################################################################
 # JULIA
 #############################################################################

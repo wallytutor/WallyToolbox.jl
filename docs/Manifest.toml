@@ -2,7 +2,7 @@
 
 julia_version = "1.10.4"
 manifest_format = "2.0"
-project_hash = "779a85225e6981365b1305e5a4177bdae49996b0"
+project_hash = "f337d65d149a66d464d2910d5fcb374428358e4d"
 
 [[deps.ADTypes]]
 git-tree-sha1 = "daf26bbdec60d9ca1c0003b70f389d821ddb4224"
@@ -3491,7 +3491,7 @@ uuid = "a44049a8-05dd-5a78-86c9-5fde0876e88c"
 version = "1.3.243+0"
 
 [[deps.WallyToolbox]]
-deps = ["BenchmarkTools", "CSV", "CUDA", "CairoMakie", "CommonSolve", "Conda", "CurveFit", "DataFrames", "DelaunayTriangulation", "DelimitedFiles", "DifferentialEquations", "Distributions", "DocStringExtensions", "Documenter", "DocumenterCitations", "ExtendableGrids", "FiniteDifferences", "FiniteVolumeMethod", "Flux", "GLMakie", "HDF5", "IJulia", "Interpolations", "Ipopt", "JLD2", "JSON", "JuMP", "JuliaFormatter", "KissSmoothing", "LaTeXStrings", "Latexify", "Libdl", "LightXML", "LinearAlgebra", "Logging", "Luxor", "ModelingToolkit", "Mustache", "NaturalSort", "NumericalIntegration", "PackageCompiler", "Plots", "Pluto", "PlutoStaticHTML", "PlutoUI", "Polynomials", "PrettyPrinting", "Printf", "ProgressMeter", "Psychro", "PythonCall", "Random", "Reexport", "Revise", "Roots", "Statistics", "StatsBase", "SteamTables", "SumTypes", "Symbolics", "Trapz", "Unitful", "Weave", "YAML", "cuDNN"]
+deps = ["BenchmarkTools", "CSV", "CUDA", "CairoMakie", "CommonSolve", "Conda", "CurveFit", "DataFrames", "DelaunayTriangulation", "DelimitedFiles", "DifferentialEquations", "Distributions", "DocStringExtensions", "Documenter", "DocumenterCitations", "ExtendableGrids", "FiniteDifferences", "FiniteVolumeMethod", "Flux", "GLMakie", "HDF5", "IJulia", "Interpolations", "Ipopt", "JLD2", "JSON", "JuMP", "JuliaFormatter", "KissSmoothing", "LaTeXStrings", "Latexify", "Libdl", "LightXML", "LinearAlgebra", "Logging", "Luxor", "ModelingToolkit", "Mustache", "NaturalSort", "NumericalIntegration", "PackageCompiler", "Pkg", "Plots", "Pluto", "PlutoStaticHTML", "PlutoUI", "Polynomials", "PrettyPrinting", "Printf", "ProgressMeter", "Psychro", "PythonCall", "Random", "Reexport", "Revise", "Roots", "Statistics", "StatsBase", "SteamTables", "SumTypes", "Symbolics", "Trapz", "Unitful", "Weave", "YAML", "cuDNN"]
 path = ".."
 uuid = "969721ee-ac18-4660-9a9a-9ed720f93b3b"
 version = "0.1.0"

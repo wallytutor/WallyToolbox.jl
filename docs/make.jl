@@ -17,7 +17,7 @@ using DocumenterCitations
 using WallyToolbox
 
 # This is not documented, but the helpers here.
-using WallyDocuments
+using WallyToolbox.Documents
 
 # These contain the actual implementation of "package".
 using Cantera
