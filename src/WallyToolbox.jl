@@ -22,7 +22,7 @@ end
 # include(joinpath(WALLYTOOLBOXPATH, "jl/main/utilities.jl"))
 
 # Sub-modules.
-include(joinpath(WALLYTOOLBOXPATH, "jl/main/documents.jl"))
-include(joinpath(WALLYTOOLBOXPATH, "jl/main/notebook.jl"))
+include(joinpath(WALLYTOOLBOXPATH, "jl/main/Documents.jl"))
+include(joinpath(WALLYTOOLBOXPATH, "jl/main/Notebook.jl"))
 
 end # (module WallyToolbox)
