@@ -640,13 +640,13 @@ nothing; #hide
 
 Em diversos casos a forma expressa na temperatura não é conveniente. Esse geralmente é o caso quando se inclui transformações de fase no sistema. Nessas situações a solução não suporta integração direta e devemos recorrer a um método iterativo baseado na entalpia. Isso se dá pela adição de uma etapa suplementar da solução de equações não lineares para se encontrar a temperatura à qual a entalpia corresponde para se poder avaliar as trocas térmicas.
 
-Para se efetuar a integração partimos do modelo derivado anteriormente numa etapa antes da simplificação final para solução na temperatura e agrupamos os parâmetros livres em $$a$$
+Para se efetuar a integração partimos do modelo derivado anteriormente numa etapa antes da simplificação final para solução na temperatura e agrupamos os parâmetros livres em $a$
 
 $$
 \frac{dh}{dz}=\frac{\hat{h}P}{\rho{}u{}A_{c}}(T_{s}-T^{\star})=a(T_{s}-T^{\star})
 $$
 
-É interessante observar que toda a discussão precedente acerca de porque não integrar sobre $$T^{\star}$$ perde seu sentido aqui: a temperatura é claramente um parâmetro.
+É interessante observar que toda a discussão precedente acerca de porque não integrar sobre $T^{\star}$ perde seu sentido aqui: a temperatura é claramente um parâmetro.
 
 $$
 \int_{h_P}^{h_N}dh=a^{\prime}\int_{0}^{\delta}(T_{s}-T^{\star})dz
@@ -654,7 +654,7 @@ $$
 
 Seguindo um procedimento de integração similar ao aplicado na formulação usando a temperatura chegamos a equação do gradiente fazendo $a=a^{\prime}\delta$
 
-$$$
+$$
 h_{E}-h_{P}=aT_{s}-aT^{\star}
 $$
 
