@@ -1,11 +1,13 @@
-
+# Heat transfer with FVM
 ```julia
-# -*- coding: utf-8 -*-
 using CairoMakie
 using DelaunayTriangulation
 using DifferentialEquations
 using FiniteVolumeMethod
+nothing; #hide
+```
 
+```julia
 # Values at boundaries:
 Txl = 813.15
 Txr = 298.15
@@ -18,6 +20,12 @@ Ly = (0.0, 0.05)
 nx = 150
 ny = 10
 
+# Integration time:
+final_time = 20.0
+nothing; #hide
+```
+
+```julia
 # Position dependent initial condition:
 f_ic = (x, y) -> 298.15
 
@@ -25,10 +33,10 @@ f_ic = (x, y) -> 298.15
 diffusion_function = (x, y, t, u, p) -> begin
     (x < 0.05) ? 1.0 : 10.0
 end
+nothing; #hide
+```
 
-# Integration time:
-final_time = 20.0
-
+```julia
 # XXX: documentation of single_boundary is wrong!
 tri = triangulate_rectangle(Lx..., Ly..., nx, ny, single_boundary = false)
 
@@ -36,11 +44,13 @@ tri = triangulate_rectangle(Lx..., Ly..., nx, ny, single_boundary = false)
 mesh = FVMGeometry(tri)
 
 # Display grid
-let
+with_theme() do
     fig, ax, sc = triplot(tri)
     fig
 end
+```
 
+```julia
 # Set boundary conditions: bottom, right, top, left
 BCs = let
     functions = (
@@ -60,17 +70,21 @@ BCs = let
     BoundaryConditions(mesh, functions, conditions)
 end
 
-initial_condition = [f_ic(x, y) for (x, y) in each_point(tri)]
+initial_condition = [f_ic(x, y) for (x, y) in DelaunayTriangulation.each_point(tri)]
+nothing; #hide
+```
 
+```julia
 prob = FVMProblem(mesh, BCs;
                   diffusion_function,
                   initial_condition,
                   final_time)
 
-
 sol = solve(prob, saveat=1.0)
+```
 
-let
+```julia
+with_theme() do
     levels = 250:50.0:850
     limits = extrema(levels)
     colormap = :turbo

@@ -1,31 +1,39 @@
-
+# A simple random walker
 ```julia
-# -*- coding: utf-8 -*-
-using GLMakie
+using CairoMakie
 using ProgressMeter
 using Random
+nothing; #hide
+```
 
+```julia
+# Create a random number generator with a given seed.
+rng = MersenneTwister(42)
+nothing; #hide
+```
+
+```julia
 # Probility of moving a distance y.
 p(z, K) = exp(-z / K)
 
-# Create a random number generator with a given seed.
-rng = MersenneTwister(42)
-
 # Size of square domain (matrix) for random walks.
-n = 100
+n = 1000
 
 # Number of random walk steps to perform.
-N = 1_000
+N = 100_000
 
 # Maximum step size.
-K = 2
+K = 3
 
 # Maximum number of tries for performing a step.
-max_tries = 100
+max_tries = 10
 
 # Maximum fraction of fails at performing a step.
 max_fails = 0.01
+nothing; #hide
+```
 
+```julia
 # Allocate matrix for tracking presence history.
 A = zeros(Int64, (n, n))
 
@@ -40,12 +48,13 @@ A[xn+1, yn+1] += 1
 
 # Tracker for number of misses.
 frozen = 0
+nothing; #hide
+```
 
+```julia
 # Initialize figure.
 # fig, ax, hm = heatmap(A / N; colormap = :thermal)#, colorrange = (0.0, N/n))
 # scatter!(ax, x0, y0; color = :black)
-
-saveas = joinpath(@__DIR__, "random-walk.mp4")
 
 @showprogress for tn ∈ 1:N
 # record(fig, saveas, 1:N) do tn
@@ -87,15 +96,19 @@ end
 if frozen > max_fails * N
     @error("Missed too many steps: $(frozen) of $(N)")
 end
+```
 
+```julia
 fig = with_theme() do
     f = Figure()
     ax = Axis(f[1, 1])
     
     heatmap!(ax, A / N; colormap = :thermal)
-    scatter!(ax, x0, y0; color = :black)
+    scatter!(ax, x0, y0; color = :red)
     f
 end
+```
 
-save("random-walk.png", fig)
+```julia
+
 ```
