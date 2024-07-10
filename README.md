@@ -9,6 +9,8 @@ General tools I use everyday for everything.
 julia --project=.
 ```
 
+To be able to use module `WallyToolbox.Notebook`, an user-defined value of environment variable `JUPYTER_DATA_DIR` must be provided to avoid conflict with system files. It must be noticed that this utility module is undocumented. For the other modules, please consult the [documentation](https://wallytutor.github.io/WallyToolbox.jl/dev/).
+
 ## Using Python modules
 
 ```bash
