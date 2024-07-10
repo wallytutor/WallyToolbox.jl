@@ -14,7 +14,7 @@ abstract type AbstractReynoldsPipeFlow <: AbstractReynoldsNumber end
 abstract type AbstractNusseltPipeFlow <: AbstractNusseltNumber end
 abstract type AbstractHtcPipeFlow <: AbstractHeatTransferCoefficient end
 
-include("jl/dimensionless.jl")
-include("jl/heat-transfer-coefficient.jl")
+include("jl/transport/dimensionless.jl")
+include("jl/transport/heat-transfer-coefficient.jl")
 
 end # (DryTransport)
