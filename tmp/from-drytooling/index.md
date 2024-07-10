@@ -1,26 +1,105 @@
-# DryTooling.jl
+# DryToolingSimulation
 
-Documentation for [DryTooling](https://github.com/DryTooling/DryTooling.jl).
+```@meta
+CurrentModule = DryToolingSimulation
+DocTestSetup  = quote
+    using DryToolingSimulation
+end
+```
 
-## Why?
+!!! danger
+    
+    This module is *fragile* and breaking changes are still expected. It is not until all the main solvers are migrated that it will become stable. This is necessary for ensuring compatibility with all models.
 
-I am often faced with using the same approach for different engineering and scientific problems, but I don't like repeating the same task again and again. This is where `DryTooling.jl` comes in. By adopting some principles of [DRY](https://en.wikipedia.org/wiki/Don%27t_repeat_yourself) in Julia, to a larger extent than its definition, it packages together models and workflows that are not available or validated elsewhere - and in some cases adapts existing models. The tools will progressively cover a broad range of numerical applications and data treatment, this package is in its early days from the migration of my old Python scripts and packages.
+## Iterative solver
 
-Also [dry tooling](https://fr.wikipedia.org/wiki/Dry-tooling) is my favorite sport!
+The core of the iterative time-stepping solver is `step!`. This function that is described below works according to the following solution logic:
 
-## Usage
+1. The `fouter!` update function is called once. This is generall where one implements the right-hand side update of the problem before stepping.
 
-The base case for using `DryTooling` is calling a pre-built model for solving a specific problem. Several sub-modules handle different Physics and find them in the side-bar. Most models are provided under structures that are already solved during construction or provide a `solve!` method. In an ideal world they should all be documented, but since this package is still in its early days, some experimental features are not yet documented.
+2. An initial update with `finner!` is done. Normally this is responsible by the update of matrix coefficients that are dependent on solution state.
 
-For extending existing models and *preferrably* contributing to the package's growth, it is possible to use some functionalities provided in the bare `DryTooling` module, *i.e.* those made available when calling `using DryTooling`. They include physical constants, abstract types used all across the package, and some simple functions of general use.
+3. If relaxation `α <= 0.0`, then the problem is treated as linear.
 
-## Citing
+4. Otherwise a maximum of `M` iterations are repeated, where `fsolve!` is used to solve the problem (ofter an under-relaxation step) and is also expected to keep track of residuals.
 
-Found it useful? See [`CITATION.bib`](https://github.com/DryTooling/DryTooling.jl/blob/main/CITATION.bib) for the relevant reference.
+5. Problem coefficients are updated with `finner!` if not converged.
 
-## Contact
+```@docs
+DryToolingSimulation.step!
+```
 
-|                         |      |
-| ----------------------: | :--- |
-  Questions and proposals | [Zulip Chat](https://wallytutor.zulipchat.com)
-  Found and error or bug  | [Create and issue](https://github.com/DryTooling/DryTooling.jl/issues/new)
+The outer iteration for advancing between steps is carried out by `advance!`.
+
+```@docs
+DryToolingSimulation.advance!
+```
+
+Any model willing to implement its solution through the methods provided in this module is expected to explicity import and override the behaviour of the following methods for its own type:
+
+```@docs
+DryToolingSimulation.fouter!
+DryToolingSimulation.finner!
+DryToolingSimulation.fsolve!
+DryToolingSimulation.timepoints
+```
+
+## Linear algebra
+
+```@docs
+DryToolingSimulation.TridiagonalProblem
+DryToolingSimulation.solve!(::DryToolingSimulation.TridiagonalProblem)
+DryToolingSimulation.change
+DryToolingSimulation.residual
+```
+
+## Residuals tracking
+
+```@docs
+DryToolingSimulation.TimeSteppingSimulationResiduals
+DryToolingSimulation.finaliterationdata
+DryToolingSimulation.addresidual!
+DryToolingSimulation.plotsimulationresiduals
+```
+
+The residuals tracking functionalities of module `DryToolingSimulation` are not often imported by the end-user (except for its plotting utility function). In this tutorial we illustrate the logic of using a residual tracker in a new solver.
+
+```@example
+using DryToolingSimulation
+
+N = 2      # Number of variables.
+M = 5      # Maximum inner steps.
+steps = 10 # Time-advancement steps.
+
+# Create a TimeSteppingSimulationResiduals object with the number of variables
+# to track, how many inner iterations per step are expected, and the
+# number of steps.
+#
+# IMPORTANT: If the total number of iterations is exceeded, it is up
+# to the user to allocate more memory, the tracker will not manage it!
+r = TimeSteppingSimulationResiduals(N, M, steps)
+
+# The following loop represents a *dummy solver*. The outer loop
+# provides the time-advancement while the inner loop handles the
+# nonlinear problem. In the inner loop we use a random number
+# generator to provide varying number of steps per outer step.
+for kouter in 1:steps
+    for kinner in 1:rand(2:M)
+        # Keep track of inner iterations per step.
+        r.innersteps[kouter] = kinner
+
+        # Feed residuals to the solver.
+        addresidual!(r, rand(r.N))
+    end
+end
+
+# After running a simulation we create a new object using another
+# constructor that accepts a `TimeSteppingSimulationResiduals` object. This
+# handles the post-processing.
+s = TimeSteppingSimulationResiduals(r)
+
+# The new object is ready for visualization. Check the documentation
+# of the following function for more details. It provides a raw figure
+# and handles for modifying it for proper display.
+fig = plotsimulationresiduals(s; showinner = true)[1]
+```
