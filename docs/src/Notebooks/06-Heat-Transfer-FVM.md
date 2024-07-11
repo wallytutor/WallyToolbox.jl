@@ -17,8 +17,8 @@ Lx = (0.0, 0.15)
 Ly = (0.0, 0.05)
 
 # Number of cells over each direction:
-nx = 150
-ny = 10
+nx = 25
+ny = 5
 
 # Integration time:
 final_time = 20.0
