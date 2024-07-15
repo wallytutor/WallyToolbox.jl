@@ -21,7 +21,7 @@ nx = 25
 ny = 5
 
 # Integration time:
-final_time = 20.0
+final_time = 2.0
 nothing; #hide
 ```
 
@@ -31,7 +31,7 @@ f_ic = (x, y) -> 298.15
 
 # Diffusion coefficient:
 diffusion_function = (x, y, t, u, p) -> begin
-    (x < 0.05) ? 1.0 : 10.0
+    (x < 0.05) ? 1.0 : 5.0
 end
 nothing; #hide
 ```
