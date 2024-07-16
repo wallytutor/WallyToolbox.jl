@@ -1,10 +1,18 @@
 # -*- coding: utf-8 -*-
 module DryElements
 
+import Base: +
+import Base: *
+
+export Stoichiometry
 export element, atomicmass
+export molecularmass
 
 "Represents a chemical element."
 const ElementData = Tuple{String, String, Float64}
+
+"Represents a pair of element symbol and associated amount."
+const ElementalQuantity = Pair{Symbol, <:Number}
 
 """ Periodic table of stable chemical elements. """
 const ELEMENTS = (
@@ -95,6 +103,53 @@ const ELEMENTS = (
 )
 
 #############################################################################
+# Compose elemental stoichiometries
+#############################################################################
+
+kwtovec(; kw...) = [k => v for (k, v) in kw]
+
+""" Compound stoichiometry for ease of data manipulation."""
+struct Stoichiometry
+    amounts::Vector{ElementalQuantity}
+
+    function Stoichiometry(qty)
+        # catchduplicates(qty) =>
+        (qty .|> first |> unique |> length) == length(qty) || begin
+            # XXX: the performance of the following is low, it
+            # needs to be generalized to use a faster counter.
+            names = first.(qty)
+            mults = map(k->k=>count(==(k), names), unique(names))
+            mults = sort(filter(a->a[2]>1, mults), rev=true, by=x->x[2])
+            throw("Quantity keys must unique: $(first(mults))")
+        end
+
+        # assertnonnegative(qty) =>
+        all(qty .|> last .>= 0) || begin
+            negs = first(filter(a->a[2]<0, qty))
+            throw("Coefficients must non-negative: $(negs)")
+        end
+
+        return new(qty)
+    end
+end
+
+Stoichiometry(; kw...) = Stoichiometry(kwtovec(; kw...))
+
+function Base.:*(c::Number, s::Stoichiometry)::Stoichiometry
+    return Stoichiometry(map(x->x[1]=>c*x[2], s.amounts))
+end
+
+function Base.:*(s::Stoichiometry, c::Number)::Stoichiometry
+    return c * s
+end
+
+function Base.:+(a::Stoichiometry, b::Stoichiometry)::Stoichiometry
+    da, db = Dict(a.amounts), Dict(b.amounts)
+    allkeys = [union(keys(da), keys(db))...]
+    return Stoichiometry(map(k->k=>get(da, k, 0)+get(db, k, 0), allkeys))
+end
+
+#############################################################################
 # Other functionalities
 #############################################################################
 
@@ -110,5 +165,20 @@ atomicmass(s::Union{String,Symbol}) = element(String(s)) |> atomicmass
 atomicmass(e::ElementData) = 0.001e[3]
 
 @doc """ Atomic mass of element [kg/mol]. """ atomicmass
+
+#############################################################################
+# molecularmass()
+#############################################################################
+
+# Using Union{NamedTuple, Base.Pairs}:
+molecularmass(nt) = sum(c*atomicmass(s) for (s, c) in pairs(nt))
+
+# For use as molecularmass(; C=2, H=2), etc:
+molecularmass(; kw...) = molecularmass(kw)
+
+# Recomended way using Stoichiometry:
+molecularmass(s::Stoichiometry) = molecularmass(; s.amounts...)
+
+@doc """ Molecular mass of compound [kg/mol]. """ molecularmass
 
 end # (DryElements)
