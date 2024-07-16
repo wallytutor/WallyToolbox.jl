@@ -13,17 +13,14 @@ nothing; #hide
 ```
 
 ```julia
-# Probility of moving a distance y.
-p(z, K) = exp(-z / K)
+# Probility of moving a distance y, step size K.
+p(z; K=3) = exp(-z / K)
 
 # Size of square domain (matrix) for random walks.
 n = 1000
 
 # Number of random walk steps to perform.
 N = 100_000
-
-# Maximum step size.
-K = 3
 
 # Maximum number of tries for performing a step.
 max_tries = 10
@@ -73,7 +70,7 @@ nothing; #hide
         z = hypot(xn-xm, yn-ym)
 
         bullet = rand(rng)
-        threshold = p(z, K)
+        threshold = p(z)
 
         if bullet < threshold
             global xn, yn, A
