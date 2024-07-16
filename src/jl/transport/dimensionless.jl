@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 export ConstantPrandtl
 export ReynoldsPipeFlow
 export NusseltGnielinski

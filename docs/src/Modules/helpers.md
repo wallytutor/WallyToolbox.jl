@@ -13,7 +13,6 @@ CurrentModule = DryConstants
 ```@docs
 DryConstants.GAS_CONSTANT
 DryConstants.STEFAN_BOLTZMANN
-DryConstants.STABLE_ELEMENTS_TABLE
 ```
 
 ### Reference states

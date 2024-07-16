@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 module DryCombustion
 
+using Roots
+
 export hfo_specific_heat
 export hfo_enthalpy_net_bs2869
 
@@ -53,5 +55,44 @@ function hfo_enthalpy_net_bs2869(;
 
     return H * ϕ + c
 end
+
+# """
+#     fit_rosinrammler(d₀, P₀; m=3.5)
+
+# Find parameter for particle size distribution with Weibull distribution
+# often called after Rosin-Rammler in the field of particles, based on
+# characteristic size and associated CDF value. Parameter `d₀` is the
+# droplet size at which Weibull cummulative probability function 
+# ``F(d)=1-\\exp(-(d/\\sigma)^m)`` evaluates to `P₀`.
+# """
+# function fit_rosinrammler(d₀, P₀; m=3.5)
+#     f(d, σ, m) = 1.0 .- exp.(-(d / σ).^m)
+#     σ = find_zero(σ -> f(d₀, σ, m) - P₀ / 100.0, d₀)
+
+# 	n = round(log10(σ))
+# 	xmax = round(2σ / 10^n) * 10^n
+	
+#     d = collect(0.0:1.0:xmax)
+#     P = 100 .* f(d, σ, m)
+
+#     fig = plot(d, P,
+#         legend        = false,
+#         linewidth     = 2,
+#         xlabel        = "Droplet diameter [μm]",
+#         ylabel        = "Probability [%]",
+#         title         = "σ = $(@sprintf("%.2f", σ)) μm",
+#         left_margin   = 7Plots.mm,
+#         right_margin  = 7Plots.mm,
+#         top_margin    = 10Plots.mm,
+#         bottom_margin = 5Plots.mm,
+# 		yticks        = 0.0:20.0:100.0,
+# 		xlim          = (0.0, xmax),
+# 		ylim          = (0.0, 100.0)
+#     )
+	
+# 	scatter!(fig, [d₀], [P₀])
+
+#     return fig;
+# end
 
 end # (DryCombustion)
