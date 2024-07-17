@@ -1,62 +1,60 @@
-# Helpers
+# WallyToolbox
 
-The core packages of `WallyToolbox` ecosystem provide shared functionalities and types that are used in several other more specialized packages. This allows for standardization of interfaces, employed quantities, and avoid boilerplate code. This page organizes everything to facilitate the understanding of the end-user. Knowing the base helper packages `DryConstants` and `DryUtilities` is key for proper usage of `WallyToolbox`.
-
-## DryConstants
+The core package of `WallyToolbox` ecosystem provides shared functionalities and types that are used in more specialized packages. This allows for standardization of interfaces, employed quantities, and avoid boilerplate code. This page organizes everything to facilitate the understanding of the end-user.
 
 ```@meta
-CurrentModule = DryConstants
+EditURL = "https://github.com/wallytutor/WallyToolbox.jl/blob/main/docs/src/Modules/WallyToolbox.md"
+CurrentModule = WallyToolbox
+DocTestSetup = quote
+    using WallyToolbox
+end
 ```
+
+## Constants
 
 ### Physical constants
 
 ```@docs
-DryConstants.GAS_CONSTANT
-DryConstants.STEFAN_BOLTZMANN
+WallyToolbox.GAS_CONSTANT
+WallyToolbox.STEFAN_BOLTZMANN
 ```
 
 ### Reference states
 
 ```@docs
-DryConstants.T_REF
-DryConstants.P_REF
-DryConstants.C_REF
+WallyToolbox.T_REF
+WallyToolbox.P_REF
+WallyToolbox.C_REF
 ```
 
 ### Other constants
 
 ```@docs
-DryConstants.ZERO_CELSIUS
-DryConstants.ONE_ATM
-DryConstants.M_AIR
+WallyToolbox.ZERO_CELSIUS
+WallyToolbox.ONE_ATM
+WallyToolbox.M_AIR
+WallyToolbox.ELEMENTS
 ```
 
-## DryElements
+## Elements
 
-```@meta
-CurrentModule = DryElements
+```@docs
+WallyToolbox.ElementData
+WallyToolbox.ElementalQuantity
+WallyToolbox.Stoichiometry
 ```
 
-```@autodocs
-Modules = [ DryElements ]
+```@docs
+WallyToolbox.element
+WallyToolbox.atomicmass
+WallyToolbox.molecularmass
 ```
 
-## DryUtilities
-
-```@meta
-CurrentModule = DryUtilities
-DocTestSetup  = quote
-    using DryUtilities
-    using DryUtilities: heaviside, interval, makestepwise1d
-    using DryUtilities: closestpowerofx, axesunitscaler
-    using DryUtilities: maxrelativechange, maxabsolutechange
-end
-```
+## Utilities
 
 ### Haskell-like array slicing
 
-Those who know Haskell probably started learning it by manipulating lists with `head` and `tail`. Those functionalities are not available in Julia *by default* and array slicing - with an ugly syntax - is required. Since this is done often in the fields of application of `DryTooling`, both [`head`](@ref) and
-[`tail`](@ref) together with a [`body`](@ref) functions are available in its core. They are simple wrapers over the `@view` macro and work with both iterable types and arrays. The following snippet illustrates their usage.
+Those who know Haskell probably started learning it by manipulating lists with `head` and `tail`. Those functionalities are not available in Julia *by default* and array slicing - with an ugly syntax - is required. Since this is done often in the fields of application of `WallyToolbox`, both [`head`](@ref) and [`tail`](@ref) together with a [`body`](@ref) functions are available in its core. They are simple wrapers over the `@view` macro and work with both iterable types and arrays. The following snippet illustrates their usage.
 
 ```jldoctest
 julia> v = collect(1:4);
@@ -71,50 +69,48 @@ julia> body(v) == [2; 3]
 true
 ```
 
-More examples are provided in the following documentation ahead of each of the
-functions.
-
-```jldoctest
-julia> head(1:4)
-1:3
-
-julia> head([1, 2, 3, 4])
-3-element view(::Vector{Int64}, 1:3) with eltype Int64:
- 1
- 2
- 3
-
-```
+More examples are provided in the documentation of each of the functions.
 
 ```@docs
-DryUtilities.head
+WallyToolbox.head
+WallyToolbox.tail
+WallyToolbox.body
 ```
 
-```jldoctest
-julia> tail([1, 2, 3, 4])
-3-element view(::Vector{Int64}, 2:4) with eltype Int64:
- 2
- 3
- 4
-julia> tail(1:4)
-2:4
-```
+### Others
 
 ```@docs
-DryUtilities.tail
+WallyToolbox.defaultvalue
+WallyToolbox.redirect_to_files
+WallyToolbox.test_exhaustive
 ```
 
-```jldoctest
-julia> body([1, 2, 3, 4])
-2-element view(::Vector{Int64}, 2:3) with eltype Int64:
- 2
- 3
-julia> body(1:4)
-2:3
-```
+## Documentation
 
 ```@docs
-DryUtilities.body
+WallyToolbox.Documents.convert_pluto
+WallyToolbox.Documents.formatequations
+WallyToolbox.Documents.deployrepo
+WallyToolbox.Documents.matchdebugger
+WallyToolbox.Documents.julianizemarkdown
+WallyToolbox.Documents.get_format
+WallyToolbox.Documents.formatnotecells
+```
+
+## DryUtilities
+
+!!! danger
+    
+    This module is deprecated and is progressivelly migrating to the root.
+
+```@meta
+CurrentModule = DryUtilities
+DocTestSetup  = quote
+    using DryUtilities
+    using DryUtilities: heaviside, interval, makestepwise1d
+    using DryUtilities: closestpowerofx, axesunitscaler
+    using DryUtilities: maxrelativechange, maxabsolutechange
+end
 ```
 
 ### Handling of discontinuous functions
@@ -275,56 +271,4 @@ DryUtilities.maxrelativechange
 ```@docs
 DryUtilities.nm3_h_to_kg_h
 DryUtilities.kg_h_to_nm3_h
-```
-
-### Others
-
-```@docs
-DryUtilities.defaultvalue
-DryUtilities.redirect_to_files
-DryUtilities.test_exhaustive
-```
-
-## Abstract types
-
-```@meta
-CurrentModule = DryAbstract
-```
-
-### Fixed state materials
-
-```@docs
-DryAbstract.AbstractMaterial
-DryAbstract.AbstractSolidMaterial
-DryAbstract.AbstractLiquidMaterial
-DryAbstract.AbstractGasMaterial
-DryAbstract.AbstractSolidMineralPhase
-```
-
-### Problem solving and physical models
-
-```@docs
-DryAbstract.AbstractMatrixProblem
-DryAbstract.AbstractIterativeSolver
-DryAbstract.AbstractSolutionStorage
-DryAbstract.AbstractPhysicalModel
-```
-
-### Transport, thermodynamics, and kinetics
-
-```@docs
-DryAbstract.AbstractTransportModel
-DryAbstract.AbstractSolidTransport
-DryAbstract.AbstractGasThermo
-DryAbstract.AbstractSolidThermo
-DryAbstract.AbstractMixtureSubstance
-DryAbstract.AbstractMixturePhase
-DryAbstract.AbstractKineticsMechanism
-```
-
-### Finite volume method and relatives
-
-```@docs
-DryAbstract.AbstractDiffusionModel1D
-DryAbstract.AbstractGrid1D
 ```

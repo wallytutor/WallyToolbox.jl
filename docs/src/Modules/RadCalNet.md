@@ -2,7 +2,7 @@
 
 ```@meta
 CurrentModule = RadCalNet
-EditURL = "https://github.com/wallytutor/WallyToolbox.jl/blob/main/docs/src/RadCalNet/index.md"
+EditURL = "https://github.com/wallytutor/WallyToolbox.jl/blob/main/docs/src/Modules/RadCalNet.md"
 ```
     
 Radiation properties machine learning model trained on RadCal.
