@@ -5,7 +5,6 @@ using Polynomials
 using Printf
 using Statistics
 using WallyToolbox
-using DryUtilities: redirect_to_files
 
 function makesifstring(T)
     """\

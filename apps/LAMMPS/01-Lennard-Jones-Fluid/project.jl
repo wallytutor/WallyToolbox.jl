@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 using WallyToolbox
-using DryUtilities: redirect_to_files
 
 function run_tutorial(; script, wd, force = false)
     !isfile(joinpath(wd, script)) && throw("No $(script) in $(wd)!")

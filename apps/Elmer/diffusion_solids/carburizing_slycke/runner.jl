@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 using WallyToolbox
-using DryUtilities: redirect_to_files
 
 meanmolecularmass(Y, M) = sum(Y ./ M)^(-1)
 
