@@ -20,7 +20,6 @@ begin
     using Unitful: @u_str, uconvert, ustrip
 
     using WallyToolbox
-    using DryConstants
     using DryUtilities: nm3_h_to_kg_h, kg_h_to_nm3_h
     using DryMaterials: AbstractLiquidMaterial
     using DryMaterials: PureWater, PureAir, PureMineral
