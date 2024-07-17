@@ -40,7 +40,6 @@ begin
     using Trapz: trapz
 
     using WallyToolbox
-    using DryConstants
     import DryMaterials as DM
 
     CairoMakie.activate!(; type = "svg", visible = false)

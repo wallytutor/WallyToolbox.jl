@@ -1,34 +1,7 @@
 # -*- coding: utf-8 -*-
 module DryUtilities
 
-using DryConstants: C_REF
-
-##############################################################################
-# Haskell-like array slicing
-##############################################################################
-
-export head, tail, body
-
-"""
-    head(z)
-
-Access view of array head. See also [`tail`](@ref) and [`body`](@ref).
-"""
-head(z) = @view z[1:end-1]
-
-"""
-    tail(z)
-
-Access view of array tail. See also [`head`](@ref) and [`body`](@ref).
-"""
-tail(z) = @view z[2:end-0]
-
-"""
-    body(z)
-
-Access view of array body. See also  [`head`](@ref) and [`tail`](@ref).
-"""
-body(z) = @view z[2:end-1]
+using WallyToolbox: C_REF
 
 ##############################################################################
 # Rounding and axes
@@ -138,41 +111,5 @@ nm3_h_to_kg_h(q, mw) = C_REF * mw  * q
 
 "Convert [kg/h] to [Nm³/h]."
 kg_h_to_nm3_h(ṁ, mw) = ṁ / (C_REF * mw)
-
-##############################################################################
-# Others
-##############################################################################
-
-"Syntax sugar for handling a possibly *nothing* value."
-defaultvalue(p, q) = isnothing(p) ? q : p
-
-"Helper function to redirect outputs to the right files."
-function redirect_to_files(dofunc, outfile; errfile = nothing)
-    errfile = defaultvalue(errfile, outfile)
-
-    open(outfile, "w") do out
-        open(errfile, "w") do err
-            redirect_stdout(out) do
-                redirect_stderr(err) do
-                    dofunc()
-                end
-            end
-        end
-    end
-end
-
-"Run all assertions before throwing an error."
-function test_exhaustive(tests)
-    messages = []
-
-    for (evaluation, message) in tests
-        !evaluation && push!(messages, message)
-    end
-    
-    if !isempty(messages)
-        @error join(messages, "\n")
-        throw(ArgumentError("Check previous warnings"))
-    end
-end
 
 end # (module DryUtilities)

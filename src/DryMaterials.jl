@@ -6,13 +6,13 @@ using Polynomials: AbstractPolynomial
 using Polynomials: Polynomial, LaurentPolynomial, integrate
 using SteamTables: SpecificV
 
-using DryAbstract: AbstractMaterial
-using DryAbstract: AbstractSolidMaterial
-using DryAbstract: AbstractLiquidMaterial
-using DryAbstract: AbstractGasMaterial
-using DryAbstract: AbstractSolidMineralPhase
-using DryConstants: M_AIR
-using DryUtilities: defaultvalue
+using WallyToolbox: AbstractMaterial
+using WallyToolbox: AbstractSolidMaterial
+using WallyToolbox: AbstractLiquidMaterial
+using WallyToolbox: AbstractGasMaterial
+using WallyToolbox: AbstractSolidMineralPhase
+using WallyToolbox: M_AIR
+using WallyToolbox: defaultvalue
 using DryUtilities: makestepwise1d
 
 #############################################################################

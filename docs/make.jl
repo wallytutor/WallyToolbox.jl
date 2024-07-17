@@ -21,10 +21,7 @@ using WallyToolbox.Documents
 
 # These contain the actual implementation of "package".
 using Cantera
-using DryAbstract
 using DryCombustion
-using DryConstants
-using DryElements
 using DryFlowsheet
 using DryGranular
 using DryMaterials
@@ -48,10 +45,8 @@ latex = false
 
 modules = [
     # Cantera,
-    DryAbstract,
+    WallyToolbox,
     DryCombustion,
-    DryConstants,
-    DryElements,
     DryFlowsheet,
     DryGranular,
     DryMaterials,
@@ -74,6 +69,7 @@ pages = [
         "Home" => "index.md",
 
         "Julia Modules" => [
+            "WallyToolbox"  => "Modules/WallyToolbox.md",
             "DryCombustion" => "Modules/DryCombustion.md",
             "DryFlowsheet"  => "Modules/DryFlowsheet.md",
             "DryGranular"   => "Modules/DryGranular.md",
@@ -82,7 +78,6 @@ pages = [
             "RadCalNet"     => "Modules/RadCalNet.md",
             "Cantera"       => "Modules/Cantera.md",
             "OpenFOAM"      => "Modules/OpenFOAM.md",
-            "Helpers"       => "Modules/helpers.md"
         ],
 
         "Computing" => [
@@ -165,7 +160,8 @@ convert_pluto(nblist; root = ppath, force = false)
 ##############################################################################
 
 for m in modules
-    setdocmeta!(m, :DocTestSetup, :(using m); warn = false, recursive = true)
+    mod = Symbol(m)
+    setdocmeta!(m, :DocTestSetup, :(using $mod); warn = true, recursive = true)
 end
 
 plugins  = [

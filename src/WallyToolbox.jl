@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 module WallyToolbox
 
+using Reexport
+
 const WALLYTOOLBOXPATH = @__DIR__
 
 function __init__()
@@ -17,12 +19,18 @@ function __init__()
     push!(LOAD_PATH, WALLYTOOLBOXPATH)
 end
 
-# Direct includes.
-# include(joinpath(WALLYTOOLBOXPATH, "jl/main/abstract.jl"))
-# include(joinpath(WALLYTOOLBOXPATH, "jl/main/utilities.jl"))
+# Primary direct includes.
+include("jl/main/abstract.jl")
+include("jl/main/constants.jl")
+include("jl/main/utilities.jl")
+
+# Dependent direct includes.
+include("jl/main/elements.jl")
 
 # Sub-modules.
 include("jl/main/Documents.jl")
 include("jl/main/Notebook.jl")
+
+@reexport using WallyToolbox.Notebook
 
 end # (module WallyToolbox)
