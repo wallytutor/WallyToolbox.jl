@@ -3,6 +3,8 @@ module DryCombustion
 
 import Base: String
 using WallyToolbox
+using CairoMakie
+using Distributions: Weibull, cdf, scale, mean
 using DocStringExtensions: TYPEDFIELDS
 using Printf
 using Roots
@@ -11,6 +13,8 @@ export EmpiricalFuel
 export oxidizer_mass_flow_rate
 export hfo_specific_heat
 export hfo_enthalpy_net_bs2869
+export fit_rosinrammler
+export plot_rosinrammler
 
 ##############################################################################
 # Empirical fuel
@@ -25,7 +29,7 @@ Below we illustrate how to create a fuel with the approximate mass fractions
 of carbon and hydrogen in naphtalene; next we check its string representation.
 
 ```jldoctest
-julia> fuel = EmpiricalFuel([0.937, 0.063, 0.0]; scale=:C=>10.0);
+julia> fuel = EmpiricalFuel([0.937, 0.063, 0.0]; scaler=:C=>10.0);
 
 julia> fuel.X
 3-element Vector{Float64}:
@@ -47,7 +51,7 @@ struct EmpiricalFuel
     "Array of computed moles per kilogram of fuel."
     X::Vector{Float64}
 
-    function EmpiricalFuel(Y; elements = [:C, :H, :O], scale = nothing)
+    function EmpiricalFuel(Y; elements = [:C, :H, :O], scaler = nothing)
         if length(elements) != length(Y)
             throw(ErrorException("Length of Y must be the same as elements"))
         end
@@ -59,11 +63,11 @@ struct EmpiricalFuel
         Y = Y ./ sum(Y)
         X = Y ./ atomicmass.(elements)
 
-        if !isnothing(scale)
-            scale.first in elements || begin
+        if !isnothing(scaler)
+            scaler.first in elements || begin
                 throw(ErrorException("Scaling element not in elements list"))
             end
-            X = scale.second.* X ./ X[findall(==(scale.first), elements)]
+            X = scaler.second.* X ./ X[findall(==(scaler.first), elements)]
         end
 
         return new(elements, Y, X)
@@ -83,7 +87,7 @@ of 1 kg provided empirical fuel. The value of `y_o2` represents the mass
 fraction of oxygen in oxidizer; default value is typical for air.
 
 ```jldoctest
-julia> fuel = EmpiricalFuel([0.937, 0.063, 0.0]; scale=:C=>10);
+julia> fuel = EmpiricalFuel([0.937, 0.063, 0.0]; scaler=:C=>10);
 
 julia> oxidizer_mass_flow_rate(fuel)
 13.02691759229764
@@ -92,7 +96,7 @@ julia> oxidizer_mass_flow_rate(fuel)
 function oxidizer_mass_flow_rate(f::EmpiricalFuel; y_o2 = 0.23)
     m_o2 = molecularmass(Stoichiometry(; O = 2))
 
-    fn = EmpiricalFuel(f.Y; f.elements, scale=nothing)
+    fn = EmpiricalFuel(f.Y; f.elements, scaler=nothing)
 
     x = fn.X[findall(==(:C), fn.elements) |> first]
     y = fn.X[findall(==(:H), fn.elements) |> first]
@@ -160,43 +164,58 @@ function hfo_enthalpy_net_bs2869(;
     return H * ϕ + c
 end
 
-# """
-#     fit_rosinrammler(d₀, P₀; m=3.5)
+##############################################################################
+# Discrete particle model (DPM)
+##############################################################################
 
-# Find parameter for particle size distribution with Weibull distribution
-# often called after Rosin-Rammler in the field of particles, based on
-# characteristic size and associated CDF value. Parameter `d₀` is the
-# droplet size at which Weibull cummulative probability function 
-# ``F(d)=1-\\exp(-(d/\\sigma)^m)`` evaluates to `P₀`.
-# """
-# function fit_rosinrammler(d₀, P₀; m=3.5)
-#     f(d, σ, m) = 1.0 .- exp.(-(d / σ).^m)
-#     σ = find_zero(σ -> f(d₀, σ, m) - P₀ / 100.0, d₀)
+"""
+    fit_rosinrammler(d₀, P₀; m=3.5)
 
-# 	n = round(log10(σ))
-# 	xmax = round(2σ / 10^n) * 10^n
-	
-#     d = collect(0.0:1.0:xmax)
-#     P = 100 .* f(d, σ, m)
+Find parameter for particle size distribution with Weibull distribution, often
+called after Rosin-Rammler in the field of particles - based on characteristic
+size and associated cumulative density function (CDF) value. Parameter `d₀` is
+the droplet size at which Weibull CDF evaluates to probability `P₀`. The value
+of `m` is generally recommended for a certain technology; a common value is
+provided by default.
+"""
+function fit_rosinrammler(d₀, P₀; m=3.5)
+    θ = find_zero(θ->cdf(Weibull(m, θ), d₀) - 0.01P₀, d₀)
+    return Weibull(m, θ)
+end
 
-#     fig = plot(d, P,
-#         legend        = false,
-#         linewidth     = 2,
-#         xlabel        = "Droplet diameter [μm]",
-#         ylabel        = "Probability [%]",
-#         title         = "σ = $(@sprintf("%.2f", σ)) μm",
-#         left_margin   = 7Plots.mm,
-#         right_margin  = 7Plots.mm,
-#         top_margin    = 10Plots.mm,
-#         bottom_margin = 5Plots.mm,
-# 		yticks        = 0.0:20.0:100.0,
-# 		xlim          = (0.0, xmax),
-# 		ylim          = (0.0, 100.0)
-#     )
-	
-# 	scatter!(fig, [d₀], [P₀])
+"Display Rosin-Rammler distribution and optionally reference data."
+function plot_rosinrammler(dist; xyref=nothing)
+    θ = scale(dist)
+    n = round(log10(θ))
+    xmax = round(2θ / 10^n) * 10^n
 
-#     return fig;
-# end
+    d = LinRange(0.0, xmax, 100)
+    p = 100cdf(dist, d)
+    
+    dmean = @sprintf("%.2f μm", mean(dist))
+    dchar = @sprintf("%.2f μm", θ)
+
+    fig = with_theme() do
+        f = Figure()
+        ax = Axis(f[1, 1])
+        
+        ax.xlabel = "Droplet diameter [μm]"
+        ax.ylabel = "Probability [%]"
+        ax.title  = "μ = $(dmean), θ = $(dchar))"
+        
+		ax.yticks = 0.0:20.0:100.0
+        xlims!(ax, 0.0, xmax)
+		ylims!(ax, 0.0, 100.0)
+        lines!(ax, d, p; color = :black)
+        
+        if !isnothing(xyref)
+            scatter!(ax, xyref...; color = :red)
+        end
+        
+        f
+    end
+
+    return fig
+end
 
 end # (DryCombustion)

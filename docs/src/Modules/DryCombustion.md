@@ -44,3 +44,10 @@ Combustion of heavy-fuel oils (HFO) is discussed in detail by ([[@Lawn1987]]). S
 DryCombustion.hfo_specific_heat
 DryCombustion.hfo_enthalpy_net_bs2869
 ```
+
+## Discrete phase model
+
+```@docs
+DryCombustion.fit_rosinrammler
+DryCombustion.plot_rosinrammler
+```

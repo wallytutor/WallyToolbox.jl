@@ -50,9 +50,7 @@ WallyToolbox.atomicmass
 WallyToolbox.molecularmass
 ```
 
-## Utilities
-
-### Haskell-like array slicing
+## Haskell-like array slicing
 
 Those who know Haskell probably started learning it by manipulating lists with `head` and `tail`. Those functionalities are not available in Julia *by default* and array slicing - with an ugly syntax - is required. Since this is done often in the fields of application of `WallyToolbox`, both [`head`](@ref) and [`tail`](@ref) together with a [`body`](@ref) functions are available in its core. They are simple wrapers over the `@view` macro and work with both iterable types and arrays. The following snippet illustrates their usage.
 
@@ -77,7 +75,7 @@ WallyToolbox.tail
 WallyToolbox.body
 ```
 
-### Others
+## General utilities
 
 ```@docs
 WallyToolbox.defaultvalue
