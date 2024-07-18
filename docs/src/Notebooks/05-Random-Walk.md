@@ -35,8 +35,8 @@ function random_walker(p, n, N, K, xn, yn, A)
         if bullet < threshold
             # FIXME: last r/c is being skipped!
             # Make sure wrapping around is respected.
-            xm = (1 <= n+xm <= n) ? n+xm : xm
-            ym = (1 <= n+ym <= n) ? n+ym : ym
+            xm = (1 <= xm <= n) ? xm : n+xm
+            ym = (1 <= ym <= n) ? ym : n+ym
             # xm = (xm>0) ? xm : n+xm-1
             # ym = (ym>0) ? ym : n+ym-1
 
@@ -85,8 +85,8 @@ function workflow(p, K, n, N, M)
         n = first(size(A))
         nn = div(n, 2) + 1
         
-        a1 = reshape(sum(A; dims=1), n)[nn:end]
-        a2 = reshape(sum(A; dims=2), n)[nn:end]
+        a1 = reshape(sum(A; dims=1), n)[nn:end-1]
+        a2 = reshape(sum(A; dims=2), n)[nn:end-1]
     
         a1 /= sum(a1)
         a2 /= sum(a2)
@@ -105,7 +105,7 @@ function workflow(p, K, n, N, M)
         f = Figure(size = (1000, 500))
         
         ax1 = Axis(f[1, 1]; aspect = 1)
-        heatmap!(ax1, A; colormap = :thermal)
+        heatmap!(ax1, A[1:end-1, 1:end-1]; colormap = :thermal)
     
         ax2 = Axis(f[1, 2]; aspect = 1)
         lines!(ax2, a1; color=:black)
