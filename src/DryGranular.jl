@@ -20,7 +20,7 @@ export plotlinearkramersmodel
 export dimlessNΦ
 export dimlessNₖ
 export sullivansηₘ
-export perrayresidence
+export perryresidence
 export kramersnlapprox
 
 """
@@ -339,8 +339,8 @@ function sullivansηₘ(R, β, ω, Φ, γ)
     return 3.8 * dimlessNΦ(R, β, ω, Φ, γ) * sqrt(γ) / sin(γ)
 end
 
-"Compute residence time from Peray's equation."
-function perrayresidence(L, ω, D, β)
+"Compute residence time from Perry's equation."
+function perryresidence(L, ω, D, β)
     return 0.19 * L / (ω * D * tan(β))
 end
 

@@ -167,7 +167,7 @@ julia> bed.τ ≈ Vₐ / Φ
 true
 ```
 
-Validation of Kramers' model is provided [here](validation/DryGranular/kramers.md).
+Validation of Kramers' model is provided [here](../Notebooks/08-Kramers-Model-Validation.md).
 
 Finally a set of basic equations provided for process analysis.
 
@@ -175,6 +175,6 @@ Finally a set of basic equations provided for process analysis.
 DryGranular.sullivansηₘ
 DryGranular.dimlessNΦ
 DryGranular.dimlessNₖ
-DryGranular.perrayresidence
+DryGranular.perryresidence
 DryGranular.kramersnlapprox
 ```
