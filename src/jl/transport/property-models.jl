@@ -31,11 +31,11 @@ The general use case of this is to create objects compatible with the function
 object approach employed for properties evaluation across the module.
 
 ```jldoctest
-julia> k = TempPolynomialHeatConductivity([1.0, -0.001])
+julia> k = TempPolynomialHeatConductivity([1.5, -0.001])
 TempPolynomialHeatConductivity(Polynomial(1.5 - 0.001*T))
 
-julia> k(300.0)
-1.2
+julia> k(1000.0)
+0.5
 ```
 
 Although not the most efficienty way, a simple wrapper for providing constant
