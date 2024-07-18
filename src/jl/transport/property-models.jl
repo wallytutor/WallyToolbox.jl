@@ -27,14 +27,14 @@ Wrapper for a polynomial temperature-dependent heat conductivity.
 
 $(TYPEDFIELDS)
 
-The general use case of this is to create objects compatible with the compute
-method employed for properties evaluation across the module.
+The general use case of this is to create objects compatible with the function
+object approach employed for properties evaluation across the module.
 
 ```jldoctest
 julia> k = TempPolynomialHeatConductivity([1.0, -0.1])
-TempPolynomialHeatConductivity(Polynomial(1.5 - 0.001*T))
+TempPolynomialHeatConductivity(Polynomial(1.5 - 0.1*T))
 
-julia> compute(k, 300.0)
+julia> k(300.0)
 1.2
 ```
 
