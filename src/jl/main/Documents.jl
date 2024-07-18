@@ -60,7 +60,11 @@ function julianizemarkdown(;
         formatter::Function,
         spath::String,
         wpath::String,
-        ignores::Vector{String} = [".gitignore", ".obsidian"]
+        ignores::Vector{String} = [
+            ".gitignore",
+            ".obsidian",
+            ".ipynb_checkpoints",
+        ]
     )
     # Ensure directory exists.
     !isdir(wpath) && mkpath(wpath)
