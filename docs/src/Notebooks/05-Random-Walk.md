@@ -1,4 +1,5 @@
 # A simple random walker
+
 ```julia
 using CairoMakie
 using ProgressMeter
