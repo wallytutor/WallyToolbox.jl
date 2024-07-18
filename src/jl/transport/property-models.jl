@@ -31,8 +31,8 @@ The general use case of this is to create objects compatible with the function
 object approach employed for properties evaluation across the module.
 
 ```jldoctest
-julia> k = TempPolynomialHeatConductivity([1.0, -0.1])
-TempPolynomialHeatConductivity(Polynomial(1.5 - 0.1*T))
+julia> k = TempPolynomialHeatConductivity([1.0, -0.001])
+TempPolynomialHeatConductivity(Polynomial(1.5 - 0.001*T))
 
 julia> k(300.0)
 1.2
