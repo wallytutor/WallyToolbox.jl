@@ -1,112 +1,120 @@
 # A simple random walker
 
-```julia
+```julia; @example notebook
 using CairoMakie
-using ProgressMeter
 using Random
+using SpecialFunctions
 nothing; #hide
 ```
 
-```julia
+```julia; @example notebook
 # Create a random number generator with a given seed.
 rng = MersenneTwister(42)
-nothing; #hide
-```
 
-```julia
 # Probility of moving a distance y, step size K.
-p(z; K=3) = exp(-z / K)
+p(z, K) = exp(-z / K)
+
+# Characteristic maximum step.
+K = 2
 
 # Size of square domain (matrix) for random walks.
-n = 1000
+n = 50
 
+# If N > n, then *neighbors* interact!
 # Number of random walk steps to perform.
-N = 100_000
+N = 3n
 
-# Maximum number of tries for performing a step.
-max_tries = 10
-
-# Maximum fraction of fails at performing a step.
-max_fails = 0.01
+# Number of repeats for sampling
+M = 10_000
 nothing; #hide
 ```
 
-```julia
+```julia; @example notebook
 # Allocate matrix for tracking presence history.
 A = zeros(Int64, (n, n))
 
 # Get initial position of *particle*.
-xn, yn = rand(rng, 0:n-1, 2)
+# xn, yn = rand(rng, 0:n-1, 2)
+xn, yn = div(n, 2), div(n, 2)
 
 # Store initial position for display later.
 x0, y0 = xn, yn
 
-# Feed particle to its initial position.
-A[xn+1, yn+1] += 1
+# Start sampling loop.
+for rm ∈ 1:M
+    # Reinitialize particle position.
+    xn, yn = x0, y0
 
-# Tracker for number of misses.
-frozen = 0
-nothing; #hide
-```
+    # NO: Feed particle to its initial position.
+    # The initial particle is *outside* the domain!
+    # A[xn+1, yn+1] += 1
 
-```julia
-# Initialize figure.
-# fig, ax, hm = heatmap(A / N; colormap = :thermal)#, colorrange = (0.0, N/n))
-# scatter!(ax, x0, y0; color = :black)
-
-@showprogress for tn ∈ 1:N
-# record(fig, saveas, 1:N) do tn
-    # global xn, yn, A, frozen
-    
-    n_try = 0
-
-    while n_try < max_tries
-        n_try += 1
-
-        # TODO: system wraps around! Not fully working if we still use clamp!
+    # Start random-walk loop.
+    for tn ∈ 1:N
+        # Sample the distance to try to move.
         Δx, Δy = rand(rng, -K:K, 2)
+
+        # Compute new hypothetical position.
         xm = mod(xn + Δx, n)
         ym = mod(yn + Δy, n)
 
+        # Compute distance from current point.
         z = hypot(xn-xm, yn-ym)
 
+        # Take shot on current movement.
         bullet = rand(rng)
-        threshold = p(z)
+        threshold = p(z, K)
 
+        # Always move or should I use RNG?
+        # if true #bullet < threshold
         if bullet < threshold
-            global xn, yn, A
+            # global xn, yn, A
+
+            # Make sure wrapping around is respected.
+            xm = (xm>0) ? xm : n-xm
+            ym = (ym>0) ? ym : n-ym
+
+            # Update position.
             xn, yn = xm, ym
-            A[xn+1, yn+1] += 1
-            break
+            A[xn, yn] += 1
         end
     end
-
-    # hm[3].val = A / N
-
-    if n_try == max_tries
-        global frozen
-        frozen += 1
-    end
 end
 
-# hm[3].val = A / sum(A)
-
-if frozen > max_fails * N
-    @error("Missed too many steps: $(frozen) of $(N)")
-end
-```
-
-```julia
-fig = with_theme() do
-    f = Figure()
-    ax = Axis(f[1, 1])
+with_theme() do
+    nn = div(n, 2) + 1
     
-    heatmap!(ax, A / N; colormap = :thermal)
-    scatter!(ax, x0, y0; color = :red)
+    a1 = reshape(sum(A; dims=1), n)[nn:end]
+    a2 = reshape(sum(A; dims=2), n)[nn:end]
+
+    a1 /= sum(a1)
+    a2 /= sum(a2)
+
+    a1 /= maximum(a1)
+    a2 /= maximum(a2)
+
+    # This is obviously wrong!
+    x = 1:nn
+    t = N
+    D = K / 6 # HOW SHOULD I? (Meher, 2007)
+    C = 1.0
+    
+    # Constant surface concentration solution:
+    an = @. C * erfc(x/(2sqrt(D*t)))
+    
+    f = Figure(size = (1000, 500))
+    
+    ax1 = Axis(f[1, 1]; aspect = 1)
+    heatmap!(ax1, A; colormap = :thermal)
+    scatter!(ax1, x0, y0; color = :red)
+
+    ax2 = Axis(f[1, 2]; aspect = 1)
+    lines!(ax2, a1; color=:black)
+    lines!(ax2, a2; color=:red)
+    lines!(ax2, an; color=:blue) 
+    xlims!(ax2, 0, nn)
+    ylims!(ax2, 0, 1.5)
+    
     f
 end
-```
-
-```julia
-
 ```
