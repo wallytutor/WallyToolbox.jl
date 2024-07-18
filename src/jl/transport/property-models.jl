@@ -7,17 +7,23 @@
 # TODO: implement composite wall (plane/radial) thermal conductivity.
 
 export TempPolynomialHeatConductivity
+export TempPolynomialFluidViscosity
+
 export GranularMediumHeatConductivity
+export AirHeatConductivityMujumdar2006
+export AirViscosityMujumdar2006
+
 export constheatconductivity
+export constfluidviscosity
+
 export maxwell_eff_conductivity
-export compute
 
 ##############################################################################
-# THERMAL CONDUCTIVITY
+# POLYNOMIALS
 ##############################################################################
 
 """
-A simple wrapper for a temperature-dependenty polynomial heat conductivity.
+Wrapper for a polynomial temperature-dependent heat conductivity.
 
 $(TYPEDFIELDS)
 
@@ -49,8 +55,38 @@ struct TempPolynomialHeatConductivity <: AbstractHeatCondTemperatureDep
     end
 end
 
-"Constant heat conductivity wrapper compatible with temperature dependency."
-constheatconductivity(k) = TempPolynomialHeatConductivity([k])
+"""
+Wrapper for a polynomial temperature-dependent fluid viscosity.
+
+$(TYPEDFIELDS)
+
+Usage is analogous to [`TempPolynomialHeatConductivity`](@ref).
+```
+"""
+struct TempPolynomialFluidViscosity <: AbstractViscosityTemperatureDep
+    "Fluid viscosity polynomial."
+    p::Polynomial
+
+    function TempPolynomialFluidViscosity(coefs)
+        return new(Polynomial(coefs, :T))
+    end
+end
+
+##############################################################################
+# GRANULAR THERMAL CONDUCTIVITY
+##############################################################################
+
+"""
+    maxwell_eff_conductivity(kg, ks, ϕ)
+
+Maxwell effective medium theory of thermal conductivity computed in terms of
+gas thermal conductivity `kg`, solids thermal conductivity `ks`, and solids
+packing fraction `ϕ`.
+"""
+function maxwell_eff_conductivity(kg, ks, ϕ)
+    Σ, Δ = (2kg + ks), (ks - kg)
+    return kg * (Σ+2ϕ*Δ) / (Σ-1ϕ*Δ)
+end
 
 """
 Provides the heat conductivity of a solids granular medium embeded in gas.
@@ -67,14 +103,14 @@ julia> kg = constheatconductivity(0.092);
 
 julia> kb = GranularMediumHeatConductivity(ks, kg, 0.36);
 
-julia> compute(kb, 300.0)
+julia> kb(300.0)
 0.23471049304677621
 ```
 """
 struct GranularMediumHeatConductivity <: AbstractMaxwellEffHeatCond
     "Heat conductivity model for solid phase."
     ks::AbstractHeatCondTemperatureDep
-    
+
     "Heat conductivity model for gas phase."
     kg::AbstractHeatCondTemperatureDep
 
@@ -82,26 +118,63 @@ struct GranularMediumHeatConductivity <: AbstractMaxwellEffHeatCond
     ϕ::Float64
 end
 
+##############################################################################
+# DOMAIN SPECIFIC - ROTARY KILN MUJUMDAR 2006
+##############################################################################
+
+# XXX: find a better way to avoid this global!
+const KMUJUMDAR2006 = Polynomial([-7.494e-03,  1.709e-04, -2.377e-07,
+                                   2.202e-10, -9.463e-14,  1.581e-17])
+
 """
-    maxwell_eff_conductivity(kg, ks, ϕ)
+Air heat conductivity for rotary kiln simulation - Mujumdar (2006).
 
-Maxwell effective medium theory of thermal conductivity computed in terms of
-gas thermal conductivity `kg`, solids thermal conductivity `ks`, and solids
-packing fraction `ϕ`.
+```jldoctest
+julia> k = AirHeatConductivityMujumdar2006();
+
+julia> k(300)
+0.027600315300000004
+```
 """
-function maxwell_eff_conductivity(kg, ks, ϕ)
-    Σ, Δ = (2kg + ks), (ks - kg)
-    return kg * (Σ+2ϕ*Δ) / (Σ-1ϕ*Δ)
+struct AirHeatConductivityMujumdar2006 <: AbstractHeatCondTemperatureDep end
+
+"""
+Air viscosity for rotary kiln simulation - Mujumdar (2006).
+
+```jldoctest
+julia> μ = AirViscosityMujumdar2006();
+
+julia> μ(300)
+1.837988950255163e-5
+```
+"""
+struct AirViscosityMujumdar2006 <: AbstractViscosityTemperatureDep end
+
+##############################################################################
+# WRAPPERS
+##############################################################################
+
+"Constant heat conductivity wrapper compatible with temperature dependency."
+constheatconductivity(k) = TempPolynomialHeatConductivity([k])
+
+"Constant heat conductivity wrapper compatible with temperature dependency."
+constfluidviscosity(μ) = TempPolynomialFluidViscosity([μ])
+
+##############################################################################
+# CALLERS
+##############################################################################
+
+(obj::TempPolynomialHeatConductivity)(T) = obj.p(T)
+
+(obj::TempPolynomialFluidViscosity)(T) = obj.p(T)
+
+(obj::GranularMediumHeatConductivity)(T) = let
+    maxwell_eff_conductivity(obj.kg(T), obj.ks(T), obj.ϕ)
 end
 
-function compute(k::AbstractHeatCondTemperatureDep, T)
-    return k.p(T)
-end
+(obj::AirHeatConductivityMujumdar2006)(T) = KMUJUMDAR2006(T)
 
-function compute(k::AbstractMaxwellEffHeatCond, T)
-    ks, kg = compute(k.ks, T), compute(k.kg, T)
-    return maxwell_eff_conductivity(kg, ks, k.ϕ)
-end
+(obj::AirViscosityMujumdar2006)(T) = 0.1672e-05sqrt(T) - 1.058e-05
 
 ##############################################################################
 # EOF

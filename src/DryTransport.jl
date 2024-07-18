@@ -8,8 +8,9 @@ using WallyToolbox: AbstractPrandtlNumber
 using WallyToolbox: AbstractReynoldsPipeFlow
 using WallyToolbox: AbstractNusseltPipeFlow
 using WallyToolbox: AbstractHtcPipeFlow
-using WallyToolbox: AbstractMaxwellEffHeatCond
+using WallyToolbox: AbstractViscosityTemperatureDep
 using WallyToolbox: AbstractHeatCondTemperatureDep
+using WallyToolbox: AbstractMaxwellEffHeatCond
 using WallyToolbox
 
 include("jl/transport/dimensionless.jl")
