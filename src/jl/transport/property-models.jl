@@ -65,7 +65,9 @@ julia> ks = constheatconductivity(5.0);
 
 julia> kg = constheatconductivity(0.092);
 
-julia> compute(GranularBedHeatConductivity(ks, kg, 0.36), 300.0)
+julia> kb = GranularMediumHeatConductivity(ks, kg, 0.36);
+
+julia> compute(kb, 300.0)
 0.23471049304677621
 ```
 """
