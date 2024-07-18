@@ -1,6 +1,11 @@
 {
     "update.mode": "none",
 
+    // These are not working yet, waiting for solution!
+    // https://github.com/Microsoft/vscode/issues/22613
+    "window.restoreWindows": "none",
+    "files.hotExit": "off",
+
     "terminal.integrated.commandsToSkipShell": [
         "language-julia.interrupt"
     ],
