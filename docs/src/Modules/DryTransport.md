@@ -116,3 +116,23 @@ DryTransport.NusseltDittusBoelter
 DryTransport.HtcPipeFlow
 DryTransport.htc
 ```
+
+## Property models
+
+Medium properties often are non-constant and require description through different sorts of models for representing their dependence on solution quantities, such as temperature, pressure, composition, etc. This section is devoted to document such models.
+
+### Thermal conductivity
+
+The most commonly used representation of thermal conductivity of materials is through polynomial fits of temperature. Although this approach does not provide any physical-based representation, it is easy to use and fast to evaluate in most computational science problems. A common interface for polynomial properties is given by the following structure.
+
+```@docs
+DryTransport.TempPolynomialHeatConductivity
+DryTransport.constheatconductivity
+```
+
+According to ([[@Hanein2017]]) the representation of effective thermal conductivity of a solids bed in a rotary kiln can be approximated through a Maxell model based on effective medium theory. To keep track of eventually temperature-dependent properties and make use of this model, the following interfaces are provided.
+
+```@docs
+DryTransport.GranularMediumHeatConductivity
+DryTransport.maxwell_eff_conductivity
+```

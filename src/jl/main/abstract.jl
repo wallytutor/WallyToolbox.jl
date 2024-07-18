@@ -36,6 +36,15 @@ abstract type AbstractHtc <: AbstractTransportCoefficient end
 abstract type AbstractHtcPipeFlow <: AbstractHtc end
 
 ##############################################################################
+# PROPERTY MODELS
+##############################################################################
+
+abstract type AbstractHeatConductivity end
+
+abstract type AbstractMaxwellEffHeatCond     <: AbstractHeatConductivity end
+abstract type AbstractHeatCondTemperatureDep <: AbstractHeatConductivity end
+
+##############################################################################
 # LEGACY (ENTERING)
 ##############################################################################
 
