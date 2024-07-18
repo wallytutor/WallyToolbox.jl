@@ -132,7 +132,7 @@ let
     
     # If N > n, then *neighbors* interact!
     # Number of random walk steps to perform.
-    N = 3n
+    N = 5n
     
     # Number of repeats for sampling
     M = 1000
@@ -145,11 +145,22 @@ end
 n = 50
 
 istrue = true
-for _ in 1:20
-x = rand(RNG, -n:n)
-v = (0 < n+x <= n) ? n+x : x
-println(x, " ", v)
-istrue = istrue && (1 <= v <= n)
+
+for _n in 1:10
+    for _ in 1:20
+        x = rand(RNG, -(n-1):n)
+        v = (1 <= n+x <= n) ? n+x : x
+        
+        if (v == 0) || (v > n)
+            println(x, " ", v)
+        end
+    
+        if !(1 <= v <= n)
+            println("WTH: $(v)")
+        end
+            
+        istrue = istrue && (1 <= v <= n)
+    end
 end
 
 istrue
