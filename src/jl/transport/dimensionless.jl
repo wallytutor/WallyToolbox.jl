@@ -1,4 +1,8 @@
-# -*- coding: utf-8 -*-
+##############################################################################
+# DIMENSIONLESS
+#
+# Provides definitions and models for evaluation of dimensionless groups.
+##############################################################################
 
 export ConstantPrandtl
 export ReynoldsPipeFlow
