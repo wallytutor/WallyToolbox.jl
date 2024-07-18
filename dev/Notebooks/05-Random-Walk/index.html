@@ -25,8 +25,8 @@ nothing; #hide</code></pre><pre><code class="language-julia hljs">function rando
         if bullet &lt; threshold
             # FIXME: last r/c is being skipped!
             # Make sure wrapping around is respected.
-            xm = (1 &lt;= n+xm &lt;= n) ? n+xm : xm
-            ym = (1 &lt;= n+ym &lt;= n) ? n+ym : ym
+            xm = (1 &lt;= xm &lt;= n) ? xm : n+xm
+            ym = (1 &lt;= ym &lt;= n) ? ym : n+ym
             # xm = (xm&gt;0) ? xm : n+xm-1
             # ym = (ym&gt;0) ? ym : n+ym-1
 
@@ -67,8 +67,8 @@ end</code></pre><pre><code class="language-julia hljs">function workflow(p, K, n
         n = first(size(A))
         nn = div(n, 2) + 1
         
-        a1 = reshape(sum(A; dims=1), n)[nn:end]
-        a2 = reshape(sum(A; dims=2), n)[nn:end]
+        a1 = reshape(sum(A; dims=1), n)[nn:end-1]
+        a2 = reshape(sum(A; dims=2), n)[nn:end-1]
     
         a1 /= sum(a1)
         a2 /= sum(a2)
@@ -87,7 +87,7 @@ end</code></pre><pre><code class="language-julia hljs">function workflow(p, K, n
         f = Figure(size = (1000, 500))
         
         ax1 = Axis(f[1, 1]; aspect = 1)
-        heatmap!(ax1, A; colormap = :thermal)
+        heatmap!(ax1, A[1:end-1, 1:end-1]; colormap = :thermal)
     
         ax2 = Axis(f[1, 2]; aspect = 1)
         lines!(ax2, a1; color=:black)
@@ -137,4 +137,4 @@ for _n in 1:10
     end
 end
 
-istrue</code></pre><pre><code class="language-julia hljs"></code></pre><pre><code class="language-julia hljs"></code></pre></article><nav class="docs-footer"><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.5.0 on <span class="colophon-date" title="Thursday 18 July 2024 19:50">Thursday 18 July 2024</span>. Using Julia version 1.10.4.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+istrue</code></pre><pre><code class="language-julia hljs"></code></pre><pre><code class="language-julia hljs"></code></pre></article><nav class="docs-footer"><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.5.0 on <span class="colophon-date" title="Thursday 18 July 2024 20:05">Thursday 18 July 2024</span>. Using Julia version 1.10.4.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
