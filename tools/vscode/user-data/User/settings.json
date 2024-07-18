@@ -117,6 +117,13 @@
         "rewrap.doubleSentenceSpacing": true
     },
 
+    "[latex]": {
+        "editor.wordWrap": "wordWrapColumn",
+        "editor.wordWrapColumn": 80,
+        "editor.rulers": [79],
+        "rewrap.autoWrap.enabled": false
+    },
+
     "[markdown]": {
         "editor.wordWrap": "wordWrapColumn",
         "editor.wordWrapColumn": 80,
@@ -126,6 +133,6 @@
 
     "editor.minimap.enabled": false,
     "workbench.tree.indent": 12,
-    "terminal.integrated.enableMultiLinePasteWarning": false,
+    "terminal.integrated.enableMultiLinePasteWarning": "never",
     "workbench.startupEditor": "none",
 }
