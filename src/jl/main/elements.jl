@@ -21,7 +21,32 @@ const ElementalQuantity = Pair{Symbol, <:Number}
 # Compose elemental stoichiometries
 #############################################################################
 
-""" Compound stoichiometry for ease of data manipulation."""
+"""
+Compound stoichiometry for ease of data manipulation.
+
+This type provide a simple interface for declaring chemical compounds from
+stable [`ELEMENTS`](@ref) and computing molecular masses. Its main use is
+intended for compound creation during parsing of thermodynamic databases.
+Below we illustrate the creation of compounds and the *algebra* of creation
+of derived compounds.
+
+```jldoctest
+julia> al2o3 = Stoichiometry(Al=2, O=3)
+Stoichiometry(Pair{Symbol, <:Number}[:Al => 2, :O => 3])
+
+julia> molecularmass(al2o3)
+0.1019600768
+
+julia> ca1o1 = Stoichiometry(Ca=1, O=1)
+Stoichiometry(Pair{Symbol, <:Number}[:Ca => 1, :O => 1])
+
+julia> c1a2 = ca1o1 + 2 * al2o3
+Stoichiometry(Pair{Symbol, <:Number}[:Al => 4, :Ca => 1, :O => 7])
+
+julia> molecularmass(c1a2)
+0.25999715360000003
+```
+"""
 struct Stoichiometry
     amounts::Vector{ElementalQuantity}
 
