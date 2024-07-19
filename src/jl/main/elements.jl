@@ -108,6 +108,11 @@ atomicmass(e::ElementData) = 0.001e[3]
 # molecularmass()
 #############################################################################
 
+# Also support elements by aliasing.
+molecularmass(s::Union{String,Symbol}) = atomicmass(s)
+
+molecularmass(e::ElementData) = atomicmass(e)
+
 # Using Union{NamedTuple, Base.Pairs}:
 molecularmass(nt) = sum(c*atomicmass(s) for (s, c) in pairs(nt))
 

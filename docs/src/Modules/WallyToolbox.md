@@ -2,12 +2,57 @@
 
 The core package of `WallyToolbox` ecosystem provides shared functionalities and types that are used in more specialized packages. This allows for standardization of interfaces, employed quantities, and avoid boilerplate code. This page organizes everything to facilitate the understanding of the end-user.
 
+!!! info
+
+    Over the time it is expected that many functionalities from other modules will integrate `WallyToolbox` as they become stable. In some cases, entire modules may become sub-modules, so you might need to check where to import some utilities as this package is rolling release.
+
 ```@meta
 EditURL = "https://github.com/wallytutor/WallyToolbox.jl/blob/main/docs/src/Modules/WallyToolbox.md"
 CurrentModule = WallyToolbox
 DocTestSetup = quote
     using WallyToolbox
 end
+```
+
+## Haskell-like array slicing
+
+Those who know Haskell probably started learning it by manipulating lists with `head` and `tail`. Those functionalities are not available in Julia *by default* and array slicing - with an ugly syntax - is required. Since this is done often in the fields of application of `WallyToolbox`, both [`head`](@ref) and [`tail`](@ref) together with a [`body`](@ref) functions are available in its core. They are simple wrapers over the `@view` macro and work with both iterable types and arrays. The following snippet illustrates their usage.
+
+```jldoctest
+julia> v = collect(1:4);
+
+julia> head(v) == [1; 2; 3]
+true
+
+julia> tail(v) == [2; 3; 4]
+true
+
+julia> body(v) == [2; 3]
+true
+```
+
+More examples are provided in the documentation of each of the functions.
+
+```@docs
+WallyToolbox.head
+WallyToolbox.tail
+WallyToolbox.body
+```
+
+## Chemical elements
+
+The core functionality is provided through the `Stoichiometry` structure:
+
+```@docs
+WallyToolbox.Stoichiometry
+```
+
+```@docs
+WallyToolbox.element
+WallyToolbox.atomicmass
+WallyToolbox.molecularmass
+WallyToolbox.ElementData
+WallyToolbox.ElementalQuantity
 ```
 
 ## Constants
@@ -34,45 +79,6 @@ WallyToolbox.ZERO_CELSIUS
 WallyToolbox.ONE_ATM
 WallyToolbox.M_AIR
 WallyToolbox.ELEMENTS
-```
-
-## Elements
-
-```@docs
-WallyToolbox.ElementData
-WallyToolbox.ElementalQuantity
-WallyToolbox.Stoichiometry
-```
-
-```@docs
-WallyToolbox.element
-WallyToolbox.atomicmass
-WallyToolbox.molecularmass
-```
-
-## Haskell-like array slicing
-
-Those who know Haskell probably started learning it by manipulating lists with `head` and `tail`. Those functionalities are not available in Julia *by default* and array slicing - with an ugly syntax - is required. Since this is done often in the fields of application of `WallyToolbox`, both [`head`](@ref) and [`tail`](@ref) together with a [`body`](@ref) functions are available in its core. They are simple wrapers over the `@view` macro and work with both iterable types and arrays. The following snippet illustrates their usage.
-
-```jldoctest
-julia> v = collect(1:4);
-
-julia> head(v) == [1; 2; 3]
-true
-
-julia> tail(v) == [2; 3; 4]
-true
-
-julia> body(v) == [2; 3]
-true
-```
-
-More examples are provided in the documentation of each of the functions.
-
-```@docs
-WallyToolbox.head
-WallyToolbox.tail
-WallyToolbox.body
 ```
 
 ## General utilities
