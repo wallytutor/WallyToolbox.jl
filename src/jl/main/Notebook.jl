@@ -73,11 +73,13 @@ function dump_kernel_spec()
     end
 end
 
+"Launch Jupyter notebook session with WallyToolbox kernel."
 function launch_notebook()
     dump_kernel_spec()
     notebook(dir=pwd(), detached=true)
 end
 
+"Launch Jupyterlab session with WallyToolbox kernel."
 function launch_jupyterlab()
     dump_kernel_spec()
     jupyterlab(dir=pwd(), detached=true)

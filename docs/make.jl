@@ -68,8 +68,14 @@ pages = [
     "WallyToolbox" => [
         "Home" => "index.md",
 
+        "WallyToolbox" => [
+            "Modules/WallyToolbox/constants.md",
+            "Modules/WallyToolbox/elements.md",
+            "Modules/WallyToolbox/utilities.md",
+            "Modules/WallyToolbox/Documentation.md",
+        ],
+        
         "Julia Modules" => [
-            "WallyToolbox"  => "Modules/WallyToolbox.md",
             "DryCombustion" => "Modules/DryCombustion.md",
             "DryFlowsheet"  => "Modules/DryFlowsheet.md",
             "DryGranular"   => "Modules/DryGranular.md",
