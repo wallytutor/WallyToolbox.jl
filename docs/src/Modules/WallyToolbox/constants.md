@@ -23,11 +23,16 @@ WallyToolbox.P_REF
 WallyToolbox.C_REF
 ```
 
-## Other constants
+## Unit conversion
 
 ```@docs
 WallyToolbox.ZERO_CELSIUS
 WallyToolbox.ONE_ATM
+```
+
+## Chemistry-related
+
+```@docs
 WallyToolbox.M_AIR
 WallyToolbox.ELEMENTS
 ```

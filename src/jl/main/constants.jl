@@ -1,34 +1,34 @@
 # -*- coding: utf-8 -*-
 
-"Ideal gas constant [J/(mol.K)]."
+"Ideal gas constant [$(GAS_CONSTANT) [J/(mol.K)]."
 const GAS_CONSTANT::Float64 = 8.314_462_618_153_24
 export GAS_CONSTANT
 
-"Stefan-Boltzmann constant [W/(m².K⁴)]."
+"Stefan-Boltzmann constant [$(STEFAN_BOLTZMANN) W/(m².K⁴)]."
 const STEFAN_BOLTZMANN::Float64 = 5.670_374_419e-08
 export STEFAN_BOLTZMANN
 
-"Zero degrees Celsius in Kelvin [$(ZERO_CELSIUS) ``K``]."
+"Zero degrees Celsius in Kelvin [$(ZERO_CELSIUS) K]."
 const ZERO_CELSIUS::Float64 = 273.15
 export ZERO_CELSIUS
 
-"Atmospheric pressure at sea level [$(ONE_ATM) ``Pa``]."
+"Atmospheric pressure at sea level [$(ONE_ATM) Pa]."
 const ONE_ATM::Float64 = 101325.0
 export ONE_ATM
 
-"Reference atmospheric pressure [Pa]."
+"Reference atmospheric pressure [$(P_REF) Pa]."
 const P_REF::Float64 = ONE_ATM
 export P_REF
 
-"Normal atmospheric temperature [K]."
+"Normal atmospheric temperature [$(T_REF) K]."
 const T_REF::Float64 = ZERO_CELSIUS
 export T_REF
 
-"Normal state concentration [mol/m³]. "
+"Normal state concentration [$(C_REF) mol/m³]. "
 const C_REF::Float64 = P_REF / (GAS_CONSTANT * T_REF)
 export C_REF
 
-"Air mean molecular mass [kg/mol]."
+"Air mean molecular mass [$(M_AIR) kg/mol]."
 const M_AIR::Float64 = 0.0289647
 export M_AIR
 
