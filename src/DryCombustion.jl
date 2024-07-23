@@ -11,6 +11,7 @@ using Roots
 
 export EmpiricalFuel
 export oxidizer_mass_flow_rate
+export hfo_empirical_formula
 export hfo_specific_heat
 export hfo_enthalpy_net_bs2869
 export fit_rosinrammler
@@ -100,14 +101,31 @@ function oxidizer_mass_flow_rate(f::EmpiricalFuel; y_o2 = 0.23)
 
     x = fn.X[findall(==(:C), fn.elements) |> first]
     y = fn.X[findall(==(:H), fn.elements) |> first]
-    z = fn.X[findall(==(:O), fn.elements) |> first]
 
-    return (1//2)*(2*x + y/2 - z)* m_o2 / y_o2
+    rhs = 2x + y/2
+
+    get_element(e) = fn.X[findall(==(e), fn.elements) |> first]
+    rhs += -1*((:O in fn.elements) ? get_element(:O) : 0.0)
+    rhs +=  1*((:N in fn.elements) ? get_element(:N) : 0.0)
+    rhs +=  2*((:S in fn.elements) ? get_element(:S) : 0.0)
+
+    return (1//2) * rhs * m_o2 / y_o2
 end
 
 ##############################################################################
 # Heavy fuel oil
 ##############################################################################
+
+"""
+    hfo_empirical_formula(Y; scaler = nothing)
+
+Wrapper for `EmpiricalFuel` ensuring all HFO instances are created with all
+typical elements, say C, H, O, N, and S, provided in this same order.
+"""
+function hfo_empirical_formula(Y; scaler = nothing)
+    length(Y) == 5 || throw(ErrorException("All CHONS elements required!"))
+    return EmpiricalFuel(Y; elements = [:C, :H, :O, :N, :S], scaler)
+end
 
 """
     hfo_specific_heat(T::Float64, S::Float64)::Float64
