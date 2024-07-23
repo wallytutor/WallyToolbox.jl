@@ -340,4 +340,22 @@ $$
 
 In this expression the *big-D* notation represents a material or convective derivative. It provides us the behavior of transported quantity in the fluid reference frame, what can be useful for some local analysis. Even more useful than that, under this form we can promptly simplify the remaining terms in the left-hand side for cases of constant diffusivity, incompressible flow, and absence of chemical reactions (in the order of appearance of terms). For numerical solution of transport equations for incompressible flows, using the null divergent of velocity can save us a lot of trouble.
 
+---
+## By lecture
+
+### 019
+
+The scale estimates of penetration depth, boundary flux, and total concentration match the analytical values for steady-state first order linear reaction-diffusion equation submitted to a Dirichlet condition on one side of a semi-infinite medium:
+
+$$
+D\dfrac{\partial^{2}C}{\partial{}x^{2}}-kC=0\implies\begin{cases}
+\delta     &\sim& \sqrt{\dfrac{D}{k}}\\[12pt]
+%
+F          &\sim& C_{0}\sqrt{Dk}\\[12pt]
+%
+C_{\infty} &\sim& C_{0}\sqrt{\dfrac{D}{k}}
+\end{cases}
+$$
+
+### 020
 
