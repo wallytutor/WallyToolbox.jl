@@ -18,6 +18,8 @@ Although an implementation is not yet provided here, users are encouraged to est
 
 ### Common dimensionless groups
 
+#### Reynolds
+
 [Reynolds](https://en.wikipedia.org/wiki/Reynolds_number) *dimensionless group is named for Osborne Reynolds (1842-1912), professor of engineering at the University of Manchester. He studied the laminar-turbulent transition, turbulent heat transfer, and theory of lubrication* ([[@Bird2001]]). In general we denote Reynolds number by $\mathrm{Re}$ and it is used to delineate flow regimes. For circular tubes it is defined as:
 
 $$
@@ -30,6 +32,8 @@ where $\langle{}v_{z}\rangle$ is the average flow velocity in axial direction an
 DryTransport.reynolds
 ```
 
+#### Nusselt
+
 The [Nusselt](https://en.wikipedia.org/wiki/Nusselt_number) number provides the ratio of convective to conductive heat transfer at a boundary in a fluid, defined as
 
 $$
@@ -41,6 +45,8 @@ Often in buoyancy-driven flow analysis it is correlated as $\mathrm{Nu}=a\mathrm
 ```@docs
 DryTransport.nusselt
 ```
+
+#### Prandtl
 
 [Prandtl](https://en.wikipedia.org/wiki/Prandtl_number) represents the ratio of momentum diffusivity to thermal diffusivity $\mathrm{Pr}=\frac{\nu}{\alpha}$. High $\mathrm{Pr}$ indicates that momentum transfer is more effective than heat transfer (oils), while low values (liquid metals) indicate thermal boundary layer is more important than viscous one.
 
@@ -61,6 +67,8 @@ $$
 DryTransport.prandtl
 ```
 
+#### Péclet
+
 [Péclet](https://en.wikipedia.org/wiki/Péclet_number) *Jean-Claude-Eugene Peclet (pronounced "Pay-clay" with the second syllable accented) (1793-1857) authored several books including one on heat conduction*  ([[@Bird2001]]). This number is nothing more than the multiplication of Reynolds and Prandtl or Schmidt numbers. By simplifying factors one easily determines that it represents the ratio of convective by diffusive transport (thermal or species). High $\mathrm{Pe}$ limit represents the #plug-flow behavior.  
 
 $$
@@ -69,6 +77,8 @@ $$
 $$
 
 ### Convection-related groups
+
+#### Grashof
 
 [Grashof](https://en.wikipedia.org/wiki/Grashof_number) number named after *Franz Grashof (1826-1893) (pronounced "Grahss-hoff). He was professor of applied mechanics in Karlsruhe and one of the founders of the Verein Deutscher Ingenieure in 1856* ([[@Bird2001]]). The Grashof number is the characteristic group occurring in analyses of free convection. It approximates the ratio of the buoyancy to viscous force acting on a fluid, defined as
 
@@ -82,9 +92,13 @@ and is analogous to Reynolds number in natural convection. Increasing the value 
 DryTransport.grashof
 ```
 
+#### Rayleigh
+
 [Rayleigh](https://en.wikipedia.org/wiki/Rayleigh_number) number is the product of Grashof $\mathrm{Gr}$ and Prandtl $\mathrm{Pr}$ numbers. Related to the transition from laminar to turbulent in buoyancy-driven flows. Laminar to turbulent is assumed to take place at $10^9$  ([[@Balaji2014]]).
 
 ### Mass transfer groups
+
+#### Schmidt
 
 [Schmidt](https://en.wikipedia.org/wiki/Schmidt_number) number is the mass diffusion equivalent of Prandtl's. Its range can be much broader than its thermal relative, Prandtl number. This is given by the effects of cross-section and molar weight determining mass diffusivity of gas species. For more, see ([[@Bird2001]]), Chapter 9.
 
@@ -92,9 +106,13 @@ $$
 \mathrm{Sc} = \frac{\nu}{D}
 $$
 
+#### Sherwood
+
 [Sherwood](https://en.wikipedia.org/wiki/Sherwood_number) number, also called the **mass transfer [Nusselt number](https://en.wikipedia.org/wiki/Nusselt_number "Nusselt number")** is a dimensionless number used in mass-transfer operation. It represents the ratio of the total mass transfer rate (convection + diffusion) to the rate of diffusive mass transport, and is named in honor of [Thomas Kilgore Sherwood](https://en.wikipedia.org/wiki/Thomas_Kilgore_Sherwood "Thomas Kilgore Sherwood").
 
 ###  Multiphase-specific
+
+#### Weber
 
 [Weber](https://en.wikipedia.org/wiki/Weber_number) group is often found in applications of multiphase flows where strongly curved surfaces are present. It represents the ratio of drag forces to cohesion forces, and can be thought of as a measure of the relative importance of the fluid's inertia compared to its surface tension. As reminded by ([[@Amsden1989]]), for $\mathrm{We}>1$, *drop oscillations, distortions, and breakup must be considered*, requiring other sub-models other than simple drag to describe the flow.
 
