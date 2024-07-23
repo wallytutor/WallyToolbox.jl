@@ -1,12 +1,12 @@
 # LAMMPS
 
-[Large-scale Atomic/Molecular Massively Parallel Simulator](https://www.lammps.org/#gsc.tab=0) or simply LAMMPS is a popular molecular dynamics software. It has probably the largest community and is highly mature, reasons why I have chosen this software to learn molecular dynamics at first. Later on I intend learning [Molly.jl](https://juliamolsim.github.io/Molly.jl/stable/) and maybe 
+[Large-scale Atomic/Molecular Massively Parallel Simulator](https://www.lammps.org/#gsc.tab=0) or simply LAMMPS is a popular molecular dynamics software. It has probably the largest community and is highly mature, reasons why I have chosen this software to learn molecular dynamics at first. Later on I intend learning [Molly.jl](https://juliamolsim.github.io/Molly.jl/stable/) and maybe [GROMACS](https://www.gromacs.org/) or some other popular package.
 
-In what follows I will be mostly guided by the [LAMMPS tutorials](https://lammpstutorials.github.io/) by [Simon Gravelle](https://scholar.google.com/citations?user=9fD2JlYAAAAJ&hl=en) in what concerns the contents, with some touches of automation by myself. Interesting materials are also inspired in what is provided by the [MEJK Course](https://mejk.github.io/moldy/intro.html). There are also interesting links in the [LAMMPS Tutorials](https://www.lammps.org/tutorials.html).
-
-The official documentation of LAMMPS can be found [here](https://docs.lammps.org/Manual.html).
+In what follows I will be mostly guided by the [LAMMPS tutorials](https://lammpstutorials.github.io/) by [Simon Gravelle](https://scholar.google.com/citations?user=9fD2JlYAAAAJ&hl=en) in what concerns the contents, with some touches of automation by myself. Interesting materials are also inspired in what is provided by the [MEJK Course](https://mejk.github.io/moldy/intro.html). There are also interesting links in the [LAMMPS Tutorials](https://www.lammps.org/tutorials.html). The official documentation of LAMMPS can be found [here](https://docs.lammps.org/Manual.html).
 
 ## Resources
+
+These are complementary to LAMMPS and might be required in some cases, mainly for post-processing and rendering of simulation results as nice videos.
 
 - [colvars](https://colvars.github.io/)
 - [MAICoS](https://maicos.readthedocs.io/en/main/get-started/maicos.html)
