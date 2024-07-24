@@ -73,26 +73,28 @@ Notes based on *Data-Driven Science and Engineering* by Steven L. Brunton and J.
 ---
 ## Physics-Informed Neural Networks
 
-Physics-Informed Neural Networks (PINNs) were first introduced by [[@Raissi2017]] in the context of providing data-driven solutions of nonlinear PDE's. In what follows we review the basic concepts and approaches developed in this field during the past few years. Both mathematical and application aspects will be treated in the review.
+Physics-Informed Neural Networks (PINNs) were first introduced by ([[@Raissi2017]]) in the context of providing data-driven solutions of nonlinear PDE's. In what follows we review the basic concepts and approaches developed in this field during the past few years. Both mathematical and application aspects will be treated in the review.
 ### Common applications
 
- As per [[@Guo2024a]] the following common applications arise from PINNs:
+ As per ([[@Guo2024a]]) the following common applications arise from PINNs:
  
-- Predictive modeling and simulations
-	- Solution of dynamical systems (even high-dimensional)
-	- Acceleration of multi-physics simulations
+*Predictive modeling and simulations*
 
-- Optimization and systems control
-	- Surrogate models for design optimization
-	- Inverse design (finding conditions)
-	- Model predictive control
-	- Optimal sensor placement
+- Solution of dynamical systems (even high-dimensional)
+- Acceleration of multi-physics simulations
+
+*Optimization and systems control*
+
+- Surrogate models for design optimization
+- Inverse design (finding conditions)
+- Model predictive control
+- Optimal sensor placement
 	
-- Data-driven insights
+*Data-driven insights*
 
-- Data-driven enhancement
+*Data-driven enhancement*
 
-- Monitoring, diagnostic, and health assessment
+*Monitoring, diagnostic, and health assessment*
 
 ### Key Ideas
 
@@ -104,7 +106,7 @@ Physics-Informed Neural Networks (PINNs) were first introduced by [[@Raissi2017]
 
 ### Research opportunities
 
-- Following [[@Guo2023a]] citing the work by [[@Wu2022a]], resampling and refinement methods could be improved by better PDF's and the use of active or reinforcement learning to improve sampling.
+- Following ([[@Guo2023a]]) citing the work by ([[@Wu2022a]]), resampling and refinement methods could be improved by better PDF's and the use of active or reinforcement learning to improve sampling.
 
 ### References
 
@@ -112,27 +114,27 @@ Unraveling the design pattern of physics-informed neural networks:
 
 | Post          | Subject                                                                                  | Main reference(s)       |
 | ------------- | ---------------------------------------------------------------------------------------- | ----------------------- |
-| [[@Guo2023a]] | Resampling of residual points                                                            | [[@Wu2022a]]            |
-| [[@Guo2023b]] | Ensemble learning and dynamic solution interval expansion                                | [[@Haitsiukevich2022a]] |
-| [[@Guo2023c]] | Improving performance through gradient boosting                                          | [[@Fang2023a]]          |
-| [[@Guo2023d]] | Incorporate the gradient of residual terms as an additional loss term for stiff problems | [[@Yu2022a]]            |
-| [[@Guo2023e]] |                                                                                          | [[@Wang2023a]]          |
-| [[@Guo2023f]] |                                                                                          | [[@Wang2022a]]          |
-| [[@Guo2023g]] |                                                                                          | [[@Arthurs2021a]]       |
+| ([[@Guo2023a]]) | Resampling of residual points                                                            | ([[@Wu2022a]])            |
+| ([[@Guo2023b]]) | Ensemble learning and dynamic solution interval expansion                                | ([[@Haitsiukevich2022a]]) |
+| ([[@Guo2023c]]) | Improving performance through gradient boosting                                          | ([[@Fang2023a]])          |
+| ([[@Guo2023d]]) | Incorporate the gradient of residual terms as an additional loss term for stiff problems | ([[@Yu2022a]])            |
+| ([[@Guo2023e]]) |                                                                                          | ([[@Wang2023a]])          |
+| ([[@Guo2023f]]) |                                                                                          | ([[@Wang2022a]])          |
+| ([[@Guo2023g]]) |                                                                                          | ([[@Arthurs2021a]])       |
 
 | Reference | Subject |
 | ---- | ---- |
-| [[@Lagaris1997a]] | Seminal work on PINNs. |
-| [[@Antonelo2021a]] |  |
-| [[@Cai2021a]] |  |
-| [[@Cuomo2022a]] |  |
-| [[@Haitsiukevich2022a]] |  |
-| [[@Karniadakis2021a]] |  |
-| [[@Lu2019a]] |  |
-| [[@Lu2021a]] |  |
-| [[@Nabian2021a]] |  |
-| [[@Sanyal2022a]] |  |
-| [[@Wurth2023a]] | Use of PINNs to solve diffusion equation (heat transfer) during the curing of composites. The paper is more focused in the application than in the implementation. Benchmark against FDM/FEM. |
+| ([[@Lagaris1997a]]) | Seminal work on PINNs. |
+| ([[@Antonelo2021a]]) |  |
+| ([[@Cai2021a]]) |  |
+| ([[@Cuomo2022a]]) |  |
+| ([[@Haitsiukevich2022a]]) |  |
+| ([[@Karniadakis2021a]]) |  |
+| ([[@Lu2019a]]) |  |
+| ([[@Lu2021a]]) |  |
+| ([[@Nabian2021a]]) |  |
+| ([[@Sanyal2022a]]) |  |
+| ([[@Wurth2023a]]) | Use of PINNs to solve diffusion equation (heat transfer) during the curing of composites. The paper is more focused in the application than in the implementation. Benchmark against FDM/FEM. |
 
 Other current readings:
 
