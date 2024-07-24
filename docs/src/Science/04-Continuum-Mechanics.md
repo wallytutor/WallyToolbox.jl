@@ -341,7 +341,9 @@ $$
 In this expression the *big-D* notation represents a material or convective derivative. It provides us the behavior of transported quantity in the fluid reference frame, what can be useful for some local analysis. Even more useful than that, under this form we can promptly simplify the remaining terms in the left-hand side for cases of constant diffusivity, incompressible flow, and absence of chemical reactions (in the order of appearance of terms). For numerical solution of transport equations for incompressible flows, using the null divergent of velocity can save us a lot of trouble.
 
 ---
-## By lecture
+## Notes by video lecture
+
+The playlist with all lectures is found [here](https://www.youtube.com/playlist?list=PLkdIY_5Zxa7WYkMvY48WQIxSZE-bI7R4w).
 
 ### 019
 
@@ -359,3 +361,24 @@ $$
 
 ### 020
 
+Damköhler number arises from reaction diffusion-equation discussed in lecture 019; we can make the equation dimensionless by making $\tilde{x}=xL^{-1}$, $\Theta=C/C_0$, and dividing everything by $k$, then we can define:
+
+$$
+\dfrac{\partial^{2}\Theta}{\partial{}\tilde{x}^{2}}-\mathrm{Da}\Theta=0
+%
+\quad\text{where}\quad
+%
+\mathrm{Da}=\frac{D}{k}L^2=\left(\frac{L}{\delta}\right)^2
+$$
+
+Limiting cases are:
+
+- $\mathrm{Da}\ll{}1$: fast diffusion limit, length scale $\delta$ is much larger than $L$, so diffusion *crosses* the domain; interaction of diffusion fronts is possible. On may be interested in *e.g* computing the deviation from surface concentration $C_0$ at the body core, $\Delta{}C/C_0\sim{}\sqrt{\mathrm{Da}}$.
+
+- $\mathrm{Da}\gg{1}$: fast reaction-limited transport; a thin layer of reaction products limits the affected depth and diffusion layer is thin beyond that. The relative amount of material that diffuses with respect to the other limiting case is $C/(C_0L^{d-1})\sim{}1/\sqrt{\mathrm{Da}}$.
+
+### 021
+
+In fact it is in this lecture that the stripping of dimensions of the equation as presented above in 020 is formalized; 
+
+### 022
