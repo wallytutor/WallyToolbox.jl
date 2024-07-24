@@ -108,16 +108,25 @@
     //-------------------------------------------------------------------------
 
     "[python]": {
+        "editor.detectIndentation": false,
+        "editor.insertSpaces": true,
+        "editor.tabSize": 4,
         "editor.rulers": [72, 79],
         "rewrap.doubleSentenceSpacing": true
     },
 
     "[julia]": {
+        "editor.detectIndentation": false,
+        "editor.insertSpaces": true,
+        "editor.tabSize": 4,
         "editor.rulers": [72, 79],
         "rewrap.doubleSentenceSpacing": true
     },
 
     "[latex]": {
+        "editor.detectIndentation": false,
+        "editor.insertSpaces": true,
+        "editor.tabSize": 2,
         "editor.wordWrap": "wordWrapColumn",
         "editor.wordWrapColumn": 80,
         "editor.rulers": [79],
