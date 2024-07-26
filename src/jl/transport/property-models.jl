@@ -8,6 +8,7 @@
 
 export TempPolynomialHeatConductivity
 export TempPolynomialFluidViscosity
+export TempFermiLikeMeltingViscosity
 
 export GranularMediumHeatConductivity
 export AirHeatConductivityMujumdar2006
@@ -16,6 +17,7 @@ export AirViscosityMujumdar2006
 export constheatconductivity
 export constfluidviscosity
 
+export fermilike_viscosity
 export maxwell_eff_conductivity
 
 ##############################################################################
@@ -61,7 +63,6 @@ Wrapper for a polynomial temperature-dependent fluid viscosity.
 $(TYPEDFIELDS)
 
 Usage is analogous to [`TempPolynomialHeatConductivity`](@ref).
-```
 """
 struct TempPolynomialFluidViscosity <: AbstractViscosityTemperatureDep
     "Fluid viscosity polynomial."
@@ -69,6 +70,73 @@ struct TempPolynomialFluidViscosity <: AbstractViscosityTemperatureDep
 
     function TempPolynomialFluidViscosity(coefs)
         return new(Polynomial(coefs, :T))
+    end
+end
+
+##############################################################################
+# ARBITRARY FUNCTIONS
+##############################################################################
+
+"""
+    fermilike_viscosity(T, μ∞, δ, Θ, Δ)
+
+Evaluation of Fermi-distribution-alike viscosity function.
+"""
+function fermilike_viscosity(T, μ∞, δ, Θ, Δ)
+    return μ∞ + δ / (1 + exp((T - Θ) / Δ))
+end
+
+"""
+Temperature-dependent viscosity with a Fermi-like distribution dependency.
+
+$(TYPEDFIELDS)
+
+The following example shows the evaluation of such a function below, in
+the middle, and above melting range.
+
+```jldoctest
+julia> μ = TempFermiLikeMeltingViscosity(1300.0, 1700.0, 1000.0, 0.1, 10);
+
+julia> μ(300.0)
+999.9999999999065
+
+julia> μ(1500.0)
+500.05
+
+julia> μ(2000.0)
+0.10372626662025815
+```
+"""
+struct TempFermiLikeMeltingViscosity <: AbstractViscosityTemperatureDep
+    "Center temperature of melting range [K]."
+    Θ::Float64
+
+    "Spread factor over melting range  [K]."
+    Δ::Float64
+
+    "Viscosity change during melting [Pa.s]."
+    δ::Float64
+
+    "High temperature viscosity [Pa.s]."
+    μ∞::Float64
+
+    "Low temperature viscosity [Pa.s]."
+    μ₀::Float64
+
+    "Spread coefficient used to compute Δ."
+    κ::Float64
+
+    "Melting start temperature [K]."
+    Ts::Float64
+    
+    "Melting end temperature [K]."
+    Te::Float64
+
+    function TempFermiLikeMeltingViscosity(Ts, Te, μ₀, μ∞, κ)
+        Θ = (Te + Ts) / 2
+        Δ = (Te - Ts) / κ
+        δ = μ₀ - μ∞
+        return new(Θ, Δ, δ, μ∞, μ₀, κ, Ts, Te)
     end
 end
 
@@ -167,6 +235,10 @@ constfluidviscosity(μ) = TempPolynomialFluidViscosity([μ])
 (obj::TempPolynomialHeatConductivity)(T) = obj.p(T)
 
 (obj::TempPolynomialFluidViscosity)(T) = obj.p(T)
+
+(obj::TempFermiLikeMeltingViscosity)(T) = let 
+    fermilike_viscosity(T, obj.μ∞, obj.δ, obj.Θ, obj.Δ)
+end
 
 (obj::GranularMediumHeatConductivity)(T) = let
     maxwell_eff_conductivity(obj.kg(T), obj.ks(T), obj.ϕ)
