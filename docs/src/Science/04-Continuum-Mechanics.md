@@ -379,6 +379,16 @@ Limiting cases are:
 
 ### 021
 
-In fact it is in this lecture that the stripping of dimensions of the equation as presented above in 020 is formalized; 
+In fact it is in this lecture that the stripping of dimensions of the equation as presented above in 020 is formalized; *do not even try to solve a problem before making it dimensionless*.
 
 ### 022
+
+#bessel-function
+
+*Always start any modeling with the simplest geometry that captures the basic features of the system being modeled; e.g. when expanding a solution of reaction-diffusion into exponential terms, it is worth noticing that they can be replaced by hyperbolic functions, and since $\sinh$ breaks the symmetry, that term may be eliminated already during constant identification from boundary conditions*.
+
+### 023
+
+### 024
+
+### 025
