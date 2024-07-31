@@ -389,6 +389,23 @@ In fact it is in this lecture that the stripping of dimensions of the equation a
 
 ### 023
 
+Similarly to lecture 019, here we develop convection-diffusion equation instead; in this case the flux of a transported concentration $C$ is given by the following expression: 
+
+$$
+\vec{F}=\vec{u}C-D\nabla{}C
+$$
+
+Applying the general conservation law to steady state and incompressible ($\nabla\vec{u}=0$) gives:
+
+$$
+\vec{u}\cdotp\nabla{C}-D\nabla^{2}C=0
+$$
+
+$$
+\vec{u}\cdotp\nabla{C}-D\nabla^{2}C=0
+\implies\delta  \sim \dfrac{D}{u}
+$$
+
 ### 024
 
 ### 025
