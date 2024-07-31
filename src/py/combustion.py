@@ -9,7 +9,10 @@ from unit_conversion import FlowUnits
 
 
 class HydrocarbonHeatingValue:
-    """ Computes heating value of gas """
+    """ Computes lower and higher heating values of gas.
+    
+    Resulting values are provided in kilojoules per kilogram.
+    """
     def __init__(self, gas: ct.Solution) -> None:
         water = ct.Water()
         h_liq = self._water_enthalpy(water, 0.0)
@@ -512,7 +515,7 @@ class CombustorPSR:
         ax1.set_xlabel(f"Residence time [x{tau_scale} s]")
         ax2.set_xlabel(f"Residence time [x{tau_scale} s]")
 
-        ax1.set_ylabel("Heat release rate [$MW\cdotp{}m^{-3}$]", color="C0")
+        ax1.set_ylabel("Heat release rate [$MW\\cdotp{}m^{-3}$]", color="C0")
         ax2.set_ylabel("Mole fraction")
         ax3.set_ylabel("Temperature [$K$]", color="C1",
                        rotation=270, labelpad=20)
