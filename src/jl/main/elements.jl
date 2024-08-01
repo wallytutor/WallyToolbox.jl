@@ -290,6 +290,9 @@ molecularmass(s::Stoichiometry) = molecularmass(; s.amounts...)
 # Recomended way using ChemicalCompound:
 molecularmass(c::ChemicalCompound) = c.M
 
+# Recomended way using ThermoCompound:
+molecularmass(c::ThermoCompound) = molecularmass(c.chemical)
+
 @doc """ Molecular mass of compound [kg/mol]. """ molecularmass
 
 #############################################################################
