@@ -14,6 +14,12 @@ The core functionality is provided through the `Stoichiometry` structure:
 WallyToolbox.Stoichiometry
 ```
 
+Once the composition of a compound has been set with `Stoichiometry`, the preferred method of working is through the creation of a `ChemicalCompound`, as follows:
+
+```@docs
+WallyToolbox.ChemicalCompound
+```
+
 The following methods and types are available for operation over compositions and elements.
 
 ```@docs

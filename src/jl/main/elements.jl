@@ -4,6 +4,7 @@ import Base: +
 import Base: *
 
 export Stoichiometry
+export ChemicalCompound
 export element, atomicmass
 export molecularmass
 
@@ -46,6 +47,11 @@ Stoichiometry(Pair{Symbol, <:Number}[:Al => 4, :Ca => 1, :O => 7])
 julia> molecularmass(c1a2)
 0.25999715360000003
 ```
+
+Please notice that [`ChemicalCompound`](@ref) creation should be done
+as early as possible as Stoichiometry has no state other than the number
+of atoms. Its recurrent use may lead to high computational cost for the
+evaluation of molecular masses.
 """
 struct Stoichiometry
     amounts::Vector{ElementalQuantity}
@@ -88,6 +94,58 @@ function Base.:+(a::Stoichiometry, b::Stoichiometry)::Stoichiometry
 end
 
 #############################################################################
+# Create processed compounds from stoichiometries
+#############################################################################
+
+"""
+A chemical compound with internal values pre-computed for recurrent use.
+
+```jldoctest
+julia> al2o3 = Stoichiometry(Al=2, O=3);
+
+julia> ca1o1 = Stoichiometry(Ca=1, O=1);
+
+julia> CA = ChemicalCompound(ca1o1 + al2o3);
+
+julia> molecularmass(CA)
+0.1580370768
+```
+"""
+struct ChemicalCompound
+    compound::Stoichiometry
+    elements::Vector{Symbol}
+    X::Vector{Float64}
+    Y::Vector{Float64}
+    M::Float64
+
+    function ChemicalCompound(st::Stoichiometry)
+        M = 0.0
+        A = 0
+
+        n = length(st.amounts)
+        elements = Vector{Symbol}(undef, n)
+        X, Y = zeros(n), zeros(n)
+
+        for (k, c) in enumerate(st.amounts)
+            # Store element for index search.
+            e = elements[k] = first(c)
+
+            # Count number of atoms `k`.
+            x = X[k] = last(c)
+
+            # Total mass of atoms `k`.
+            y = Y[k] = x * atomicmass(e)
+
+            # Cummulative atoms/molecular mass.
+            A += x
+            M += y
+        end
+
+        return new(st, elements, X ./ A, Y ./ M, M)
+    end
+end
+
+#############################################################################
 # Other functionalities
 #############################################################################
 
@@ -121,5 +179,8 @@ molecularmass(; kw...) = molecularmass(kw)
 
 # Recomended way using Stoichiometry:
 molecularmass(s::Stoichiometry) = molecularmass(; s.amounts...)
+
+# Recomended way using ChemicalCompound:
+molecularmass(c::ChemicalCompound) = c.M
 
 @doc """ Molecular mass of compound [kg/mol]. """ molecularmass
