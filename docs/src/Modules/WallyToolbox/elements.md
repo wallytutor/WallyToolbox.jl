@@ -29,3 +29,12 @@ WallyToolbox.molecularmass
 WallyToolbox.ElementData
 WallyToolbox.ElementalQuantity
 ```
+
+## Thermodynamic properties
+
+Materials properties are often reported according to the formalism of ([[@MaierKelley1932]]) or ([[@Shomate1954]]). To be able to handle data under this format, the following structures are provided.
+
+```@docs
+WallyToolbox.MaierKelleyThermo
+WallyToolbox.ShomateThermo
+```

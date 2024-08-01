@@ -69,6 +69,32 @@ with_theme() do
 end
 ```
 
-```julia
+## Testing silica values
 
+```julia
+let
+    selected_compounds = ["SIO2_ALPHA"]
+    data = ThermoDatabase(; selected_compounds)
+    # display(compounds(data))
+    
+    T = [298.0, 300.0, 400.0]
+    c = [44.57, 44.77, 53.43]
+    
+    sio2 = data.compounds[1]
+    cp1(t) = specific_heat(sio2, t) * molecularmass(sio2)
+    test1 = log10(sum(abs2, cp1.(T) - c)) < -4
+
+    selected_compounds = ["SIO2_BETA"]
+    data = ThermoDatabase(; selected_compounds)
+    # display(compounds(data))
+    
+    T = [847.0, 900.0, 1900.0]
+    c = [67.42, 67.95, 77.99]
+    
+    sio2 = data.compounds[1]
+    cp2(t) = specific_heat(sio2, t) * molecularmass(sio2)
+    test2 = log10(sum(abs2, cp2.(T) - c)) < -4
+
+    test1 && test2
+end
 ```
