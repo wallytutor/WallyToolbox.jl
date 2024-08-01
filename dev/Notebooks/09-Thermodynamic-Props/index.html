@@ -48,4 +48,28 @@ end</code></pre><h2 id="Comparison-of-alumina-properties"><a class="docs-heading
     lines!(ax, T, cp2.(T); color = :red,   label = &quot;Schieltz (1964)&quot;)
     axislegend(ax; position = :lt)
     f
-end</code></pre><pre><code class="language-julia hljs"></code></pre></article><nav class="docs-footer"><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.5.0 on <span class="colophon-date" title="Thursday 1 August 2024 19:21">Thursday 1 August 2024</span>. Using Julia version 1.10.4.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+end</code></pre><h2 id="Testing-silica-values"><a class="docs-heading-anchor" href="#Testing-silica-values">Testing silica values</a><a id="Testing-silica-values-1"></a><a class="docs-heading-anchor-permalink" href="#Testing-silica-values" title="Permalink"></a></h2><pre><code class="language-julia hljs">let
+    selected_compounds = [&quot;SIO2_ALPHA&quot;]
+    data = ThermoDatabase(; selected_compounds)
+    # display(compounds(data))
+    
+    T = [298.0, 300.0, 400.0]
+    c = [44.57, 44.77, 53.43]
+    
+    sio2 = data.compounds[1]
+    cp1(t) = specific_heat(sio2, t) * molecularmass(sio2)
+    test1 = log10(sum(abs2, cp1.(T) - c)) &lt; -4
+
+    selected_compounds = [&quot;SIO2_BETA&quot;]
+    data = ThermoDatabase(; selected_compounds)
+    # display(compounds(data))
+    
+    T = [847.0, 900.0, 1900.0]
+    c = [67.42, 67.95, 77.99]
+    
+    sio2 = data.compounds[1]
+    cp2(t) = specific_heat(sio2, t) * molecularmass(sio2)
+    test2 = log10(sum(abs2, cp2.(T) - c)) &lt; -4
+
+    test1 &amp;&amp; test2
+end</code></pre></article><nav class="docs-footer"><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.5.0 on <span class="colophon-date" title="Thursday 1 August 2024 20:21">Thursday 1 August 2024</span>. Using Julia version 1.10.4.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
