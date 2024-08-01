@@ -101,7 +101,7 @@ pages = [
 
         "Science" => [
             "Theoretical Physics"   => "Science/01-Theoretical-Physics.md",
-            "Computational Physics" => "Science/02-Density-Functional-Theory.md",
+            "Computational Physics" => "Science/02-Computational-Physics.md",
             "Continuum Mechanics"   => "Science/04-Continuum-Mechanics.md",
             "Machine Learning"      => "Science/05-Machine-Learning.md",
             "Porous Solids"         => "Science/08-Conductivity-Porous-Solids.md",
