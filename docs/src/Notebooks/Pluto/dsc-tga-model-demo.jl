@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.19.40
+# v0.19.45
 
 using Markdown
 using InteractiveUtils
@@ -7,14 +7,7 @@ using InteractiveUtils
 # This Pluto notebook uses @bind for interactivity. When running this notebook outside of Pluto, the following 'mock version' of @bind gives bound variables a default value (instead of an error).
 macro bind(def, element)
     quote
-        local iv = try
-            Base.loaded_modules[Base.PkgId(
-                Base.UUID("6e696c72-6542-2067-7265-42206c756150"),
-                "AbstractPlutoDingetjes",
-            )].Bonds.initial_value
-        catch
-            b -> missing
-        end
+        local iv = try Base.loaded_modules[Base.PkgId(Base.UUID("6e696c72-6542-2067-7265-42206c756150"), "AbstractPlutoDingetjes")].Bonds.initial_value catch; b -> missing; end
         local el = $(esc(element))
         global $(esc(def)) = Core.applicable(Base.get, el) ? Base.get(el) : iv(el)
         el
@@ -230,10 +223,12 @@ md"""
 The model creation function `assemblymodel(cpx, cpy)` requires the specific heats of species ``X`` and ``Y`` to be provided. Below we provide functions for generation of symbolic ``c_P`` functions for kaolinite and metakaolin under the `ModellingToolkit` framework.
 """
 
-# ╔═╡ 7b97bd4c-2928-4c24-a7d7-8332f1a49e12
+# ╔═╡ e3252f33-a7ea-42c5-8dc5-701320c9f0eb
 begin
-    cpx(T) = 932.347 + 0.572679 * T - 1.27676e7 / T^2
-    cpy(T) = 1034.30 + 0.165941 * T - 6.56221e6 / T^2
+	tdb = ThermoDatabase(; selected_compounds = ["KAOLINITE", "METAKAOLIN"])
+
+	cpx(T) = specific_heat(tdb.compounds[1], T)
+	cpy(T) = specific_heat(tdb.compounds[2], T)
 end;
 
 # ╔═╡ f7438057-3f77-4155-837c-92d85a90cf88
@@ -501,7 +496,7 @@ end
 # ╠═687e7d85-cde4-46c9-b776-eaf7cca4a973
 # ╟─2bff2c9b-29bd-4fc1-8556-c9af051bd721
 # ╟─c9196b25-ec02-4c98-b6c3-b794e9550d07
-# ╠═7b97bd4c-2928-4c24-a7d7-8332f1a49e12
+# ╠═e3252f33-a7ea-42c5-8dc5-701320c9f0eb
 # ╟─f7438057-3f77-4155-837c-92d85a90cf88
 # ╟─ead986d8-bd2a-442c-b581-03c7d46daef6
 # ╟─af8fd783-7b86-4f66-9817-06bd81cd1517

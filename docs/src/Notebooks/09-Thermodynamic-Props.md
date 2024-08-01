@@ -62,8 +62,8 @@ with_theme() do
     T = LinRange(300.0, 2000.0, 100)
     cp1(t) = specific_heat(data.compounds[1], t)
     cp2(t) = specific_heat(data.compounds[2], t)
-    lines!(ax, T, cp1.(T); label = "Chase (1998)")
-    lines!(ax, T, cp2.(T); label = "Schieltz (1964)")
+    lines!(ax, T, cp1.(T); color = :black, label = "Chase (1998)")
+    lines!(ax, T, cp2.(T); color = :red,   label = "Schieltz (1964)")
     axislegend(ax; position = :lt)
     f
 end
