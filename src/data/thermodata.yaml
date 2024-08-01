@@ -140,6 +140,60 @@ compounds:
         ]
     comment: https://webbook.nist.gov/cgi/cbook.cgi?ID=C1305788&Mask=2#Thermo-Condensed
 
+  - compoundname: SIO2_ALPHA
+    displayname: SiO2 (alpha quartz)
+    aggregation: solid
+    datasource: CHASE1998
+    stoichiometry:
+      Si: 1
+      O : 2
+    thermodynamics:
+      type: shomate
+      data:
+        range: [298.0, 847.0]
+        h298: -910860.0
+        s298: 42.091
+        coefs: [
+          -6.076591,
+          251.6755,
+          -324.7964,
+          168.5604,
+          0.002548,
+          -917.6893,
+          -27.96962,
+          -910.8568
+        ]
+    comment: 
+      https://webbook.nist.gov/cgi/cbook.cgi?ID=C14808607&Mask=2#Thermo-Condensed
+      s298 converted from SCHIELTZ1968
+
+  - compoundname: SIO2_BETA
+    displayname: SiO2 (beta quartz)
+    aggregation: solid
+    datasource: CHASE1998
+    stoichiometry:
+      Si: 1
+      O : 2
+    thermodynamics:
+      type: shomate
+      data:
+        range: [847.0, 1996.0]
+        h298: -910860.0
+        s298: 42.091
+        coefs: [
+          58.7534,
+          10.27925,
+          -0.131384,
+          0.02521,
+          0.025601,
+          -929.3292,
+          105.8092,
+          -910.8568
+        ]
+    comment: 
+      https://webbook.nist.gov/cgi/cbook.cgi?ID=C14808607&Mask=2#Thermo-Condensed
+      s298 converted from SCHIELTZ1968
+
   - compoundname: CA1O1_L
     displayname: Calcium oxide
     aggregation: liquid
