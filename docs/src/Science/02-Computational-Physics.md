@@ -1,5 +1,26 @@
-# Finite Volume Method
+# Molecular Dynamics (MD)
 
+The [Materials Project](https://next-gen.materialsproject.org/) has many interesting for those working on MD and especially [DFT](02-Computational-Physics.md). Theoretical basis can be found in the work by [Hinchliffe](https://www.wiley.com/en-us/Molecular+Modelling+for+Beginners%2C+2nd+Edition-p-9781119964810) which maybe will require some refreshing on the [The Feynman Lectures on Physics](https://www.feynmanlectures.caltech.edu/) to be followed.
+
+Since molecular dynamics is a field essentially related to simulation (there is no MD without simulation!), it is worth listing the major open source projects related to the field, [LAMMPS](https://www.lammps.org), [ESPReSo](https://espressomd.org/wordpress/), and [Gromacs](https://www.gromacs.org/).  Other interesting projects include [HOOMD](http://glotzerlab.engin.umich.edu/hoomd-blue/) and the popular [NAMD](https://www.ks.uiuc.edu/Research/namd/); I have refrained from the last given its greedy licensing scheme. My studies are currently focused in [LAMMPS](../Computing/LAMMPS.md) because its fields of application and system portability.
+
+# Density Functional Theory (DFT)
+
+- [Abinit webpage](https://www.abinit.org/)
+- [BigDFT](https://l_sim.gitlab.io/bigdft-doc/)
+- [CP2K](https://www.cp2k.org/)
+- [Dalton/LSDalton](https://daltonprogram.org/)
+- [DIRAC webpage](http://www.diracprogram.org/doku.php/)
+- [FLEUR webpage](https://www.flapw.de/MaX-6.0/)
+- [Quantum Espresso webpage](https://www.quantum-espresso.org/)
+- [Siesta](https://siesta-project.org/siesta/)
+- [Yambo](http://www.yambo-code.org/)
+
+# Finite Element Method
+
+Ongoing...
+
+# Finite Volume Method
 
 ## Formulations of heat conduction
 

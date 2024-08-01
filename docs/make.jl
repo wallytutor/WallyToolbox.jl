@@ -100,14 +100,11 @@ pages = [
         ],
 
         "Science" => [
-            "Science/01-Theoretical-Physics.md",
-            "Science/02-Density-Functional-Theory.md",
-            "Science/03-Molecular-Dynamics.md",
-            "Science/04-Continuum-Mechanics.md",
-            "Science/05-Machine-Learning.md",
-            "Science/07-Finite-Volume-Method.md",
-            "Science/08-Conductivity-Porous-Solids.md",
-            "Science/09-Finite-Element-Method.md",
+            "Theoretical Physics"   => "Science/01-Theoretical-Physics.md",
+            "Computational Physics" => "Science/02-Density-Functional-Theory.md",
+            "Continuum Mechanics"   => "Science/04-Continuum-Mechanics.md",
+            "Machine Learning"      => "Science/05-Machine-Learning.md",
+            "Porous Solids"         => "Science/08-Conductivity-Porous-Solids.md",
         ],
 
         "Notebooks"         => [
