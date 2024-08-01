@@ -1,0 +1,209 @@
+##############################################################################
+# THERMODYNAMICS DATA
+##############################################################################
+
+about:
+  Thermodynamic database with compounds and solid phases for use in process
+  calculations and phase equilibria determination; this is an ongoing work
+  and structure might evolve until a stable version.
+
+  Created by Walter Dal'Maz Silva on August 1st 2024.
+
+##############################################################################
+# COMPOUNDS
+##############################################################################
+
+compounds:
+
+  - compoundname: AL2O3_ALPHA
+    displayname: Alumina (alpha)
+    aggregation: solid
+    datasource: CHASE1998
+    stoichiometry:
+      Al: 2
+      O : 3
+    thermodynamics:
+      type: shomate
+      data:
+        range: [298.0, 2327.0]
+        h298: -1675690.0
+        s298: 50.92
+        coefs: [
+          102.4290,  # A
+          38.74980,  # B
+          -15.91090, # C
+          2.628181,  # D
+          -3.00755,  # E
+          -1717.930, # F
+          146.9970,  # G
+          -1675.690  # H
+        ]
+    comment: https://webbook.nist.gov/cgi/cbook.cgi?ID=C1344281&Type=JANAFS&Table=on#JANAFS
+
+  - compoundname: AL2O3_GAMMA
+    displayname: Alumina (gamma)
+    aggregation: solid
+    datasource: CHASE1998
+    stoichiometry:
+      Al: 2
+      O : 3
+    thermodynamics:
+      type: shomate
+      data:
+        range: [298.0, 2327.0]
+        h298: -1675690.0
+        s298: 50.92
+        coefs: [
+          108.6830,  # A
+          37.22630,  # B
+          -14.20650, # C
+          2.193601,  # D
+          -3.209881, # E
+          -1701.600, # F
+          155.1360,  # G
+          -1656.860  # H
+        ]
+    comment: https://webbook.nist.gov/cgi/cbook.cgi?ID=C1344281&Type=JANAFS&Table=on#JANAFS
+
+  - compoundname: AL2O3_DELTA
+    displayname: Alumina (delta)
+    aggregation: solid
+    datasource: CHASE1998
+    stoichiometry:
+      Al: 2
+      O : 3
+    thermodynamics:
+      type: shomate
+      data:
+        range: [298.0, 2327.0]
+        h298: -1675690.0
+        s298: 50.92
+        coefs: [
+          106.9180,  # A
+          36.62190,  # B
+          -13.97590, # C
+          2.157990,  # D
+          -3.157761, # E
+          -1710.500, # F
+          151.7920,  # G
+          -1666.490  # H
+        ]
+    comment: https://webbook.nist.gov/cgi/cbook.cgi?ID=C1344281&Type=JANAFS&Table=on#JANAFS
+
+  - compoundname: AL2O3_KAPPA
+    displayname: Alumina (kappa)
+    aggregation: solid
+    datasource: CHASE1998
+    stoichiometry:
+      Al: 2
+      O : 3
+    thermodynamics:
+      type: shomate
+      data:
+        range: [298.0, 2327.0]
+        h298: -1675690.0
+        s298: 50.92
+        coefs: [
+          106.0880,  # A
+          36.33740,  # B
+          -13.86730, # C
+          2.141221,  # D
+          -3.133231, # E
+          -1705.970, # F
+          153.9350,  # G
+          -1662.300  # H
+        ]
+    comment: https://webbook.nist.gov/cgi/cbook.cgi?ID=C1344281&Type=JANAFS&Table=on#JANAFS
+
+  - compoundname: CA1O1
+    displayname: Calcium oxide
+    aggregation: solid
+    datasource: CHASE1998
+    stoichiometry:
+      Ca: 1
+      O : 1
+    thermodynamics:
+      type: shomate
+      data:
+        range: [298.0, 3200.0]
+        h298: -635090.0
+        s298: 38.19
+        coefs: [
+          49.95403,  # A
+          4.887916,  # B
+          -0.352056, # C
+          0.046187,  # D
+          -0.825097, # E
+          -652.9718, # F
+          92.56096,  # G
+          -635.0894 # H
+        ]
+    comment: https://webbook.nist.gov/cgi/cbook.cgi?ID=C1305788&Mask=2#Thermo-Condensed
+
+  - compoundname: CA1O1_L
+    displayname: Calcium oxide
+    aggregation: liquid
+    datasource: CHASE1998
+    stoichiometry:
+      Ca: 1
+      O : 1
+    thermodynamics:
+      type: shomate
+      data:
+        range: [3200.0, 4500.0]
+        h298: -635090.0
+        s298: 62.31
+        coefs: [
+          62.76000,      # A
+          4.629681e-07,  # B
+          -1.092037e-07, # C
+          8.966312e-09,  # D
+          6.504656e-07,  # E
+          -591.8059,     # F
+          116.8909,      # G
+          -557.3339      # H
+        ]
+    comment: https://webbook.nist.gov/cgi/cbook.cgi?ID=C1305788&Mask=2#Thermo-Condensed
+
+  - compoundname: AL2SI2O5(OH)4
+    displayname: Kaolinite
+    aggregation: solid
+    datasource: SCHIELTZ1964
+    stoichiometry:
+      Al: 2
+      Si: 2
+      O : 9
+      H : 4
+    thermodynamics:
+      type: maier_kelley
+      data:
+        h298: 964940.0
+        s298: 40.50
+        coefs: [57.47, 35.30e-03, -7.87e+05]
+
+  - compoundname: AL2SI2O7
+    displayname: Metakaolin
+    aggregation: solid
+    datasource: SCHIELTZ1964
+    stoichiometry:
+      Al: 2
+      Si: 2
+      O : 7
+    thermodynamics:
+      type: maier_kelley
+      data:
+        h298: 767500.0
+        s298: 32.78
+        coefs: [54.85, 8.80e-03, -3.48e+05]
+
+##############################################################################
+# REFERENCES
+##############################################################################
+
+references:
+  CHASE1998: ''
+  SCHIELTZ1964: ''
+
+##############################################################################
+# EOF
+##############################################################################
