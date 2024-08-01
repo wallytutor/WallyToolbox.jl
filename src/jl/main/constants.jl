@@ -28,6 +28,10 @@ export T_REF
 const C_REF::Float64 = P_REF / (GAS_CONSTANT * T_REF)
 export C_REF
 
+"Conversion factor from calories to joules [$(JOULE_PER_CALORIE) J/cal]."
+const JOULE_PER_CALORIE::Float64 = 4.184
+export JOULE_PER_CALORIE
+
 "Air mean molecular mass [$(M_AIR) kg/mol]."
 const M_AIR::Float64 = 0.0289647
 export M_AIR
