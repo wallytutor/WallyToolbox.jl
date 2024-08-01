@@ -405,6 +405,21 @@ compounds:
         s298: 45.13
         coefs: [7.17, 2.56e-03, 0.08e+05]
 
+  - compoundname: SPINEL
+    displayname: Spinel
+    aggregation: solid
+    datasource: HYPOTHETICAL
+    stoichiometry:
+      Al: 4
+      Si: 3
+      O : 12
+    thermodynamics:
+      type: maier_kelley
+      data:
+        h298: -100000.0
+        s298: 30.0
+        coefs: [50.0, 0, 0]
+
 ##############################################################################
 # REFERENCES
 ##############################################################################
@@ -412,6 +427,7 @@ compounds:
 references:
   CHASE1998: ''
   SCHIELTZ1964: ''
+  HYPOTHETICAL: 'Data for testing models and development only!'
 
 ##############################################################################
 # EOF

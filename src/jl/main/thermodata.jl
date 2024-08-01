@@ -74,7 +74,7 @@ function thermodata_validate_datasource(compound, refs)
     end
 
     !haskey(refs, compound["datasource"]) && begin
-        @warn("Missing reference entry for $(compound["source"])")
+        @warn("Missing reference entry for $(compound["datasource"])")
         return false
     end
 
