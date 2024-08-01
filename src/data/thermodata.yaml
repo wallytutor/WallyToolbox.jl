@@ -165,7 +165,7 @@ compounds:
         ]
     comment: https://webbook.nist.gov/cgi/cbook.cgi?ID=C1305788&Mask=2#Thermo-Condensed
 
-  - compoundname: AL2SI2O5(OH)4
+  - compoundname: KAOLINITE
     displayname: Kaolinite
     aggregation: solid
     datasource: SCHIELTZ1964
@@ -177,11 +177,11 @@ compounds:
     thermodynamics:
       type: maier_kelley
       data:
-        h298: 964940.0
+        h298: -964940.0
         s298: 40.50
         coefs: [57.47, 35.30e-03, -7.87e+05]
 
-  - compoundname: AL2SI2O7
+  - compoundname: METAKAOLIN
     displayname: Metakaolin
     aggregation: solid
     datasource: SCHIELTZ1964
@@ -192,9 +192,164 @@ compounds:
     thermodynamics:
       type: maier_kelley
       data:
-        h298: 767500.0
+        h298: -767500.0
         s298: 32.78
         coefs: [54.85, 8.80e-03, -3.48e+05]
+
+  - compoundname: MULLITE
+    displayname: Mullite
+    aggregation: solid
+    datasource: SCHIELTZ1964
+    stoichiometry:
+      Al: 6
+      Si: 2
+      O : 13
+    thermodynamics:
+      type: maier_kelley
+      data:
+        h298: -1804000.0
+        s298: 60.00
+        coefs: [84.22, 20.00e-03, -25.00e+05]
+
+  - compoundname: AL2O3_GAMMA
+    displayname: Alumina (gamma)
+    aggregation: solid
+    datasource: SCHIELTZ1964
+    stoichiometry:
+      Al: 2
+      O : 3
+    thermodynamics:
+      type: maier_kelley
+      data:
+        h298: -395000.0
+        s298: 12.20
+        coefs: [16.37, 11.10e-03, 0]
+
+  - compoundname: SIO2_ALPHA
+    displayname: SiO2 (alpha quartz)
+    aggregation: solid
+    datasource: SCHIELTZ1964
+    stoichiometry:
+      Si: 1
+      O : 2
+    thermodynamics:
+      type: maier_kelley
+      data:
+        h298: -209900.0
+        s298: 10.06
+        coefs: [11.22, 8.20e-03, -2.70e+05]
+
+  - compoundname: SIO2_BETA
+    displayname: SiO2 (beta quartz)
+    aggregation: solid
+    datasource: SCHIELTZ1964
+    stoichiometry:
+      Si: 1
+      O : 2
+    thermodynamics:
+      type: maier_kelley
+      data:
+        h298: -209900.0
+        s298: 10.06
+        coefs: [14.41, 1.94e-03, 0]
+
+  - compoundname: SIO2_GLASS
+    displayname: SiO2 (glass)
+    aggregation: solid
+    datasource: SCHIELTZ1964
+    stoichiometry:
+      Si: 1
+      O : 2
+    thermodynamics:
+      type: maier_kelley
+      data:
+        h298: -202000.0
+        s298: 10.06
+        coefs: [13.38, 3.68e-03, -3.45e+05]
+
+  - compoundname: CRISTOBALITE_ALPHA
+    displayname: Cristobalite (alpha)
+    aggregation: solid
+    datasource: SCHIELTZ1964
+    stoichiometry:
+      Si: 1
+      O : 2
+    thermodynamics:
+      type: maier_kelley
+      data:
+        h298: -209500.0
+        s298: 10.06
+        coefs: [4.28, 21.06e-03, 0]
+
+  - compoundname: CRISTOBALITE_BETA
+    displayname: Cristobalite (beta)
+    aggregation: solid
+    datasource: SCHIELTZ1964
+    stoichiometry:
+      Si: 1
+      O : 2
+    thermodynamics:
+      type: maier_kelley
+      data:
+        h298: -209500.0
+        s298: 10.06
+        coefs: [14.40, 2.04e-03, 0]
+
+  - compoundname: TRIDYMITE_ALPHA
+    displayname: Tridymite (alpha)
+    aggregation: solid
+    datasource: SCHIELTZ1964
+    stoichiometry:
+      Si: 1
+      O : 2
+    thermodynamics:
+      type: maier_kelley
+      data:
+        h298: -209400.0
+        s298: 10.06
+        coefs: [3.27, 24.80e-03, 0]
+
+  - compoundname: TRIDYMITE_BETA
+    displayname: Tridymite (beta)
+    aggregation: solid
+    datasource: SCHIELTZ1964
+    stoichiometry:
+      Si: 1
+      O : 2
+    thermodynamics:
+      type: maier_kelley
+      data:
+        h298: -209400.0
+        s298: 10.06
+        coefs: [13.64, 2.64e-03, 0]
+
+  - compoundname: WATER_L
+    displayname: Water (liquid)
+    aggregation: liquid
+    datasource: SCHIELTZ1964
+    stoichiometry:
+      H : 2
+      O : 1
+    thermodynamics:
+      type: maier_kelley
+      data:
+        h298: -68320.0
+        s298: 16.72
+        coefs: [18.03, 0, 0]
+
+  - compoundname: WATER_G
+    displayname: Water (gas)
+    aggregation: gas
+    datasource: SCHIELTZ1964
+    stoichiometry:
+      H : 2
+      O : 1
+    thermodynamics:
+      type: maier_kelley
+      data:
+        h298: -57800.0
+        s298: 45.13
+        coefs: [7.17, 2.56e-03, 0.08e+05]
 
 ##############################################################################
 # REFERENCES
