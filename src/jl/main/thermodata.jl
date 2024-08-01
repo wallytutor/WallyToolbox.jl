@@ -3,8 +3,10 @@
 ##############################################################################
 
 import YAML
+import DataFrames
 
 export ThermoDatabase
+export compounds
 
 ##############################################################################
 # CONSTANT AND CONFIGURATION
@@ -134,6 +136,19 @@ function thermo_parse_thermoshomate(thermodata, compound)
         thermodata["h298"], thermodata["s298"], copy(thermodata["coefs"]),
         (thermodata["range"]...,); units = get(thermodata, "units", :mole),
         molar_mass = molecularmass(compound)
+    )
+end
+
+##############################################################################
+# QUERY
+##############################################################################
+
+function compounds(data::ThermoDatabase)
+    return DataFrames.DataFrame(
+        names   = map(x->x.compoundname, data.compounds),
+        display = map(x->x.displayname,  data.compounds),
+        source  = map(x->x.datasource,   data.compounds),
+        state   = map(x->x.aggregation,  data.compounds),
     )
 end
 
