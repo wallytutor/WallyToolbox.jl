@@ -28,6 +28,7 @@ WallyToolbox.C_REF
 ```@docs
 WallyToolbox.ZERO_CELSIUS
 WallyToolbox.ONE_ATM
+WallyToolbox.JOULE_PER_CALORIE
 ```
 
 ## Chemistry-related
