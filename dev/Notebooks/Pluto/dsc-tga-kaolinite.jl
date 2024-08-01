@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.19.43
+# v0.19.45
 
 using Markdown
 using InteractiveUtils
@@ -40,7 +40,6 @@ begin
     using Trapz: trapz
 
     using WallyToolbox
-    import DryMaterials as DM
 
     CairoMakie.activate!(; type = "svg", visible = false)
 end
@@ -79,19 +78,27 @@ Final conversion of spinel into mullite and cristobalite is neglected here.
 Polynomials for specific heat are those of [Schieltz and Soliman (1964)](https://doi.org/10.1346/CCMN.1964.0130139), except for *spinel* phase for which at the time of the publication was unknown. A rough estimate of its value is provided by [Eskelinen *et al.* (2015)](https://doi.org/10.1002/aic.14903). Since this phase is the least relevant in the present study and the  order of magnitude seems correct, it is employed in the simulations.
 """
 
+# ╔═╡ 5e84be72-1120-4cac-9944-fcd6765ea85c
+begin
+    selected_compounds = ["WATER_L", "KAOLINITE", "METAKAOLIN", "SPINEL", "SIO2_GLASS"]
+    tdb = ThermoDatabase(; selected_compounds)
+
+    compounds(tdb)
+end
+
 # ╔═╡ 241f2150-c134-4951-b87d-d820727b8269
 "Materials for considered phases."
 const materials = [
-    DM.PureWater()
-    DM.getkaolinite()
-    DM.getmetakaolin()
-    DM.getspinel()
-    DM.getamorphoussilica()
+    tdb.compounds[4]
+    tdb.compounds[1]
+    tdb.compounds[2]
+    tdb.compounds[5]
+    tdb.compounds[3]
 ]
 
 # ╔═╡ 5bc5d31b-9f3a-44e5-a271-12d9e8ffa7de
 "Molecular masses of considered phases [``kg\\cdotp{}mol^{-1}``]"
-const Mₘ = map(DM.molecularmass, materials)
+const Mₘ = map(molecularmass, materials)
 
 # ╔═╡ 967579c7-252d-460c-a68d-c39dc9e2e0f0
 """
@@ -99,7 +106,7 @@ const Mₘ = map(DM.molecularmass, materials)
 
 Retrieve specific heat for all species
 """
-specificheat(T) = map(m -> DM.specificheat(m, T, P_REF), materials)
+specificheat(T) = map(m -> specific_heat(m, T), materials)
 
 # ╔═╡ 9d98242a-7487-447b-89a4-5b5acb957ff6
 """
@@ -594,6 +601,7 @@ Hope these notes provided you insights on DSC/TGA methods!
 # ╟─8e43ead5-4099-469e-9d74-6aa1b3659988
 # ╟─276f19f0-9075-11ee-06f3-7d2f8111ed34
 # ╟─c05012fd-6647-48df-83ec-f7bf26686a87
+# ╟─5e84be72-1120-4cac-9944-fcd6765ea85c
 # ╟─241f2150-c134-4951-b87d-d820727b8269
 # ╟─5bc5d31b-9f3a-44e5-a271-12d9e8ffa7de
 # ╟─967579c7-252d-460c-a68d-c39dc9e2e0f0
