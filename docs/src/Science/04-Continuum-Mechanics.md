@@ -361,6 +361,8 @@ $$
 
 ### 020
 
+#dimless-damkohler
+
 Damköhler number arises from reaction diffusion-equation discussed in lecture 019; we can make the equation dimensionless by making $\tilde{x}=xL^{-1}$, $\Theta=C/C_0$, and dividing everything by $k$, then we can define:
 
 $$
@@ -368,7 +370,7 @@ $$
 %
 \quad\text{where}\quad
 %
-\mathrm{Da}=\frac{D}{k}L^2=\left(\frac{L}{\delta}\right)^2
+\mathrm{Da}=\frac{k}{D}L^2=\left(\frac{L}{\delta}\right)^2
 $$
 
 Limiting cases are:
@@ -379,7 +381,16 @@ Limiting cases are:
 
 ### 021
 
-In fact it is in this lecture that the stripping of dimensions of the equation as presented above in 020 is formalized; *do not even try to solve a problem before making it dimensionless*.
+In fact it is in this lecture that the stripping of dimensions of the equation as presented above in 020 is formalized; *do not even try to solve a problem before making it dimensionless*. The general procedure for making differential operators dimensionless is summarized as follows:
+
+$$
+\tilde{x}_{i} = \dfrac{x_{i}}{L_{i}} \implies
+%
+\begin{cases}
+\dfrac{d}{d\tilde{x}_{i}}&=&L_{i}\dfrac{d}{dx_{i}}\\[12pt]
+\dfrac{d^{n}}{d\tilde{x}_{i}^{n}}&=&L_{i}^{n}\dfrac{d^{n}}{dx_{i}^{n}}\\[12pt]
+\end{cases}
+$$
 
 ### 022
 
@@ -388,6 +399,8 @@ In fact it is in this lecture that the stripping of dimensions of the equation a
 *Always start any modeling with the simplest geometry that captures the basic features of the system being modeled; e.g. when expanding a solution of reaction-diffusion into exponential terms, it is worth noticing that they can be replaced by hyperbolic functions, and since $\sinh$ breaks the symmetry, that term may be eliminated already during constant identification from boundary conditions*.
 
 ### 023
+
+#dimless-peclet #plug-flow 
 
 Similarly to lecture 019, here we develop convection-diffusion equation instead; in this case the flux of a transported concentration $C$ is given by the following expression: 
 
@@ -401,10 +414,27 @@ $$
 \vec{u}\cdotp\nabla{C}-D\nabla^{2}C=0
 $$
 
+Using the same approach to make the equation dimensionless as in lecture 019 we have:
+
 $$
-\vec{u}\cdotp\nabla{C}-D\nabla^{2}C=0
-\implies\delta  \sim \dfrac{D}{u}
+\begin{align}
+\dfrac{D}{L^2}\tilde{\nabla}^{2}\Theta-\dfrac{u}{L}\tilde{\nabla}\Theta&=0\\[12pt]
+\dfrac{1}{\tau_{d}}\tilde{\nabla}^{2}\Theta-\dfrac{1}{\tau_{c}}\tilde{\nabla}\Theta&=0\\
+\end{align}
 $$
+
+where $\tau_c$ is the characteristic convection time and $\tau_d$ the characteristic diffusion time; to reach the final dimensionless equation we can multiply the whole equation by $\tau_d$, what introduces the ratio of diffusion to advection times, commonly called the Péclet number. The results may be summarized as
+
+$$
+\tilde{\nabla}^{2}\Theta-\mathrm{Pe}\tilde{\nabla}\Theta=0
+\implies
+\begin{cases}
+\delta      &\sim& \dfrac{D}{u}\\[12pt]
+\mathrm{Pe} &=& \dfrac{uL}{D}
+\end{cases}
+$$
+
+In the limiting case of $\mathrm{Pe}\gg{1}$ diffusion is much slower than convection and the flow can be approximated as purely advective; this characterizes the plug-flow regime.
 
 ### 024
 
