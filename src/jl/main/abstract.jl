@@ -5,12 +5,14 @@
 ##############################################################################
 
 abstract type AbstractMatter end
+abstract type AbstractThermodynamics end
 abstract type AbstractTransportModel end
 
 ##############################################################################
 # MATERIALS
 ##############################################################################
 
+abstract type AbstractThermoCompound          <: AbstractMatter end
 abstract type AbstractMaterial                <: AbstractMatter end
 abstract type AbstractLiquidMaterial          <: AbstractMaterial end
 abstract type AbstractSolidMaterial           <: AbstractMaterial end
