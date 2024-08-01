@@ -1,12 +1,39 @@
-# -*- coding: utf-8 -*-
+##############################################################################
+# ELEMENTS
+##############################################################################
 
 import Base: +
 import Base: *
 
 export Stoichiometry
 export ChemicalCompound
+export ThermoCompound
+
+export MaierKelleyThermo
+export ShomateThermo
+
 export element, atomicmass
 export molecularmass
+export specific_heat
+
+export disable_thermo_warnings
+export enable_thermo_warnings
+
+#############################################################################
+# Configure
+#############################################################################
+
+THERMO_WARNINGS = true
+
+function disable_thermo_warnings()
+    global THERMO_WARNINGS = false
+    return nothing
+end
+
+function enable_thermo_warnings()
+    global THERMO_WARNINGS = true
+    return nothing
+end
 
 #############################################################################
 # Type signatures
@@ -145,6 +172,86 @@ struct ChemicalCompound
     end
 end
 
+function ChemicalCompound(d::Dict)
+    atoms = NamedTuple(zip(Symbol.(keys(d)), values(d)))
+    return ChemicalCompound(; atoms...)
+end
+
+ChemicalCompound(; kw...) = ChemicalCompound(Stoichiometry(; kw...))
+
+##############################################################################
+# Assembly more complex thermo compounds for use with databases
+##############################################################################
+
+struct ThermoCompound <: AbstractThermoCompound
+    compoundname::String
+    displayname::String
+    aggregation::String
+    datasource::String
+    chemical::ChemicalCompound
+    thermodynamics::AbstractThermodynamics
+end
+
+##############################################################################
+# MODELS
+##############################################################################
+
+struct MaierKelleyThermo <: AbstractThermodynamics
+    h298::Float64
+    s298::Float64
+    coefs::Vector{Float64}
+
+    function MaierKelleyThermo(h298, s298, coefs;
+            units = :mole,
+            molar_mass = nothing
+        )
+        (units == :mole && isnothing(molar_mass)) && begin
+            throw(ErrorException("""\
+            Maier-Kelley data provided in literature is often provided in \
+            calorie per mole units; if that is the case, providing the \
+            compound mass is mandatory because this structure stores values \
+            in mass units.
+            """))
+        end
+
+        if (units == :mole)
+            h298   *= JOULE_PER_CALORIE / molar_mass
+            s298   *= JOULE_PER_CALORIE
+            coefs .*= JOULE_PER_CALORIE / molar_mass
+        end
+        
+        return new(h298, s298, coefs)
+    end
+end
+
+struct ShomateThermo <: AbstractThermodynamics
+    h298::Float64
+    s298::Float64
+    coefs::Vector{Float64}
+    validity_range::Tuple{Float64, Float64}
+
+    function ShomateThermo(h298, s298, coefs, validity_range;
+            units = :mole,
+            molar_mass = nothing
+        )
+        (units == :mole && isnothing(molar_mass)) && begin
+            throw(ErrorException("""\
+            Shomate data provided in literature is often found in JANAF \
+            tables which report values on a per mole basis; if that is the \
+            case, providing the compound mass is mandatory because this \
+            structure stores values in mass units.
+            """))
+        end
+
+        if (units == :mole)
+            h298   /= molar_mass
+            coefs ./= molar_mass
+        end
+
+        return new(h298, s298, coefs, validity_range)
+    end
+end
+
 #############################################################################
 # Other functionalities
 #############################################################################
@@ -184,3 +291,30 @@ molecularmass(s::Stoichiometry) = molecularmass(; s.amounts...)
 molecularmass(c::ChemicalCompound) = c.M
 
 @doc """ Molecular mass of compound [kg/mol]. """ molecularmass
+
+#############################################################################
+# specific_heat()
+#############################################################################
+
+function specific_heat(obj::ThermoCompound, T)
+    return specific_heat(obj.thermodynamics, T)
+end
+
+function specific_heat(obj::MaierKelleyThermo, T)
+    return obj.coefs[1] + obj.coefs[2] * T + obj.coefs[3] / T^2
+end
+
+function specific_heat(obj::ShomateThermo, T)
+    THERMO_WARNINGS && !in_range_co(T, obj.validity_range) && begin
+        @warn("Temperature $(T) K outside valid range $(obj.validity_range)")        
+    end
+
+    t = 0.001T
+    p0 = obj.coefs[3] + t * obj.coefs[4]
+    p1 = obj.coefs[2] + t * p0
+    return t * p1 + obj.coefs[5] / t^2 + obj.coefs[1]
+end
+
+##############################################################################
+# EOF
+##############################################################################
