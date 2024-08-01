@@ -4,6 +4,7 @@ module WallyToolbox
 using Reexport
 
 const WALLYTOOLBOXPATH = @__DIR__
+const WALLYTOOLBOXDATA = joinpath(WALLYTOOLBOXPATH, "data")
 
 function __init__()
     # Make other modules available, that's all!
@@ -26,6 +27,7 @@ include("jl/main/utilities.jl")
 
 # Dependent direct includes.
 include("jl/main/elements.jl")
+include("jl/main/thermodata.jl")
 
 # Sub-modules.
 include("jl/main/Documents.jl")

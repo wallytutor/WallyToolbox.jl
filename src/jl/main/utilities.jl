@@ -67,6 +67,11 @@ body(z) = @view z[2:end-1]
 "Syntax sugar for handling a possibly *nothing* value."
 defaultvalue(p, q) = isnothing(p) ? q : p
 
+# TODO document these or deprecate?
+in_range_cc(x, lims) = lims[1] <= x <= lims[2]
+in_range_co(x, lims) = lims[1] <= x <  lims[2]
+in_range_oo(x, lims) = lims[1] <  x <  lims[2]
+
 "Helper function to redirect outputs to the right files."
 function redirect_to_files(dofunc, outfile; errfile = nothing)
     errfile = defaultvalue(errfile, outfile)
