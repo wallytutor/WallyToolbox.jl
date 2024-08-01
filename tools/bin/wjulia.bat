@@ -1,2 +1,2 @@
 @echo off
-julia --project=%~dp0../.. %*
+julia --project=%~dp0../.. -i -e "using WallyToolbox" %*
