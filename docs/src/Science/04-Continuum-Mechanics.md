@@ -18,11 +18,11 @@ Most physical phenomena are actually discrete processes (particles); many phenom
 Say we have a quantity $b$ such as it represents a number $\#$ concentration of a given physical quantity. Associated to this quantity we have a flux density $\vec{F}$ through the boundaries of the system and a rate production in volume $B_v$ as summarized in the following table.
 
 $$
-\begin{align}
+\begin{align*}
 b &= \dfrac{\#}{\text{volume}}                 &\qquad\text{concentration}  \\
 \vec{F} &= \dfrac{\#}{\text{area}\cdotp{}\text{time}} &\qquad\text{flux density}   \\
 B_{v} &= \dfrac{\#}{\text{volume}\cdotp{}\text{time}} &\qquad\text{production rate}
-\end{align}
+\end{align*}
 $$
 
 ### General conservation equation
@@ -200,14 +200,14 @@ P_{N} = (P_{0} \ast p \ast p \ast \dots p)(x) = (P_{0} \ast p^{\ast{}N})(x)
 $$
 
 $$
-\begin{align}
+\begin{align*}
 P_{N+1}(x)
 &= \int{}\left(P_{N}(x) - yP_{N}^{\prime}(x) + \dfrac{1}{2}y^{2}P_{N}^{\prime\prime}(x)\right)p(y)dy\\
 %
 &=P_{N}(x)\int{}p(y)dy - P_{N}^{\prime}(x)\int{}yp(y)dy + \dfrac{1}{2}P_{N}^{\prime\prime}(x)\int{}y^{2}p(y)dy\\
 %
 &=P_{N}(x) - \langle{}y\rangle{}P_{N}^{\prime}(x) + \dfrac{1}{2}\langle{}y^{2}\rangle{}P_{N}^{\prime\prime}(x)
-\end{align}
+\end{align*}
 $$
 
 The fourth and last requirement now is that process take place with a *finite mean step $\langle\tau\rangle$*:
@@ -417,10 +417,10 @@ $$
 Using the same approach to make the equation dimensionless as in lecture 019 we have:
 
 $$
-\begin{align}
+\begin{align*}
 \dfrac{D}{L^2}\tilde{\nabla}^{2}\Theta-\dfrac{u}{L}\tilde{\nabla}\Theta&=0\\[12pt]
 \dfrac{1}{\tau_{d}}\tilde{\nabla}^{2}\Theta-\dfrac{1}{\tau_{c}}\tilde{\nabla}\Theta&=0\\
-\end{align}
+\end{align*}
 $$
 
 where $\tau_c$ is the characteristic convection time and $\tau_d$ the characteristic diffusion time; to reach the final dimensionless equation we can multiply the whole equation by $\tau_d$, what introduces the ratio of diffusion to advection times, commonly called the Péclet number. The results may be summarized as
