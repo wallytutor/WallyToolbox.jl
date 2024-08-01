@@ -196,6 +196,7 @@ end
 # MODELS
 ##############################################################################
 
+"Thermodynamic properties represeted in Maier-Kelley formalism."
 struct MaierKelleyThermo <: AbstractThermodynamics
     h298::Float64
     s298::Float64
@@ -224,6 +225,7 @@ struct MaierKelleyThermo <: AbstractThermodynamics
     end
 end
 
+"Thermodynamic properties represeted in Shomate formalism."
 struct ShomateThermo <: AbstractThermodynamics
     h298::Float64
     s298::Float64
@@ -316,6 +318,37 @@ function specific_heat(obj::ShomateThermo, T)
     p0 = obj.coefs[3] + t * obj.coefs[4]
     p1 = obj.coefs[2] + t * p0
     return t * p1 + obj.coefs[5] / t^2 + obj.coefs[1]
+end
+
+#############################################################################
+# enthalpy()
+#############################################################################
+
+function enthalpy(obj::ShomateThermo, T)
+    THERMO_WARNINGS && !in_range_co(T, obj.validity_range) && begin
+        @warn("Temperature $(T) K outside valid range $(obj.validity_range)")        
+    end
+
+    t = 0.001T
+    p0 = (obj.coefs[3]/3) + t * (obj.coefs[4]/4)
+    p1 = (obj.coefs[2]/2) + t * p0
+    p2 = (obj.coefs[1]/1) + t * p1
+    return t * p2 - (obj.coefs[5]/t) + obj.coefs[6] - obj.coefs[8]
+end
+
+#############################################################################
+# entropy()
+#############################################################################
+
+function entropy(obj::ShomateThermo, T)
+    THERMO_WARNINGS && !in_range_co(T, obj.validity_range) && begin
+        @warn("Temperature $(T) K outside valid range $(obj.validity_range)")        
+    end
+
+    t = 0.001T
+    p0 = (obj.coefs[3]/2) + t * (obj.coefs[4]/3)
+    p1 = (obj.coefs[2]/1) + t * p0
+    return obj.coefs[1] * log(t) + t * p1 + obj.coefs[5]/(2t^2) + obj.coefs[7]
 end
 
 ##############################################################################
