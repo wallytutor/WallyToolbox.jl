@@ -1,0 +1,79 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% STUDY NOTES
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[12pt]{paper}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage[
+    backend=bibtex,
+    style=numeric
+]{biblatex}
+\usepackage{booktabs}
+\usepackage{chemformula}
+\usepackage{fancyvrb}
+\usepackage{hyperref}
+\usepackage{geometry}
+\usepackage{paralist}
+\usepackage{pgfplots}
+\usepackage{siunitx}
+\usepackage{xfrac}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% CONFIGURATION
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\geometry{margin=25mm}
+\bibliography{../databases/references}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% COMMANDS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand{\newSection}[1]{\cleardoublepage\section{#1}}
+
+\DeclareSIUnit\scfm{SCFM}
+\DeclareSIUnit\Normcubicmeter{Nm^3}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% TITLE
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\title{Study Notes}
+\author{Walter Dal'Maz Silva}
+\date{\today}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% DOCUMENT
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+\maketitle%
+
+\begin{abstract}
+	This document has no specific or fixed structure. It is intended to be a single place to group study notes and short discussions about papers and books so that they can be reused later \emph{i.e.} to give a lecture or as reminder for a review for a paper. Please do not rely on this document as a perennial source or as a source of truth since there is no reviewer checking it to date.
+\end{abstract}
+
+\cleardoublepage\tableofcontents%
+
+\newSection{Dynamical Systems}
+\input{parts/dynamics/control_bootcamp.tex}
+
+\newSection{Thermodynamics}
+\input{parts/thermodynamics/calphad_basics.tex}
+\input{parts/thermodynamics/oxides_minerals.tex}
+
+\newSection{Transport Phenomena}
+\input{parts/transport/unit_conversions.tex}
+\input{parts/transport/multiphase_granular.tex}
+\input{parts/transport/fluent_meshing.tex}
+\input{parts/transport/ansys_reminders.tex}
+\input{parts/transport/discrete_elements.tex}
+\input{parts/transport/plug_flow_models.tex}
+
+\newSection{Molecular Dynamics}
+
+\newpage%
+\printbibliography%
+\end{document}

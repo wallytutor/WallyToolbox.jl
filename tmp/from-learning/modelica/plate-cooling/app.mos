@@ -1,0 +1,17 @@
+// TODO:
+// - Tinf must be a function of position
+// - eps must be a function of temperature
+// - cp must be a function of temperature
+
+loadFile("src/ApcTowerModelGeneric.mo");
+loadFile("src/ApcTowerModelImplemented.mo");
+loadFile("src/MaterialProperties.mo");
+
+instantiateModel(ApcTowerModelImplemented.TowerModel);
+
+simulate(ApcTowerModelImplemented.TowerModel,
+         startTime=0.0, stopTime=30.0);
+
+plot(T);
+
+getErrorString();

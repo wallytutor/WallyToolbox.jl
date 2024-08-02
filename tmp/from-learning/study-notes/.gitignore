@@ -1,0 +1,25 @@
+*.aux
+*.log
+*.nav
+*.out
+*.snm
+*.synctex(busy)
+*.synctex.gz
+*.toc
+*.vrb
+
+# From bibliography
+*-blx.bib
+*.bbl
+*.bcf
+*.blg
+*.run.xml
+*.bib.bak
+*.bib.sav
+*.bib.sav.tmp
+
+# Downloaded HTML from JabRef
+*.html
+
+# Comment this out once finished first release.
+*.pdf
