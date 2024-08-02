@@ -1,0 +1,37 @@
+{
+    "configurations": [
+      {
+        "name": "x64-Release",
+        "generator": "Ninja",
+        "configurationType": "RelWithDebInfo",
+        "buildRoot": "${projectDir}\\out\\build\\${name}",
+        "installRoot": "${projectDir}\\..\\install\\${name}",
+        "cmakeCommandArgs": "",
+        "buildCommandArgs": "",
+        "ctestCommandArgs": "",
+        "inheritEnvironments": [ "msvc_x64_x64" ],
+        "variables": [
+          {
+            "name": "WITH_IPOPT",
+            "value": "True",
+            "type": "BOOL"
+          },
+          {
+            "name": "Ipopt_DIR",
+            "value": "${projectDir}\\..\\Ipopt-3.14.2-win64-msvs2019-md\bin",
+            "type": "PATH"
+          },
+          {
+            "name": "IPOPT_LIBRARIES",
+            "value": "${projectDir}\\..\\Ipopt-3.14.2-win64-msvs2019-md\\lib\\ipopt.dll.lib",
+            "type": "PATH"
+          },
+          {
+            "name": "IPOPT_INCLUDE_DIRS",
+            "value": "${projectDir}\\..\\Ipopt-3.14.2-win64-msvs2019-md\\include\\coin-or",
+            "type": "PATH"
+          }
+        ]
+      }
+    ]
+  }

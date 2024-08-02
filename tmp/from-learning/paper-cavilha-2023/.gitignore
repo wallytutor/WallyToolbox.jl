@@ -1,0 +1,8 @@
+# Unpublished
+media/outputs/
+media/using/**/*.png
+media/using/**/*.aux
+media/using/**/*.log
+media/using/**/*.pdf
+media/using/**/*.synctex.gz
+media/using/*.xlsx

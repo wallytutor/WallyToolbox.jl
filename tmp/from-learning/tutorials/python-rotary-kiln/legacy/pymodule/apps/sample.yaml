@@ -1,0 +1,370 @@
+---
+title: Rotary kiln simulator
+
+reactor_discretization_type:
+  label: Select a mode of length discretization
+  options:
+    - null
+    - Linear
+    - Geometric
+    - User
+  index: 2
+  key: reactor_discretization_type
+  help:
+    Provide the reactor length discretization mode. It can be a simple
+    linear or geometric discretization, but also be an user supplied
+    scheme (with associated properties in space).
+
+combustion_models_names:
+  label: Select combustion model
+  options:
+    - null
+    - Two chambers (sequential)
+  index: 1
+  key: combustion_models_names
+  help:
+    Specify the model to be imported and initialize combustion. This must
+    be implemented a sub-module of *rotary_kiln.combustion_models* and provide
+    a function *make_combustion_solution*.
+
+combustion_models_configs:
+  -
+    name: Two chambers (sequential)
+    module: two_chambers
+    description:
+      Simulate thermal profile in a rotary kiln using as initialization
+      method a sequential two chamber model of burner outputs. In the left
+      side bar you find model specific parameters, while below you have
+      those for a generic rotary kiln.
+
+      # <h3>Future developments</h3>
+      # <ul>
+      #   <li>
+      #     Add exposed wall and heat transfer coefficients for flame
+      #     temperature calibration.
+      #   </li>
+      #   <li>
+      #     Describe leaks towards/from cooling zone (of air or fumes).
+      #   </li>
+      #   <li>
+      #     Add multi-chamber model with recirculation and leaks.
+      #   </li>
+      #   <li>
+      #     Provide multi-layer kiln walls (at least with steel casing).
+      #   </li>
+      #   <li>
+      #     Include bed flow and convective/radiative heat exchanges.
+      #   </li>
+      #   <li>
+      #     Include bed phase transformations through CALPHAD.
+      #   </li>
+      #   <li>
+      #     Include bed-gas mass transfer (degassing).
+      #   </li>
+      # </ul>
+
+    fields:
+      mechanism:
+        entry_type: selectbox
+        label: Select kinetic mechanism
+        options:
+          - 2S_CH4_BFER.yaml
+          - lu30_gri30.yaml
+          - gri30.yaml
+        index: 0
+        key: mechanism
+        help: Specify mechanism from *rotary_kiln.data.kinetics*.
+
+      oxidizer_flow_rate_primary:
+        entry_type: slider
+        label: Oxidizer primary flow rate [Nm³/h]
+        min_value: 0.0
+        max_value: 2000.0
+        value: 600.0
+        step: 10.0
+        format: "%.0f"
+        key: oxidizer_flow_rate_primary
+        help: Oxidizer flow rate injected in primary burner.
+
+      oxidizer_composition_primary:
+        entry_type: text_input
+        label: Oxidizer primary flow composition string
+        value: N2:0.78, O2:0.21, AR:0.01
+        max_chars: null
+        key: oxidizer_composition_primary
+        type: default
+        help:
+          Oxidizer primary flow composition compatible with Cantera.
+          Numeric values are expected to correspond to mole fractions.
+        autocomplete: null
+
+      oxidizer_flow_rate_secondary:
+        entry_type: slider
+        label: Oxidizer secondary flow rate [Nm³/h]
+        min_value: 0.0
+        max_value: 5000.0
+        value: 4000.0
+        step: 10.0
+        format: "%.0f"
+        key: oxidizer_flow_rate_secondary
+        help: Oxidizer flow rate injected in secondary burner.
+
+      oxidizer_composition_secondary:
+        entry_type: text_input
+        label: Oxidizer secondary flow composition string
+        value: N2:0.78, O2:0.21, AR:0.01
+        max_chars: null
+        key: oxidizer_composition_secondary
+        type: default
+        help:
+          Oxidizer secondary flow composition compatible with Cantera.
+          Numeric values are expected to correspond to mole fractions.
+        autocomplete: null
+
+      fuel_flow_rate:
+        entry_type: slider
+        label: Fuel flow rate [Nm³/h]
+        min_value: 0.0
+        max_value: 1000.0
+        value: 460.0
+        step: 10.0
+        format: "%.0f"
+        key: fuel_flow_rate
+        help: Fuel flow rate injected in primary burner.
+
+      fuel_composition:
+        entry_type: text_input
+        label: Fuel flow composition string
+        value: CH4:1.00
+        max_chars: null
+        key: fuel_composition
+        type: default
+        help:
+          Fuel flow composition compatible with Cantera.
+          Numeric values are expected to correspond to mole fractions.
+        autocomplete: null
+
+      volume_chamber_first:
+        entry_type: slider
+        label: First chamber volume [m³]
+        min_value: 0.05
+        max_value: 5.00
+        value: 0.5
+        step: 0.05
+        format: "%.2f"
+        key: volume_chamber_first
+        help: Burner pre-combustion model first chamber volume.
+
+      volume_chamber_second:
+        entry_type: slider
+        label: Second chamber volume [m³]
+        min_value: 0.05
+        max_value: 5.00
+        value: 3.0
+        step: 0.05
+        format: "%.2f"
+        key: volume_chamber_second
+        help: Burner pre-combustion model second chamber volume.
+
+      secondary_oxidizer_first_chamber:
+        entry_type: slider
+        label: Secondary oxidizer in first chamber [%]
+        min_value: 0.0
+        max_value: 100.0
+        value: 0.0
+        step: 1.0
+        format: "%.0f"
+        key: secondary_oxidizer_first_chamber
+        help:
+          Burner pre-combustion model secondary oxidizer percentage being
+          actually fed to the first chamber volume.
+
+      ignition_temperature:
+        entry_type: slider
+        label: Ignition temperature [°C]
+        min_value: 0.0
+        max_value: 2000.0
+        value: 1000.0
+        step: 10.0
+        format: "%.0f"
+        key: ignition_temperature
+        help: Burner pre-combustion model inlet temperature.
+
+reactor_discretization_configs:
+  -
+    name: User
+    fields:
+      kiln_file:
+        entry_type: file_uploader
+        label: Select user defined discretization file
+        type:
+          - yaml
+          - yml
+        accept_multiple_files: false
+        key: kiln_file
+        help:
+          Provide user defined discretization scheme. This must... TODO
+
+  - 
+    name: Automatic
+    geometry:
+      reactor_length:
+        entry_type: slider
+        label: Rotary kiln length [m]
+        min_value: 10.0
+        max_value: 50.0
+        value: 20.0
+        step: 1.0
+        format: "%.0f"
+        key: reactor_length
+        help:
+          Specify the total reactor length after flame zone (assumed to be
+          handled by combustion initialization model).
+    
+      reactor_slices:
+        entry_type: slider
+        label: Number of slices over length
+        min_value: 1
+        max_value: 100
+        value: 20
+        step: 1
+        format: "%d"
+        key: reactor_slices
+        help:
+          Specify the number of slices to discretize the reactor length
+          for numerical integration of mass and species transport.
+  
+      reactor_inner_diameter:
+        entry_type: slider
+        label: Internal kiln diameter [m]
+        min_value: 0.5
+        max_value: 2.5
+        value: 1.75
+        step: 0.01
+        format: "%.2f"
+        key: reactor_inner_diameter
+        help:
+          Specify the reactor internal diameter.
+  
+    layers:
+      brick_layer_thickness:
+        entry_type: slider
+        label: Inner brick layer thickness [mm]
+        min_value: 10.0
+        max_value: 300.0
+        value: 135.0
+        step: 5.0
+        format: "%.0f"
+        key: brick_layer_thickness
+        help:
+          Thickness of inner layer of bricks on kiln walls.
+
+      brick_layer_thermal_conductivity:
+        entry_type: slider
+        label: Inner brick layer thermal conductivity [W/(m.K)]
+        min_value: 0.0
+        max_value: 5.0
+        value: 0.5
+        step: 0.1
+        format: "%.1f"
+        key: brick_layer_thermal_conductivity
+        help:
+          Thermal conductivity of inner layer of bricks on kiln walls.
+
+      steel_layer_thickness:
+        entry_type: slider
+        label: Outer casing layer thickness [mm]
+        min_value: 1.0
+        max_value: 30.0
+        value: 10.0
+        step: 1.0
+        format: "%.0f"
+        key: steel_layer_thickness
+        help:
+          Thickness of steel layer around bricks on kiln walls.
+
+      steel_layer_thermal_conductivity:
+        entry_type: slider
+        label: Outer casing layer thermal conductivity [W/(m.K)]
+        min_value: 0.0
+        max_value: 50.0
+        value: 13.5
+        step: 0.5
+        format: "%.1f"
+        key: steel_layer_thermal_conductivity
+        help:
+          Thermal conductivity of of steel layer around bricks on kiln walls.
+      
+reactor_model_general:
+    bed:
+      kiln_load_level:
+        entry_type: slider
+        label: Kiln load level [mm]
+        min_value: 10.0
+        max_value: 500.0
+        value: 150.0
+        step: 10.0
+        format: "%.0f"
+        key: kiln_load_level
+        help:
+          Height of bed material at bottom of kiln.
+
+    models:
+      reactor_solver_mode:
+        entry_type: checkbox
+        label: Inverse solver mode
+        value: true
+        key: reactor_solver_mode
+        help:
+          If true, provide external wall temperature to find out the
+          compatible internal kiln temperature. Otherwise the kiln is
+          used in simulation mode and external temperature is expected
+          to be that of environment.
+
+      external_wall_temperature_entry:
+        entry_type: slider
+        label: External wall temperature (entry) [°C]
+        min_value: 50.0
+        max_value: 300.0
+        value: 200.0
+        step: 10.0
+        format: "%.0f"
+        key: external_wall_temperature_entry
+        help:
+          External kiln wall temperature (gas injection side).
+
+      external_wall_temperature_exit:
+        entry_type: slider
+        label: External wall temperature (exit) [°C]
+        min_value: 50.0
+        max_value: 300.0
+        value: 100.0
+        step: 10.0
+        format: "%.0f"
+        key: external_wall_temperature_exit
+        help:
+          External kiln wall temperature (gas outlet side).
+
+      environment_temperature:
+        entry_type: slider
+        label: Environment temperature [°C]
+        min_value: -10.0
+        max_value: 45.0
+        value: 20.0
+        step: 1.0
+        format: "%.0f"
+        key: environment_temperature
+        help:
+          External kiln environment temperature.
+
+      environment_convective_htc:
+        entry_type: slider
+        label: Environment heat transfer coefficient [W/(m².K)]
+        min_value: 0.0
+        max_value: 30.0
+        value: 10.0
+        step: 1.0
+        format: "%.0f"
+        key: environment_convective_htc
+        help:
+          External kiln convective heat transfer coefficient.

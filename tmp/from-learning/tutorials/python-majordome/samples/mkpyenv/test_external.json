@@ -1,0 +1,9 @@
+{
+    "pkg_tarbz2": [
+        "https://anaconda.org/Cantera/cantera/2.4.0/download/win-64/cantera-2.4.0-np115py37_2.tar.bz2"
+    ],
+    "deps": [
+        "scipy",
+        "numpy"
+    ]
+}

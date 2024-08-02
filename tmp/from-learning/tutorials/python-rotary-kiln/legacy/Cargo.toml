@@ -1,0 +1,18 @@
+[package]
+name = "rotary_kiln"
+version = "0.1.0"
+authors = ["Walter Dal'Maz Silva"]
+edition = "2021"
+description = "General rotary kiln simulation utilities in Rust."
+readme = "README.md"
+repository = "https://github.com/waltermateriais/rotary_kiln"
+license-file = "LICENSE"
+keywords = ["thermodynamics", "kinetics", "simulation"]
+categories = ["science", "simulation", ]
+autobins = true
+autoexamples = true
+autotests = true
+autobenches = true
+
+[dependencies]
+plotters = "0.3.1"

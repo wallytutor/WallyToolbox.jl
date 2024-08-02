@@ -1,0 +1,12 @@
+# Editor cache
+.vscode
+*.code-workspace
+*.sav
+
+# Python cache
+__pycache__
+*py[o|c]
+.ipynb_checkpoints
+
+# My old bad practice of sandboxes
+sandbox*

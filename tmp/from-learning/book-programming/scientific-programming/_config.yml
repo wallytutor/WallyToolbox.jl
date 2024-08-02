@@ -1,0 +1,22 @@
+title: Programação para Cientistas e Engenheiros
+author: Walter Dal'Maz Silva
+logo: media/logo.png
+
+execute:
+  execute_notebooks: force
+
+latex:
+  latex_documents:
+    targetname: book.tex
+
+bibtex_bibfiles:
+  - ./../../../databases/references.bib
+
+repository:
+  url: https://github.com/WallyTutor/learning-scientific-computing/tree/main/publications/book-programming/
+  path_to_book: docs
+  branch: master 
+
+html:
+  use_issues_button: false
+  use_repository_button: false

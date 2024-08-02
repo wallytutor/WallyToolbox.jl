@@ -1,0 +1,65 @@
+# Build/install Python.
+RUN cd /tmp/ && \
+    git clone --recursive https://github.com/python/cpython.git && \
+    cd /tmp/cpython && \
+    git checkout tags/v3.8.12 && \
+    ./configure \
+        --enable-optimizations \
+        --with-lto \
+        --enable-shared && \
+    make -j `nproc` && \
+    make test && \
+    make install && \
+    ldconfig && \
+    rm -rf /tmp/cpython
+
+# Build/install R.
+RUN cd /opt/ && \
+    wget https://pbil.univ-lyon1.fr/CRAN/src/base/R-4/R-4.1.2.tar.gz && \
+    tar xzf R-4.1.2.tar.gz && rm -rf R-4.1.2.tar.gz && \
+    cd R-4.1.2 && mkdir build && cd build && \
+    ../configure \
+        --enable-R-shlib \
+        --enable-R-static-lib \
+        --enable-lto \
+        --enable-long-double \
+        --with-lapack \
+        --with-readline \
+        --with-pcre2 \
+    && make all && make install
+
+# Build/install Julia.
+RUN cd /opt/ && \
+    git clone https://github.com/JuliaLang/julia.git && \
+    cd julia && git checkout v1.6.1 && make -j `nproc` && make install
+
+# Install nvtop for monitoring GPU.
+RUN cd /tmp/ && \
+    git clone https://github.com/Syllo/nvtop.git && \
+    mkdir -p /tmp/nvtop/build && cd /tmp/nvtop/build && \
+    cmake .. && make && make install && \
+    rm -rf /tmp/nvtop/
+
+# Julia/espresso cannot be tested with root user.
+RUN useradd -m -s /bin/bash -G jupyterusers nonroot
+
+RUN chown -R nonroot:nonroot /opt/espresso
+USER nonroot
+RUN cd /opt/espresso/build && make check
+USER root
+RUN chown -R root:root /opt/espresso
+
+RUN chown -R nonroot:nonroot /opt/julia
+USER nonroot
+RUN cd /opt/julia && make testall
+USER root
+RUN chown -R root:root /opt/julia
+
+# This actually breaks GPU support.
+RUN apt-get install -y \
+    libnvidia-compute-460 \
+    nvidia-utils-460 \
+    nvidia-cuda-dev \
+    nvidia-cuda-gdb \
+    nvidia-cuda-toolkit \
+    nvidia-cuda-toolkit-gcc

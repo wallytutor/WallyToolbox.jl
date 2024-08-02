@@ -1,0 +1,393 @@
+\documentclass{article}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{amssymb}
+\usepackage{xfrac}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage[round]{natbib}
+
+\newlist{todolist}{itemize}{2}
+\setlist[todolist]{label=$\square$}
+
+\title{Study notes and solutions}
+\author{Walter Dal'Maz Silva}
+\date{\today}
+
+\begin{document}
+\maketitle
+\tableofcontents
+\clearpage
+
+
+
+\subsection{Open Links}
+
+\begin{itemize}
+	\item\href{https://zims-en.kiwix.campusafrica.gos.orange.com/wikibooks_en_all_maxi/A/Algorithm_Implementation/Linear_Algebra/Tridiagonal_matrix_algorithm}
+	{TDMA implemented in Haskell}
+	\item\href{https://github.com/bmcage/odes}
+	{scikit-odes (create branch to support Windows)}
+\end{itemize}
+
+
+
+
+
+
+\section{Knowledge Tree}
+
+\begin{itemize}
+	\item References:
+	\begin{enumerate}
+		\item Hirsch, 2007
+		\item Hirsch, 1994, v1-2
+		\item Smith, 2021 (OpenFoam programming)
+		\item Patankar, 1980
+		\item Launder \& Spalding, 1972-74 (k-epsilon)
+	\end{enumerate}
+	%%%%
+	\item Fluid Mechanics:
+	\begin{itemize}
+		\item Frames of reference:
+		\begin{enumerate}
+			\item Lagrangian
+			\begin{itemize}
+				\item Material points
+				\item Follow travel of element
+				\item Origin of "Material derivative"
+			\end{itemize}
+			\item Eulerian
+			\begin{itemize}
+				\item Fixed/laboratory frame
+				\item Grid of measurements
+				\item Example: anemometer
+				\item Sometimes you can find a system where the flow is steady.
+			\end{itemize}
+		\end{enumerate}
+		\item State equation
+		\begin{itemize}
+			\item Ideal gas
+			\item Peng-Robinson-Stryjek-Vera
+		\end{itemize}
+		\item Flow regimes:
+		\begin{itemize}
+			\item Laminar
+			\begin{itemize}
+				\item Bernoulli-Euler equation
+				\item Navier-Stokes equation
+			\end{itemize}
+			\item Turbulent
+			\begin{itemize}
+				\item RANS Spalart-Allmaras: applicable to external/aerodynamics, implements and eddy turbulence viscosity equation. It is not suitable for industrial flows. Transition models: Bas-Cakmakcioglu.
+				\item RANS SST (Shear stress transport): Internal/pipelines
+			\end{itemize}
+			\item Multiphase:
+			\begin{itemize}
+				\item Continuous-continuous
+				\item Dispersed-continuous
+				\item Volume of fluid method
+				\item Interfaces: pressure is higher on the concave side. Surface tension is a property of the pair, and is affected by shear stresses, electrical conditions, temperature. Described by Young-Laplace equation.
+			\end{itemize}
+		\end{itemize}
+	\end{itemize}
+	%%%%
+	\item Mathematics:
+	\begin{itemize}
+		\item Analysis
+		\begin{itemize}
+			\item Linear
+			\item Affine
+			\item Tensors
+			\begin{itemize}
+				\item Vector: contravariant (notation $V^i$ $e_j$)
+				\item Covector: covariant (notation $V_i$ $e^j$)
+			\end{itemize}
+		\end{itemize}
+	\end{itemize}
+	%%%%
+	\item Tools
+	\begin{itemize}
+		\item 
+	\end{itemize}
+\end{itemize}
+
+%Tools
+%Meshing
+%Salome 9.3+
+%Shaper (replaces Geometry)
+%Parametric modeler
+%Create part with Gear icon
+%Geometry (old)
+%Non-parametric modeler
+%Create groups priot to meshing
+%Surface groups for patches
+%Edges groups
+%Hexablock
+%Mesh
+%Creation
+%Create Mesh object
+%Add Sub-Meshes to main mesh
+%Add hypothesis to mesh/sub-meshes
+%Possible to add custom hyposthesis
+%Evaluate mesh size without build
+%Algorithms
+%Quadrangle
+%1D segments must be even
+%CFD
+%OpenFoam
+%Jobs
+%foamJob
+%foamLog
+%Numerical Schemes
+%Interpolation
+%Programming
+%Utilities
+%Build
+%wmake
+%wclean
+%wmakeFilesAndOptions
+%Helpers
+%foamNewApp
+%foamNewBC
+%foamNewFunctionObject
+%foamNewSource
+%foamNewTemplate
+%Headers
+%IOstreams.H
+%IO replacing std iostream
+%createMesh.H
+%Loads mesh from constant/polyMesh
+%Object named `mesh` (fvMesh) is created
+%Internal faces list: mesh.Cf()
+%Cell volumes list: mesh.V()
+%Cells list: mesh.C()
+%Neighbors for all cells mesh.cellCells()
+%setRootCase.H
+%Enforce running from a case directory
+%createTime.H
+%Create runtime counter
+%fvCFD.H
+%Groups frequently required headers
+%Data types
+%List.H
+%Foam::List<T>
+%size()
+%last()
+%append()
+%Avoid: performance issues!
+%fieldTypes.H
+%C++ int becomes Foam::label
+%C++ double becomes Foam::scalar
+%Foam::vector (3D only)
+%Foam::tensor (3D only)
+%& for inner product
+%Exercises
+%Build std C++ with wmake: done
+%Build Foam C++ with wmake: done
+%Tensor operations in Foam C++: done
+%Series sum in Foam C++: done
+%Application volumeRatioCheck: done
+%Solver icoThermalFoam: done
+%fvm vs fvc
+%fvm
+%Discretize the term into the matrix equation
+%Will provide [M] when solving [M][Q]=[B]
+%Implicit divergence equations
+%fvc
+%Compute the derivatives (field) with values
+%Will provide [B] when solving [M][Q]=[B]
+%Explicit divergence equations
+%Data I/O
+%IOdictionary
+%Reads a field from a file
+%Find field with .lookup("fieldName")
+%IOobject
+%Use inside IOdictionary
+%IOobject::MUST_READ
+%IOobject:NO_WRITE
+%readScalar
+%General utilities
+%foamGet (retrieve default files)
+%foamMonitor
+%checkMesh
+%setFields
+%Multiregion
+%topSet
+%splitMeshRegions
+%Mesh conversion
+%ideasUnvToFoam
+%SU2
+%Running
+%All Configurations
+%Patches = Markers
+%Save to visualization file with MARKER_PLOTTING
+%Compute objective quantities with MARKER_MONITORING
+%Termination
+%No. of iterations
+%Residual of chosen equations
+%Convergence of output quantity
+%Stagnation flow
+%Subsonic
+%Outlet
+%P
+%Inlet
+%T, P, direction (TOTAL_CONDITIONS)
+%Density, velocity (MASS_FLOW)
+%Transonic
+%Supersonic
+%Inlet
+%MARKER_SUPERSONIC_INLET
+%Outlet
+%Nothing required (no backpropagation)
+%Tutorials
+%01-compressible_flow
+%01-Inviscid_Bump
+%Change inlet direction
+%Experiment with supersonic case
+%02-Inviscid_Wedge
+%Test oblique-shock relations - perfect gas 
+%03-Inviscid_ONERAM6
+%Cannot selected named surfaces in paraview?
+%Validation with ONERA M6 wing
+%04-Laminar_Flat_Plate
+%Validation with Blasius equation
+%Classic test case for viscous flow solvers
+%05-Laminar_Cylinder
+%Gradient limiting only with MUSCL active
+%MUSCL applies only for upwind schemes
+%06-Turbulent_Flat_Plate
+%07-Transitional_Flat_Plate
+%08-Turbulent_ONERAM6
+%09-Unsteady_NACA0012
+%10-UQ_NACA0012
+%Sensivitivy analysis
+%11-NICFD_nozzle
+%Defaults
+%2D
+%x-y plane
+%freestream over x
+%AOA over x
+%SIDESLIP_ANGLE over y
+%3D
+%Options
+%Solvers
+%EULER
+%Inviscid flows
+%NAVIER_STOKES
+%Viscous flows
+%RANS
+%Turbulent flows
+%INC_RANS
+%Turbulence models
+%SA
+%Spalart-Allmaras
+%SA_NEG
+%Spalart-Allmaras
+%SST
+%Shear Stress Transport
+%SA_E
+%Spalart-Allmaras
+%SA_COMP
+%Spalart-Allmaras
+%SA_E_COMP
+%Spalart-Allmaras
+%SST_SUST
+%Shear Stress Transport
+%Questions
+%JST/HLLC convective scheme?
+%How to have different inlets with different types (TOTAL_CONDITIONS, MASS_FLOW)?
+%Multigrid solvers (check old MIT course)
+%Venkat limiter (check old MIT course)
+%Tools
+%SU2 Modules
+%SU2_CFD(_AD)
+%FVM
+%FEM (ongoing)
+%SU2_DOT(_AD)
+%Gradient Projection
+%SU2_DEF
+%Mesh Deformation
+%SU2_MSH
+%Mesh Adaptation
+%Periodic BC setup
+%SU2_SOL
+%Generates solution files
+%SU2_GEO
+%Geometry definition
+%Geometric constraints
+%Shape optimization
+%More here
+%Support
+%Programming
+%Python
+%NumPy
+%SciPy
+%MPI
+%OpenMPI
+%MPICH (recommneded)
+%MVAPICH
+%Post-processing
+%ParaView
+%Tecplot
+%Meshing
+%SU2
+%Programatically
+%SU2_DEF converted from CGNS
+%gmsh CGNS (ADF)
+%Proprietary
+%Pointwise
+%ICEM CFD
+%Gambit
+%Postprocessing
+%ParaView
+%import paraview.simple as ps
+%Tools > Start Trace to record macro
+%Use contours to see multiphase interfaces
+%
+%Portfolio
+%CFD
+%Chemical
+%Thesis
+%Flame 2D
+%Heat transfer
+%CHT gas-solid - DONE
+%Salome
+%Model in Shapr
+%Create fluid in Geom
+%Meshing in Mesh
+%Export as UNV
+%Convert mesh with ideasUnvToFoam
+%Split cell zones with splitMeshRegions -cellZones -overwrite
+%fvSchemes and fvSolution must be present but in empty versions (specific region directories to be used to the real ones)
+%CHT fluid-solid-solid - DONE
+%One sub-folder per region
+%0
+%constant
+%system
+%regionProperties dictionary
+%topoSetDict
+%Create cell set
+%Can perform operations on filter
+%Create zone set
+%Run topoSet after creation
+%splitMeshRegions
+%Provide heat sources in fvOptions for given zone under constant directory
+%Use function objects to provide runtime post-processing utilities
+%View with paraFoam -builtin
+%Subtopic 7
+%Plate quench in fluid
+%Moving Reference Frame
+%Mutiphase
+%Two-phase VoF dragout
+%Two-phase VoF gas-liquid
+%setFieldsDict
+%Bubble raising
+%Gas injection
+%Particles drag
+%Porous medium
+%Multiphysics
+%Fluid structure
+%Moving parts
+%Mixing fan
+%DEM
+%Combustion

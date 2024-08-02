@@ -1,0 +1,126 @@
+###################################################################
+# MATERIALS DATABASE FOR CALPHAD CALCULATIONS
+###################################################################
+
+metadata:
+  author: Walter Dal'Maz Silva
+  date: Mar 10 2022
+
+###################################################################
+# ELEMENTS
+###################################################################
+
+elements:
+  AL:
+    reference_state: FCC_A1
+    molar_mass: 26.98
+    H298_H0: 4577.3
+    S298: 28.321
+  CA:
+    reference_state: FCC_A1
+    molar_mass: 40.08
+    H298_H0: 6196.5
+    S298: 41.589
+  O:
+    reference_state: 1/2 mol O2
+    molar_mass: 16.00
+    H298_H0: 4341.0
+    S298: 102.520
+  SI:
+    reference_state: null
+    molar_mass: null
+    H298_H0: null
+    S298: null
+
+compounds:
+  AL(3+):
+    AL: 1
+  CA(2+):
+    CA: 1
+  O(2-):
+    O: 1
+  SIO2(0):
+    SI: 1
+    O: 2
+  SIO3(2-):
+    SI: 1
+    O: 3
+  SIO4(4-):
+    SI: 1
+    O: 4
+  C3A1:
+    AL: 2
+    CA: 3
+    O: 6
+  C1A1:
+    AL: 2
+    CA: 1
+    O: 4
+  C1A2:
+    AL: 4
+    CA: 1
+    O: 7
+  C1A6:
+    AL: 12
+    CA: 1
+    O: 19
+  C12A7:
+    AL: 14
+    CA: 12
+    O: 33
+  C1S1:
+    CA: 1
+    SI: 1
+    O: 3
+  C2S1:
+    CA: 2
+    SI: 1
+    O: 4
+  C3S2:
+    CA: 3
+    SI: 2
+    O: 7
+
+phases:
+  LIQUID:
+    -
+      species:
+        - AL(3+)
+        - CA(2+)
+      sites: P
+    -
+      species:
+        - O(2-)
+        - SIO2(0)
+        - SIO3(2-)
+        - SIO4(4-)
+      sites: Q
+
+###################################################################
+# PHASES
+###################################################################
+
+data:
+  include:
+    - database/liquid.yml
+    - database/solid.yml
+    - database/compound_al2o3_cao.yml
+    - database/compound_cao_sio2.yml
+
+###################################################################
+# REFERENCES
+###################################################################
+
+references:
+  -
+    key: hallstedt1990
+    doi: 10.1111/j.1151-2916.1990.tb05083.x
+    summary:
+  -
+    key: hillert1990
+    doi: 10.1007/BF02664198
+    summary:
+
+###################################################################
+# EOF
+###################################################################

@@ -1,0 +1,1286 @@
+# -*- coding: utf-8 -*-
+
+# Import Python built-in modules.
+from pathlib import Path
+from time import perf_counter
+from typing import Any
+from typing import Optional
+
+# Import external modules.
+from casadi import MX
+from casadi import nlpsol
+from casadi import vertcat
+from majordome.utilities import Capturing
+from matplotlib.figure import Figure
+from scipy.integrate import simpson
+from scipy.integrate import solve_ivp
+from scipy.interpolate import interp1d
+from scipy.optimize import root
+import cantera as ct
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+
+# Own imports.
+from ..materials import ThermoSi1O2
+from ..models import HtcTscheng1979
+from ..models import solve_kramers_model
+from ..models import arrhenius
+from ..models import conduction
+from ..models import convection
+from ..models import radiation
+from ..models import effective_thermal_conductivity
+from ..types import Matrix
+from ..types import Vector
+
+# Make package kinetics data available.
+ct.add_directory(Path(__file__).resolve().parents[1] / "data")
+
+
+class RotaryKilnMixModel:
+    """ Implementation of rotary kiln with Kramers model and mixture.
+    
+    Parameters
+    ----------
+    L: float
+        Length of kiln provided in meters [m].
+    R: float
+        Internal radius of kiln provided in meters [m].
+    alpha: float
+        Slope of kiln provided in degrees [°].
+    n: float
+        Kiln rotation rate [rev/min]. It is important to note here
+        that for compatibility with Kramers' equation for bed
+        height prediction, this value is stored and provided
+        through `rotation_rate` property with units of revolutions
+        per second [rev/s].
+    phim: float
+        Kiln feed rate [kg/h].
+    nz: int
+        Number of cells to discretize kiln over length. Because
+        it is aimed to be used with a finite volume formulation,
+        cells are discretized over an equally spaced array with
+        lenght `nz` and center of first/last cells are displaced
+        to half-way the step size.
+    hl: Optional[float] = 0.0
+        Height of bed at product discharge end [m].
+    radcal: Optional[Any] = None
+        Radiation model for atmosphere properties.
+    solver: Optional[str] = "scipy-root"
+        Solver for constraints, "casadi-ipopt" or "scipy-root".
+        The default is preferred for performance but in some cases
+        using constrained optimization with CasADi interface to
+        Ipopt may provide more consistence in solution.
+    root_method: Optional[str] = "krylov"
+        Method to use with solver "scipy-root". The default is
+        recommended for the typical problem size found here but
+        in some cases "df-sane" ensures avoids divergence due to
+        problem numerical stiffness.
+    nlptol: Optional[float] = 1.0e-06
+        Constrain violation tolerance for solver "casadi-ipopt".
+    """
+    def __init__(self,
+            L: float,
+            R: float,
+            alpha: float,
+            n: float,
+            phim: float,
+            nz: int,
+            hl: Optional[float] = 0.0,
+            radcal: Optional[Any] = None,
+            solver: Optional[str] = "scipy-root",
+            root_method: Optional[str] = "krylov",
+            nlptol: Optional[float] = 1.0e-06
+        ) -> None:
+        self._initialized = False
+        self._length = L
+        self._radius = R
+        self._slope = np.radians(alpha)
+        self._rotation_rate = n / 60.0
+        self._feed_rate = phim / 3600.0
+        self._discharge_height = hl
+        self._radcal = radcal
+        self._nlptol = nlptol
+        self._solver = solver
+        self._root_method = root_method
+        self._Tmin = 200.0
+        self._Tmax = 5000.0
+        self.__discretization(nz)
+
+    ###############################################################
+    # Private properties (access shortcuts)
+    ###############################################################
+
+    @property
+    def _reinitialize_per_iteration(self) -> bool:
+        """ Whether to call initialization on every update. """
+        return False
+
+    @property
+    def _mass_flow_rate_gas(self) -> Matrix:
+        """ Access to gas mass flow rate [kg/s]. """
+        return self._solution[:, 0]
+
+    @property
+    def _mass_flow_rate_bed(self) -> Matrix:
+        """ Access to bed mass flow rate [kg/s]. """
+        return self._solution[:, self._n_vars_gas+0]
+
+    @property
+    def _mass_fractions_gas(self) -> Matrix:
+        """ Access to gas composition in mass fractions [-]. """
+        return self._solution[:, 2:self._n_vars_gas]
+
+    @property
+    def _mole_fractions_gas(self) -> Matrix:
+        """ Access to gas composition in mole fractions [-]. """
+        self._sarr.TPY = None, None, self._mass_fractions_gas
+        return self._sarr.X
+
+    @property
+    def _temperature_gas(self) -> Vector:
+        """ Access to gas temperature in solution [K]. """
+        return self._solution[:, 1][::+1]
+
+    @property
+    def _temperature_bed(self) -> Vector:
+        """ Access to bed temperature in solution [K]. """
+        return self._solution[:, self._n_vars_gas+1][::-1]
+
+    @property
+    def _partial_enthalpies_mass(self) -> Vector:
+        """ Species partial mass enthalpies [J/kg]. """
+        return self._gas.partial_molar_enthalpies / self._mw_gas
+
+    ###############################################################
+    # Internal simple helper functions
+    ###############################################################
+
+    def __discretization(self, nz: int) -> None:
+        """ Discretize 1D in equal length cells. """
+        self._n_cells = nz
+        self._cell_length = dz = self._length / self._n_cells
+        self._cell_centers = np.linspace(dz/2, self._length-dz/2, nz)
+        self._z = np.hstack((0.0, self._cell_centers, self._length))
+
+    def __unpack_temperatures(self, T: Vector) -> tuple[4*[Vector]]:
+        """ Unpack stacked temperature array. """
+        return (T[0*self._n_cells:1*self._n_cells],
+                T[1*self._n_cells:2*self._n_cells],
+                T[2*self._n_cells:3*self._n_cells],
+                T[3*self._n_cells:4*self._n_cells])
+
+    def __extended_balance(self, q: Vector) -> interp1d:
+        """ Build full balance interpolation with safe ends. """
+        return interp1d(self._z, [q[0], *q, q[-1]],
+                        fill_value="extrapolate")
+
+    @staticmethod
+    def __select_conversion(tunit: str):
+        """ Select conversion function for temperature units. """
+        match tunit[-1]:
+            case "C":
+                return lambda k: k - 273.15
+            case "F":
+                return lambda k: 9 * (k - 273.15) / 5 + 32
+            case "K":
+                return lambda k: k
+            case _:
+                raise ValueError(f"Unknown temperature unit {tunit}")
+    
+    ###############################################################
+    # Solution methods
+    ###############################################################
+
+    def __integrate(self,
+            method: Optional[str] = "LSODA",
+            max_step: Optional[float] = 1.0,
+            max_iters: Optional[int] = 0
+        ):
+        """ Call solution method with current state. """
+        for _ in range(max(1, max_iters)):
+            # Wall to solution temperatures interpolations [K].
+            opts = dict(fill_value="extrapolate")
+            self._T_g = interp1d(self._z, self._temperature_gas, **opts)
+            self._T_b = interp1d(self._z, self._temperature_bed, **opts)
+            self._mdot_g = interp1d(self._z, self._mass_flow_rate_gas, **opts)
+        
+            sol = solve_ivp(self.__core_rhs_gas, t_span=(0.0, self._length),
+                            y0=self._initial_value_gas, method=method,
+                            t_eval=self._z, max_step=max_step)
+
+            if not sol.success:
+                raise RuntimeError(f"Failed to integrate gas.")
+
+            self._solution[:, :self._n_vars_gas] = sol.y.T
+            
+            sol = solve_ivp(self.__core_rhs_bed, t_span=(0.0, self._length),
+                            y0=self._initial_value_bed, method=method,
+                            t_eval=self._z, max_step=max_step)
+
+            if not sol.success:
+                raise RuntimeError(f"Failed to integrate bed.")
+
+            self._solution[:, self._n_vars_gas:] = sol.y.T
+            
+    def __solve_scipy_root(self, T_g, T_b, e_g, a_g):
+        """ Solve constrained problem with `scipy.optimize.root`. """
+        args = (T_g, T_b, e_g, a_g, self._eps_bed, self._eps_ref)
+        sol = root(self.__steady_constraints, self._guess,
+                   method=self._root_method, args=args)
+
+        if not sol.success:
+            raise ValueError("Rootfinding failed!")
+        
+        return sol.x
+
+    def __solve_casadi_ipopt(self, T_g, T_b, e_g, a_g):
+        """ Solve constrained problem with CasADi interface to ipopt. """
+        g = self.__steady_constraints(self._T_sym, T_g, T_b, e_g, a_g, 
+                                      self._eps_bed, self._eps_ref)
+
+        nlp = {"x": self._T_sym, "f": 1, "g": g}
+        solver = nlpsol("solver", "ipopt", nlp)
+
+        with Capturing() as solver_output:
+            result = solver(x0=self._guess,
+                            lbx=self._Tmin,
+                            ubx=self._Tmax,
+                            lbg=0.0, ubg=0.0)
+
+        constrain_violation = abs(result["g"].full()).max()
+        if constrain_violation > self._nlptol:
+            print(solver_output)
+            raise ValueError("Rootfinding failed!")
+
+        return result["x"].full().ravel()
+
+    def __solve_constraints(self, T_g, T_b, e_g, a_g):
+        """ Use selected solver to solve steady-state constraints. """
+        match self._solver:
+            case "casadi-ipopt":
+                solver = self.__solve_casadi_ipopt
+            case "scipy-root":
+                solver = self.__solve_scipy_root
+
+        self._guess[:] = solver(T_g, T_b, e_g, a_g)
+        return self._guess
+
+    ###############################################################
+    # Simulation and post-processing auxiliaries
+    ###############################################################
+
+    def __test_convergence(self, atol: float) -> bool:
+        """ Check if absolute temperature change converged. """
+        Tg = self._temperature_gas
+        Tb = self._temperature_bed
+
+        self._errg = abs(self._Tg_last - Tg).max()
+        self._errb = abs(self._Tb_last - Tb).max()
+        
+        self._Tg_last[:] = Tg
+        self._Tb_last[:] = Tb
+
+        self._history_gas.append(self._errg)
+        self._history_bed.append(self._errb)
+
+        if self._errg <= atol and self._errb <= atol:
+            self._count += 1
+        else:
+            self._count = 0
+
+        # TODO make an interface.
+        min_convergence_steps = 3
+
+        if self._count >= min_convergence_steps:
+            return True
+        
+        return False
+
+    def __tabulate_solution(self, tabs: dict[str, Vector]) -> None:
+        """ Compile model results in a tabular format. """
+        def wrap_cell_based_results(arr):
+            return [float("nan"), *arr, float("nan")]
+
+        X_g = self._mole_fractions_gas
+        Y_g = self._mass_fractions_gas
+        T_g = self._temperature_gas
+
+        self._sarr.TPY = T_g, None, Y_g
+
+        u = self._mass_flow_rate_gas
+        u /= (self._sarr.density * self._gas_cross_area)
+
+        df = pd.DataFrame()
+
+        df["z"] = self._z
+        df["h"] = self._bed_height
+        df["load"] = self._local_loading
+        df["area_bed"] = self._bed_cross_area 
+        df["area_gas"] = self._gas_cross_area 
+
+        df["temp_gas"] = self._temperature_gas
+        df["temp_bed"] = self._temperature_bed
+
+        df["mdot_gas"] = self._mass_flow_rate_gas
+        df["mdot_bed"] = self._mass_flow_rate_bed
+
+        df["gas_density"] = self._sarr.density
+        df["gas_viscosity"] = self._sarr.viscosity
+        df["gas_conductivity"] = self._sarr.thermal_conductivity
+        df["gas_speed"] = u
+
+        for key, val in tabs.items():
+            df[key] = wrap_cell_based_results(val)
+
+        df["P_xgw"] = self._P_xgw
+        df["P_xgb"] = self._P_xgb
+        df["P_cwb"] = self._P_cwb
+        df["P_rwb"] = self._P_rwb
+        
+        df["A_cgw"] = self._A_cgw
+        df["A_rgw"] = self._A_rgw
+        df["A_cgb"] = self._A_cgb
+        df["A_rgb"] = self._A_rgb
+        df["A_cwb"] = self._A_cwb
+        df["A_rwb"] = self._A_rwb
+
+        df["h_cgb"] = self._h_cgb
+        df["h_cgw"] = self._h_cgw
+        df["h_cwb"] = self._h_cwb
+
+        # NOTE: no array inversion here!
+        df["q_gas"] = wrap_cell_based_results(-1 * self._bal_gas)
+        df["q_bed"] = wrap_cell_based_results(+1 * self._bal_bed)
+        df["q_env"] = wrap_cell_based_results(self._q_env)
+        df["q_cgw"] = wrap_cell_based_results(self._q_cgw)
+        df["q_rgw"] = wrap_cell_based_results(self._q_rgw)
+        df["q_cgb"] = wrap_cell_based_results(self._q_cgb)
+        df["q_rgb"] = wrap_cell_based_results(self._q_rgb)
+        df["q_cwb"] = wrap_cell_based_results(self._q_cwb)
+        df["q_rwb"] = wrap_cell_based_results(self._q_rwb)
+
+        # Is it better to report densities?
+        df["q_gas"] /= self._cell_length
+        df["q_bed"] /= self._cell_length
+        df["q_env"] /= self._cell_length
+        df["q_cgw"] /= self._cell_length
+        df["q_rgw"] /= self._cell_length
+        df["q_cgb"] /= self._cell_length
+        df["q_rgb"] /= self._cell_length
+        df["q_cwb"] /= self._cell_length
+        df["q_rwb"] /= self._cell_length
+
+        df["x_o2"] =  X_g[:, self._sarr.species_index("O2")]
+        df["x_h2o"] = X_g[:, self._sarr.species_index("H2O")]
+        df["x_co2"] = X_g[:, self._sarr.species_index("CO2")]
+        df["x_n2"] =  X_g[:, self._sarr.species_index("N2")]
+        
+        bg = df["q_cgw"] + df["q_rgw"] - df["q_rwb"] - df["q_cwb"]
+        bs = df["q_env"]
+        df["balance_residual"] = bs - bg
+
+        self._table = df
+
+        q_loss = simpson(df.q_env[1:-1], df.z[1:-1])
+        print(f"Environment losses {q_loss:.2f} kW")
+
+    ###############################################################
+    # Initialization methods
+    ###############################################################
+
+    def __init_gas_phase(self, **kwargs):
+        """ Initialize gas phase thermophysical model. """
+        # Mandatory arguments
+        mf0 = kwargs.get("mf0")
+        tf0 = kwargs.get("tf0")
+        lambda0 = kwargs.get("lambda0")
+        fuel = kwargs.get("fuel")
+        oxid = kwargs.get("oxid")
+
+        # Arguments with defaults.
+        pf0 = kwargs.get("pf0", ct.one_atm)
+        mechanism = kwargs.get("mechanism", "1S_CH4_MP1.yaml")
+        kinetics = kwargs.get("kinetics", "EBU")
+        ke = kwargs.get("ke", None)
+
+        # Initialize gas to given equivalece ratio.
+        self._gas = ct.Solution(mechanism)
+        self._gas.TP = tf0, pf0
+        self._gas.set_equivalence_ratio(lambda0, fuel, oxid)
+
+        # Store/allocate internals.
+        self._mw_gas = self._gas.molecular_weights
+        self._initial_value_gas = np.hstack((mf0, tf0, self._gas.Y))
+        self._n_vars_gas = self._initial_value_gas.shape[0]
+
+        match kinetics:
+            case "MAK":
+                self._wdot_mass = self.__wdot_mak
+            case "EBU":
+                self._wdot_mass = self.__wdot_ebu
+                self._coefs = np.array([-1.0, -2.0, 1.0, 2.0, 0.0, 0.0])
+                self._idxf = self._gas.species_index("CH4")
+                self._idxo = self._gas.species_index("O2")
+                self._ke = ke
+
+        if hasattr(self, "_ke") and self._ke is None:
+            # Approximate k/e ratio proposed by Mujumdar (2006).
+            self._ke = lambda z: z / self._length
+
+    def __init_bed_phase(self, **kwargs):
+        """ Initialize bed phase thermophysical model. """
+        # Mandatory arguments
+        mb0 = kwargs.get("mb0")
+        tb0 = kwargs.get("tb0")
+
+        # Arguments with defaults.
+        rho_bed = kwargs.get("rho_bed")
+        aor = kwargs.get("aor")
+        kb = kwargs.get("kb")
+
+        self._bed_specific_mass = rho_bed
+        self._bed_repose_angle = np.radians(aor)
+        self._kb = kb
+        self._si1o2 = ThermoSi1O2()
+        self._initial_value_bed = np.array([mb0 / 3600.0, tb0])
+        self._n_vars_bed = self._initial_value_bed.shape[0]
+
+    def __init_bed_geometry(self, **kwargs):
+        """ Evaluate internal areas and perimeters of kiln. """
+        # Retrieve local functions.
+        thick_coat = kwargs.get("thick_coat")
+        thick_refr = kwargs.get("thick_refr")
+        thick_shell = kwargs.get("thick_shell")
+
+        # Compute radius for radial equations.
+        self._R_zw = self._radius - thick_coat(self._z)
+        self._R_wg = self._radius - thick_coat(self._cell_centers)
+        self._R_cr = self._radius
+        self._R_rs = self._R_cr + thick_refr(self._cell_centers)
+        self._R_sh = self._R_rs + thick_shell(self._cell_centers)
+
+        experimental = kwargs.get("kramers_exp", False)
+
+        if experimental:
+            radius = interp1d(self._z,
+                              self._R_zw,
+                              fill_value="extrapolate")
+        else:
+            radius = interp1d(self._z,
+                              self._radius * np.ones_like(self._z),
+                              fill_value="extrapolate")
+
+        z, h = solve_kramers_model(
+            radius,
+            self._length,
+            self._slope,
+            self._rotation_rate,
+            self._feed_rate,
+            self._bed_repose_angle,
+            self._bed_specific_mass,
+            discharge_height=self._discharge_height,
+            t_eval=self._z,
+            method=kwargs.get("method_bed", "BDF"),
+            experimental=experimental
+        )
+
+        R = radius(self._z)
+        
+        phi = 2 * np.arccos(1 - h / R)
+        lgb = 2 * np.sqrt(h * (2 * R - h))
+
+        Ab = (1/2)*(phi * R**2 - lgb * (R - h))
+        Ag = np.pi * R**2 - Ab
+
+        eta_loc = (phi - np.sin(phi)) / (2 * np.pi)
+        eta_bar = simpson(eta_loc, z) / self._length
+
+        self._central_angle = phi
+        self._bed_height = h
+        self._bed_cord_length = lgb
+        self._bed_cross_area = Ab
+        self._gas_cross_area = Ag
+        self._local_loading = eta_loc
+        self._mean_loading = eta_bar
+
+        opts = dict(fill_value="extrapolate")
+
+        # General interpolations.
+        self._fR = interp1d(self._z, self._R_zw, **opts)
+        self._fbeta = interp1d(self._z, self._central_angle, **opts)
+        self._feta = interp1d(self._z, self._local_loading, **opts)
+
+        # Compute gas and bed interpolated sections.
+        fAc = interp1d(self._z, self._gas_cross_area, **opts)
+        fPc = interp1d(self._z, self._bed_cord_length, **opts)
+        fAb = interp1d(self._z, self._bed_cross_area, **opts)
+        fPb = interp1d(self._z, self._bed_cord_length, **opts)
+
+        # Assembly accessor functions.
+        self._get_section_gas = lambda z: (fAc(z), fPc(z))
+        self._get_section_bed = lambda z: (fAb(z), fPb(z))
+
+    def __init_heat_geometry(self, **kwargs):
+        """ Evaluate internal areas and perimeters of kiln. """
+        opts = dict(fill_value="extrapolate")
+
+        # Local radius is inner kiln radius all over...
+        R = self._radius
+
+        # Areas for pair gas-wall: since the bed covers the central
+        # angle, theta=2pi-phi and areas are computed as follows.
+        self._P_xgw = (2 * np.pi - self._central_angle) * R
+        self._A_cgw = self._P_xgw * self._cell_length
+        self._A_rgw = self._A_cgw
+
+        self._fA_cgw = interp1d(self._z, self._A_cgw, **opts)
+        self._fA_rgw = self._fA_cgw
+
+        # Areas for pair gas-bed: this area is as trapezoidal
+        # section because in fact bed is an inclined plane. Here,
+        # to avoid useless complications it is computed as a
+        # rectangle of exposed bed.
+        self._P_xgb = self._bed_cord_length
+        self._A_cgb = self._P_xgb * self._cell_length
+        self._A_rgb = self._A_cgb
+
+        self._fA_cgb = interp1d(self._z, self._A_cgb, **opts)
+        self._fA_rgb = self._fA_cgb
+
+        # Areas for pair wall-bed: in this case there are two
+        # different areas because radiation comes through the
+        # exposed surface and conduction from contact with wall.
+        # XXX: should'n the CWB be based on emitting surface?
+        # self._P_cwb = self._central_angle * R
+        self._P_cwb = (2 * np.pi - self._central_angle) * R
+        self._P_rwb = self._bed_cord_length
+        self._A_cwb = self._P_cwb * self._cell_length
+        self._A_rwb = self._P_rwb * self._cell_length
+
+        self._fA_cwb = interp1d(self._z, self._A_cwb, **opts)
+        self._fA_rwb = interp1d(self._z, self._A_rwb, **opts)
+
+        # View factor for RWB is the ratio of receiving bed
+        # surface to emitting walls (interface gas-wall).
+        self._omega = self._P_rwb / self._P_xgw
+        self._fomega = interp1d(self._z, self._omega)
+
+        # External shell area.
+        self._P_env = 2 * np.pi * self._R_sh
+        self._A_env = self._P_env * self._cell_length 
+
+    def __init_heat_fluxes(self, **kwargs):
+        """ Prepare parameters related to heat fluxes computation. """
+        k_coat  = kwargs.get("k_coat")
+        k_refr  = kwargs.get("k_refr")
+        k_shell = kwargs.get("k_shell")
+
+        self._fn_k_coat  = lambda T: k_coat(self._cell_centers, T)
+        self._fn_k_refr  = lambda T: k_refr(self._cell_centers, T)
+        self._fn_k_shell = lambda T: k_shell(self._cell_centers, T)
+
+        self._eps_bed = kwargs.get("eps_bed", 0.8)
+        self._eps_ref = kwargs.get("eps_ref", 0.8)
+
+        self._e_env = kwargs.get("eps_env", 0.8)
+        self._h_env = kwargs.get("h_env", 8.0)
+        self._T_env = kwargs.get("T_env", 313.15)
+
+        self._h_cgw = np.zeros(self._n_cells+2)
+        self._h_cgb = np.zeros(self._n_cells+2)
+        self._h_cwb = np.zeros(self._n_cells+2)
+
+        self._q_cgw = np.zeros(self._n_cells)
+        self._q_rgw = np.zeros(self._n_cells)
+        self._q_cgb = np.zeros(self._n_cells)
+        self._q_rgb = np.zeros(self._n_cells)
+        self._q_cwb = np.zeros(self._n_cells)
+        self._q_rwb = np.zeros(self._n_cells)
+        self._q_env = np.zeros(self._n_cells)
+
+        self._bal_gas = np.zeros(self._n_cells)
+        self._bal_bed = np.zeros(self._n_cells)
+
+        self._htc = HtcTscheng1979(D=2*self._R_zw,
+                                   beta=self._central_angle,
+                                   eta=self._local_loading)
+
+    def __init_solution(self, **kwargs):
+        """ Initialize variables used in solution process. """
+        self._initial_value = np.hstack((
+            self._initial_value_gas,
+            self._initial_value_bed
+        ))
+
+        # Allocate memory for use in `update_htc`.
+        self._sarr = ct.SolutionArray(self._gas, shape=self._z.shape)
+
+        # Allocate RHS memory.
+        self._n_vars = self._n_vars_gas + self._n_vars_bed
+        self._rhs = np.zeros((self._n_vars,))
+
+        self._errg = np.inf
+        self._errb = np.inf
+
+        self._Tg_last = np.zeros((self._n_cells+2,))
+        self._Tb_last = np.zeros((self._n_cells+2,))
+
+        self._solution = np.zeros((self._n_cells+2, self._n_vars))
+        self._solution[:, :] = self._initial_value
+
+        self._history_gas = []
+        self._history_bed = []
+
+        self._guess = self._Tmax * np.ones(4 * self._n_cells)
+        
+        self._T_sym = None
+        if self._solver == "casadi-ipopt":
+            self._T_sym = MX.sym("T_sym", 4 * self._n_cells)
+
+        # Access to wall temperature interpolation [K].
+        T_w = 0.1 * self._Tmax * np.ones(self._n_cells)
+        self._T_w = lambda z: self.__extended_balance(T_w)(z)
+
+    def __init_postprocess(self, **kwargs):
+        """ Create postprocessing symbols. """
+        self._table = None
+
+    def __initialize(self, **kwargs) -> None:
+        """ Evaluate model internals and solve bed profile. """
+        self.__init_gas_phase(**kwargs)
+        self.__init_bed_phase(**kwargs)
+        self.__init_bed_geometry(**kwargs)
+        self.__init_heat_geometry(**kwargs)
+        self.__init_heat_fluxes(**kwargs)
+        self.__init_solution(**kwargs)
+        self.__init_postprocess(**kwargs)
+        self._initialized = True
+
+    ###############################################################
+    # Partial heat flux expressions
+    ###############################################################
+
+    @staticmethod
+    def __core_convection(h, A, Tu, Tv):
+        """ Reduced system convection evaluation. """
+        return convection(h[1:-1], A[1:-1], Tu, Tv)
+
+    @staticmethod
+    def __core_radiation(E, A, Tu, Tv, eu=1, au=1):
+        """ Reduced system radiation evaluation. """
+        return radiation(E, A[1:-1], Tu, Tv, eu=eu, au=au)
+
+    def __fn_q_rgx(self, T_g, T_x, A, eg, ag, ex):
+        """ Radiation from gas to X Eq. (20) X={W,B}. """
+        E = (1.0 + ex) / 2.0
+        return self.__core_radiation(E, A, T_g, T_x, eu=eg, au=ag)
+
+    def __fn_q_cgw(self, T_g, T_w):
+        """ Convection from gas to wall Eq. (18) X=W. """
+        h = self._h_cgw
+        A = self._A_cgw
+        return self.__core_convection(h, A, T_g, T_w)
+
+    def __fn_q_rgw(self, T_g, T_w, eg, ag, ew):
+        """ Radiation from gas to wall Eq. (20) X=W. """
+        A = self._A_rgw
+        return self.__fn_q_rgx(T_g, T_w, A, eg, ag, ew)
+
+    def __fn_q_cgb(self, T_g, T_b):
+        """ Convection from gas to bed Eq. (18) X=B. """
+        h = self._h_cgb
+        A = self._A_cgb
+        return self.__core_convection(h, A, T_g, T_b)
+
+    def __fn_q_rgb(self, T_g, T_b, eg, ag, eb):
+        """ Radiation from gas to bed Eq. (20) X=B. """
+        A = self._A_rgb
+        return self.__fn_q_rgx(T_g, T_b, A, eg, ag, eb)
+
+    def __fn_q_cwb(self, T_w, T_b):
+        """ Conduction(-like) from wall to bed Eq. (22). """
+        h = self._h_cwb
+        A = self._A_cwb
+        return self.__core_convection(h, A, T_w, T_b)
+
+    def __fn_q_rwb(self, T_w, T_b, eb, ew):
+        """ Radiation from wall to bed Eq. (21). """
+        E = eb * ew * self._omega[1:-1]
+        A = self._A_rwb
+        return self.__core_radiation(E, A, T_w, T_b)
+
+    def __fn_q_env(self, T_s):
+        """ Heat flux towards environment [W]. """
+        con = convection(self._h_env, self._A_env, T_s, self._T_env)
+        rad = radiation(self._e_env, self._A_env, T_s, self._T_env)
+        return con + rad
+
+    ###############################################################
+    # Gas phase methods
+    ###############################################################
+    
+    def __heat_release_rate_volume(self, wdotk: Vector) -> float:
+        """ Volumetric heat release rate [W/m³].
+        
+        XXX: for verification of properties, i.e. checking that
+        the computation of `_partial_enthalpies_mass` is calling
+        the good Cantera property, it was verified that this is
+        precisely equivalent to `self._gas.heat_release_rate` if
+        kinetics is `MAK` managed by Cantera.
+        """
+        return sum(wdotk * self._partial_enthalpies_mass)
+
+    def __heat_release_rate_surface(self, sdotk: Vector) -> float:
+        """ Surface heat release rate [W/m²]. """
+        return sum(sdotk * self._partial_enthalpies_mass)
+
+    def __wdot_mak(self, z: float, T: float, Y: Vector) -> Vector:
+        """ Return reaction rate in mass units [kg/(m³.s)]. """
+        return self._gas.net_production_rates * self._mw_gas
+
+    def __wdot_ebu(self, z: float, T: float, Y: Vector) -> Vector:
+        """ Return reaction rate in mass units [kg/(m³.s)]. """
+        cr, bo = 4.000e+00, 4.375e+00
+        k0, Ea = 1.600e+10, 1.081e+05
+
+        # Retrieve rate parameters.
+        rho = self._gas.density_mass
+        yf, yo = Y[[self._idxf, self._idxo]]
+        ke = self._ke(z)
+
+        # Evaluate both possible reaction rates.
+        R_ebu = rho**1 * cr * ke * min(yf, yo / bo)
+        R_arr = rho**2 * yf * yo * arrhenius(k0, Ea, T)
+
+        # Mole rate of CH4 consumption.
+        rt = min(R_ebu, R_arr) / self._mw_gas[self._idxf]
+
+        # Mass rate of all species from `rt`.
+        return rt * self._coefs * self._mw_gas
+
+    ###############################################################
+    # Core right-hand sides
+    ###############################################################
+
+    def __core_rhs_rad(self, T_g, T_b, R):
+        """ Compute local radiative coefficients with parameters. """
+        e_w = self._eps_ref
+        e_b = self._eps_bed
+        e_g = 0.0
+        a_g = 0.0
+
+        if self._radcal is not None:
+            X_h2o = self._gas.X[self._gas.species_index("H2O")]
+            X_co2 = self._gas.X[self._gas.species_index("CO2")]
+            e_g, a_g = self._radcal(T_b, T_g, X_h2o, X_co2, R)
+
+        return e_w, e_b, e_g, a_g
+    
+    def __core_rhs_qdot(self, z, mdot_g, T_g, T_b):
+        """ Compute local HTC's with parameters. """
+        R = self._fR(z)
+        beta = self._fbeta(z)
+        eta = self._feta(z)
+        Ac = self._get_section_gas(z)[0]
+    
+        # Compute radiative properties.
+        e_w, e_b, e_g, a_g = self.__core_rhs_rad(T_g, T_b, R)
+
+        # Create local HTC calculator.
+        htc = HtcTscheng1979(D=2*R, beta=beta, eta=eta)
+        
+        # Bed thermophysical properties.
+        cp_b = self._si1o2.specific_heat_mass(T_b)
+        k_b = self._kb(T_b)
+        a_b = k_b / (self._bed_specific_mass * cp_b)
+
+        # Effective bed thermal conductivity.
+        k_b_eff = effective_thermal_conductivity(k_g, k_b, 0.5)
+
+        u = mdot_g / (self._gas.density * Ac)
+        n = self._rotation_rate
+        w = 2 * np.pi * n
+
+        htc.update(self._gas.density, self._gas.viscosity, u, w)
+        h_cgw = htc.h_gw(self._gas.thermal_conductivity)
+        h_cgb = htc.h_gb(self._gas.thermal_conductivity)
+        h_cwb = htc.h_wb(k_b_eff, n, R, beta, a_b)
+
+        # Retrieve local values.
+        T_w = self._T_w(z)
+
+        A_cgw = self._fA_cgw(z)
+        A_cgb = self._fA_cgb(z)
+        A_cwb = self._fA_cwb(z)
+
+        A_rgw = self._fA_rgw(z)
+        A_rgb = self._fA_cgb(z)
+        A_rwb = self._fA_rwb(z)
+
+        omega = self._fomega(z)
+
+        # Compute emissivity parameters.
+        e_rgw = 0.5 * (1.0 + e_w)
+        e_rgb = 0.5 * (1.0 + e_b)
+        e_rwb = e_b * e_w * omega
+
+        # Compute convective heat exchanges.
+        q_cgw = convection(h_cgw, A_cgw, T_g, T_w)
+        q_cgb = convection(h_cgb, A_cgb, T_g, T_b)
+        q_cwb = convection(h_cwb, A_cwb, T_w, T_b)
+
+        # Compute radiative heat exchanges.
+        q_rgw = radiation(e_rgw, A_rgw, T_g, T_w, eu=e_g, au=a_g)
+        q_rgb = radiation(e_rgb, A_rgb, T_g, T_b, eu=e_g, au=a_g)
+        q_rwb = radiation(e_rwb, A_rwb, T_w, T_b)
+
+        return q_cgw, q_cgb, q_cwb, q_rgw, q_rgb, q_rwb
+
+    def __core_rhs_gas(self, z, state):
+        """ Compute gas RHS without exchange terms. """
+        # Unpack variables.
+        mdot, T, Y = state[0], state[1], state[2:]
+
+        # TODO implement exchange terms internally.
+        sdotk = np.zeros_like(Y)
+
+        # Compute sections and perimeters.
+        Ac, Pc = self._get_section_gas(z)
+
+        try:
+            # Set state to compute properties.
+            self._gas.TPY = T, None, Y
+        except:
+            T = self._T_g(z)
+            self._gas.TPY = T, None, Y
+
+        # Compute reaction rates.
+        wdotk = self._wdot_mass(z, T, Y)
+
+        # Compute energy release contributions.
+        hdotv = -Ac * self.__heat_release_rate_volume(wdotk)
+        hdots = -Pc * self.__heat_release_rate_surface(sdotk)
+
+        # Retrieve local heat exchanges.
+        T_b = self._T_b(z)
+        mdot_g = mdot
+        q_all = self.__core_rhs_qdot(z, mdot_g, T, T_b)
+        q_cgw, q_cgb, _, q_rgw, q_rgb, _ = q_all
+
+        # Perform energy balance and local density.
+        qdot = q_cgw + q_cgb + q_rgw + q_rgb
+        qdot *= (-1 / self._cell_length)
+    
+        # Retrieve properties.
+        cp = self._gas.cp_mass
+
+        # Compute derivatives.
+        sdot = Pc * sum(sdotk)
+        Ydot = (Ac * wdotk + Pc * sdotk - Y * sdot) / mdot
+        Tdot = (hdotv + hdots + qdot) / (mdot * cp)
+
+        return np.hstack((sdot, Tdot, Ydot))
+
+    def __core_rhs_bed(self, z, state):
+        """ Compute bed RHS without exchange terms. """
+        # Unpack variables.
+        mdot, T, Y = state[0], state[1], state[2:]
+
+        # TODO implement exchange terms internally.
+        sdotk = np.zeros_like(Y)
+
+        # Compute sections and perimeters.
+        Ab, Pb = self._get_section_bed(z)
+
+        # Set external state to compute properties.
+        # Not applicable.
+
+        # Compute reaction rates.
+        # Not implemented.
+
+        # Compute energy release contributions.
+        # Not implemented.
+
+        # Retrieve local heat exchanges.
+        T_g = self._T_g(self._length - z)
+        mdot_g = self._mdot_g(self._length - z)
+        q_all = self.__core_rhs_qdot(z, mdot_g, T_g, T)
+        _, q_cgb, q_cwb, _, q_rgb, q_rwb = q_all
+
+        # Perform energy balance and local density.
+        qdot = q_cwb + q_cgb + q_rwb + q_rgb
+        qdot *= (+1 / self._cell_length)
+
+        # Retrieve properties.
+        cp = self._si1o2.specific_heat_mass(T)
+
+        # Compute derivatives.
+        sdot = sum(sdotk)
+        Tdot = qdot / (mdot * cp)
+        Ydot = []
+
+        return np.hstack((sdot, Tdot, Ydot))
+
+    ###############################################################
+    # Main constraint methods
+    ###############################################################
+    
+    def __steady_constraints(self, T, T_g, T_b, e_g, a_g, e_b, e_w):
+        """ Steady-state nonlinear constraints function. """
+        T_wi, T_cr, T_rs, T_sh = self.__unpack_temperatures(T)
+
+        q_coat  = conduction(self._cell_length, self._fn_k_coat,
+                             T_wi, T_cr, self._R_wg, self._R_cr)
+        q_refr  = conduction(self._cell_length, self._fn_k_refr,
+                             T_cr, T_rs, self._R_cr, self._R_rs)
+        q_shell = conduction(self._cell_length, self._fn_k_shell,
+                             T_rs, T_sh, self._R_rs, self._R_sh)
+        q_env   = self.__fn_q_env(T_sh)
+
+        q_cgw = self.__fn_q_cgw(T_g, T_wi)
+        q_rgw = self.__fn_q_rgw(T_g, T_wi, e_g, a_g, e_w)
+
+        q_cwb = self.__fn_q_cwb(T_wi, T_b)
+        q_rwb = self.__fn_q_rwb(T_wi, T_b, e_b, e_w)
+
+        # Eqs. (12) to (15) from paper.
+        eq12 = q_coat - (q_cgw + q_rgw - q_rwb - q_cwb)
+        eq13 = q_refr - q_coat
+        eq14 = q_shell - q_refr
+        eq15 = q_env - q_shell
+
+        if isinstance(T, MX):
+            return vertcat(eq12, eq13, eq14, eq15)
+
+        return np.hstack((eq12, eq13, eq14, eq15))
+
+    def __update_exchanges(self, radon=False, tabs=False):
+        """ Use latest model states to compute exchanges. """
+        # Full-array values for HTC evaluation.
+        Y_g = self._mass_fractions_gas
+        T_g = self._temperature_gas
+        T_b = self._temperature_bed
+
+        # Bed thermophysical properties.
+        cp_b = self._si1o2.specific_heat_mass(T_b)
+        k_b = self._kb(T_b)
+        a_b = k_b / (self._bed_specific_mass * cp_b)
+
+        # Effective bed thermal conductivity.
+        k_b_eff = effective_thermal_conductivity(k_g, k_b, 0.5)
+
+        # Gas thermophysical properties.
+        self._sarr.TPY = T_g, None, Y_g
+        rho = self._sarr.density
+        mu = self._sarr.viscosity
+        k_g = self._sarr.thermal_conductivity
+        
+        # NOTE: apparently Tscheng uses rev/s to be consistent
+        # in units with Kramers equation and other references.
+        # Thus, instead of angular speed we use directly the
+        # rotation rate in their equation Nu(n*R^2*beta/alpha).
+        # For Re_w they actually use angular velocity w.
+        # NOTE: on Mujumdar's thesis page 48 it is stated
+        # otherwise, that the argument should use angular speed
+        # instead. We keep here with what was understood from
+        # Tscheng with possibility of later update.
+        u = self._mass_flow_rate_gas / (rho * self._gas_cross_area)
+        n = self._rotation_rate
+        w = 2 * np.pi * n
+
+        # Because of phase transformations there might be steep
+        # changes in this variable (a_b is discontinuous), what
+        # is reflected in h_cwb later.
+        R = self._R_zw
+        beta = self._central_angle
+
+        self._htc.update(rho, mu, u, w)
+        self._h_cgw[:] = self._htc.h_gw(k_g)
+        self._h_cgb[:] = self._htc.h_gb(k_g)
+        self._h_cwb[:] = self._htc.h_wb(k_b_eff, n, R, beta, a_b)
+
+        # Cell-based values only here.
+        X_g = self._mole_fractions_gas[1:-1]
+        T_g = self._temperature_gas[1:-1]
+        T_b = self._temperature_bed[1:-1]
+
+        e_w = self._eps_ref
+        e_b = self._eps_bed
+        e_g = 0.0
+        a_g = 0.0
+
+        if self._radcal is not None and radon:
+            L = self._radius
+            X_h2o = X_g[:, self._sarr.species_index("H2O")]
+            X_co2 = X_g[:, self._sarr.species_index("CO2")]
+            e_g, a_g = self._radcal(T_b, T_g, X_h2o, X_co2, L)
+
+        T_opt = self.__solve_constraints(T_g, T_b, e_g, a_g)
+        T_w, T_cr, T_rs, T_s = self.__unpack_temperatures(T_opt)
+
+        # Access to wall temperature interpolation [K].
+        fT_w = self.__extended_balance(T_w)
+        self._T_w = lambda z: fT_w(z)
+    
+        # Update fluxes.
+        self._q_cgw[:] = self.__fn_q_cgw(T_g, T_w)
+        self._q_rgw[:] = self.__fn_q_rgw(T_g, T_w, e_g, a_g, e_w)
+
+        self._q_cgb[:] = self.__fn_q_cgb(T_g, T_b)
+        self._q_rgb[:] = self.__fn_q_rgb(T_g, T_b, e_g, a_g, e_b)
+
+        self._q_cwb[:] = self.__fn_q_cwb(T_w, T_b)
+        self._q_rwb[:] = self.__fn_q_rwb(T_w, T_b, e_b, e_w)
+
+        self._q_env[:] = self.__fn_q_env(T_s)
+
+        self._bal_gas[:] = self._q_cgw + self._q_cgb +\
+                           self._q_rgw + self._q_rgb
+
+        self._bal_bed[:] = self._q_cwb + self._q_cgb +\
+                           self._q_rwb + self._q_rgb
+
+        if tabs:
+            return {"temp_inner": T_w, "temp_coat": T_cr,
+                    "temp_refr":  T_rs, "temp_shell": T_s}
+
+    ###############################################################
+    # External API
+    ###############################################################
+
+    def simulate(self,
+            *,
+            max_steps: Optional[int] = 100,
+            atol: Optional[float] = 0.01,
+            minrad: Optional[int] = 10,
+            **kwargs
+        ) -> None:
+        """ Iteratively solve kiln problem in 1D.
+        
+        This function deal with the fact that some bed height
+        models might include sintering effects or more general 
+        angle of repose computations, requiring profile updates.
+
+        Parameters
+        ----------
+        max_steps: Optional[int] = 100
+            Maximum number of iteration steps for convergence.
+        atol: Optional[float] = 0.0001
+            Absolute temperature change tolerance for convergence.
+        minrad: Optional[int] = 10
+            Iteration to activate radiation for lower stiffness.
+
+        Keywords (mandatory)
+        --------------------
+        thick_coat: Callable[[Vector], Vector]
+            Thickness of coating in heat geometry initialization.
+        thick_refr: Callable[[Vector], Vector]
+            Thickness of refractory used in heat geometry initialization.
+        thick_shell: Callable[[Vector], Vector]
+            Thickness of shell used in heat geometry initialization.
+        k_coat: Callable[[Vector, Vector], Vector]
+            Conductivity of used coating in heat fluxes initialization.
+        k_refr: Callable[[Vector, Vector], Vector]
+            Conductivity of used refractory in heat fluxes initialization.
+        k_shell: Callable[[Vector, Vector], Vector]
+            Conductivity of used shell in heat fluxes initialization.
+
+        Keywords (gas phase)
+        --------------------
+        mf0: float
+            Inlet total mass flow rate [kg/s].
+        tf0: float
+            Inlet temperature [K].
+        lambda0: float
+            Inlet equivalence ratio [-].
+        fuel: str | dict[str, float]
+            Fuel composition in mole fractions [-].
+        oxid: str | dict[str, float]
+            Oxidizer composition in mole fractions [-].
+
+        Keywords (bed phase)
+        --------------------
+        mb0: float
+            Inlet total mass flow rate [kg/h].
+        tb0: float
+            Inlet temperature [K].
+
+        Keywords (optional)
+        -------------------
+        kramers_exp: Optional[bool] = True
+            If True, consider coating in Kramer's equation solution.
+        method_bed: Optional[str] = "BDF"
+            Method to integrate bed height profile in bed initialization.
+        eps_bed: Optional[float] = 0.8
+            Constant emissivity of bed used in heat fluxes initialization.
+        eps_ref: Optional[float] = 0.8
+            Constant emissivity of coating used in heat fluxes initialization.
+        eps_env: Optional[float] = 0.8
+            Constant emissivity of shell used in heat fluxes initialization.
+        h_env: Optional[float] = 8.0
+            Convective heat transfer coefficient to environment [W/(m.K)].
+        T_env: Optional[float] = 313.15
+            External environment temperature [K].
+        pf0: Optional[float] = ct.one_atm
+            Freeboard operating pressure [Pa].
+        mechanism: Optional[str] = "1S_CH4_MP1.yaml"
+            Kinetics mechanism in Cantera format.
+        kinetics: Optional[str] = "EBU"
+            Switch for EBU or MAK rate equations.
+        ke: Optional[Callable[[NumberOrVector], NumberOrVector]] = None
+            Eddy break-up (EBU) k-epsilon ratio for EBU kinetics.
+        rho_bed: Optional[float] = 150.0
+            Material apparent specific weight [kg/m³].
+        aor: Optional[float] = 45.0
+            Material angle of repose (AOR) in degrees [°].
+        kb: Optional[Callable[[float], float]] = lambda T: 0.2
+            Material apparent thermal conductivity [W/(m.K)].
+        """
+        self._count = 0
+
+        t0 = perf_counter()
+        for step in range(max_steps):
+            print("\n")
+
+            if self._reinitialize_per_iteration or not self._initialized:
+                print(f"Running initialization ({step})")
+                self.__initialize(**kwargs)
+
+            print(f"Integrating at step {step}")
+            self.__integrate(max_iters=1)
+
+            print(f"Solving nonlinear constraints ({step})")
+            self.__update_exchanges(radon=step > minrad)
+
+            if self.__test_convergence(atol) and step > minrad:
+                err = max(self._errg, self._errb)
+                print(f"Leaving on step {step} with res = {err:.6f}\n")
+                break
+
+            print(f"Gas integration ({step}) res = {self._errg:.6f}")
+            print(f"Bed integration ({step}) res = {self._errb:.6f}")
+
+        print(f"Simulation took {perf_counter() - t0:.2f} s")
+        cell_tabs = self.__update_exchanges(tabs=True)
+        self.__tabulate_solution(cell_tabs)
+
+    def plot_solution(self,
+            tunit: Optional[str] = "K",
+            gridstyle: Optional[str] = ":",
+            figsize: Optional[tuple[float, float]] = (14.0, 10.0)
+        ) -> Figure:
+        """ Display simulation results from table. """
+        z = self._table["z"].to_numpy()
+        mean_loading = 100 * self._table["load"].mean()
+        tfunc = self.__select_conversion(tunit)
+
+        plt.close("all")
+        plt.style.use("seaborn-white")
+
+        fig = plt.figure(figsize=figsize)
+
+        # COLUMN 1
+
+        ax = plt.subplot(331, sharex=None)
+        ax.plot(z, 100 * self._table["h"])
+        ax.grid(linestyle=gridstyle)
+        ax.set_xlabel("Coordinate [m]")
+        ax.set_ylabel("Bed height [cm]")
+        ax.set_xlim(0.0, self._length)
+
+        ax = plt.subplot(334, sharex=ax)
+        ax.plot(z, 100 * self._table["load"])
+        ax.axhline(mean_loading, color="k", linestyle=":")
+        ax.grid(linestyle=gridstyle)
+        ax.set_xlabel("Coordinate [m]")
+        ax.set_ylabel("Kiln loading [%]")
+        ax.set_xlim(0.0, self._length)
+
+        ax = plt.subplot(337, sharex=ax)
+        ax.plot(z, self._table["area_bed"], label="Bed")
+        ax.plot(z, self._table["area_gas"], label="Gas")
+        ax.grid(linestyle=gridstyle)
+        ax.set_ylabel("Coordinate [m]")
+        ax.set_ylabel("Cross-section area [m²]")
+        ax.legend(loc=1, frameon=True, framealpha=1.0)
+        ax.set_xlim(0.0, self._length)
+
+        # COLUMN 2
+
+        ax = plt.subplot(332, sharex=ax)
+        ax.plot(z, tfunc(self._table["temp_bed"]), label="Bed")
+        ax.plot(z, tfunc(self._table["temp_gas"]), label="Gas")
+        ax.plot(z, tfunc(self._table["temp_inner"]), label="Wall")
+        ax.grid(linestyle=gridstyle)
+        ax.set_xlabel("Coordinate [m]")
+        ax.set_ylabel(f"Temperature [{tunit}]")
+        ax.legend(loc=1, frameon=True, framealpha=1.0)
+        ax.set_xlim(0.0, self._length)
+
+        ax = plt.subplot(335, sharex=ax)
+        ax.plot(z, tfunc(self._table["temp_shell"]), label="Shell")
+        ax.grid(linestyle=gridstyle)
+        ax.set_xlabel("Coordinate [m]")
+        ax.set_ylabel(f"Temperature [{tunit}]")
+        ax.legend(loc=1, frameon=True, framealpha=1.0)
+        ax.set_xlim(0.0, self._length)
+
+        ax = plt.subplot(338, sharex=ax)
+        ax.plot(z, self._table["x_o2"], label=r"$\mathrm{O_2}$")
+        ax.plot(z, self._table["x_h2o"], label=r"$\mathrm{H_2O}$")
+        ax.plot(z, self._table["x_co2"], label=r"$\mathrm{CO_2}$")
+        ax.grid(linestyle=gridstyle)
+        ax.set_xlabel("Coordinate [m]")
+        ax.set_ylabel(f"Mole fraction [-]")
+        ax.legend(loc=1, frameon=True, framealpha=1.0)
+        ax.set_xlim(0.0, self._length)
+
+        # COLUMN 3
+
+        ax = plt.subplot(333, sharex=ax)
+        ax.plot(z, self._table["q_cgw"]/1000, label="$Q_{CGW}$")
+        ax.plot(z, self._table["q_cgb"]/1000, label="$Q_{CGB}$")
+        ax.plot(z, self._table["q_cwb"]/1000, label="$Q_{CWB}$")
+        ax.plot(z, self._table["q_rgw"]/1000, label="$Q_{RGW}$")
+        ax.plot(z, self._table["q_rgb"]/1000, label="$Q_{RGB}$")
+        ax.plot(z, self._table["q_rwb"]/1000, label="$Q_{RWB}$")
+        ax.plot(z, self._table["q_gas"]/1000, label="$Q_{Gas}$")
+        ax.plot(z, self._table["q_bed"]/1000, label="$Q_{Bed}$")
+        ax.plot(z, self._table["q_env"]/1000, label="$Q_{Env}$")
+        ax.grid(linestyle=gridstyle)
+        ax.set_xlabel("Coordinate [m]")
+        ax.set_ylabel(r"Heat flux [$kW\cdotp{}m^{-1}$]")
+        ax.legend(loc="best", frameon=True, framealpha=1.0, ncol=3)
+        ax.set_xlim(0.0, self._length)
+
+        ax = plt.subplot(336, sharex=ax)
+        ax.plot(z, self._table["h_cgw"], label="$h_{CGW}$")
+        ax.plot(z, self._table["h_cgb"], label="$h_{CGB}$")
+        ax.plot(z, self._table["h_cwb"], label="$h_{CWB}$")
+        ax.grid(linestyle=gridstyle)
+        ax.set_xlabel("Coordinate [m]")
+        ax.set_ylabel(r"Heat transfer coefficient [$W\cdotp{}m^{-2}K^{-1}$]")
+        ax.legend(loc="best", frameon=True, framealpha=1.0)
+        ax.set_xlim(0.0, self._length)
+
+        ax = plt.subplot(339, sharex=None)
+        ax.semilogy(self._history_gas, label="Gas")
+        ax.semilogy(self._history_bed, label="Bed")
+        ax.grid(linestyle=gridstyle)
+        ax.set_xlabel("Iteration")
+        ax.set_ylabel(r"Temperature change [$K$]")
+        ax.legend(loc=1, frameon=True, framealpha=1.0)
+
+        fig.tight_layout()
+
+        return fig
+
+    ###############################################################
+    # Public properties
+    ###############################################################
+
+    @property
+    def table(self) -> pd.DataFrame:
+        """ Provides access results table. """
+        return self._table

@@ -1,0 +1,13 @@
+# Caches.
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.vscode/
+
+# Build directories
+build/
+dist/
+*.egg-info/
+
+# Any sandbox
+sandbox*

@@ -1,0 +1,13 @@
+{
+    "argv": [
+        "python",
+        "-m",
+        "kernel_openmodelica",
+        "-f",
+        "{connection_file}"
+    ],
+    "display_name": "OpenModelica",
+    "language": "OpenModelica",
+    "mimetype": "text/x-modelica",
+    "name": "OpenModelica"
+}

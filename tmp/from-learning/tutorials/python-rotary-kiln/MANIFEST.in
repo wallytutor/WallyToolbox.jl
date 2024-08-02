@@ -1,0 +1,2 @@
+recursive-exclude dossiers *
+recursive-exclude legacy *

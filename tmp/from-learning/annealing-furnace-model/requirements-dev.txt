@@ -1,0 +1,6 @@
+casadi
+numpy
+pandas
+plotly
+pythonnet
+streamlit

@@ -1,0 +1,112 @@
+% !TeX spellcheck = pt_BR
+\documentclass[12pt,fleqn]{book}
+
+% TODO make this a class
+\input{Parts/structure.tex}
+
+\booktitle{Introdução à Computação Científica}
+\booksubtitle{Aplicações na Ciência dos Materiais}
+\bookauthor{}
+\bookyear{2020}
+\bookmonth{Novembro}
+
+\hypersetup{
+    pdftitle={\insertbooktitle},
+    pdfauthor={\insertbookauthor}
+}
+
+\begin{document}
+
+\maketitle
+\makecopyright
+
+% If you don't want to include a chapter image, use this to toggle images
+% off - it can be enabled later with \usechapterimagetrue
+\usechapterimagefalse
+
+\pagestyle{fancy}
+\input{Parts/preface.tex}
+
+\chapterimage{chapter_head_1.pdf}
+\pagestyle{empty}
+
+\tableofcontents
+\cleardoublepage
+
+\pagestyle{fancy}
+
+\input{Parts/preface.tex}
+
+\part{Parte 1 - Fundamentos}
+
+\input{Parts/part01_ch01.tex}
+\input{Parts/part01_ch02.tex}
+\input{Parts/part01_ch05.tex}
+\input{Parts/part01_ch03.tex}
+\input{Parts/part01_ch04.tex}
+
+\part{\label{part:thermo}Parte 2 - Termodinâmica}
+
+\input{Parts/part02_ch01.tex}
+\input{Parts/part02_ch05.tex}
+\input{Parts/part02_ch02.tex}
+\input{Parts/part02_ch03.tex}
+\input{Parts/part02_ch04.tex}
+%TODO exemplo Dictra + Termo aqui, no em transporte!
+
+\part{\label{part:process}Parte 3 - Processos}
+
+\input{Parts/part03_ch01.tex}
+\input{Parts/part03_ch02.tex}
+\input{Parts/part03_ch03.tex}
+\input{Parts/part03_ch04.tex}
+\input{Parts/part03_ch05.tex}
+
+\part{\label{part:transport}Parte 4 - Transporte}
+
+\input{Parts/part04_ch01.tex}
+\input{Parts/part04_ch02.tex}
+\input{Parts/part04_ch03.tex}
+\input{Parts/part04_ch04.tex}
+\input{Parts/part04_ch05.tex}
+
+\part{\label{part:applications}Parte 5 - Aplicações}
+
+\input{Parts/part05_ch01.tex}
+\input{Parts/part05_ch04.tex}
+\input{Parts/part05_ch02.tex}
+\input{Parts/part05_ch03.tex}
+
+%  ---- Remove later
+%% \part{Part One}
+%% \input{Parts/refs/partX1_ch01.tex}
+%% \input{Parts/refs/partX1_ch02.tex}
+%% \input{Parts/refs/partX2_ch03.tex}
+%  ----
+
+\part*{Referências}
+
+\chapter*{Referências}
+\addcontentsline{toc}{chapter}{\textcolor{bookocre}{Referências}}
+
+\section*{Artigos}
+\addcontentsline{toc}{section}{Artigos}
+\printbibliography[heading=bibempty,type=article]
+
+\section*{Livros}
+\addcontentsline{toc}{section}{Livros}
+\printbibliography[heading=bibempty,type=book]
+
+\section*{Outros}
+\addcontentsline{toc}{section}{Outros}
+\printbibliography[heading=bibempty,type=misc]
+
+\appendix
+
+\part*{Apêndices}
+
+\input{Parts/Appendix/app01.tex}
+\input{Parts/Appendix/app02.tex}
+
+\makebookindex
+\end{document}

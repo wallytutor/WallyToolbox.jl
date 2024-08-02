@@ -1,0 +1,44 @@
+format: jb-book
+
+root: content/intro
+
+parts:
+  - caption: Computation for Science and Engineering
+    chapters:
+    - file: content/part-01/intro
+    - file: content/part-01/introduction-to-shell-scripting
+    - file: content/part-01/review-linear-algebra
+    - file: content/part-01/introduction-to-numerical-calculus
+
+
+  - caption: Thermodynamics and Kinetics for Processes and Materials
+    chapters:
+    - file: content/part-02/intro
+
+
+  - caption: Introduction to Computational Transport Phenomena
+    chapters:
+    - file: content/part-03/intro
+    - file: content/part-03/finite-differences-advection.md
+    - file: content/part-03/finite-differences-diffusion.md
+    - file: content/part-03/finite-differences-advection-diffusion.md
+    - file: content/part-03/finite-differences-poisson-equation.md
+    - file: content/part-03/finite-differences-navier-stokes.md
+
+
+  - caption: Topics of Technical Data Science and Machine Learning
+    chapters:
+    - file: content/part-04/intro
+
+
+  - caption: Science and Engineering Study Cases
+    chapters:
+    - file: content/part-05/intro
+
+
+  - caption: Annexes
+    chapters:
+    - file: content/annexes/open-source-software
+    - file: content/annexes/introduction-to-python
+    - file: content/annexes/compiled-languages
+

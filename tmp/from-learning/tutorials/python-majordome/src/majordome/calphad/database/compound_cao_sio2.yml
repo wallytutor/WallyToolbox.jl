@@ -1,0 +1,194 @@
+---
+description: Gibbs energy parameters for compounds (CaO)x(SiO2)y.
+author: Compiled by Walter Dal'Maz Silva
+
+G(WOLLASTONITE,C1S1):
+  source: hillert1990
+  name: Wollastonite
+  comment: 
+    Using data from assesment 2 of source.
+    https://www.mindat.org/min-4323.html
+  Tmax: null
+  base: 
+    -
+      multiplier: 1
+      function: G(CA1O1,CA1O1)
+    -
+      multiplier: 1
+      function: G(QUARTZ,SI1O2)
+  parameters:
+    -
+      T0: 298.15
+      a: -1.67790400e+06
+      b: +6.91427400e+02
+      c: -1.12347600e+02
+      d: -8.02670100e-03
+      e: +0.00000000e+00
+      f: +1.43781800e+06
+
+G(PSEUDOWOLLASTONITE,C1S1):
+  source: hillert1990
+  name: Pseudowollastonite
+  comment:
+    Using data from assesment 2 of source.
+    https://www.mindat.org/min-9535.html
+  Tmax: null
+  base: 
+    -
+      multiplier: 1
+      function: G(CA1O1,CA1O1)
+    -
+      multiplier: 1
+      function: G(QUARTZ,SI1O2)
+  parameters:
+    -
+      T0: 298.15
+      a: -1.66353400e+06
+      b: +5.91040600e+02
+      c: -9.83913700e+01
+      d: -1.56928500e-02
+      e: +0.00000000e+00
+      f: +9.42721200e+05
+
+G(OLIVINE,C2S1):
+  source: hillert1990
+  name: Olivine
+  comment:
+    Using data from assesment 2 of source.
+    https://www.mindat.org/min-29264.html
+    https://www.mindat.org/min-9574.html
+  Tmax: null
+  base: 
+    -
+      multiplier: 2
+      function: G(CA1O1,CA1O1)
+    -
+      multiplier: 1
+      function: G(QUARTZ,SI1O2)
+  parameters:
+    -
+      T0: 298.15
+      a: -2.36535800e+06
+      b: +7.85305300e+02
+      c: -1.31411700e+02
+      d: -2.62593900e-02
+      e: +0.00000000e+00
+      f: +8.96084000e+05
+
+G(OLIVINE_ALPHA_PRIME,C2S1):
+  source: hillert1990
+  name: Alpha Prime
+  comment:
+    Using data from assesment 2 of source.
+  Tmax: null
+  base: 
+    -
+      multiplier: 2
+      function: G(CA1O1,CA1O1)
+    -
+      multiplier: 1
+      function: G(QUARTZ,SI1O2)
+  parameters:
+    -
+      T0: 298.15
+      a: -2.34003700e+06
+      b: +7.76746100e+02
+      c: -1.33731800e+02
+      d: -2.30686900e-02
+      e: +0.00000000e+00
+      f: -7.73839700e+05
+
+G(OLIVINE_ALPHA,C2S1):
+  source: hillert1990
+  name: Alpha
+  comment:
+    Using data from assesment 2 of source.
+  Tmax: null
+  base: 
+    -
+      multiplier: 2
+      function: G(CA1O1,CA1O1)
+    -
+      multiplier: 1
+      function: G(QUARTZ,SI1O2)
+  parameters:
+    -
+      T0: 298.15
+      a: -2.37770800e+06
+      b: +1.24688600e+03
+      c: -1.98876700e+02
+      d: -1.69135000e-03
+      e: +0.00000000e+00
+      f: +0.00000000e+00
+
+G(LARNITE,C2S1):
+  source: hillert1990
+  name: Larnite
+  comment:
+    Using data from assesment 2 of source.
+    https://www.mindat.org/min-2333.html
+  Tmax: null
+  base: 
+    -
+      multiplier: 2
+      function: G(CA1O1,CA1O1)
+    -
+      multiplier: 1
+      function: G(QUARTZ,SI1O2)
+  parameters:
+    -
+      T0: 298.15
+      a: -2.36116600e+06
+      b: +8.68957400e+02
+      c: -1.44408700e+02
+      d: -2.22183300e-02
+      e: +0.00000000e+00
+      f: +1.31777400e+06
+
+G(HATRURITE,C3S1):
+  source: hillert1990
+  name: Hatrurite
+  comment:
+    Using data from assesment 2 of source.
+    https://www.mindat.org/min-1828.html
+  Tmax: null
+  base: 
+    -
+      multiplier: 3
+      function: G(CA1O1,CA1O1)
+    -
+      multiplier: 1
+      function: G(QUARTZ,SI1O2)
+  parameters:
+    -
+      T0: 298.15
+      a: -3.00886900e+06
+      b: +1.21315600e+03
+      c: -2.01003600e+02
+      d: -2.37662500e+02
+      e: +0.00000000e+00
+      f: +1.94203700e+06
+
+G(RANKINITE,C3S2):
+  source: hillert1990
+  name: Rankinite
+  comment:
+    Using data from assesment 2 of source.
+    https://www.mindat.org/min-3363.html
+  Tmax: null
+  base: 
+    -
+      multiplier: 3
+      function: G(CA1O1,CA1O1)
+    -
+      multiplier: 1
+      function: G(QUARTZ,SI1O2)
+  parameters:
+    -
+      T0: 298.15
+      a: -4.07844800e+06
+      b: +1.70712700e+03
+      c: -2.81330000e+02
+      d: -2.00000000e-04
+      e: +0.00000000e+00
+      f: +2.95072200e+06

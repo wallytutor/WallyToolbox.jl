@@ -1,0 +1,45 @@
+# https://docs.docker.com/compose/gpu-support/
+version: '3.9'
+
+services:
+
+  #################################################################
+  # JUPYTERHUB
+  #################################################################
+
+  jupyterhub:
+      build:
+        context: .
+        dockerfile: Dockerfile
+        shm_size: ${GPU_SHM_SIZE}
+      image: ${IMAGE_NAME}
+      container_name: ${IMAGE_NAME}
+      shm_size: ${GPU_SHM_SIZE}
+      deploy:
+        resources:
+          reservations:
+            devices:
+              - driver: nvidia
+                count: 1
+                capabilities: [gpu]
+      restart: always
+      runtime: nvidia
+      ports:
+        - ${PORT_JUPYTERHUB_URI}:8000
+      volumes:
+        - ${PROJECTS_ROOT}/${IMAGE_NAME}:/home
+      command: sh -c "/srv/jupyterhub/make_users.sh && jupyterhub"
+
+  #################################################################
+  # GOGS
+  #################################################################
+
+  gogs:
+    image: gogs/gogs:latest
+    container_name: gogs
+    restart: always
+    ports:
+      - ${PORT_GOGS_SSH}:22
+      - ${PORT_GOGS_HTTPS}:3000
+    volumes:
+      - "${PROJECTS_ROOT}/gogs/data:/data"

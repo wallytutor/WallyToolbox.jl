@@ -1,0 +1,4 @@
+# Generated libraries
+/build/
+/dist/
+*.egg-info

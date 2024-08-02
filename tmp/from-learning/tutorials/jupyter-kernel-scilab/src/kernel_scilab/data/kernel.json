@@ -1,0 +1,13 @@
+{
+    "argv": [
+        "python",
+        "-m",
+        "kernel_scilab",
+        "-f",
+        "{connection_file}"
+    ],
+    "display_name": "Scilab Refactored",
+    "language": "scilab",
+    "mimetype": "text/x-octave",
+    "name": "scilab"
+}

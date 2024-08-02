@@ -1,0 +1,24 @@
+O1953_9960_A3_1m.tif
+O1999_9523_A3_1m.tif
+O2004_2385c_A3_1m.tif
+
+Corner Corrdinates:
+X:
+-1100
+-200
+Y:
+1500
+2100
+
+Offset to GK M31 
+dX -90000.0
+dY -5230000.0
+
+Original GK M31
+X:
+88900
+89800
+
+Y:
+5231500
+5232100
