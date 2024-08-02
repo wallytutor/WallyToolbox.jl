@@ -86,6 +86,13 @@ pages = [
             "OpenFOAM"      => "Modules/OpenFOAM.md",
         ],
 
+        "Software" =>[
+            "Software/Elmer.md",
+            "Software/OpenFOAM11.md",
+            "Software/Basilisk.md",
+            "Software/LAMMPS.md",
+        ],
+
         "Computing" => [
             "Computing/01-Scientific-Computing.md",
             "Computing/02-General-Computing-Skills.md",
@@ -93,10 +100,6 @@ pages = [
             "Computing/04-Geometry-and-Preprocessing.md",
             "Computing/05-Postprocessing.md",
             "Computing/06-Domain-Specific-Software.md",
-            "Computing/Elmer.md",
-            "Computing/OpenFOAM11.md",
-            "Computing/Basilisk.md",
-            "Computing/LAMMPS.md",
         ],
 
         "Science" => [
