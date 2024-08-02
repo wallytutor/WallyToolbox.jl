@@ -1,0 +1,171 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% LAMMPS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[aspectratio=169]{beamer}
+
+\usepackage{fancyvrb}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{xcolor}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% CONFIGURATION
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\hypersetup{%
+	colorlinks      = true,
+	linkbordercolor = {white},
+	urlcolor        = {blue}
+}
+
+\colorlet{codebg}{lightgray!30}
+
+\AtBeginSection[]{
+  \begin{frame}
+  \vfill
+  \centering
+  \begin{beamercolorbox}[sep=8pt,center,shadow=true,rounded=true]{title}
+    \usebeamerfont{title}\insertsectionhead\par%
+  \end{beamercolorbox}
+  \vfill
+  \end{frame}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% LISTINGS LAMMPS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\lstdefinelanguage{LAMMPS}{%
+	alsodigit       = {-},
+	basicstyle      = \ttfamily,
+	backgroundcolor = \color{codebg},
+    keywordstyle    = [1]\color{magenta},
+    keywordstyle    = [2]\color{blue},
+    keywordstyle    = [3]\color{violet},
+    keywordstyle    = [4]\color{orange},
+    numberstyle     = \color{magenta},
+    stringstyle     = \color{olive}\ttfamily,
+    morestring      = [b]',
+    morestring      = [b]",
+	morecomment     = [f][\color{red}][0]{\#},
+    otherkeywords  = {
+        &,
+        ave/time,
+        lj/cut,
+        lj/cut/tip4p/long,
+        pppm/tip4p,
+        temp/berendsen
+    },
+    keywords        = [1]{
+        addforce,
+        airebo,
+        deposit,
+        enforce2d,
+        image,
+        langevin,
+        nve,
+        recenter,
+        setforce,
+        shake,
+        temp,
+        vashishta
+    },
+	keywords        = [2]{%
+		atom_style,
+		boundary,
+        compute,
+		create_atoms,
+		create_box,
+        delete_atoms,
+        dihedral_style,
+		dimension,
+		dump,
+        fix,
+        fix_modify,
+        group,
+        improper_style,
+		include,
+        lattice,
+		mass,
+        minimize,
+        molecule,
+		neigh_modify,
+		pair_coeff,
+		pair_style,
+        read_data,
+		region,
+        run,
+        set,
+        special_bonds,
+        thermo,
+        thermo_modify,
+        timestep,
+		units,
+        variable,
+        velocity,
+        write_data
+	},
+    keywords        = [3]{%
+        bound,
+        count,
+        xcm
+    },
+    keywords        = [4]{%
+        all,
+        equal
+    }
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% COMMANDS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand\LAMMPS{%
+	\href{https://www.lammps.org/}{LAMMPS}}
+
+\newcommand\lammpsInline[1]{%
+	\lstinline[language=LAMMPS]|#1|}
+
+\newcommand\lammpsDocs[1]{%
+	\lammpsInline{#1} (\href{https://docs.lammps.org/#1.html}{docs})}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% TITLE PAGE
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\title{LAMMPS}
+\subtitle{Molecular Dynamics simulator}
+\author{Walter Dal'Maz Silva}
+\date{\today}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% DOCUMENT
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+\maketitle
+
+\section{LAMMPS Introduction}
+\input{parts/00-general-introduction.tex}
+
+\section{Lennard-Jones Fluid}
+\input{parts/01-lennard-jones-fluid.tex}
+
+\section{Permeable Membrane}
+\input{parts/02-permeable-membrane.tex}
+
+\section{Nanoconfined Electrolyte}
+\input{parts/03-nanoconfined-electrolyte.tex}
+
+\section{Graphene Deformation}
+\input{parts/04-graphene-deformation.tex}
+
+\section{Water Adsorption in Silica}
+\input{parts/05-water-adsorption-in-silica.tex}
+
+\section{Free Energy Calculation}
+\input{parts/06-free-energy-calculation.tex}
+
+\end{document}

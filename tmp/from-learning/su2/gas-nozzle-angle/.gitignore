@@ -1,0 +1,12 @@
+# Results
+/cases/**/*[.csv|.dat|.vtu]
+
+# Generated mesh
+/mesh/generated/*.cgns
+/mesh/generated/*.su2
+
+# Private stuff
+/private/
+
+# Converted files
+*.pdf

@@ -1,0 +1,17 @@
+/icoReactingMultiphaseInterFoam/FilmBoiling_Lee3D/
+/icoReactingMultiphaseInterFoam/FilmBoiling_Schrage2D/
+/icoReactingMultiphaseInterFoam/StefanCase_Lee/
+/icoReactingMultiphaseInterFoam/StefanCase_Schrage/
+/icoReactingMultiphaseInterFoam/SuckingInterface_Schrage/
+
+/interCondensatingEvaporatingFoam/
+/interFoam/
+/interTransferFoam/
+/multiRegionPhaseChangeFlow/
+
+# Files in cases
+/*/*/[0-9]*/
+/*/*/constant/polyMesh/
+/*/*/dynamicCode/
+/*/*/processor*/
+/*/*/log.*

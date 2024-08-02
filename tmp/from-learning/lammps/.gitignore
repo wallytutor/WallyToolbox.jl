@@ -1,0 +1,8 @@
+# LAMMPS
+.lammps_history
+/**/dumps/*.lammpstrj
+/**/dumps/*.min.lammps
+/**/dumps/*.dat
+/**/dumps/*.vmd
+log.lammps
+*.log
