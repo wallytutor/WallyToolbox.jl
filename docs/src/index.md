@@ -61,4 +61,4 @@ Found it useful? See [`CITATION.bib`](https://github.com/wallytutor/WallyToolbox
 
 ## Contact
 
-For quick questions and proposals, please prefer [Zulip Chat](https://wallytutor.zulipchat.com). If you found and error or bug, please [create and issue](https://github.com/wallytutor/WallyToolbox.jl/issues). That will make me more efficient at handling everything. If none of those work for you, you can contact me by [mail](mailto:walter.dalmazsilva.manager@gmail.com). 
+For quick questions and proposals, please prefer [Zulip Chat](https://wallytutor.zulipchat.com). If you found and error or bug, please [create an issue](https://github.com/wallytutor/WallyToolbox.jl/issues). That will make me more efficient at handling everything. If none of those work for you, you can contact me by [mail](mailto:walter.dalmazsilva.manager@gmail.com). 
