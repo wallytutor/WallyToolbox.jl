@@ -1,4 +1,4 @@
-# Portable Toolbox
+# Setup guide
 
 The goal of this directory is to provide an easy way to setup a portable toolbox for working with scientific computing and development under Windows. It is intended to leave minimal track on host system, but I am not enforcing this in its development, so take care if you are not allowed to execute some software in a given computer.
 

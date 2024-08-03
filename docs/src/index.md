@@ -1,10 +1,14 @@
 # WallyToolbox
 
+*General tools I use everyday for everything.*
+
+## About the toolbox
+
 My name is [Walter (CV)](https://github.com/wallytutor/WallyToolbox.jl/tree/main/data/curriculum/curriculum.pdf) and I like writing about science and engineering topics. I have more than a decade of scientific computing experience and a broad experience with open source software, especially in the fields of fluid dynamics and gas phase kinetics; a little of it being shared here.
 
 During the years I tried to different formats to organize my study materials and working tools, but it was only recently that I realized that coupling my knowledge base with the documentation of my personal code was the best approach in terms of maintenance. Obviously I cannot migrate all the content I have ever produced here at once, so my decision was to restructure everything and have a fresh start, feeding content as required, *i.e.* somebody asked me a hand in a certain subject or I need to refresh certain skill at work. In this page you will also find the supporting materials of my Medium [articles](https://medium.com/@waltermateriais) and some additional content.
 
-The core package of `WallyToolbox` ecosystem provides shared functionalities and types that are used in more specialized packages. It is an unpublished rolling release package composed of several sub-modules not making part of the main package and currently not following any versioning semantics. That means that new features are added and only the commits track differences.
+The core package of `WallyToolbox` ecosystem provides shared functionalities and types that are used in more specialized packages. It is an unpublished rolling release package composed of several sub-modules not making part of the main package and currently not following any versioning semantics. That means that new features are added and only the commits track differences. Its main goal is to provide a portable working environment that runs smoothly (at least) under Windows; anyone working in the numerical world knows the struggle with IT to have a proper Linux working system, especially in a portable device.
 
 This allows for standardization of interfaces, employed quantities, and avoid boilerplate code. This page organizes everything to facilitate the understanding of the end-user.
 
@@ -12,19 +16,15 @@ This allows for standardization of interfaces, employed quantities, and avoid bo
 
     Over the time it is expected that many functionalities from other modules will integrate `WallyToolbox` as they become stable. In some cases, entire modules may become sub-modules, so you might need to check where to import some utilities as this package is rolling release. This is temporary and will be modified when all the old code base that is giving origing to the package is migrated here. Nonetheless, the package will probably not be published to Julia registries because of the way its governance works. `WallyToolbox.jl` tries to be self-contained in several aspects because of the needs of perfect integration between functionalities of several of its foreseen end applications. That is currently incompatible with using some of the state-of-the-art packages from Julia ecosystem.
 
-## Using Julia modules
+## Using the modules
 
-Simply launch the root directory of `WallyToolbox.jl` as a project:
+The simplest way to use `WallyToolbox` is by launching Julia the root directory of `WallyToolbox.jl` as a project; this way one has access to most Julia modules packaged within the toolbox. Notice that for a full availability one needs to consider the extra steps provided in the [setup guide](setup-guide.md). To be able to use module `WallyToolbox.Notebook`, an user-defined value of environment variable `JUPYTER_DATA_DIR` must be provided to avoid conflict with system files. It must be noticed that this utility module is undocumented. .
 
 ```bash
 julia --project=.
 ```
 
-To be able to use module `WallyToolbox.Notebook`, an user-defined value of environment variable `JUPYTER_DATA_DIR` must be provided to avoid conflict with system files. It must be noticed that this utility module is undocumented. .
-
-## Using Python modules
-
-Python modules are secondary to `WallyToolbox`; they consist mostly of domain-specific code that I did not yet migrate to Julia. Nonetheless, some code will remain in Python because fields such as computer vision and overall machine learning have a much broader community and thus quality tools. Wrapping these in Julia through [PythonCall](https://github.com/JuliaPy/PythonCall.jl) is not considered as an alternative for now. 
+Python modules are currently second-grade citizens to `WallyToolbox`; they consist mostly of domain-specific code that I did not yet migrate to Julia. Nonetheless, some code will remain in Python because fields such as computer vision and overall machine learning have a much broader community and thus quality tools. Wrapping these in Julia through [PythonCall](https://github.com/JuliaPy/PythonCall.jl) is not considered as an alternative for now. 
 
 ```bash
 # Install `virtualenv`:
@@ -43,7 +43,7 @@ virtualenv venv
 pip install -r requirements.txt
 ```
 
-## Documentation
+## Documentation build
 
 Documentation is generated by a GitHub Actions workflow at every commit to the main branch. Because of the multiple modules in a repository structure, this documentation follows *intrinsically* a rolling release logic. Because the package and modules are not registered, they also do not appear in the `docs/Project.toml`. So it is up to the maintainers to ensure that section `[deps]` of `docs/Project.toml` points to **ALL** dependencies of **ALL** subpackages.
 
@@ -55,10 +55,9 @@ julia> include("docs/make.jl")
    ...
 ```
 
-## Citing
+## Contact and citing
+
+For quick questions and proposals, please prefer [Zulip Chat](https://wallytutor.zulipchat.com). If you found and error or bug, please [create an issue](https://github.com/wallytutor/WallyToolbox.jl/issues). That will make me more efficient at handling everything. If none of those work for you, you can contact me by [mail](mailto:walter.dalmazsilva.manager@gmail.com). 
 
 Found it useful? See [`CITATION.bib`](https://github.com/wallytutor/WallyToolbox.jl/blob/main/CITATION.bib) for the relevant reference.
 
-## Contact
-
-For quick questions and proposals, please prefer [Zulip Chat](https://wallytutor.zulipchat.com). If you found and error or bug, please [create an issue](https://github.com/wallytutor/WallyToolbox.jl/issues). That will make me more efficient at handling everything. If none of those work for you, you can contact me by [mail](mailto:walter.dalmazsilva.manager@gmail.com). 
