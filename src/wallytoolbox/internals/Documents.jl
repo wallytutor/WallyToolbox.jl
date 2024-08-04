@@ -9,7 +9,7 @@ using Pluto: ServerSession, SessionActions
 using Pluto: generate_html
 
 export get_format, deployrepo, julianizemarkdown
-export formatnotecells, formatequations
+export formatnotecells, formatequations, formatembvideos
 export convert_pluto
 
 DEBUGMATCHES  = false
@@ -27,6 +27,20 @@ ODOLLAR = p"(\$\$((\s+|\n)?))"
 CDOLLAR = p"(((\s+|\n)?)\$\$)"
 SDOLLAR = s"```math\n\g<named>\n```"
 
+OVIDEO  = p"!\[(.*)?\]\("
+CVIDEO  = p"\)"
+SVIDEO  = s"""
+    ```@raw html
+    <center>
+      <iframe width="500" style="height:315px" frameborder="0"
+              src="\g<named>" allowfullscreen>
+      </iframe>
+    </center>
+    ```
+    """
+
+# TODO make this a macro...
+concatregex(args...) = Regex(join([args...]))
 
 "Get format specified to generate docs."
 function get_format(; latex = false, user, sitename)
@@ -120,16 +134,23 @@ end
 
 "Convert cells of notebooks to Documenter format."
 function formatnotecells(text)
-    oldgroup = Regex(join([OJULIA, ANYNAME, CJULIA]))
+    oldgroup = concatregex(OJULIA, ANYNAME, CJULIA)
     DEBUGMATCHES && matchdebugger(oldgroup, text)
     return replace(text, oldgroup => SJULIA)
 end
 
 "Convert (multiline) equations to Julia markdown."
 function formatequations(text)
-    oldgroup = Regex(join([ODOLLAR, ANYNAME, CDOLLAR]))
+    oldgroup = concatregex(ODOLLAR, ANYNAME, CDOLLAR)
     DEBUGMATCHES && matchdebugger(oldgroup, text)
     return replace(text, oldgroup => SDOLLAR)
+end
+
+"Convert simple embeded markdown video to raw HTML."
+function formatembvideos(text)
+    oldgroup = concatregex(OVIDEO, ANYNAME, CVIDEO)
+    DEBUGMATCHES && matchdebugger(oldgroup, text)
+    return replace(text, oldgroup => SVIDEO)
 end
 
 "Convert Pluto notebook into a static HTML file."
