@@ -1,16 +1,6 @@
-module DryGranular
-
-using CairoMakie
-using DifferentialEquations: ODEProblem, Tsit5
-using DifferentialEquations: solve
-using Distributions
-using DocStringExtensions: TYPEDFIELDS
-using Ipopt
-using ModelingToolkit
-using Printf
-using Random
-using Trapz: trapz
-import JuMP
+##############################################################################
+# GRANULAR
+##############################################################################
 
 export PackedBedPorosityDescriptor
 export SymbolicLinearKramersModel
@@ -23,10 +13,45 @@ export sullivansηₘ
 export perryresidence
 export kramersnlapprox
 
+##############################################################################
+# PACKED BED
+##############################################################################
+
 """
 Provides description of porosity parameters with stochastic behavior.
 
+## Fields
+
 $(TYPEDFIELDS)
+
+## Examples
+
+[`PackedBedPorosityDescriptor`](@ref) can be used to describe the geometry of
+exchange section of a packed bed for a single set of arguments.
+
+```jldoctest
+julia> PackedBedPorosityDescriptor(; ϕ = 0.65, l = 0.10, area = 1.0)
+PackedBedPorosityDescriptor(P = 21.000000 m, D = 0.123810 m)
+```
+
+It can also be used to describe randomly varying reactors, what is a more
+realistic thing to do when using this structure to simulate real world systems.
+
+```jldoctest
+julia> PackedBedPorosityDescriptor(;
+            ϕ  = 0.65, l  = 0.10,
+            σϕ = 0.03, σl = 0.01,
+            N = 2,
+            ϕlims = (0.4, 0.8),
+            llims = (0.0, 0.3),
+            seed = 42,
+            area = 1.0
+        )
+PackedBedPorosityDescriptor(
+    P from  21.455749 m to  24.370742 m
+    D from   0.125589 m to   0.102353 m
+)
+```
 """
 struct PackedBedPorosityDescriptor
     "Porosity volume fraction in medium [-]."
@@ -98,8 +123,14 @@ function Base.show(io::IO, obj::PackedBedPorosityDescriptor)
     end
 end
 
+##############################################################################
+# KRAMERS
+##############################################################################
+
 """
 Creates a reusable linear Kramers model for rotary kiln simulation.
+
+## Fields
 
 $(TYPEDFIELDS)
 """
@@ -157,9 +188,11 @@ end
 """
 General geometric description of a bed from Kramers equation solution.
 
+## Fields
+
 $(TYPEDFIELDS)
 
-# Arguments
+## Arguments
 
 Internal elements are initialized through the following constructor:
 
@@ -195,6 +228,87 @@ as the ODE initial condition.
 - `solver`: Solver for `DifferentialEquations`. Defaults to `Tsit5`.
 - `rtol`: Relative integration tolerance. Defaults to 1.0e-08.
 - `atol`: Absolute integration tolerance. Defaults to 1.0e-08.
+
+## Examples
+
+Data in next example is an SI conversion of an example from
+([[@Kramers1952]]).
+
+```jldoctest
+julia> L = 13.715999999999998;  # Kiln length [m]
+
+julia> D = 1.8897599999999999;  # Kiln diameter [m]
+
+julia> β = 2.3859440303888126;  # Kiln slope [°]
+
+julia> γ = 45.0;                # Repose angle [°]
+
+julia> d = 1.0;                 # Particle/dam size [mm]
+
+julia> Φ = 10.363965852671996;  # Feed rate [m³/h]
+
+julia> ω = 3.0300000000000002;  # Rotation rate [rev/min]
+
+julia> bed = RotaryKilnBedSolution(;
+            model = SymbolicLinearKramersModel(),
+            L     = L,
+            R     = D / 2.0,
+            Φ     = Φ / 3600.0,
+            ω     = ω / 60.0,
+            β     = deg2rad(β),
+            γ     = deg2rad(γ),
+            d     = d / 1000.0
+        );
+
+julia> bed
+RotaryKilnBedSolution(τ = 13.169938 min, ηₘ = 5.913271 %)
+
+julia> bed.τ
+790.1963002204403
+```
+
+In the following dummy example we force a very thick *analytical* bed
+solution, filling the radius of the rotary drum. Next we confirm the
+*internal* evaluations of the model match the expected *analytical*
+values.
+
+```jldoctest; setup=:(using Statistics: mean)
+julia> R = 1.0e+00;
+
+julia> Φ = 1.0e-02;
+
+julia> z = collect(0.0:0.1:10.0);
+
+julia> h = R * ones(size(z));
+
+julia> Aₐ = π * R^2 / 2;
+
+julia> Vₐ = Aₐ * z[end];
+
+julia> bed = RotaryKilnBedSolution(z, h, 0, R, Φ)
+RotaryKilnBedSolution(τ = 26.179939 min, ηₘ = 50.000000 %)
+
+julia> mean(bed.θ) ≈ π
+true
+
+julia> mean(bed.l) ≈ 2R
+true
+
+julia> mean(bed.A) ≈ Aₐ
+true
+
+julia> mean(bed.η) ≈ 0.5
+true
+
+julia> bed.ηₘ ≈ 50.0
+true
+
+julia> bed.V ≈ Vₐ
+true
+
+julia> bed.τ ≈ Vₐ / Φ
+true
+```
 """
 struct RotaryKilnBedSolution
     "Solution coordinates [m]"
@@ -324,6 +438,10 @@ function plotlinearkramersmodel(
     return fig
 end
 
+##############################################################################
+# PROBABLY DEPRECATE (used only in validation case, move there?)
+##############################################################################
+
 "Kramers (1952) dimensionless group NΦ."
 function dimlessNΦ(R, β, ω, Φ, γ)
     return Φ * sin(γ) / (ω * R^3 * tan(β))
@@ -371,4 +489,6 @@ function kramersnlapprox(; z, R, Φ, ω, β, γ, d)
     return RotaryKilnBedSolution(z, JuMP.value.(h), β, R, Φ)
 end
 
-end # module DryGranular
+##############################################################################
+# EOF
+##############################################################################

@@ -20,18 +20,18 @@ function __init__()
     push!(LOAD_PATH, WALLYTOOLBOXPATH)
 end
 
+# General internals.
+include("internals/abstract.jl")
+include("internals/Documents.jl")
+include("internals/Notebook.jl")
+
 # Primary direct includes.
-include("jl/main/abstract.jl")
-include("jl/main/constants.jl")
-include("jl/main/utilities.jl")
+include("constants.jl")
+include("utilities.jl")
 
 # Dependent direct includes.
-include("jl/thermochemistry.jl")
-include("jl/transport.jl")
-
-# Sub-modules.
-include("jl/main/Documents.jl")
-include("jl/main/Notebook.jl")
+include("thermochemistry.jl")
+include("transport.jl")
 
 @reexport using WallyToolbox.Notebook
 

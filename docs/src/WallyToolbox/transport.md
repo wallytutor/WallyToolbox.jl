@@ -193,3 +193,69 @@ For the simulation of rotary kilns, ([[@Mujumdar2006i]]) proposes some data for 
 WallyToolbox.AirHeatConductivityMujumdar2006
 WallyToolbox.AirViscosityMujumdar2006
 ```
+
+## General porous media
+
+Modeling of geometrical characteristics of porous beds is required for including both their thermal effect or role over chemistry in chemical reactors. A classical approach used in several commercial and open source tools is that of ([[@Gunn1978]]). In what follows we develop the ideas that lead to an analogous model which is implemented by this structure.
+
+To build the model we will assume a reactor of constant rectangular cross-section ${A}_{r}={b}{w}$ and volume ${V}_{R}={b}{w}{h}$. Its cross-section perimeter is then ${P}_{R}=2({b}+{w})$. Inside this reactor we randomly pack cubic particles $\beta$ of surface area ${A}_{\beta}=6{l}_{\beta}^2$ and volume ${V}_{\beta}={l}_{\beta}^3$ at a porosity level ${\phi}$. Thus the total volume of solids inside the reactor is ${V}_{S}=(1-{\phi}){V}_{R}$ and the approximate number of particles ${N}=\frac{{V}_{S}}{{V}_{\beta}}$. Following a similar reasoning the total surface area of particles is ${A}_{S}={N}{A}_{\beta}$. Performing all the substitutions so far one finds the following expression
+
+$$
+{A}_{S}=\frac{6(1-{\phi}){b}{w}{h}}{{l}_{\beta}}
+$$
+
+Since the differential $d{A}={P}d{l}$ holds for the surface of a body over its length ${l}$, one can divide the above expression by the reactor length to get the perimeter of particles in a cross-section. We can further divide by the cross-section area itself and find the *perimeter density* which is a more general result, and find the expression proposed by ([[@Gunn1978]]). This result is summarized in the next equation where the subscript of particle size was dropped for generality.
+
+$$
+{P} = \frac{6(1-{\phi})}{{l}}
+$$
+
+An estimator of the number of channels per unit cross-section of reactor ${N}$ can be related to the porosity through ${N}\pi{R}^2={\phi}$. Because the above perimeter is shared between the fluid volume and solids, it holds that ${N}2\pi{R}=P$. Using these expressions one can solve for the porosity channels characteristic *radius* ${R}$ as given below, which is also a result reported by ([[@Gunn1978]]).
+
+$$
+{R}=\frac{{\phi}{l}}{3(1-{\phi})}
+$$
+
+This model is provided in [`PackedBedPorosityDescriptor`](@ref).
+
+```@docs
+WallyToolbox.PackedBedPorosityDescriptor
+```
+
+## Rotary kiln models
+
+In a rotary kiln as proposed by ([[@Kramers1952]]). Its goal is to be used as a process support tool or to integrate more complex models requiring integration of the bed profile. In its classical statement, the bed height profile $h(z)$ can be evaluated from *volume* of flowing material conservation through the following equations. Coordinate $z=0$ represents the discharge position where initial condition must be applied. This is given by the dam height, if any, or particle size.
+
+$$
+\begin{aligned}
+\dfrac{dh}{dz} &= C₁ \left[\frac{h}{R}\left(2 - \frac{h}{R}\right)\right]^{-\frac{3}{2}} - C₂\\[6pt]
+C₁             &= \frac{3}{4}\dfrac{Φ\tan{γ}}{π R^3 ω}\\[6pt]
+C₂             &= \dfrac{\tan{β}}{\cos{γ}}
+\end{aligned}
+$$
+
+The structure [`SymbolicLinearKramersModel`](@ref) implements the Kramers' ordinary differential equation for prediction of bed height profile in a rotary kiln. This equation is implemented under the formalism of `ModelingToolkit`.
+
+```@docs
+WallyToolbox.SymbolicLinearKramersModel
+```
+
+
+For integration of this model we implement [`RotaryKilnBedSolution`](@ref). It provides the solved description of a rotary kiln bed geometry computed from the solution of bed height along the kiln length. The main goal of the quantities computed here is their use with heat and mass transfer models for the simulation of rotary kiln process. A simple post-processing utilitiy [`plotlinearkramersmodel`](@ref) is also provided.
+
+```@docs
+WallyToolbox.RotaryKilnBedSolution
+WallyToolbox.plotlinearkramersmodel
+```
+
+Validation of Kramers' model is provided [here](../Notebooks/08-Kramers-Model-Validation.md).
+
+Finally a set of basic equations provided for process analysis.
+
+```@docs
+WallyToolbox.sullivansηₘ
+WallyToolbox.dimlessNΦ
+WallyToolbox.dimlessNₖ
+WallyToolbox.perryresidence
+WallyToolbox.kramersnlapprox
+```

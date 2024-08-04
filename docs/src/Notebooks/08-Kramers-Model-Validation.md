@@ -2,7 +2,6 @@
 
 ```julia; @example notebook
 using WallyToolbox
-using DryGranular
 
 using CairoMakie
 using CSV

@@ -22,7 +22,6 @@ using WallyToolbox.Documents
 # These contain the actual implementation of "package".
 using Cantera
 using DryFlowsheet
-using DryGranular
 using DryMaterials
 using DryUtilities
 using OpenFOAM
@@ -45,7 +44,6 @@ modules = [
     # Cantera,
     WallyToolbox,
     DryFlowsheet,
-    DryGranular,
     DryMaterials,
     DryUtilities,
     OpenFOAM,
@@ -79,7 +77,6 @@ pages = [
         
         "Julia Modules" => [
             "DryFlowsheet"  => "Modules/DryFlowsheet.md",
-            "DryGranular"   => "Modules/DryGranular.md",
             "DryMaterials"  => "Modules/DryMaterials.md",
             "RadCalNet"     => "Modules/RadCalNet.md",
             "Cantera"       => "Modules/Cantera.md",

@@ -17,7 +17,11 @@ export plot_rosinrammler
 """
 Provides description of an empirical fuel based on elemental mass fractions.
 
+## Fields
+
 $(TYPEDFIELDS)
+
+## Examples
 
 Below we illustrate how to create a fuel with the approximate mass fractions
 of carbon and hydrogen in naphtalene; next we check its string representation.

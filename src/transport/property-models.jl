@@ -25,7 +25,11 @@ export maxwell_eff_conductivity
 """
 Wrapper for a polynomial temperature-dependent heat conductivity.
 
+## Fields
+
 $(TYPEDFIELDS)
+
+## Examples
 
 The general use case of this is to create objects compatible with the function
 object approach employed for properties evaluation across the module.
@@ -58,6 +62,8 @@ end
 """
 Wrapper for a polynomial temperature-dependent fluid viscosity.
 
+## Fields
+
 $(TYPEDFIELDS)
 
 Usage is analogous to [`TempPolynomialHeatConductivity`](@ref).
@@ -87,7 +93,11 @@ end
 """
 Temperature-dependent viscosity with a Fermi-like distribution dependency.
 
+## Fields
+
 $(TYPEDFIELDS)
+
+## Examples
 
 The following example shows the evaluation of such a function below, in
 the middle, and above melting range.
@@ -157,7 +167,11 @@ end
 """
 Provides the heat conductivity of a solids granular medium embeded in gas.
 
+## Fields
+
 $(TYPEDFIELDS)
+
+## Examples
 
 This composite type relies on a gas and a solid; below we illustrate how to
 evaluate a granular medium effective heat conductivity using this structure.

@@ -29,7 +29,6 @@ begin
 
     using PlutoUI
     using WallyToolbox
-    using DryGranular
 
     @info "Initializing parameters..."
     # Geometry
