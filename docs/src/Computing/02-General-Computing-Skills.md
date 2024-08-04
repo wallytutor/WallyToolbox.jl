@@ -18,7 +18,34 @@ git submodule add https://<path>/<to>/<repository>
 Nonetheless this might fail, especially for large sized repositories; I faced [this issue](https://stackoverflow.com/questions/66366582) which I tried to fix by increasing buffer size as reported in the link. This solved the issue but led me to [another problem](https://stackoverflow.com/questions/59282476) which could be solved by degrading HTTP protocol.
 
 ---
-## Windows Subsystem for Linux
+
+## Working on Windows
+
+### Creating a portable launcher
+
+A simple way to create a portable launcher requiring to source extra variables is by writing a simple batch script exporting or calling another script with the definitions:
+
+```batch
+@echo off
+
+@REM Add variables to be sourced here such as
+@REM set PATH="/path/to/some/dir";%PATH%
+@REM ... or call another shared script doing so.
+@REM call %~dp0\env
+
+MyCode.exe
+```
+
+Because a batch script will keep a console window open, create a VB file with the following
+
+```vb
+Set oShell = CreateObject ("Wscript.Shell") 
+Dim strArgs
+strArgs = "cmd /c MyCode.bat"
+oShell.Run strArgs, 0, false
+```
+
+In the example we assume the program is called `MyCode.exe` and the batch script has been named in an analogous way `MyCode.bat`. Some real world examples are provided [here](https://github.com/wallytutor/WallyToolbox.jl/tree/main/tools).
 
 ### Mount a network drive in WSL
 

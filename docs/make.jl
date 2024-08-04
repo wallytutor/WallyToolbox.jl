@@ -69,6 +69,7 @@ pages = [
         "Home" => "index.md",
 
         "WallyToolbox" => [
+            "Modules/WallyToolbox/setup-guide.md",
             "Modules/WallyToolbox/constants.md",
             "Modules/WallyToolbox/elements.md",
             "Modules/WallyToolbox/utilities.md",
