@@ -32,10 +32,11 @@ WallyToolbox.ElementData
 WallyToolbox.ElementalQuantity
 ```
 
-```
+```@docs
 WallyToolbox.density
 WallyToolbox.specific_heat
 WallyToolbox.enthalpy
+WallyToolbox.entropy
 ```
 
 ## Hard-coded substances
