@@ -91,8 +91,7 @@ $$
 
 This expression has a very straightforward interpretation. If there is no creation rate $B_{s}$ at the interface, flux is continuous across interface; otherwise some arbitrary form of discontinuity should arise, whose form would depend on the volume governing equations at each side of $S$. Below we have an illustration of a non-zero value of $B_{s}$ at the interface, with a net increase in the flow in region 2.
 
-![[images_TY_010105.svg]]
-
+![](figures/10/images_TY_010105.svg)
 
 > [!todo] The following is something I need to abstract better, although I fully understand the mathematical origins. The argument that it is formulated in the interface reference frame but viewed from the observer frame bothers me.
 	
@@ -346,6 +345,8 @@ In this expression the *big-D* notation represents a material or convective deri
 The playlist with all lectures is found [here](https://www.youtube.com/playlist?list=PLkdIY_5Zxa7WYkMvY48WQIxSZE-bI7R4w).
 
 ### 019
+
+![@video](https://www.youtube.com/embed/0UTKHB_OzAQ)
 
 The scale estimates of penetration depth, boundary flux, and total concentration match the analytical values for steady-state first order linear reaction-diffusion equation submitted to a Dirichlet condition on one side of a semi-infinite medium:
 

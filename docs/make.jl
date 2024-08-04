@@ -94,9 +94,9 @@ pages = [
         ],
 
         "Science" => [
+            "Continuum Mechanics"   => "Science/04-Continuum-Mechanics.md",
             "Theoretical Physics"   => "Science/01-Theoretical-Physics.md",
             "Computational Physics" => "Science/02-Computational-Physics.md",
-            "Continuum Mechanics"   => "Science/04-Continuum-Mechanics.md",
             "Machine Learning"      => "Science/05-Machine-Learning.md",
             "Porous Solids"         => "Science/08-Conductivity-Porous-Solids.md",
         ],
@@ -141,6 +141,7 @@ end
 function formatter(text, rhpath)
     text = formatnotecells(text)
     text = formatequations(text)
+    text = formatembvideos(text)
     text = formatcitations(text, rhpath)
     return text
 end
