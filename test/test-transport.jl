@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-using WallyToolbox
 
 @testset "transport" begin
     nu_gn = NusseltGnielinski()
