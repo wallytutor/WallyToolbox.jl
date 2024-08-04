@@ -1,7 +1,5 @@
 ##############################################################################
-# PROPERTY MODELS
-#
-# Provides the description of medium properties through different models.
+# PROPERTYMODELS
 ##############################################################################
 
 # TODO: implement composite wall (plane/radial) thermal conductivity.

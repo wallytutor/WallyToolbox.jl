@@ -1,7 +1,5 @@
 ##############################################################################
-# HEAT TRASNFER COEFFICIENT
-#
-# File dedicated to models related to convective heat transfer coefficient.
+# HEATTRASNFERCOEFFICIENT
 ##############################################################################
 
 export HtcPipeFlow

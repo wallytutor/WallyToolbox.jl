@@ -111,7 +111,7 @@ function julianizemarkdown(;
     end
 end
 
-"Helper to debug regex matches by simply printing to the screen."
+# Helper to debug regex matches by simply printing to the screen.
 function matchdebugger(gr, text)
     if (m = match(gr, text); m !== nothing)
         println(m[:named])

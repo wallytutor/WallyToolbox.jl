@@ -1,7 +1,7 @@
 # Constants
 
 ```@meta
-EditURL = "https://github.com/wallytutor/WallyToolbox.jl/blob/main/docs/src/Modules/WallyToolbox/constants.md"
+EditURL = "https://github.com/wallytutor/WallyToolbox.jl/blob/main/docs/src/WallyToolbox/constants.md"
 CurrentModule = WallyToolbox
 DocTestSetup = quote
     using WallyToolbox

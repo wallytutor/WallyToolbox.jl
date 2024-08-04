@@ -1,7 +1,7 @@
 # Unstable
 
 ```@meta
-EditURL = "https://github.com/wallytutor/WallyToolbox.jl/blob/main/docs/src/Modules/WallyToolbox.md"
+EditURL = "https://github.com/wallytutor/WallyToolbox.jl/blob/main/docs/src/WallyToolbox/unstable.md"
 CurrentModule = WallyToolbox
 DocTestSetup = quote
     using WallyToolbox

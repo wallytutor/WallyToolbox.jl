@@ -1,9 +1,6 @@
 ##############################################################################
-# ELEMENTS
+# CHEMISTRY
 ##############################################################################
-
-import Base: +
-import Base: *
 
 export Stoichiometry
 export ChemicalCompound
@@ -18,22 +15,6 @@ export specific_heat
 
 export disable_thermo_warnings
 export enable_thermo_warnings
-
-#############################################################################
-# Configure
-#############################################################################
-
-THERMO_WARNINGS = true
-
-function disable_thermo_warnings()
-    global THERMO_WARNINGS = false
-    return nothing
-end
-
-function enable_thermo_warnings()
-    global THERMO_WARNINGS = true
-    return nothing
-end
 
 #############################################################################
 # Type signatures

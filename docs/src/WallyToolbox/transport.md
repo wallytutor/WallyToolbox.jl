@@ -1,11 +1,11 @@
-# DryTransport
+# Transport
 
 ```@meta
-CurrentModule = DryTransport
-DocTestSetup  = quote
-    using DryTransport
+"https://github.com/wallytutor/WallyToolbox.jl/blob/main/docs/src/WallyToolbox/transport.md"
+CurrentModule = WallyToolbox
+DocTestSetup = quote
+    using WallyToolbox
 end
-EditURL = "https://github.com/wallytutor/WallyToolbox.jl/blob/main/docs/src/Modules/DryTransport.md"
 ```
 
 ## Dimensionless groups
@@ -29,7 +29,7 @@ $$
 where $\langle{}v_{z}\rangle$ is the average flow velocity in axial direction and $D$ is the tube diameter. For values up 2100 the flow is assumed laminar if steady state is established and density is constant. For more, see ([[@Bird2001]]), Chapter 2.
 
 ```@docs
-DryTransport.reynolds
+WallyToolbox.reynolds
 ```
 
 #### Nusselt
@@ -43,7 +43,7 @@ $$
 Often in buoyancy-driven flow analysis it is correlated as $\mathrm{Nu}=a\mathrm{Ra}^b$. A Nusselt number of value one represents heat transfer by pure conduction. Increasing this number implies a laminar conductive-dominant flow and then a convective dominant turbulent flow.
 
 ```@docs
-DryTransport.nusselt
+WallyToolbox.nusselt
 ```
 
 #### Prandtl
@@ -64,7 +64,7 @@ $$
 $$
 
 ```@docs
-DryTransport.prandtl
+WallyToolbox.prandtl
 ```
 
 #### Péclet
@@ -89,7 +89,7 @@ $$
 and is analogous to Reynolds number in natural convection. Increasing the value of this number above a given threshold promotes buoyancy driven flow.
 
 ```@docs
-DryTransport.grashof
+WallyToolbox.grashof
 ```
 
 #### Rayleigh
@@ -119,20 +119,20 @@ $$
 ### Groups by application
 
 ```@docs
-DryTransport.ConstantPrandtl
+WallyToolbox.ConstantPrandtl
 ```
 
 ```@docs
-DryTransport.ReynoldsPipeFlow
-DryTransport.NusseltGnielinski
-DryTransport.NusseltDittusBoelter
+WallyToolbox.ReynoldsPipeFlow
+WallyToolbox.NusseltGnielinski
+WallyToolbox.NusseltDittusBoelter
 ```
 
 ## Heat transfer coefficients
 
 ```@docs
-DryTransport.HtcPipeFlow
-DryTransport.htc
+WallyToolbox.HtcPipeFlow
+WallyToolbox.htc
 ```
 
 ## Property models
@@ -144,15 +144,15 @@ Medium properties often are non-constant and require description through differe
 The most commonly used representation of thermal conductivity of materials is through polynomial fits of temperature. Although this approach does not provide any physical-based representation, it is easy to use and fast to evaluate in most computational science problems. A common interface for polynomial properties is given by the following structure.
 
 ```@docs
-DryTransport.TempPolynomialHeatConductivity
-DryTransport.constheatconductivity
+WallyToolbox.TempPolynomialHeatConductivity
+WallyToolbox.constheatconductivity
 ```
 
 An analogous interface is also provided for viscosity temperature dependence.
 
 ```@docs
-DryTransport.TempPolynomialFluidViscosity
-DryTransport.constfluidviscosity
+WallyToolbox.TempPolynomialFluidViscosity
+WallyToolbox.constfluidviscosity
 ```
 
 ### Other temperature dependences
@@ -172,16 +172,17 @@ $$
 $$
 
 ```@docs
-DryTransport.TempFermiLikeMeltingViscosity
-DryTransport.fermilike_viscosity
+WallyToolbox.TempFermiLikeMeltingViscosity
+WallyToolbox.fermilike_viscosity
 ```
+
 ### Granular media
 
 According to ([[@Hanein2017]]) the representation of effective thermal conductivity of a solids bed in a rotary kiln can be approximated through a Maxell model based on effective medium theory. To keep track of eventually temperature-dependent properties and make use of this model, the following interfaces are provided.
 
 ```@docs
-DryTransport.GranularMediumHeatConductivity
-DryTransport.maxwell_eff_conductivity
+WallyToolbox.GranularMediumHeatConductivity
+WallyToolbox.maxwell_eff_conductivity
 ```
 
 ### Air properties
@@ -189,6 +190,6 @@ DryTransport.maxwell_eff_conductivity
 For the simulation of rotary kilns, ([[@Mujumdar2006i]]) proposes some data for air properties implemented by the following interfaces. It must be noted that the thermal conductivity proposed by the authors [quickly diverges above 1500 K](../Notebooks/07-Air-Properties.md) and users must be aware of its implications.
 
 ```@docs
-DryTransport.AirHeatConductivityMujumdar2006
-DryTransport.AirViscosityMujumdar2006
+WallyToolbox.AirHeatConductivityMujumdar2006
+WallyToolbox.AirViscosityMujumdar2006
 ```

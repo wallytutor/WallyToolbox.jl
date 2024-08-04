@@ -2,7 +2,7 @@
 
 #plug-flow
 
-Escoamentos nos quais a componente axial do transporte por advecção é dominante sobre o transporte difusivo aproximam-se do comportamento dito *pistão*. Neste caso o *número de Péclet* (ver [DryTransport](../Modules/DryTransport.md) para mais detalhes) tende ao infinito.
+Escoamentos nos quais a componente axial do transporte por advecção é dominante sobre o transporte difusivo aproximam-se do comportamento dito *pistão*. Neste caso o *número de Péclet* (ver [transport](../WallyToolbox/transport.md) para mais detalhes) tende ao infinito.
 
 A temática de reatores pistão apresenta grande interesse para o cientista e engenheiro dados os fatos de que (1) frequentemente instalações experimentais no laboratório podem ser caracterizadas como estando neste regime limite e (2) com a composição de reatores pistão e agitados é possível compor modelos de reatores mais complexos de utilidade industrial. A introdução desenvolvida aqui parte da apresentação feita por ([[@Kee2017]]) para então desenvolver uma abordagem algorítmica para solução de reatores quaisquer. A abordagem de engenharia de reatores empregando modelos compostos não será apresentada, o leitor interessado podendo encontrá-la em ([[@Fogler1999]]).
 

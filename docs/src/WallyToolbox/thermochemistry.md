@@ -1,11 +1,44 @@
-# DryCombustion
+# Thermochemistry
 
 ```@meta
-CurrentModule = DryCombustion
-DocTestSetup  = quote
-    using DryCombustion
+EditURL = "https://github.com/wallytutor/WallyToolbox.jl/blob/main/docs/src/WallyToolbox/thermochemistry.md"
+CurrentModule = WallyToolbox
+DocTestSetup = quote
+    using WallyToolbox
 end
-EditURL = "https://github.com/wallytutor/WallyToolbox.jl/blob/main/docs/src/Modules/DryCombustion.md"
+```
+
+## Composition manipulation
+
+The core functionality is provided through the `Stoichiometry` structure:
+
+```@docs
+WallyToolbox.Stoichiometry
+```
+
+Once the composition of a compound has been set with `Stoichiometry`, the preferred method of working is through the creation of a `ChemicalCompound`, as follows:
+
+```@docs
+WallyToolbox.ChemicalCompound
+```
+
+The following methods and types are available for operation over compositions and elements.
+
+```@docs
+WallyToolbox.element
+WallyToolbox.atomicmass
+WallyToolbox.molecularmass
+WallyToolbox.ElementData
+WallyToolbox.ElementalQuantity
+```
+
+## Thermodynamic properties
+
+Materials properties are often reported according to the formalism of ([[@MaierKelley1932]]) or ([[@Shomate1954]]). To be able to handle data under these formats, the following structures are provided.
+
+```@docs
+WallyToolbox.MaierKelleyThermo
+WallyToolbox.ShomateThermo
 ```
 
 ## Empirical fuels
@@ -13,7 +46,7 @@ EditURL = "https://github.com/wallytutor/WallyToolbox.jl/blob/main/docs/src/Modu
 In industrial practice of CFD one is often confronted with simulating *empirical* fuels. This is how one generally calls a fuel provided in elemental mass fractions of elements and is the most common reporting format for heavy-fuel oil. Using [`EmpiricalFuel`](@ref) one can quickly perform conversions and find out the required air flow rate for setting up a process simulation or furnace operation.
 
 ```@docs
-DryCombustion.EmpiricalFuel
+WallyToolbox.EmpiricalFuel
 ```
 
 A simple empirical fuel complete combustion can be represented by the following chemical equation:
@@ -48,22 +81,22 @@ $$
 With this value it is trivial to find out the required mass flow rate of oxidizer. This is implemented in [`oxidizer_mass_flow_rate`](@ref) as documented below. Notice that this function will fail if one of the required elements in the above equation is missing. The presence of nitrogen oxides and sulfur is fuel is neglected in this calculations and one must assess whether they should be considered in a certain analysis prior to using this function.
 
 ```@docs
-DryCombustion.oxidizer_mass_flow_rate
+WallyToolbox.oxidizer_mass_flow_rate
 ```
 
 ## Heavy fuel-oils
 
-Combustion of heavy-fuel oils (HFO) is discussed in detail by ([[@Lawn1987]]). Some relations that might be useful for the industrial combustion specialist are under implementation here to be integrated in larger models *e.g.* using [`DryFlowsheet`](DryFlowsheet.md), or simple calculations.
+Combustion of heavy-fuel oils (HFO) is discussed in detail by ([[@Lawn1987]]). Some relations that might be useful for the industrial combustion specialist are under implementation here to be integrated in larger models *e.g.* using [`DryFlowsheet`](../Modules/DryFlowsheet.md), or simple calculations.
 
 ```@docs
-DryCombustion.hfo_empirical_formula
-DryCombustion.hfo_specific_heat
-DryCombustion.hfo_enthalpy_net_bs2869
+WallyToolbox.hfo_empirical_formula
+WallyToolbox.hfo_specific_heat
+WallyToolbox.hfo_enthalpy_net_bs2869
 ```
 
 ## Discrete phase model
 
 ```@docs
-DryCombustion.fit_rosinrammler
-DryCombustion.plot_rosinrammler
+WallyToolbox.fit_rosinrammler
+WallyToolbox.plot_rosinrammler
 ```

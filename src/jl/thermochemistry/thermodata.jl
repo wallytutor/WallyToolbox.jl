@@ -2,17 +2,8 @@
 # THERMODATA
 ##############################################################################
 
-import YAML
-import DataFrames
-
 export ThermoDatabase
 export compounds
-
-##############################################################################
-# CONSTANT AND CONFIGURATION
-##############################################################################
-
-const DEFAULTTHERMODATA = joinpath(WALLYTOOLBOXDATA, "thermodata.yaml")
 
 ##############################################################################
 # DATA STRUCTURES

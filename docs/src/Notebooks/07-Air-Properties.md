@@ -4,7 +4,6 @@ In this note we show how to use [Cantera](https://cantera.org/) to retrieve mixt
 
 ```julia; @example notebook
 using WallyToolbox
-using DryTransport
 
 using CairoMakie
 using CondaPkg

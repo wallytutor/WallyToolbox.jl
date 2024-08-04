@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
-using DryTransport
+using WallyToolbox
 
-@testset "DryTransport" begin
-
+@testset "transport" begin
     nu_gn = NusseltGnielinski()
     nu_db = NusseltDittusBoelter()
 

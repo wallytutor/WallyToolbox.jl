@@ -1,5 +1,9 @@
 # Setup guide
 
+```@meta
+EditURL = "https://github.com/wallytutor/WallyToolbox.jl/blob/main/docs/src/WallyToolbox/setup-guide.md"
+```
+
 You probably ended up here because you are looking for a full working setup of a reasonable computing environment under Windows and that is exactly the goal of this guide: to provide an easy way to setup a portable toolbox for working with scientific computing and development under Windows. It is intended to leave minimal track on host system[^1], but I am not enforcing this in its development, so take care if you are not allowed to execute some software in a given computer. Except for the fact that you will probably want [Microsoft MPI ](https://learn.microsoft.com/en-us/message-passing-interface/microsoft-mpi) to be able to perform parallel computations, everything else can be deployed without administration rights.
 
 !!! warn

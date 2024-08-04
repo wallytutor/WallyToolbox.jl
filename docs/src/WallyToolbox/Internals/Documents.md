@@ -1,14 +1,14 @@
-# Documentation
+# Documents
 
 ```@meta
-EditURL = "https://github.com/wallytutor/WallyToolbox.jl/blob/main/docs/src/Modules/WallyToolbox/Documentation.md"
+EditURL = "https://github.com/wallytutor/WallyToolbox.jl/blob/main/docs/src/Modules/WallyToolbox/Documents.md"
 CurrentModule = WallyToolbox
 DocTestSetup = quote
     using WallyToolbox
 end
 ```
 
-The following functionalities are intended mostly for the own toolbox maintenance and documentation generation. This can also be imported as a replacement for some boilerplate code in other projects.
+The following functionalities are intended mostly for the own toolbox maintenance and documentation generation. This can also be imported as a replacement for some boilerplate code in other projects. The use of the functions provided in this module is essentially illustrated in [`docs/make.jl`](https://github.com/wallytutor/WallyToolbox.jl/blob/main/docs/make.jl).
 
 ```@docs
 WallyToolbox.Documents.get_format
@@ -21,7 +21,6 @@ Because most of my work is done with [Obsidian](https://obsidian.md/) and the to
 WallyToolbox.Documents.julianizemarkdown
 WallyToolbox.Documents.formatequations
 WallyToolbox.Documents.formatnotecells
-WallyToolbox.Documents.matchdebugger
 ```
 
 Finally, we wrap up a standard workflow for converting Pluto notebooks.

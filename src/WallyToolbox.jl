@@ -26,8 +26,8 @@ include("jl/main/constants.jl")
 include("jl/main/utilities.jl")
 
 # Dependent direct includes.
-include("jl/main/elements.jl")
-include("jl/main/thermodata.jl")
+include("jl/thermochemistry.jl")
+include("jl/transport.jl")
 
 # Sub-modules.
 include("jl/main/Documents.jl")

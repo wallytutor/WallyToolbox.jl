@@ -1,13 +1,6 @@
-# -*- coding: utf-8 -*-
-module DryCombustion
-
-import Base: String
-using WallyToolbox
-using CairoMakie
-using Distributions: Weibull, cdf, scale, mean
-using DocStringExtensions: TYPEDFIELDS
-using Printf
-using Roots
+##############################################################################
+# COMBUSTION
+##############################################################################
 
 export EmpiricalFuel
 export oxidizer_mass_flow_rate
@@ -236,4 +229,6 @@ function plot_rosinrammler(dist; xyref=nothing)
     return fig
 end
 
-end # (DryCombustion)
+##############################################################################
+# EOF
+##############################################################################

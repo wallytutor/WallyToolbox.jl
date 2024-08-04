@@ -1,7 +1,7 @@
 # Utilities
 
 ```@meta
-EditURL = "https://github.com/wallytutor/WallyToolbox.jl/blob/main/docs/src/Modules/WallyToolbox/utilities.md"
+EditURL = "https://github.com/wallytutor/WallyToolbox.jl/blob/main/docs/src/WallyToolbox/utilities.md"
 CurrentModule = WallyToolbox
 DocTestSetup = quote
     using WallyToolbox

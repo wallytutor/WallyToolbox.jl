@@ -21,11 +21,9 @@ using WallyToolbox.Documents
 
 # These contain the actual implementation of "package".
 using Cantera
-using DryCombustion
 using DryFlowsheet
 using DryGranular
 using DryMaterials
-using DryTransport
 using DryUtilities
 using OpenFOAM
 using RadCalNet
@@ -46,11 +44,9 @@ latex = false
 modules = [
     # Cantera,
     WallyToolbox,
-    DryCombustion,
     DryFlowsheet,
     DryGranular,
     DryMaterials,
-    DryTransport,
     DryUtilities,
     OpenFOAM,
     RadCalNet,
@@ -69,19 +65,22 @@ pages = [
         "Home" => "index.md",
 
         "WallyToolbox" => [
-            "Modules/WallyToolbox/setup-guide.md",
-            "Modules/WallyToolbox/constants.md",
-            "Modules/WallyToolbox/elements.md",
-            "Modules/WallyToolbox/utilities.md",
-            "Modules/WallyToolbox/Documentation.md",
+            "WallyToolbox/setup-guide.md",
+            "WallyToolbox/thermochemistry.md",
+            "WallyToolbox/transport.md",
+            "WallyToolbox/constants.md",
+            "WallyToolbox/utilities.md",
+
+            "Internals" => [
+                # "WallyToolbox/Internals/abstract.md",
+                "WallyToolbox/Internals/Documents.md",
+            ],
         ],
         
         "Julia Modules" => [
-            "DryCombustion" => "Modules/DryCombustion.md",
             "DryFlowsheet"  => "Modules/DryFlowsheet.md",
             "DryGranular"   => "Modules/DryGranular.md",
             "DryMaterials"  => "Modules/DryMaterials.md",
-            "DryTransport"  => "Modules/DryTransport.md",
             "RadCalNet"     => "Modules/RadCalNet.md",
             "Cantera"       => "Modules/Cantera.md",
             "OpenFOAM"      => "Modules/OpenFOAM.md",
@@ -170,7 +169,7 @@ convert_pluto(nblist; root = ppath, force = false)
 
 for m in modules
     mod = Symbol(m)
-    setdocmeta!(m, :DocTestSetup, :(using $mod); warn = true, recursive = true)
+    setdocmeta!(m, :DocTestSetup, :(using $mod); warn = false, recursive = true)
 end
 
 plugins  = [
@@ -183,6 +182,8 @@ makedocs(; source = wpath,
 if "DEPLOY_DOCS" in keys(ENV) && hasproperty(format, :repolink)
     deploydocs(; repo = deployrepo(format))
 end
+
+rm(wpath; force=true, recursive=true)
 
 ##############################################################################
 # THE END

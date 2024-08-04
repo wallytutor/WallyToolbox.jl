@@ -18,12 +18,12 @@ This unification over a central package allows for standardization of interfaces
 
 ## Using the modules
 
-The simplest way to use `WallyToolbox` is by launching Julia the root directory of `WallyToolbox.jl` as a project from command line, such as `julia --project=.`[^1]; this way one has access to most Julia modules packaged within the toolbox. Notice that for a full availability one needs to consider the extra steps provided in the [setup guide](Modules/WallyToolbox/setup-guide.md), which is the preferred way to deploy a working system with `WallyToolbox`.
+The simplest way to use `WallyToolbox` is by launching Julia the root directory of `WallyToolbox.jl` as a project from command line, such as `julia --project=.`[^1]; this way one has access to most Julia modules packaged within the toolbox. Notice that for a full availability one needs to consider the extra steps provided in the [setup guide](WallyToolbox/setup-guide.md), which is the preferred way to deploy a working system with `WallyToolbox`.
 
 [^1]: You might need to enter `pkg` mode and instantiate the project to get all dependencies installed. You can find more about this [here](https://docs.julialang.org/en/v1/stdlib/Pkg/).
+
 ## Contact and citing
 
 For quick questions and proposals, please prefer [Zulip Chat](https://wallytutor.zulipchat.com). If you found and error or bug, please [create an issue](https://github.com/wallytutor/WallyToolbox.jl/issues). That will make me more efficient at handling everything. If none of those work for you, you can contact me by [mail](mailto:walter.dalmazsilva.manager@gmail.com). 
 
 Found it useful? See [`CITATION.bib`](https://github.com/wallytutor/WallyToolbox.jl/blob/main/CITATION.bib) for the relevant reference.
-
