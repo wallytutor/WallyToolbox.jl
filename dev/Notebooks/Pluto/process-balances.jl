@@ -19,18 +19,22 @@ begin
     using SteamTables: SpecificH
     using Unitful: @u_str, uconvert, ustrip
 
+    using WallyToolbox: AbstractLiquidMaterial
     using WallyToolbox
-    using DryUtilities: nm3_h_to_kg_h, kg_h_to_nm3_h
-    using DryMaterials: AbstractLiquidMaterial
-    using DryMaterials: PureWater, PureAir, PureMineral
-    using DryMaterials: density
-    using DryFlowsheet
 end
 
 # ╔═╡ 0b802603-00d0-4418-85ba-78e5a1e72b32
 md"""
 # Creating a custom balance model
 """
+
+# ╔═╡ 537d2369-fa2f-4a02-bb03-216582a5ef11
+"Convert [Nm³/h] to [kg/h]."
+nm3_h_to_kg_h(q, mw) = C_REF * mw * q
+
+# ╔═╡ bce23e3c-35ad-4584-b3f0-1e3e39af66b0
+"Convert [kg/h] to [Nm³/h]."
+kg_h_to_nm3_h(ṁ, mw) = ṁ / (C_REF * mw)
 
 # ╔═╡ 85be503e-eedf-49b4-952b-f581e71249ba
 """ Process `CooledCrusherModel` inputs in SI units.
@@ -987,6 +991,8 @@ refmodel
 # ╔═╡ Cell order:
 # ╟─0b802603-00d0-4418-85ba-78e5a1e72b32
 # ╟─aa8086be-ec51-11ee-2ca0-933674507b58
+# ╟─537d2369-fa2f-4a02-bb03-216582a5ef11
+# ╟─bce23e3c-35ad-4584-b3f0-1e3e39af66b0
 # ╟─85be503e-eedf-49b4-952b-f581e71249ba
 # ╟─299a3f06-5893-4b3d-beb8-c9770b0430f1
 # ╟─9b0788b4-de80-4da6-b9bd-464c490e478d
