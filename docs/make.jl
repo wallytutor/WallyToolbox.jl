@@ -63,6 +63,7 @@ pages = [
             "WallyToolbox/flowsheet.md",
             "WallyToolbox/constants.md",
             "WallyToolbox/utilities.md",
+            "WallyToolbox/roadmap.md",
 
             "Internals" => [
                 # "WallyToolbox/Internals/abstract.md",
@@ -150,27 +151,46 @@ spath = joinpath(@__DIR__, "src")
 wpath = joinpath(@__DIR__, "tmp")
 julianizemarkdown(; formatter, spath, wpath)
 
-ppath = joinpath(wpath, "Notebooks", "Pluto")
-convert_pluto(nblist; root = ppath, force = false)
+try
+    ppath = joinpath(wpath, "Notebooks", "Pluto")
+    convert_pluto(nblist; root = ppath, force = false)
+catch err
+    @error("Failed converting notebooks:\n$(err)")
+end
 
 ##############################################################################
 # THE DOCUMENTATION
 ##############################################################################
 
-for m in modules
-    mod = Symbol(m)
-    setdocmeta!(m, :DocTestSetup, :(using $mod); warn = false, recursive = true)
+function setdocmetawrapper!(m; warn = false, recursive = true)
+    setdocmeta!(m, :DocTestSetup, :(using $(Symbol(m))); warn, recursive)
 end
+
+setdocmetawrapper!(WallyToolbox)
+setdocmetawrapper!(OpenFOAM)
+setdocmetawrapper!(RadCalNet)
 
 plugins  = [
     CitationBibliography(bibtex)
 ]
 
-makedocs(; source = wpath,
-           sitename, authors, format, modules, plugins, pages, clean, draft)
+try
+    makedocs(; source = wpath,
+               sitename, 
+               authors, 
+               format, 
+               modules, 
+               plugins, 
+               pages, 
+               clean, 
+               draft
+            )
 
-if "DEPLOY_DOCS" in keys(ENV) && hasproperty(format, :repolink)
-    deploydocs(; repo = deployrepo(format))
+    if "DEPLOY_DOCS" in keys(ENV) && hasproperty(format, :repolink)
+        deploydocs(; repo = deployrepo(format))
+    end
+catch err
+    @error("Failed while generating the docs:\n$(err)")
 end
 
 rm(wpath; force=true, recursive=true)
