@@ -3,8 +3,9 @@ module WallyToolbox
 
 using Reexport
 
-const WALLYTOOLBOXPATH = @__DIR__
-const WALLYTOOLBOXDATA = joinpath(WALLYTOOLBOXPATH, "data")
+# const WALLYTOOLBOXPATH = @__DIR__
+const WALLYTOOLBOXPATH = joinpath(@__DIR__, "modules")
+const WALLYTOOLBOXDATA = joinpath(@__DIR__, "data")
 
 function __init__()
     # Make other modules available, that's all!

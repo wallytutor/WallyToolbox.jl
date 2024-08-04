@@ -5,15 +5,14 @@ import Base: +
 import Base: -
 import Base: *
 import Base: /
-import DryMaterials: enthalpy
 
 using DocStringExtensions: FIELDS
 using Roots: find_zero
 using Unitful: uconvert, ustrip, @u_str
 
-using WallyToolbox: T_REF
-using DryMaterials: AbstractMaterial
-using DryMaterials: issolid, isliquid, isgas
+import WallyToolbox: enthalpy
+using WallyToolbox: AbstractMaterial
+using WallyToolbox
 
 export StreamPipeline
 export MaterialStream

@@ -17,7 +17,6 @@ abstract type AbstractMaterial                <: AbstractMatter end
 abstract type AbstractLiquidMaterial          <: AbstractMaterial end
 abstract type AbstractSolidMaterial           <: AbstractMaterial end
 abstract type AbstractGasMaterial             <: AbstractMaterial end
-abstract type AbstractSolidMineralPhase       <: AbstractSolidMaterial end
 
 ##############################################################################
 # DIMENSIONLESS GROUPS

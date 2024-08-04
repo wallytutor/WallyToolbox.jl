@@ -12,8 +12,11 @@ import YAML
 using CairoMakie
 using Distributions: Weibull, cdf, scale, mean
 using DocStringExtensions: TYPEDFIELDS
+using Polynomials: AbstractPolynomial
 using Printf
+using Polynomials: Polynomial, LaurentPolynomial, integrate
 using Roots
+using SteamTables: SpecificV
 
 ##############################################################################
 # CONSTANT AND CONFIGURATION

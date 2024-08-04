@@ -102,14 +102,4 @@ function maxabsolutechange(x::Vector{Float64}, Δx::Vector{Float64})::Float64
     return maximum(abs.(Δx))
 end
 
-##############################################################################
-# Unit conversion
-##############################################################################
-
-"Convert [Nm³/h] to [kg/h]."
-nm3_h_to_kg_h(q, mw) = C_REF * mw  * q
-
-"Convert [kg/h] to [Nm³/h]."
-kg_h_to_nm3_h(ṁ, mw) = ṁ / (C_REF * mw)
-
 end # (module DryUtilities)

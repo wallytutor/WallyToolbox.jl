@@ -32,11 +32,26 @@ WallyToolbox.ElementData
 WallyToolbox.ElementalQuantity
 ```
 
+```
+WallyToolbox.density
+WallyToolbox.specific_heat
+WallyToolbox.enthalpy
+```
+
+## Hard-coded substances
+
+```@docs
+WallyToolbox.PureAir
+WallyToolbox.PureMineral
+WallyToolbox.PureWater
+```
+
 ## Thermodynamic properties
 
 Materials properties are often reported according to the formalism of ([[@MaierKelley1932]]) or ([[@Shomate1954]]). To be able to handle data under these formats, the following structures are provided.
 
 ```@docs
+WallyToolbox.LaurentPolynomialProperties
 WallyToolbox.MaierKelleyThermo
 WallyToolbox.ShomateThermo
 ```

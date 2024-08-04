@@ -175,10 +175,3 @@ DryUtilities.axesunitscaler
 DryUtilities.maxabsolutechange
 DryUtilities.maxrelativechange
 ```
-
-### Unit conversion
-
-```@docs
-DryUtilities.nm3_h_to_kg_h
-DryUtilities.kg_h_to_nm3_h
-```

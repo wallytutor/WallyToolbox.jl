@@ -6,12 +6,22 @@ export Stoichiometry
 export ChemicalCompound
 export ThermoCompound
 
+export PureWater
+export PureAir
+export PureMineral
+
 export MaierKelleyThermo
 export ShomateThermo
 
-export element, atomicmass
+export issolid, isliquid, isgas
+
+export element
+export atomicmass
 export molecularmass
+export density
 export specific_heat
+export enthalpy
+export entropy
 
 export disable_thermo_warnings
 export enable_thermo_warnings
@@ -173,11 +183,52 @@ struct ThermoCompound <: AbstractThermoCompound
     thermodynamics::AbstractThermodynamics
 end
 
+#############################################################################
+# Types check
+#############################################################################
+
+issolid(m::AbstractMaterial)  = m isa AbstractSolidMaterial
+isliquid(m::AbstractMaterial) = m isa AbstractLiquidMaterial
+isgas(m::AbstractMaterial)    = m isa AbstractGasMaterial
+
+issolid(m::ThermoCompound)  = m.aggregation == "solid"
+isliquid(m::ThermoCompound) = m.aggregation == "liquid"
+isgas(m::ThermoCompound)    = m.aggregation == "gas"
+
 ##############################################################################
 # MODELS
 ##############################################################################
 
-"Thermodynamic properties represeted in Maier-Kelley formalism."
+"Thermodynamic properties represeted by Laurent polynomials."
+struct SolidPolynomialProperties <: AbstractThermodynamics
+    h298::Float64
+    s298::Float64
+    coefs::Vector{Float64}
+
+    "Polynomial representation of specific heat [J/(kg.K)]."
+    c::AbstractPolynomial
+
+    "Polynomial representation of enthalpy [J/kg]."
+    h::AbstractPolynomial
+
+    function LaurentPolynomialProperties(h298, s298, coefs;
+            units = :mole,
+            molar_mass = nothing
+        )
+        terms = map(p->LaurentPolynomial(p.second, p.first, :T), coefs)
+
+        c = sum(terms)
+        h = h298 + integrate(c)
+        
+        return new(h298, s298, coefs, c, h)
+    end
+end
+
+"""
+Thermodynamic properties represeted in Maier-Kelley formalism.
+
+This is a special case of [`LaurentPolynomialProperties`](@ref).
+"""
 struct MaierKelleyThermo <: AbstractThermodynamics
     h298::Float64
     s298::Float64
@@ -279,6 +330,14 @@ molecularmass(c::ThermoCompound) = molecularmass(c.chemical)
 @doc """ Molecular mass of compound [kg/mol]. """ molecularmass
 
 #############################################################################
+# density()
+#############################################################################
+
+density(mat::AbstractMaterial, T, P) = error("Not implemented")
+
+@doc "Evaluates the density of material [kg/m³]." density
+
+#############################################################################
 # specific_heat()
 #############################################################################
 
@@ -301,9 +360,13 @@ function specific_heat(obj::ShomateThermo, T)
     return t * p1 + obj.coefs[5] / t^2 + obj.coefs[1]
 end
 
+@doc "Evaluates the specific heat of materials [J/(kg.K)]." specific_heat
+
 #############################################################################
 # enthalpy()
 #############################################################################
+
+# enthalpy(mat::AbstractMaterial, pars...) = error("Not implemented")
 
 function enthalpy(obj::ShomateThermo, T)
     THERMO_WARNINGS && !in_range_co(T, obj.validity_range) && begin
@@ -316,6 +379,8 @@ function enthalpy(obj::ShomateThermo, T)
     p2 = (obj.coefs[1]/1) + t * p1
     return t * p2 - (obj.coefs[5]/t) + obj.coefs[6] - obj.coefs[8]
 end
+
+@doc "Evaluates the enthalpy of material [J/kg]." enthalpy
 
 #############################################################################
 # entropy()
@@ -331,6 +396,56 @@ function entropy(obj::ShomateThermo, T)
     p1 = (obj.coefs[2]/1) + t * p0
     return obj.coefs[1] * log(t) + t * p1 + obj.coefs[5]/(2t^2) + obj.coefs[7]
 end
+
+@doc "Evaluates the entropy of material [J/K]." entropy
+
+##############################################################################
+# DUMMY MATERIALS (TODO: deprecate! use database instead!)
+##############################################################################
+
+"Simple solid mineral material for illustration purposes."
+struct PureMineral <: AbstractSolidMaterial
+    ρ::Float64
+    h::Polynomial
+
+    function PureMineral(; ρ = 900.0, h = [0, 850.0])
+        return new(ρ, Polynomial(h, :T))
+    end
+end
+
+"Simple implementation of liquid water for illustration purposes."
+struct PureWater <: AbstractLiquidMaterial
+end
+
+"Simple implementation of pure air for illustration purposes."
+struct PureAir <: AbstractGasMaterial
+    M::Float64
+    h::Polynomial
+
+    function PureAir(; m = nothing, h = nothing)
+        m = defaultvalue(m, M_AIR)
+        h = defaultvalue(h, [-2.6257123774377e+05, 9.8274248481342e+02,
+                              4.9125599795629e-02])
+        return new(m, Polynomial(h, :T))
+    end
+end
+
+molecularmass(mat::PureWater) = 0.018
+
+density(mat::PureMineral, T, P) = mat.ρ
+
+density(mat::PureWater, T, P) = 1.0 / SpecificV(P, T)
+
+density(mat::PureAir, T, P) = (P * mat.M̄) / (RGAS * T)
+
+specific_heat(mat::PureWater, T, P) = 4182.0
+
+enthalpy(mat::PureMineral, T, P) = mat.h(T)
+
+# TODO use clamp or a fallback to use SteamTables value!
+enthalpy(mat::PureWater, T, P) = 4182.0T
+
+enthalpy(mat::PureAir, T, P) = mat.h(T)
 
 ##############################################################################
 # EOF
