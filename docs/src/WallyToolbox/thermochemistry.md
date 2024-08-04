@@ -101,7 +101,7 @@ WallyToolbox.oxidizer_mass_flow_rate
 
 ## Heavy fuel-oils
 
-Combustion of heavy-fuel oils (HFO) is discussed in detail by ([[@Lawn1987]]). Some relations that might be useful for the industrial combustion specialist are under implementation here to be integrated in larger models *e.g.* using [`DryFlowsheet`](../Modules/DryFlowsheet.md), or simple calculations.
+Combustion of heavy-fuel oils (HFO) is discussed in detail by ([[@Lawn1987]]). Some relations that might be useful for the industrial combustion specialist are under implementation here to be integrated in larger models *e.g.* using [`flowsheets`](flowsheet.md), or simple calculations.
 
 ```@docs
 WallyToolbox.hfo_empirical_formula

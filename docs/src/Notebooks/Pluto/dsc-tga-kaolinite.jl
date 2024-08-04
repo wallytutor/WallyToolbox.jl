@@ -73,16 +73,16 @@ Polynomials for specific heat are those of [Schieltz and Soliman (1964)](https:/
 
 # ╔═╡ 5e84be72-1120-4cac-9944-fcd6765ea85c
 begin
-	selected_compounds = [
-		"WATER_L",
-		"KAOLINITE",
-		"METAKAOLIN",
-		"SPINEL",
-		"SIO2_GLASS"
-	]
-	tdb = ThermoDatabase(; selected_compounds)
-	
-	compounds(tdb)
+    selected_compounds = [
+        "WATER_L",
+        "KAOLINITE",
+        "METAKAOLIN",
+        "SPINEL",
+        "SIO2_GLASS"
+    ]
+    tdb = ThermoDatabase(; selected_compounds)
+    
+    compounds(tdb)
 end
 
 # ╔═╡ 241f2150-c134-4951-b87d-d820727b8269

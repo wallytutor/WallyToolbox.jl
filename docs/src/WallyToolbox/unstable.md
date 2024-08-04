@@ -8,25 +8,25 @@ DocTestSetup = quote
 end
 ```
 
-## DryUtilities
+## WallyToolbox
 
 !!! danger
     
     This module is deprecated and is progressivelly migrating to the root.
 
 ```@meta
-CurrentModule = DryUtilities
+CurrentModule = WallyToolbox
 DocTestSetup  = quote
-    using DryUtilities
-    using DryUtilities: heaviside, interval, makestepwise1d
-    using DryUtilities: closestpowerofx, axesunitscaler
-    using DryUtilities: maxrelativechange, maxabsolutechange
+    using WallyToolbox
+    using WallyToolbox: heaviside, interval, makestepwise1d
+    using WallyToolbox: closestpowerofx, axesunitscaler
+    using WallyToolbox: maxrelativechange, maxabsolutechange
 end
 ```
 
 ### Handling of discontinuous functions
 
-Discontinuous functions are all over in real world applications. Whether they handle discrete signals sent to controllers or represent a material property change in the solution domain of a heat transfer simulation, they are often represented by a single or a composition of [Heaviside step](https://en.wikipedia.org/wiki/Heaviside_step_function) functions. Again, because its implementation is pretty simple and optimization routines require a differentiable form of this function, `DryUtilities` implements [`heaviside`](@ref) and [`interval`](@ref) as proposed in this [StackOverflow answer](https://stackoverflow.com/a/27677532/11987084).
+Discontinuous functions are all over in real world applications. Whether they handle discrete signals sent to controllers or represent a material property change in the solution domain of a heat transfer simulation, they are often represented by a single or a composition of [Heaviside step](https://en.wikipedia.org/wiki/Heaviside_step_function) functions. Again, because its implementation is pretty simple and optimization routines require a differentiable form of this function, `WallyToolbox` implements [`heaviside`](@ref) and [`interval`](@ref) as proposed in this [StackOverflow answer](https://stackoverflow.com/a/27677532/11987084).
 
 ```jldoctest
 julia> heaviside(-1) == 0
@@ -58,7 +58,7 @@ julia> heaviside(-2:2)
 ```    
 
 ```@docs
-DryUtilities.heaviside
+WallyToolbox.heaviside
 ```
 By implementation inheritance that is also the case for [`interval`](@ref):
 
@@ -75,7 +75,7 @@ julia> interval(0:6; a = 2, b = 5)
 ```
 
 ```@docs
-DryUtilities.interval
+WallyToolbox.interval
 ```
 
 As it is the case for representation of specific heats using NASA7/NASA9 or Shomate polynomials, functions defined by parts with an specific change point are also required in physical modeling. To this end, a stepwise function can be established with [`makestepwise1d`](@ref). If keyword `differentialble = true`, then the function makes use of the above [`interval`](@ref) and remains
@@ -108,7 +108,7 @@ julia> f(x); # Output is too long, try by yourself.
 ```
 
 ```@docs
-DryUtilities.makestepwise1d
+WallyToolbox.makestepwise1d
 ```
 
 ### Rounding numbers and automatic axes
@@ -143,7 +143,7 @@ julia> closestpowerofx(12.0; x = 10, roundf = round)
 ```
 
 ```@docs
-DryUtilities.closestpowerofx
+WallyToolbox.closestpowerofx
 ```
 
 Below we illustrate the usage of [`axesunitscaler`](@ref).
@@ -162,7 +162,7 @@ julia> axesunitscaler(1000000)
 ```
 
 ```@docs
-DryUtilities.axesunitscaler
+WallyToolbox.axesunitscaler
 ```
 
 ### Computation of changes and residuals
@@ -172,6 +172,6 @@ DryUtilities.axesunitscaler
     This section documents functions that are used in a very unstable context.
 
 ```@docs
-DryUtilities.maxabsolutechange
-DryUtilities.maxrelativechange
+WallyToolbox.maxabsolutechange
+WallyToolbox.maxrelativechange
 ```

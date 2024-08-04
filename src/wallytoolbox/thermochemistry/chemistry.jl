@@ -10,6 +10,7 @@ export PureWater
 export PureAir
 export PureMineral
 
+export LaurentPolynomialProperties
 export MaierKelleyThermo
 export ShomateThermo
 
@@ -200,7 +201,7 @@ isgas(m::ThermoCompound)    = m.aggregation == "gas"
 ##############################################################################
 
 "Thermodynamic properties represeted by Laurent polynomials."
-struct SolidPolynomialProperties <: AbstractThermodynamics
+struct LaurentPolynomialProperties <: AbstractThermodynamics
     h298::Float64
     s298::Float64
     coefs::Vector{Float64}

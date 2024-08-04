@@ -225,10 +225,10 @@ The model creation function `assemblymodel(cpx, cpy)` requires the specific heat
 
 # ╔═╡ e3252f33-a7ea-42c5-8dc5-701320c9f0eb
 begin
-	tdb = ThermoDatabase(; selected_compounds = ["KAOLINITE", "METAKAOLIN"])
+    tdb = ThermoDatabase(; selected_compounds = ["KAOLINITE", "METAKAOLIN"])
 
-	cpx(T) = specific_heat(tdb.compounds[1], T)
-	cpy(T) = specific_heat(tdb.compounds[2], T)
+    cpx(T) = specific_heat(tdb.compounds[1], T)
+    cpy(T) = specific_heat(tdb.compounds[2], T)
 end;
 
 # ╔═╡ f7438057-3f77-4155-837c-92d85a90cf88

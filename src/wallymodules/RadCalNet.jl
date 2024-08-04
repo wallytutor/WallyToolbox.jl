@@ -17,7 +17,7 @@ using YAML
 # XXX: this is the version of the trained model, not the package!
 const MODELVERSION::String = "v1.0.0"
 
-const RADCALROOT = joinpath(@__DIR__, "data/radcal/$(MODELVERSION)")
+const RADCALROOT = joinpath(@__DIR__, "../../data/radcal/$(MODELVERSION)")
 const FILESCALER = joinpath(RADCALROOT, "scaler.yaml")
 const FILEMODEL  = joinpath(RADCALROOT, "model.jld2")
 

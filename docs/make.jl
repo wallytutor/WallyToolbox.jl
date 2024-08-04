@@ -21,8 +21,6 @@ using WallyToolbox.Documents
 
 # These contain the actual implementation of "package".
 using Cantera
-using DryFlowsheet
-using DryUtilities
 using OpenFOAM
 using RadCalNet
 
@@ -42,8 +40,6 @@ latex = false
 modules = [
     # Cantera,
     WallyToolbox,
-    DryFlowsheet,
-    DryUtilities,
     OpenFOAM,
     RadCalNet,
 ]
@@ -64,6 +60,7 @@ pages = [
             "WallyToolbox/setup-guide.md",
             "WallyToolbox/thermochemistry.md",
             "WallyToolbox/transport.md",
+            "WallyToolbox/flowsheet.md",
             "WallyToolbox/constants.md",
             "WallyToolbox/utilities.md",
 
@@ -74,7 +71,6 @@ pages = [
         ],
         
         "Julia Modules" => [
-            "DryFlowsheet"  => "Modules/DryFlowsheet.md",
             "RadCalNet"     => "Modules/RadCalNet.md",
             "Cantera"       => "Modules/Cantera.md",
             "OpenFOAM"      => "Modules/OpenFOAM.md",

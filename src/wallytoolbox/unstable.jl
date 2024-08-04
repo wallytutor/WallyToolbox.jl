@@ -1,8 +1,3 @@
-# -*- coding: utf-8 -*-
-module DryUtilities
-
-using WallyToolbox: C_REF
-
 ##############################################################################
 # Rounding and axes
 ##############################################################################
@@ -101,5 +96,3 @@ end
 function maxabsolutechange(x::Vector{Float64}, Δx::Vector{Float64})::Float64
     return maximum(abs.(Δx))
 end
-
-end # (module DryUtilities)

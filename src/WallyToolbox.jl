@@ -3,9 +3,8 @@ module WallyToolbox
 
 using Reexport
 
-# const WALLYTOOLBOXPATH = @__DIR__
-const WALLYTOOLBOXPATH = joinpath(@__DIR__, "modules")
-const WALLYTOOLBOXDATA = joinpath(@__DIR__, "data")
+const WALLYTOOLBOXPATH = joinpath(@__DIR__, "wallymodules")
+const WALLYTOOLBOXDATA = joinpath(@__DIR__, "../data")
 
 function __init__()
     # Make other modules available, that's all!
@@ -22,17 +21,19 @@ function __init__()
 end
 
 # General internals.
-include("internals/abstract.jl")
-include("internals/Documents.jl")
-include("internals/Notebook.jl")
+include("wallytoolbox/internals/abstract.jl")
+include("wallytoolbox/internals/Documents.jl")
+include("wallytoolbox/internals/Notebook.jl")
 
 # Primary direct includes.
-include("constants.jl")
-include("utilities.jl")
+include("wallytoolbox/constants.jl")
+include("wallytoolbox/utilities.jl")
+include("wallytoolbox/unstable.jl")
 
 # Dependent direct includes.
-include("thermochemistry.jl")
-include("transport.jl")
+include("wallytoolbox/thermochemistry.jl")
+include("wallytoolbox/transport.jl")
+include("wallytoolbox/flowsheet.jl")
 
 @reexport using WallyToolbox.Notebook
 
