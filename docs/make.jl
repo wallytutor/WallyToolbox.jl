@@ -1,4 +1,7 @@
-# -*- coding: utf-8 -*-
+##############################################################################
+# PACKAGE DOCUMENTATION
+##############################################################################
+
 using Revise
 using Documenter
 using Documenter.DocMeta: setdocmeta!
@@ -6,51 +9,82 @@ using DocumenterCitations
 
 ##############################################################################
 # THE DOCUMENTED *PACKAGES*
-##############################################################################
-
+#
 # XXX: I could not find a way that `dev` installs the dependencies of the
 # parent project, as it *LOGICALLY* should be the case. To be able to document
 # the following I was forced to add the same dependencies in the project file
 # docs/Project.toml, so when adding new dependencies to the parent, do not
 # forget to add them here too!
+##############################################################################
 
-# This comes first because it sources the modules.
 using WallyToolbox
-
-# This is not documented, but the helpers here.
 using WallyToolbox.Documents
-
-# These contain the actual implementation of "package".
 using Cantera
 using OpenFOAM
 using RadCalNet
 
 ##############################################################################
+# FUNCTIONS
+##############################################################################
+
+"Custom formatting of references with links (project-specific)."
+function formatcitations(text, rhpath)
+    oldgroup = r"\(\[\[@(?<named>((.|\n)*?))\]\]\)"
+    link = "[\\g<named>]($(rhpath)/References/@\\g<named>.md)"
+    scites = SubstitutionString("$(link) [\\g<named>](@cite)")
+    return replace(text, oldgroup => scites)
+end
+
+"Formatting workflow for all markdown files in documentation."
+function formatter(text, rhpath)
+    text = formatnotecells(text)
+    text = formatequations(text)
+    text = formatembimages(text)
+    text = formatembvideos(text)
+    text = formatcitations(text, rhpath)
+    return text
+end
+
+"Managed workflow for Pluto notebooks conversion."
+function workflow_pluto(notebooks, root; force = false)
+    try
+        convert_pluto(map(n->splitext(n)[1], notebooks); root, force)
+    catch err
+        @error("Failed converting notebooks:\n$(err)")
+    end
+end
+
+"Managed workflow for Documenter.jl documentation generation."
+function workflow_main(modules, pages, source, authors, format, sitename, plugins)
+    try
+        makedocs(; source, sitename, authors, plugins, modules, format, 
+                   clean = true, doctest = true, draft = false, pages)
+    
+        if haskey(ENV, "DEPLOY_DOCS") && hasproperty(format, :repolink)
+            deploydocs(; repo = deployrepo(format))
+        end
+    catch err
+        @error("Failed while generating the docs:\n$(err)")
+    end
+end
+
+##############################################################################
 # THE CONFIGURATION
 ##############################################################################
 
-name = "Walter Dal'Maz Silva"
-mail = "walter.dalmazsilva.manager@gmail.com"
-user = "wallytutor"
-sitename = "WallyToolbox.jl"
-authors = "$(name) <$(mail)> and contributors"
-clean = true
-draft = false
-latex = false
+modules = [WallyToolbox, OpenFOAM, RadCalNet]
 
-modules = [
-    # Cantera,
-    WallyToolbox,
-    OpenFOAM,
-    RadCalNet,
-]
+name     = "Walter Dal'Maz Silva"
+mail     = "walter.dalmazsilva.manager@gmail.com"
+
+user     = "wallytutor"
+sitename =  "WallyToolbox.jl"
 
 bibtex = joinpath(@__DIR__, "..", "data", "bibtex", "references.bib")
-
-format = get_format(; latex, user, sitename)
+authors = "$(name) <$(mail)> and contributors"
 
 ##############################################################################
-# THE PAGES
+# THE STRUCTURE
 ##############################################################################
 
 pages = [
@@ -66,16 +100,14 @@ pages = [
             "WallyToolbox/utilities.md",
             "WallyToolbox/roadmap.md",
 
+            "Modules/RadCalNet.md",
+            "Modules/Cantera.md",
+            "Modules/OpenFOAM.md",
+
             "Internals" => [
                 # "WallyToolbox/Internals/abstract.md",
                 "WallyToolbox/Internals/Documents.md",
             ],
-        ],
-        
-        "Julia Modules" => [
-            "RadCalNet"     => "Modules/RadCalNet.md",
-            "Cantera"       => "Modules/Cantera.md",
-            "OpenFOAM"      => "Modules/OpenFOAM.md",
         ],
 
         "Software" =>[
@@ -113,89 +145,35 @@ pages = [
         ],
 
         "References" => "References/index.md",
-        # "Table of Contents" => "toc.md",
-    ],
-
+    ]
 ]
 
-# XXX: only files that properly execute in the current environment are
-# added here: some error handling is still required in converter.
-nblist = map(n->splitext(n)[1], [
+notes = [
     "dsc-tga-kaolinite.jl",
     "dsc-tga-model-demo.jl",
     "kramers-model-demo.jl",
     "process-balances.jl",
-])
+]
 
 ##############################################################################
-# PREPROCESS ALL
+# THE WORKFLOW
 ##############################################################################
-
-"Custom formatting of references with links (project-specific)."
-function formatcitations(text, rhpath)
-    oldgroup = r"\(\[\[@(?<named>((.|\n)*?))\]\]\)"
-    link = "[\\g<named>]($(rhpath)/References/@\\g<named>.md)"
-    scites = SubstitutionString("$(link) [\\g<named>](@cite)")
-    return replace(text, oldgroup => scites)
-end
-
-function formatter(text, rhpath)
-    text = formatnotecells(text)
-    text = formatequations(text)
-    text = formatembvideos(text)
-    text = formatcitations(text, rhpath)
-    return text
-end
-
-# include("formatter.jl")
 
 spath = joinpath(@__DIR__, "src")
 wpath = joinpath(@__DIR__, "tmp")
 julianizemarkdown(; formatter, spath, wpath)
 
-try
-    ppath = joinpath(wpath, "Notebooks", "Pluto")
-    convert_pluto(nblist; root = ppath, force = false)
-catch err
-    @error("Failed converting notebooks:\n$(err)")
-end
-
-##############################################################################
-# THE DOCUMENTATION
-##############################################################################
-
-function setdocmetawrapper!(m; warn = false, recursive = true)
-    setdocmeta!(m, :DocTestSetup, :(using $(Symbol(m))); warn, recursive)
-end
-
 setdocmetawrapper!(WallyToolbox)
 setdocmetawrapper!(OpenFOAM)
 setdocmetawrapper!(RadCalNet)
 
-plugins  = [
-    CitationBibliography(bibtex)
-]
+format = get_format(user, sitename; latex = false)
+plugins = [CitationBibliography(bibtex)]
 
-try
-    makedocs(; source = wpath,
-               sitename, 
-               authors, 
-               format, 
-               modules, 
-               plugins, 
-               pages, 
-               clean, 
-               draft
-            )
+workflow_pluto(notes, joinpath(wpath, "Notebooks", "Pluto"))
+workflow_main(modules, pages, wpath, authors, format, sitename, plugins)
 
-    if "DEPLOY_DOCS" in keys(ENV) && hasproperty(format, :repolink)
-        deploydocs(; repo = deployrepo(format))
-    end
-catch err
-    @error("Failed while generating the docs:\n$(err)")
-end
-
-rm(wpath; force=true, recursive=true)
+rm(wpath; force = true, recursive = true)
 
 ##############################################################################
 # THE END

@@ -8,8 +8,14 @@ using JuliaFormatter
 using Pluto: ServerSession, SessionActions
 using Pluto: generate_html
 
-export get_format, deployrepo, julianizemarkdown
-export formatnotecells, formatequations, formatembvideos
+export deployrepo
+export setdocmetawrapper!
+export get_format
+export julianizemarkdown
+export formatnotecells
+export formatequations
+export formatembvideos
+export formatembimages
 export convert_pluto
 
 DEBUGMATCHES  = false
@@ -17,19 +23,21 @@ DEBUGMATCHES  = false
 # See https://stackoverflow.com/questions/20478823/
 macro p_str(s) s end
 
-ANYNAME = p"(?<named>((.|\n)*?))"
+const ANYNAME = p"(?<named>((.|\n)*?))"
 
-OJULIA  = p"(```julia;(\s+)@example(\s+)(.*)\n)"
-CJULIA  = p"(\n```)"
-SJULIA  = s"```@example notebook\n\g<named>\n```"
+const OJULIA  = p"(```julia;(\s+)@example(\s+)(.*)\n)"
+const CJULIA  = p"(\n```)"
+const SJULIA  = s"```@example notebook\n\g<named>\n```"
 
-ODOLLAR = p"(\$\$((\s+|\n)?))"
-CDOLLAR = p"(((\s+|\n)?)\$\$)"
-SDOLLAR = s"```math\n\g<named>\n```"
+const ODOLLAR = p"(\$\$((\s+|\n)?))"
+const CDOLLAR = p"(((\s+|\n)?)\$\$)"
+const SDOLLAR = s"```math\n\g<named>\n```"
 
-OVIDEO  = p"!\[(.*)?\]\("
-CVIDEO  = p"\)"
-SVIDEO  = s"""
+const OIMAGE  = p"!\[@image\]\("
+const OVIDEO  = p"!\[@video\]\("
+
+const CMEDIA  = p"\)"
+const SMEDIA  = s"""
     ```@raw html
     <center>
       <iframe width="500" style="height:315px" frameborder="0"
@@ -39,12 +47,17 @@ SVIDEO  = s"""
     ```
     """
 
-# TODO make this a macro...
-concatregex(args...) = Regex(join([args...]))
+"Generate a `repo` argument in the format expected by `deploydocs`."
+deployrepo(format) = last(split(format.repolink, "://")) * ".git"
+
+"Simple wrapper to set documentation tests metadata."
+function setdocmetawrapper!(m; warn = false, recursive = true)
+    setdocmeta!(m, :DocTestSetup, :(using $(Symbol(m))); warn, recursive)
+end
 
 "Get format specified to generate docs."
-function get_format(; latex = false, user, sitename)
-    if (latex)
+function get_format(user, sitename; kw...)
+    if get(kw, :latex, false)
         # TODO add automatic tectonic download here!
         return Documenter.LaTeX(;
             platform = "tectonic",
@@ -58,16 +71,44 @@ function get_format(; latex = false, user, sitename)
         repolink   = "https://github.com/$(user)/$(sitename)",
         edit_link  = "main",
         assets     = String[],
-        size_threshold_warn = 1_000_000,
-        size_threshold = 2_000_000,
+        size_threshold_warn    = 1_000_000,
+        size_threshold         = 2_000_000,
         example_size_threshold = 2_000_000
     )
 
     return format
 end
 
-"Generate a `repo` argument in the format expected by `deploydocs`."
-deployrepo(format) = last(split(format.repolink, "://")) * ".git"
+"Convert Pluto notebook into a static HTML file."
+function convert_pluto(nblist::Vector{String};
+        root=pwd(), distributed=true, force=false, verbose=2)
+
+    s = ServerSession()
+    s.options.server.launch_browser = false
+    s.options.server.dismiss_update_notification = true
+    s.options.server.disable_writing_notebook_files = true
+    s.options.server.show_file_system = false
+    s.options.evaluation.workspace_use_distributed = distributed
+
+    for nbname in nblist
+        nbpath = joinpath(root, "$(nbname).jl")
+        pgpath = joinpath(root, "$(nbname).html")
+        
+        if !format_file(nbpath)
+            @warn("file not formatted: $(nbpath)")
+        end
+        
+        if isfile(pgpath) && !force
+            verbose > 1 && @info("file exists: $(pgpath)")
+            continue
+        end
+        
+        verbose > 0 && @info "working on $(nbname)"
+        nb = SessionActions.open(s, nbpath; run_async=false)
+        write(pgpath, generate_html(nb))
+        SessionActions.shutdown(s, nb)
+    end
+end
 
 "Convert equations from dollar to Julia ticks notation."
 function julianizemarkdown(;
@@ -125,63 +166,29 @@ function julianizemarkdown(;
     end
 end
 
-# Helper to debug regex matches by simply printing to the screen.
-function matchdebugger(gr, text)
-    if (m = match(gr, text); m !== nothing)
-        println(m[:named])
+function makeformat(text, tagopen, tagclose, tagnew;
+                    tagmid = ANYNAME)
+    oldgroup = Regex(join([tagopen, tagmid, tagclose]))
+
+    DEBUGMATCHES && begin
+        if (m = match(oldgroup, text); m !== nothing)
+            println(m[:named])
+        end
     end
+
+    return replace(text, oldgroup => tagnew)
 end
 
 "Convert cells of notebooks to Documenter format."
-function formatnotecells(text)
-    oldgroup = concatregex(OJULIA, ANYNAME, CJULIA)
-    DEBUGMATCHES && matchdebugger(oldgroup, text)
-    return replace(text, oldgroup => SJULIA)
-end
+formatnotecells(text) = makeformat(text, OJULIA, CJULIA, SJULIA)
 
 "Convert (multiline) equations to Julia markdown."
-function formatequations(text)
-    oldgroup = concatregex(ODOLLAR, ANYNAME, CDOLLAR)
-    DEBUGMATCHES && matchdebugger(oldgroup, text)
-    return replace(text, oldgroup => SDOLLAR)
-end
+formatequations(text) = makeformat(text, ODOLLAR, CDOLLAR, SDOLLAR)
+
+"Convert simple embeded markdown image to raw HTML."
+formatembimages(text) = makeformat(text, OIMAGE, CMEDIA, SMEDIA)
 
 "Convert simple embeded markdown video to raw HTML."
-function formatembvideos(text)
-    oldgroup = concatregex(OVIDEO, ANYNAME, CVIDEO)
-    DEBUGMATCHES && matchdebugger(oldgroup, text)
-    return replace(text, oldgroup => SVIDEO)
-end
-
-"Convert Pluto notebook into a static HTML file."
-function convert_pluto(nblist::Vector{String};
-        root=pwd(), distributed=true, force=false, verbose=2)
-
-    s = ServerSession()
-    s.options.server.launch_browser = false
-    s.options.server.dismiss_update_notification = true
-    s.options.server.disable_writing_notebook_files = true
-    s.options.server.show_file_system = false
-    s.options.evaluation.workspace_use_distributed = distributed
-
-    for nbname in nblist
-        nbpath = joinpath(root, "$(nbname).jl")
-        pgpath = joinpath(root, "$(nbname).html")
-        
-        if !format_file(nbpath)
-            @warn("file not formatted: $(nbpath)")
-        end
-        
-        if isfile(pgpath) && !force
-            verbose > 1 && @info("file exists: $(pgpath)")
-            continue
-        end
-        
-        verbose > 0 && @info "working on $(nbname)"
-        nb = SessionActions.open(s, nbpath; run_async=false)
-        write(pgpath, generate_html(nb))
-        SessionActions.shutdown(s, nb)
-    end
-end
+formatembvideos(text) = makeformat(text, OVIDEO, CMEDIA, SMEDIA)
 
 end # (module Documents)

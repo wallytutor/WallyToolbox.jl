@@ -35,7 +35,7 @@ $$
 
 Using the previous notation for units it is important to notice that each term of the above equation is given in units of *quantity* $\#$ per volume per time.
 
-![](../figures/10/images_TUT_010101_divergence.svg)
+![@image](./figures/10/images_TUT_010101_divergence.svg)
 
 #divergence-theorem
 
@@ -91,7 +91,7 @@ $$
 
 This expression has a very straightforward interpretation. If there is no creation rate $B_{s}$ at the interface, flux is continuous across interface; otherwise some arbitrary form of discontinuity should arise, whose form would depend on the volume governing equations at each side of $S$. Below we have an illustration of a non-zero value of $B_{s}$ at the interface, with a net increase in the flow in region 2.
 
-![](../figures/10/images_TY_010105.svg)
+![@image](./figures/10/images_TY_010105.svg)
 
 > [!todo] The following is something I need to abstract better, although I fully understand the mathematical origins. The argument that it is formulated in the interface reference frame but viewed from the observer frame bothers me.
 	
@@ -348,7 +348,7 @@ The playlist with all lectures is found [here](https://www.youtube.com/playlist?
 
 #reaction-diffusion
 
-![](https://www.youtube.com/embed/0UTKHB_OzAQ)
+![@video](https://www.youtube.com/embed/0UTKHB_OzAQ)
 
 The scale estimates of penetration depth, boundary flux, and total concentration match the analytical values for steady-state first order linear reaction-diffusion equation submitted to a Dirichlet condition on one side of a semi-infinite medium:
 
@@ -366,7 +366,7 @@ $$
 
 #dimless-damkohler
 
-![](https://www.youtube.com/embed/Du4y2lueQWM)
+![@video](https://www.youtube.com/embed/Du4y2lueQWM)
 
 Damköhler number arises from reaction diffusion-equation discussed in lecture 019; we can make the equation dimensionless by making $\tilde{x}=xL^{-1}$, $\Theta=C/C_0$, and dividing everything by $k$, then we can define:
 
@@ -386,7 +386,7 @@ Limiting cases are:
 
 ### 021
 
-![](https://www.youtube.com/embed/rrZgH7y15XU)
+![@video](https://www.youtube.com/embed/rrZgH7y15XU)
 
 In fact it is in this lecture that the stripping of dimensions of the equation as presented above in 020 is formalized; *do not even try to solve a problem before making it dimensionless*. The general procedure for making differential operators dimensionless is summarized as follows:
 
@@ -403,7 +403,7 @@ $$
 
 #bessel-function
 
-![](https://www.youtube.com/embed/Bi9jWgw_aQ8)
+![@video](https://www.youtube.com/embed/Bi9jWgw_aQ8)
 
 *Always start any modeling with the simplest geometry that captures the basic features of the system being modeled; e.g. when expanding a solution of reaction-diffusion into exponential terms, it is worth noticing that they can be replaced by hyperbolic functions, and since $\sinh$ breaks the symmetry, that term may be eliminated already during constant identification from boundary conditions*.
 
@@ -411,7 +411,7 @@ $$
 
 #dimless-peclet #plug-flow #convection-diffusion
 
-![](https://www.youtube.com/embed/LBSzqxjQl2k)
+![@video](https://www.youtube.com/embed/LBSzqxjQl2k)
 
 Similarly to lecture 019, here we develop convection-diffusion equation instead; in this case the flux of a transported concentration $C$ is given by the following expression: 
 
@@ -449,17 +449,17 @@ In the limiting case of $\mathrm{Pe}\gg{1}$ diffusion is much slower than convec
 
 ### 024
 
-![](https://www.youtube.com/embed/328868nsFH4)
+![@video](https://www.youtube.com/embed/328868nsFH4)
 
 ### 025
 
-![](https://www.youtube.com/embed/aEe10NkgI98)
+![@video](https://www.youtube.com/embed/aEe10NkgI98)
 
 ### 026
 
 #dimless-peclet #plug-flow #convection-diffusion
  
-![](https://www.youtube.com/embed/hdkt3S78f8A)
+![@video](https://www.youtube.com/embed/hdkt3S78f8A)
 
 ### 027
 
