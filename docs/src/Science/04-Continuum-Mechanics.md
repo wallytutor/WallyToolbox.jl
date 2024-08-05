@@ -35,7 +35,7 @@ $$
 
 Using the previous notation for units it is important to notice that each term of the above equation is given in units of *quantity* $\#$ per volume per time.
 
-![](figures/10/images_TUT_010101_divergence.svg)
+![](../Science/figures/10/images_TUT_010101_divergence.svg)
 
 #divergence-theorem
 
@@ -91,7 +91,7 @@ $$
 
 This expression has a very straightforward interpretation. If there is no creation rate $B_{s}$ at the interface, flux is continuous across interface; otherwise some arbitrary form of discontinuity should arise, whose form would depend on the volume governing equations at each side of $S$. Below we have an illustration of a non-zero value of $B_{s}$ at the interface, with a net increase in the flow in region 2.
 
-![](figures/10/images_TY_010105.svg)
+![](../Science/figures/10/images_TY_010105.svg)
 
 > [!todo] The following is something I need to abstract better, although I fully understand the mathematical origins. The argument that it is formulated in the interface reference frame but viewed from the observer frame bothers me.
 	
