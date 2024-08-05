@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+using Revise
 using Documenter
 using Documenter.DocMeta: setdocmeta!
 using DocumenterCitations

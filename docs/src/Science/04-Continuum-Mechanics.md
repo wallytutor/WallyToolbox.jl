@@ -386,6 +386,8 @@ Limiting cases are:
 
 ### 021
 
+![](https://www.youtube.com/embed/rrZgH7y15XU)
+
 In fact it is in this lecture that the stripping of dimensions of the equation as presented above in 020 is formalized; *do not even try to solve a problem before making it dimensionless*. The general procedure for making differential operators dimensionless is summarized as follows:
 
 $$
@@ -401,11 +403,15 @@ $$
 
 #bessel-function
 
+![](https://www.youtube.com/embed/Bi9jWgw_aQ8)
+
 *Always start any modeling with the simplest geometry that captures the basic features of the system being modeled; e.g. when expanding a solution of reaction-diffusion into exponential terms, it is worth noticing that they can be replaced by hyperbolic functions, and since $\sinh$ breaks the symmetry, that term may be eliminated already during constant identification from boundary conditions*.
 
 ### 023
 
 #dimless-peclet #plug-flow #convection-diffusion
+
+![](https://www.youtube.com/embed/LBSzqxjQl2k)
 
 Similarly to lecture 019, here we develop convection-diffusion equation instead; in this case the flux of a transported concentration $C$ is given by the following expression: 
 
@@ -443,4 +449,25 @@ In the limiting case of $\mathrm{Pe}\gg{1}$ diffusion is much slower than convec
 
 ### 024
 
+![](https://www.youtube.com/embed/328868nsFH4)
+
 ### 025
+
+![](https://www.youtube.com/embed/aEe10NkgI98)
+
+### 026
+
+#dimless-peclet #plug-flow 
+
+![](https://www.youtube.com/embed/hdkt3S78f8A)
+
+### 027
+
+### 028
+
+### 029
+
+### 030
+
+### 031
+
