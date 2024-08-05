@@ -346,7 +346,9 @@ The playlist with all lectures is found [here](https://www.youtube.com/playlist?
 
 ### 019
 
-![@video](https://www.youtube.com/embed/0UTKHB_OzAQ)
+#reaction-diffusion
+
+![](https://www.youtube.com/embed/0UTKHB_OzAQ)
 
 The scale estimates of penetration depth, boundary flux, and total concentration match the analytical values for steady-state first order linear reaction-diffusion equation submitted to a Dirichlet condition on one side of a semi-infinite medium:
 
@@ -363,6 +365,8 @@ $$
 ### 020
 
 #dimless-damkohler
+
+![](https://www.youtube.com/embed/Du4y2lueQWM)
 
 Damköhler number arises from reaction diffusion-equation discussed in lecture 019; we can make the equation dimensionless by making $\tilde{x}=xL^{-1}$, $\Theta=C/C_0$, and dividing everything by $k$, then we can define:
 
@@ -401,7 +405,7 @@ $$
 
 ### 023
 
-#dimless-peclet #plug-flow 
+#dimless-peclet #plug-flow #convection-diffusion
 
 Similarly to lecture 019, here we develop convection-diffusion equation instead; in this case the flux of a transported concentration $C$ is given by the following expression: 
 
