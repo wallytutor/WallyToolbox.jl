@@ -457,8 +457,8 @@ In the limiting case of $\mathrm{Pe}\gg{1}$ diffusion is much slower than convec
 
 ### 026
 
-#dimless-peclet #plug-flow 
-
+#dimless-peclet #plug-flow #convection-diffusion
+ 
 ![](https://www.youtube.com/embed/hdkt3S78f8A)
 
 ### 027
