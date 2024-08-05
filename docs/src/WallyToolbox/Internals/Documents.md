@@ -21,6 +21,7 @@ Because most of my work is done with [Obsidian](https://obsidian.md/) and the to
 WallyToolbox.Documents.julianizemarkdown
 WallyToolbox.Documents.formatequations
 WallyToolbox.Documents.formatnotecells
+WallyToolbox.Documents.formatembvideos
 ```
 
 Finally, we wrap up a standard workflow for converting Pluto notebooks.
