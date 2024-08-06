@@ -8,6 +8,16 @@ DocTestSetup = quote
 end
 ```
 
+## Configuration
+
+The following constants are not exported by the toolbox; their use is mostly intended for developers and some particular use cases. If extending module data, please consider using the reference path.
+
+```@docs
+WallyToolbox.WALLYTOOLBOXPATH
+WallyToolbox.WALLYTOOLBOXDATA
+WallyToolbox.MAJORDOMEPATH
+```
+
 ## Physical constants
 
 ```@docs

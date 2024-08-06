@@ -1,10 +1,17 @@
 # -*- coding: utf-8 -*-
 module WallyToolbox
 
+using PythonCall
 using Reexport
 
+"Path to supporting modules annex to WallyToolbox."
 const WALLYTOOLBOXPATH = joinpath(@__DIR__, "wallymodules")
-const WALLYTOOLBOXDATA = joinpath(@__DIR__, "../data")
+
+"Path to data files used by WallyToolbox."
+const WALLYTOOLBOXDATA = joinpath(@__DIR__, "..", "data")
+
+"Path to Python modules from legacy Majordome package."
+const MAJORDOMEPATH = joinpath(@__DIR__, "py")
 
 function __init__()
     # Make other modules available, that's all!
@@ -18,6 +25,12 @@ function __init__()
     end
 
     push!(LOAD_PATH, WALLYTOOLBOXPATH)
+
+    # Python modules.
+    sys = pyimport("sys")
+    sys.path.insert(0, MAJORDOMEPATH)
+
+    return nothing
 end
 
 # General internals.
