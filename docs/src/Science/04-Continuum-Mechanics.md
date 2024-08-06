@@ -342,9 +342,9 @@ In this expression the *big-D* notation represents a material or convective deri
 ---
 ## Notes by video lecture
 
-The playlist with all lectures is found [here](https://www.youtube.com/playlist?list=PLkdIY_5Zxa7WYkMvY48WQIxSZE-bI7R4w).
+This section organizes notes by lecture, serving as a basis for writing the body of the main text or as complementary material for those willing to follow Bazant's course only. The playlist with all lectures is found in this [link](https://www.youtube.com/playlist?list=PLkdIY_5Zxa7WYkMvY48WQIxSZE-bI7R4w).
 
-### 019
+### 019 Steady homogeneous reaction-diffusion
 
 #reaction-diffusion
 
@@ -362,7 +362,7 @@ C_{\infty} &\sim& C_{0}\sqrt{\dfrac{D}{k}}
 \end{cases}
 $$
 
-### 020
+### 020 The Damköhler number
 
 #dimless-damkohler
 
@@ -384,7 +384,7 @@ Limiting cases are:
 
 - $\mathrm{Da}\gg{1}$: fast reaction-limited transport; a thin layer of reaction products limits the affected depth and diffusion layer is thin beyond that. The relative amount of material that diffuses with respect to the other limiting case is $C/(C_0L^{d-1})\sim{}1/\sqrt{\mathrm{Da}}$.
 
-### 021
+### 021 Dimensionless equations
 
 ![@video](https://www.youtube.com/embed/rrZgH7y15XU)
 
@@ -399,7 +399,7 @@ $$
 \end{cases}
 $$
 
-### 022
+### 022 Symmetric domains
 
 #bessel-function
 
@@ -407,7 +407,7 @@ $$
 
 *Always start any modeling with the simplest geometry that captures the basic features of the system being modeled; e.g. when expanding a solution of reaction-diffusion into exponential terms, it is worth noticing that they can be replaced by hyperbolic functions, and since $\sinh$ breaks the symmetry, that term may be eliminated already during constant identification from boundary conditions*.
 
-### 023
+### 023 Steady convection-diffusion
 
 #dimless-peclet #plug-flow #convection-diffusion
 
@@ -447,9 +447,41 @@ $$
 
 In the limiting case of $\mathrm{Pe}\gg{1}$ diffusion is much slower than convection and the flow can be approximated as purely advective; this characterizes the plug-flow regime.
 
-### 024
+### 024 Equilibrium drift-diffusion
+
+#diffusion #mobility
 
 ![@video](https://www.youtube.com/embed/328868nsFH4)
+
+Particle drift in response to a conservative force field $f$ in a potential $\epsilon$:
+
+$$
+f = -\dfrac{d\epsilon}{dx}
+\quad\text{then}\quad{}
+\bar{u} = Mf
+\quad\text{and}\quad{}
+F\_{d}=-cM\dfrac{d\epsilon}{dx}
+$$
+
+This result can be applied to a general conservation law at steady-state:
+
+$$
+F=-cM\dfrac{d\epsilon}{dx}-D\dfrac{dc}{dx}0
+$$
+
+This equation can be solved as
+
+$$c(x)=c_{0}\exp\left(-\dfrac{M}{D}\epsilon\right)$$
+
+which is analogous to Boltzmann equilibrium, as stated by Einstein, *i.e.*. $c(x)=c_{0}\exp\left(-\dfrac{\epsilon}{k_{B}T}\right)$; from this arises the equality of the exponential coefficients, known as Einstein relation
+
+$$
+D=Mk_{B}T=\dfrac{k_{B}T}{C_{D}}
+$$
+
+which is a manifestation of fluctuation-dissipation theorem. This can be extended to the drag of a spherical particle in the theory of Brownian motion, leading to Einstein-Stokes relation, not further discussed here.
+
+> [!todo]  Find and read the reference with the argument of equality by Einstein.
 
 ### 025
 
