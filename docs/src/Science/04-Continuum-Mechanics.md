@@ -483,11 +483,13 @@ which is a manifestation of fluctuation-dissipation theorem. This can be extende
 
 > [!todo]  Find and read the reference with the argument of equality by Einstein.
 
-### 025
+### 025 Thickness of Earths atmosphere
 
 ![@video](https://www.youtube.com/embed/aEe10NkgI98)
 
-### 026
+*This video presents a simple example; there is nothing inherently theoretical I would like to extract from it; recommend it in notes because analysis is interesting.*
+
+### 026 Péclet number
 
 #dimless-peclet #plug-flow #convection-diffusion
  
