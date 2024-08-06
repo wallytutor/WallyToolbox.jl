@@ -20,7 +20,7 @@
     "extensions.ignoreRecommendations": true,
     "python.createEnvironment.trigger": "off",
 
-    "workbench.colorTheme": "Monokai Dimmed",
+    "workbench.colorTheme": "Dracula Theme",
 
     //-------------------------------------------------------------------------
     // LATEX-WORKSHOP
