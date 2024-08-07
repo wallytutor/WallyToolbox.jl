@@ -13,6 +13,9 @@ tectonic.exe
 # Generated docs directory
 docs/tmp/
 
+# Notebooks under docs
+docs/**/*.ipynb
+
 # Anysandbox
 sandbox*
 
