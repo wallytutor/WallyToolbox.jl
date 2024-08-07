@@ -20,6 +20,9 @@ This note presents a finite volume method implementation of mass transfer in sol
 ```julia
 using WallyToolbox
 
+import Printf: @sprintf
+
+import DelaunayTriangulation: Triangulation
 import DelaunayTriangulation: triangulate_rectangle
 import DelaunayTriangulation: each_point
 
@@ -36,6 +39,8 @@ import CairoMakie: with_theme
 import CairoMakie: triplot, tricontourf
 import CairoMakie: xlims!, ylims!, tightlimits!
 ```
+
+## Visualization utilities
 
 ```julia
 function plot_trimesh(tri; kw...)
@@ -71,47 +76,46 @@ function plot_state(tri, t, u; kw...)
         f
     end
 end
+nothing; # hide
+```
 
-function mesh_rectangle(; Lx, Ly, nx, ny)
-    return triangulate_rectangle(0, Lx, 0, Ly, nx, ny;
-                                 single_boundary = false)
-end
+## Diffusion problem
 
-function get_rectangle_bcs(bcd)
-    bc_order = [:bottom, :right, :top, :left]
-    bc_fncs = Tuple(map(b->bcd[b][1], bc_order))
-    bc_type = Tuple(map(b->bcd[b][2], bc_order))
-    return bc_fncs, bc_type
-end
-
+```julia
 struct DiffusionProblem
+    grid::Triangulation
     mesh::FVMGeometry
     prob::FVMProblem
     bcns::BoundaryConditions
 
     function DiffusionProblem(
-            tri,
+            Lx, Ly, nx, ny,
             bcd,
             diffusion_function, 
             diffusion_parameters,
             final_time,
             init
         )
+        tri = triangulate_rectangle(0, Lx, 0, Ly, nx, ny;
+                                    single_boundary = false)
+        
         initial_condition = map(p->init(p...), each_point(tri))
         
         mesh = FVMGeometry(tri)
     
-        bc_fncs, bc_type = get_rectangle_bcs(bcd)
-        bcns  = BoundaryConditions(mesh, bc_fncs, bc_type)
+        bc_order = [:bottom, :right, :top, :left]
+        bc_fncs = Tuple(map(b->bcd[b][1], bc_order))
+        bc_type = Tuple(map(b->bcd[b][2], bc_order))
+        bcs  = BoundaryConditions(mesh, bc_fncs, bc_type)
         
-        prob = FVMProblem(mesh, bcns;
+        prob = FVMProblem(mesh, bcs;
             diffusion_function,
             diffusion_parameters,
             initial_condition,
             final_time,
         )
 
-        return new(mesh, prob, bcns)
+        return new(tri, mesh, prob, bcs)
     end
 end
 
@@ -122,6 +126,20 @@ function solve(model::DiffusionProblem, saveat; kw...)
     sol = solve(model.prob, alg; saveat)
     return sol
 end
+nothing; # hide
+```
+
+## Steel carburizing
+
+```julia
+function masstomolefraction(w)
+    return w * (w / 0.012 + (1 - w) / 0.055)^(-1) / 0.012
+end
+
+function moletomassfraction(x)
+    return 0.012 * x / (0.012*x + (1 - x) * 0.055)
+end
+nothing; # hide
 ```
 
 ```julia
@@ -132,33 +150,21 @@ function diffusion_coefficient(xc, T)
     return D
 end
 
-function masstomolefraction(w)
-    return w * (w / 0.012 + (1 - w) / 0.055)^(-1) / 0.012
-end
-
-function moletomassfraction(x)
-    return 0.012 * x / (0.012*x + (1 - x) * 0.055)
-end
-
-function bcs_debug(hm, um)
-    bc_cons = (x, y, t, u, p) -> hm(t) * um
-    bc_symm = (x, y, t, u, p) -> 0.0
-    return Dict(:right  => (bc_cons, Dirichlet),
-                :bottom => (bc_cons, Dirichlet),
-                :top    => (bc_symm, Neumann),
-                :left   => (bc_symm, Neumann))
-end
-
 function bcs_treatment(hm, um)
     conc_bc = (x, y, t, u, p) -> hm(t) * (u - um)
     symm_bc = (x, y, t, u, p) -> 0.00
-    return Dict(:right  => (conc_bc, Neumann),
-                :bottom => (conc_bc, Neumann),
+    return Dict(:bottom => (conc_bc, Neumann),
+                :right  => (conc_bc, Neumann),
                 :top    => (symm_bc, Neumann),
                 :left   => (symm_bc, Neumann))
 end
+nothing; # hide
+```
 
+```julia
 function select_alloy(alloy)
+    hour = 3600.0
+    
     if alloy == :aero
         y0 = 0.0016
         ys = 0.0100
@@ -166,7 +172,7 @@ function select_alloy(alloy)
         enrich  = 2hour
         diffuse = 3hour
         
-        hf = 1.0e-04
+        hf = 9.0e-05
     else
         y0 = 0.0023
         ys = 0.0095
@@ -179,90 +185,130 @@ function select_alloy(alloy)
 
     return y0, ys, enrich, diffuse, hf
 end
+nothing; # hide
 ```
+
+## Simulation workflow
+
+```julia
+function create_model(alloy, T, Lx, Ly, nx, ny)
+    y0, ys, enrich, diffuse, hf = select_alloy(alloy)
+    
+    tend = enrich + diffuse
+    u0 = masstomolefraction(y0)
+    um = masstomolefraction(ys)
+    
+    D = (x, y, t, u, p) -> 1.0e+06diffusion_coefficient(u, p[1])
+    p = (T,)
+    
+    f = (x, y) -> u0
+    h = (t) -> (t < enrich) ? hf : 0.0
+    b = bcs_treatment(h, um)
+
+    model = DiffusionProblem(Lx, Ly, nx, ny, b, D, p, tend, f)
+
+    return model, (enrich, tend)
+end
+
+function solve_model(model, saveat, Lx, Ly, Lz; ρ = 7890.0)
+    saveat = min(model.prob.final_time, saveat) 
+    sol = solve(model, saveat)
+        
+    y0 = moletomassfraction.(sol.u[1])
+    yf = moletomassfraction.(sol.u[end])
+    
+    m0 = sum(model.mesh.cv_volumes .* y0)
+    mf = sum(model.mesh.cv_volumes .* yf)
+    dm = ρ * Lz * (mf - m0)
+
+    # 8 blocks, mm3->m3, kg->g
+    fact3d = 8 * 1e-09 * 1000
+    fact2d = 4 * 1e-06
+    
+    M = fact3d * dm
+    A = fact2d * (Lx*Ly + Lx*Lz + Ly*Lz)
+
+    σ = M / A
+    Δm = M
+    
+    return sol, σ, Δm
+end
+
+function postprocess(model, sol, tk; aspect = 2, levels = 0.0:0.05:1.0)
+    idx = findfirst(t->t>=tk, sol.t)
+    
+    t = sol.t[idx]
+    u = 100moletomassfraction.(sol.u[idx])
+
+    return plot_state(model.grid, t, u; aspect, levels)
+end
+
+function simulate(alloy, T, Lx, Ly, Lz, nx, saveat; post = false)
+    ny = convert(Int64, round(nx * Ly / Lx))
+    
+    model, tchange = create_model(alloy, T, Lx, Ly, nx, ny)
+    sol, σ, Δm = solve_model(model, saveat, Lx, Ly, Lz)
+
+    Nx  = @sprintf("%05d", nx)
+    Δmt = @sprintf("%.1f", 1000Δm)
+    σt  = @sprintf("%.1f", σ)
+    
+    @info("$(Nx) : Mass change $(Δmt) mg ⟹ $(σt) g/m²")
+
+    (!post) && return nothing
+    
+    f1 = postprocess(model, sol, tchange[1]; aspect = 2)
+    f2 = postprocess(model, sol, tchange[2]; aspect = 2)
+    return sol, f1, f2
+end
+
+function grid_convergence(alloy, T, Lx, Ly, Lz,)
+    simulate(alloy, T, Lx, Ly, Lz,  20, 9e+99)
+    simulate(alloy, T, Lx, Ly, Lz,  50, 9e+99)
+    simulate(alloy, T, Lx, Ly, Lz, 100, 9e+99)
+    simulate(alloy, T, Lx, Ly, Lz, 200, 9e+99)
+    simulate(alloy, T, Lx, Ly, Lz, 300, 9e+99)
+    simulate(alloy, T, Lx, Ly, Lz, 400, 9e+99)
+    simulate(alloy, T, Lx, Ly, Lz, 500, 9e+99)
+    return nothing
+end
+
+nothing; # hide
+```
+
+## Problem setup
 
 ```julia
 Lx = 7
 Ly = 2
 Lz = 20
 
-nx = 400
-ny = convert(Int64, round(nx * Ly / Lx))
-
-hour = 3600.0
 saveat = 180.0
+
 T = 1173.15
 
-alloy = :aero
-alloy = :auto
-
-y0, ys, enrich, diffuse, hf = select_alloy(alloy)
-
-tri = mesh_rectangle(; Lx, Ly, nx, ny);
-
-
-model = let
-    tend = enrich + diffuse
-    u0 = masstomolefraction(y0)
-    um = masstomolefraction(ys)
-    
-    D = (x, y, t, u, p) -> p[2] * diffusion_coefficient(u, p[1])
-    p = (T, 1.0e+06)
-    
-    f = (x, y) -> u0
-    h = (t) -> (t < enrich) ? hf : 0.0
-    b = bcs_treatment(h, um)
-
-    # XXX: keep this for debug
-    # b = debug_dirichlet(hm, um)
-
-    DiffusionProblem(tri, b, D, p, tend, f)
-end
-
-sol = solve(model, saveat)
-
-# 8 blocks, mm3->m3, kg->g
-fact3d = 8 * 1e-09 * 1000
-fact2d = 4 * 1e-06
-
-ρ = 7890.0
-yf = moletomassfraction.(sol.u[end])
-
-m0 = sum(model.mesh.cv_volumes .* y0)
-mf = sum(model.mesh.cv_volumes .* yf)
-dm = ρ * Lz * (mf - m0)
-
-M = fact3d * dm
-A = fact2d * (Lx*Ly + Lx*Lz + Ly*Lz)
-
-M / A, M
+nothing; # hide
 ```
 
 ```julia
-# plot_trimesh(tri; Lx, Ly)
+# m, _ = create_model(:aero, T, Lx, Ly, 30, 30)
+```
+
+### Grid convergence
+
+```julia
+grid_convergence(:aero, T, Lx, Ly, Lz)
 ```
 
 ```julia
-
+grid_convergence(:auto, T, Lx, Ly, Lz)
 ```
 
+### Simulate 16NiCroMo13
+
 ```julia
-f1, f2 = if (sol.retcode == ReturnCode.Success)
-    levels = 0.0:0.05:1.0
-    aspect = Lx/Ly
-    
-    idx = findfirst(t->t>=enrich, sol.t)
-    
-    t = sol.t[idx]
-    u = 100moletomassfraction.(sol.u[idx])
-    f1 = plot_state(tri, t, u; aspect, levels)
-
-    t = sol.t[end]
-    u = 100moletomassfraction.(sol.u[end])
-    f2 = plot_state(tri, t, u; aspect, levels)
-
-    f1, f2
-end;
+_, f1, f2 = simulate(:aero, T, Lx, Ly, Lz, 300, saveat; post = true)
+nothing; # hide
 ```
 
 ```julia
@@ -273,6 +319,23 @@ f1
 f2
 ```
 
-```julia
+### Simulate 23MnCrMo5
 
+```julia
+_, f1, f2 = simulate(:auto, T, Lx, Ly, Lz, 500, saveat; post = true)
+nothing; # hide
 ```
+
+```julia
+f1
+```
+
+```julia
+f2
+```
+
+## To-do
+
+- [ ] Improve logic of `saveas` to minimize memory footprint in grid convergence (sometimes it overflows).
+- [ ] Add a secondary factor for non-*squarish* meshes for other sensitivity studies.
+- [ ] Slice midplane (how?) to retrieve data for comparison with PhD thesis.
