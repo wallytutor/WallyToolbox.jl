@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 module WallyToolbox
 
-using PythonCall
 using Reexport
 
 "Path to supporting modules annex to WallyToolbox."
@@ -25,13 +24,15 @@ function __init__()
     end
 
     push!(LOAD_PATH, WALLYTOOLBOXPATH)
-
-    # Python modules.
-    sys = pyimport("sys")
-    sys.path.insert(0, MAJORDOMEPATH)
-
     return nothing
 end
+
+# If I do this, Jupyter stops working.
+# using PythonCall
+# function source_python()
+#     sys = pyimport("sys")
+#     sys.path.insert(0, MAJORDOMEPATH)
+# end
 
 # General internals.
 include("wallytoolbox/internals/abstract.jl")
