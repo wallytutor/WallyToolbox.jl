@@ -520,12 +520,14 @@ version = "2.4.2"
 [[deps.Conda]]
 deps = ["Downloads", "JSON", "VersionParsing"]
 git-tree-sha1 = "b19db3927f0db4151cb86d073689f2428e524576"
+pinned = true
 uuid = "8f4d0f93-b110-5947-807f-2305c1781a2d"
 version = "1.10.2"
 
 [[deps.CondaPkg]]
 deps = ["JSON3", "Markdown", "MicroMamba", "Pidfile", "Pkg", "Preferences", "TOML"]
 git-tree-sha1 = "8f7faef2ca039ee068cd971a80ccd710d23fb2eb"
+pinned = true
 uuid = "992eb4ea-22a4-4c89-a5bb-47a3300528ab"
 version = "0.2.23"
 
@@ -903,9 +905,9 @@ uuid = "6b7a57c9-7cc1-4fdf-b7f5-e857abae3636"
 version = "0.8.5"
 
 [[deps.ExproniconLite]]
-git-tree-sha1 = "1447811213cf2ac36b5f7e8633a55f4a3ee42042"
+git-tree-sha1 = "4c9ed87a6b3cd90acf24c556f2119533435ded38"
 uuid = "55351af7-c7e9-48d6-89ff-24e801d99491"
-version = "0.10.12"
+version = "0.10.13"
 
 [[deps.ExtendableGrids]]
 deps = ["AbstractTrees", "Bijections", "Compat", "Dates", "DocStringExtensions", "ElasticArrays", "Graphs", "InteractiveUtils", "LinearAlgebra", "Printf", "Random", "SparseArrays", "StaticArrays", "StatsBase", "UUIDs", "WriteVTK"]
@@ -1896,9 +1898,9 @@ uuid = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
 
 [[deps.LinearSolve]]
 deps = ["ArrayInterface", "ChainRulesCore", "ConcreteStructs", "CpuId", "DocStringExtensions", "EnumX", "FastLapackInterface", "GPUArraysCore", "InteractiveUtils", "KLU", "Krylov", "LazyArrays", "Libdl", "LinearAlgebra", "MKL_jll", "Markdown", "PrecompileTools", "Preferences", "RecursiveFactorization", "Reexport", "SciMLBase", "SciMLOperators", "Setfield", "SparseArrays", "Sparspak", "StaticArraysCore", "UnPack"]
-git-tree-sha1 = "00d9dc2ef7abb0575ec2b59fedbbc5685127e6ea"
+git-tree-sha1 = "ee625f4053362526950661ce3022c7a483c6f8e5"
 uuid = "7ed4a6bd-45f5-4d41-b270-4a48e9bafcae"
-version = "2.31.2"
+version = "2.32.0"
 
     [deps.LinearSolve.extensions]
     LinearSolveBandedMatricesExt = "BandedMatrices"
@@ -2709,9 +2711,10 @@ version = "1.2.0"
 
 [[deps.PythonCall]]
 deps = ["CondaPkg", "Dates", "Libdl", "MacroTools", "Markdown", "Pkg", "REPL", "Requires", "Serialization", "Tables", "UnsafePointers"]
-git-tree-sha1 = "84084218c7377beb15a317868d4541a8c3c4ac99"
+git-tree-sha1 = "8de9e6cbabc9bcad4f325bd9f2f1e83361e5037d"
+pinned = true
 uuid = "6099a3de-0909-46bc-b1f4-468b9a2dfc0d"
-version = "0.9.22"
+version = "0.9.20"
 
 [[deps.QOI]]
 deps = ["ColorTypes", "FileIO", "FixedPointNumbers"]

@@ -65,8 +65,10 @@ set VSCODESETTINGS=%HERE%..\vscode\user-data
 
 set PATH=%HERE%%GMSH_VERSION%\bin;%PATH%
 set PATH=%HERE%%GMSH_VERSION%\lib;%PATH%
-set JULIA_LOAD_PATH=%HERE%%GMSH_VERSION%\lib;%JULIA_LOAD_PATH%
-set PYTHONPATH=%HERE%%GMSH_VERSION%\lib;%PYTHONPATH%
+
+@REM Keep this out unless needed....
+@REM set JULIA_LOAD_PATH=%HERE%%GMSH_VERSION%\lib;%JULIA_LOAD_PATH%
+@REM set PYTHONPATH=%HERE%%GMSH_VERSION%\lib;%PYTHONPATH%
 
 @REM @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @REM CONFIGURE ELMER
@@ -109,7 +111,7 @@ set LAMMPS_PLUGIN_PATH=%LAMMPSHOME%\plugins
 set LAMMPS_POTENTIALS=%LAMMPSHOME%\Potentials
 set MSI2LMP_LIBRARY=%LAMMPSHOME%\frc_files
 set PLUMED_ROOT=%LAMMPSHOME%
-set PYTHONPATH=%LAMMPSHOME%\Python;%PYTHONPATH%
+@REM set PYTHONPATH=%LAMMPSHOME%\Python;%PYTHONPATH%
 set PATH=%LAMMPSHOME%\bin;%PATH%
 
 @REM @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -190,6 +192,7 @@ set JULIA_DEPOT_PATH=%HERE%%JULIA_VERSION%-win64\depot
 @REM Jupyter to be used with IJulia.
 set JUPYTER=%PYTHON_HOME%\Scripts\jupyter.exe
 set JUPYTER_DATA_DIR=%HERE%..\jupyter
+
 @REM set JUPYTER=%JULIA_DEPOT_PATH%\conda\3\x86_64\Scripts\jupyter.exe
 @REM set JUPYTER_CONFIG_DIR=%JULIA_DEPOT_PATH%/.jupyter
 
