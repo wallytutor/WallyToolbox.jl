@@ -1,4 +1,4 @@
-# Thermal conductivity of porous solids
+# Porous solids
 
 Porous solids are characterized by the presence of voidance; they may be formed, for instance, through the sintering of particles with a given size distribution or through a foaming process. The former will lead to pores presenting a mostly convex geometry due to particle-particle contacts of  while the latter leads to concave pores, generally due to former gas bubbles during foaming process; these morphologies and the scale of porosity will lead to a broad range of properties in macroscopic behavior of materials. Other features related to the porosity might include the communicating character of pores or the validity of continuum mechanics in a given problem due to pore sizes. This subject has been treated by scholars of many fields because of its relevance to industrial processes, heat transfer in furnaces, biological systems, and more recently in heat storage and recovery devices, not to try to be exhaustive here; specific citations come next.
 

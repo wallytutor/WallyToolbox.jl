@@ -127,11 +127,11 @@ pages = [
         ],
 
         "Science" => [
-            "Continuum Mechanics"   => "Science/04-Continuum-Mechanics.md",
-            "Theoretical Physics"   => "Science/01-Theoretical-Physics.md",
-            "Computational Physics" => "Science/02-Computational-Physics.md",
-            "Machine Learning"      => "Science/05-Machine-Learning.md",
-            "Porous Solids"         => "Science/08-Conductivity-Porous-Solids.md",
+            "Science/01-Continuum-Mechanics.md",
+            "Science/03-Machine-Learning.md",
+            # "Science/04-Theoretical-Physics.md",
+            # "Science/05-Computational-Physics.md",
+            "Science/08-Porous-Solids.md",
         ],
 
         "Notebooks"         => [
