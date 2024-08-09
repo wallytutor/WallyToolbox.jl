@@ -2,7 +2,6 @@
 [pip.deps]
 cantera = ""
 matplotlib = ""
+pandas = ""
 pyvista = ""
 numpy = ""
-[deps]
-cantera = ""
