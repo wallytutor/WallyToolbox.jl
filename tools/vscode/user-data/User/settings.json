@@ -6,6 +6,7 @@
     "window.restoreWindows": "none",
     "files.hotExit": "off",
 
+    "terminal.integrated.enableMultiLinePasteWarning": "never",
     "terminal.integrated.commandsToSkipShell": [
         "language-julia.interrupt"
     ],
@@ -21,6 +22,11 @@
     "python.createEnvironment.trigger": "off",
 
     "workbench.colorTheme": "Dracula Theme",
+    "workbench.startupEditor": "none",
+    "workbench.tree.indent": 12,
+
+    "explorer.autoReveal": false,
+    "editor.minimap.enabled": false,
 
     //-------------------------------------------------------------------------
     // LATEX-WORKSHOP
@@ -107,25 +113,21 @@
     // LANGUAGE SPECIFIC
     //-------------------------------------------------------------------------
 
+    "editor.detectIndentation": false,
+    "editor.insertSpaces": true,
+    "editor.tabSize": 4,
+    "editor.rulers": [72, 79],
+
     "[python]": {
-        "editor.detectIndentation": false,
-        "editor.insertSpaces": true,
-        "editor.tabSize": 4,
-        "editor.rulers": [72, 79],
-        "rewrap.doubleSentenceSpacing": true
+    },
+
+    "[octave]": {
     },
 
     "[julia]": {
-        "editor.detectIndentation": false,
-        "editor.insertSpaces": true,
-        "editor.tabSize": 4,
-        "editor.rulers": [72, 79],
-        "rewrap.doubleSentenceSpacing": true
     },
 
     "[latex]": {
-        "editor.detectIndentation": false,
-        "editor.insertSpaces": true,
         "editor.tabSize": 2,
         "editor.wordWrap": "wordWrapColumn",
         "editor.wordWrapColumn": 80,
@@ -139,10 +141,4 @@
         "editor.rulers": [79],
         "rewrap.autoWrap.enabled": false
     },
-
-    "explorer.autoReveal": false,
-    "editor.minimap.enabled": false,
-    "workbench.tree.indent": 12,
-    "terminal.integrated.enableMultiLinePasteWarning": "never",
-    "workbench.startupEditor": "none",
 }
