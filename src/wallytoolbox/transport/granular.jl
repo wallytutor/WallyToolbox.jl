@@ -164,7 +164,8 @@ struct SymbolicLinearKramersModel
     function SymbolicLinearKramersModel()
         # Declare symbols and unknowns.
         ps = @parameters R Φ ω β γ
-        @variables z
+        # @variables z
+        @independent_variables z
         @variables h(z)
 
         # Declare a derivative.
