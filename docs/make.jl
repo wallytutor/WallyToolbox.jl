@@ -91,7 +91,7 @@ pages = [
     "WallyToolbox" => [
         "Home" => "index.md",
 
-        "WallyToolbox" => [
+        "WallyToolbox Docs" => [
             "WallyToolbox/setup-guide.md",
             "WallyToolbox/thermochemistry.md",
             "WallyToolbox/transport.md",
@@ -108,6 +108,11 @@ pages = [
                 # "WallyToolbox/Internals/abstract.md",
                 "WallyToolbox/Internals/Documents.md",
             ],
+        ],
+
+
+        "WallyToolbox Tutorials" => [
+            "WallyToolbox/Tutorials/combustion-flows.md",
         ],
 
         "Software" =>[
@@ -138,7 +143,6 @@ pages = [
             "Notebooks/01-Composite-Conduction.md",
             "Notebooks/02-Part-Radiation-Heating.md",
             "Notebooks/03-Plug-Flow-Reactor-1.md",
-            "Notebooks/07-Air-Properties.md",
             "Notebooks/08-Kramers-Model-Validation.md",
             "Notebooks/A1-Julia-para-Cientistas.md",
             "Notebooks/A2-Ciencia-Colaborativa-e-Julia.md",
