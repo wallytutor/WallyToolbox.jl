@@ -3,10 +3,13 @@
 ##############################################################################
 
 export EmpiricalFuel
+export RosinRammlerDroplet
+
 export oxidizer_mass_flow_rate
 export hfo_empirical_formula
 export hfo_specific_heat
 export hfo_enthalpy_net_bs2869
+
 export fit_rosinrammler
 export plot_rosinrammler
 
@@ -183,6 +186,41 @@ end
 # Discrete particle model (DPM)
 ##############################################################################
 
+""" Evaluate practical values for using Rosin-Rammler distribution in CFD.
+
+## Fields
+
+$(TYPEDFIELDS)
+
+## Examples
+
+Upcoming...
+"""
+struct RosinRammlerDroplet
+    "Droplet average size [μm]."
+    vavg::Float64
+
+    "Droplet minimum size [μm]."
+    vmin::Float64
+
+    "Droplet maximum size [μm]."
+    vmax::Float64
+
+    "Distribution spread characteristic exponent."
+    m::Float64
+    
+    "Distribution characteristic droplet size [μm]."
+    θ::Float64
+
+    function RosinRammlerDroplet(dist::Weibull{Float64};
+            pmin = 0.0001, pmax = 0.9999)
+        vavg = mean(dist)
+        vmin = find_zero(d->cdf(dist, d) - pmin, vavg)
+        vmax = find_zero(d->cdf(dist, d) - pmax, vavg)
+        return new(vavg, vmin, vmax, params(dist)...)
+    end
+end
+
 """
     fit_rosinrammler(d₀, P₀; m=3.5)
 
@@ -216,7 +254,7 @@ function plot_rosinrammler(dist; xyref=nothing)
         
         ax.xlabel = "Droplet diameter [μm]"
         ax.ylabel = "Probability [%]"
-        ax.title  = "μ = $(dmean), θ = $(dchar))"
+        ax.title  = "μ = $(dmean), θ = $(dchar)"
         
 		ax.yticks = 0.0:20.0:100.0
         xlims!(ax, 0.0, xmax)

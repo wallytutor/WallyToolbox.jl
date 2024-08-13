@@ -113,6 +113,7 @@ WallyToolbox.hfo_enthalpy_net_bs2869
 ## Discrete phase model
 
 ```@docs
+WallyToolbox.RosinRammlerDroplet
 WallyToolbox.fit_rosinrammler
 WallyToolbox.plot_rosinrammler
 ```

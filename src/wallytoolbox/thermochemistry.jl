@@ -10,7 +10,8 @@ import DataFrames
 import YAML
 
 using CairoMakie
-using Distributions: Weibull, cdf, scale, mean
+using Distributions: Weibull
+using Distributions: cdf, scale, mean, params
 using DocStringExtensions: TYPEDFIELDS
 using Polynomials: AbstractPolynomial
 using Printf
