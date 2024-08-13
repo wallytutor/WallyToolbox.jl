@@ -76,7 +76,7 @@ struct EmpiricalFuel
 end
 
 function Base.String(f::EmpiricalFuel)
-    fmt(e, x) = @sprintf("%s(%.4f)", e, x)
+    fmt(e, x) = @sprintf("%s(%.6f)", e, x)
     return join(map(args->fmt(args...), zip(f.elements, f.X)))
 end
 
