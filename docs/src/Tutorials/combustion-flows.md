@@ -6,6 +6,9 @@ CurrentModule = WallyToolbox
 DocTestSetup = quote
     using WallyToolbox
     using PythonCall
+    
+    pyimport("cantera")
+    pyimport("numpy")
 end
 ```
 
