@@ -14,6 +14,8 @@ class HydrocarbonHeatingValue:
     Resulting values are provided in kilojoules per kilogram.
     """
     def __init__(self, gas: ct.Solution) -> None:
+        print("WARNING: deprecated heating value calculator!")
+
         water = ct.Water()
         h_liq = self._water_enthalpy(water, 0.0)
         h_gas = self._water_enthalpy(water, 1.0)
@@ -75,15 +77,35 @@ class HydrocarbonHeatingValue:
             gas: ct.Solution
         ) -> dict[str, float]:
         """ Compute expected complete combustion composition. """
-        X_products = {
-            "CO2": gas.elemental_mole_fraction("C"),
-            "H2O": 0.5 * gas.elemental_mole_fraction("H"),
-            "N2":  0.5 * gas.elemental_mole_fraction("N"),
-        }
+        # These migh not always be available.
+        s, n, N = 0.0, 0.0, 0.0
+
+        # These are only in hydrocarbons (how to handle CO, CO2,... in fuel?)
+        # Or better, do I even need to handle that here? NO!
+        x = gas.elemental_mole_fraction("C")
+        y = gas.elemental_mole_fraction("H")
+
+        # These are global, O comes from O2 and fuel.
+        A = gas.elemental_mole_fraction("O")
+
+        # These are expected to be ALWAYS present.
+        X_products = {"CO2": x, "H2O": y/2}
     
         # Notice the case convention for SPECIES / Element.
         if "AR" in gas.species_names:
             X_products["AR"] = gas.elemental_mole_fraction("Ar")
+
+        if "SO2" in gas.species_names:
+            s = gas.elemental_mole_fraction("S")
+            X_products["SO2"] = s
+
+        if "NO" in gas.species_names:
+            N = gas.elemental_mole_fraction("N")
+            n = A - (2 * x) - (y / 2) - (2 * s)
+            X_products["NO"] = n
+
+        if "N2" in gas.species_names:
+            X_products["N2"] = 0.5 * (N - n)
 
         # TODO add oxygen balance check here, there might be cases
         # where equivalence ratio has not been set to unit ?!?
@@ -109,20 +131,27 @@ class HydrocarbonHeatingValue:
                 continue
 
             atoms = sorted(species.composition.keys())
-            if atoms == ["C", "H"] or atoms == ["H"]:
+
+            # Experimental conditions: test1 passes for something that
+            # can be a possible fuel, but also contains other atoms. On
+            # the other hand, test2 matches H and H2.
+            test1 = ("C" in atoms) and ("H" in atoms)
+            test2 = (atoms == ["H"])
+
+            if test1 or test2:
                 keep.append(species.name)
 
         gas.TPX = None, None, X_orig
 
         return keep
 
-    @staticmethod
-    def hydrocarbon_mass_fraction(
+    @classmethod
+    def hydrocarbon_mass_fraction(cls,
             gas: ct.Solution,
             fuel: dict[str, float]
         ) -> float:
         """ Fraction of hydrocarbons in mixture. """
-        hc_species = HydrocarbonHeatingValue.select_hydrocarbons(gas, fuel)
+        hc_species = cls.select_hydrocarbons(gas, fuel)
         Y_fuel = sum(gas[hc_species].Y)
         return Y_fuel
 
