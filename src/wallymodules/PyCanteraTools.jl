@@ -19,8 +19,12 @@ end
 ##############################################################################
 
 export cantera_string_to_dict
+export cantera_dict_to_string
+
+export chons_get_fractions
 export chons_fuel_formula
 export chons_fuel_equation
+
 export pure_species_heating_value
 export mixture_heating_value
 
@@ -33,10 +37,37 @@ function cantera_string_to_dict(X)
         species, amounts = split(X, ":")
         s = strip(species, ' ')
         x = strip(amounts, ' ')
-        return (s, parse(Float64, x))
+        return (String(s), parse(Float64, x))
     end
 
     return Dict(map(innersplit, split(X, ", ")))
+end
+
+function cantera_dict_to_string(X; fmt = x->@sprintf("%.12f", x))
+    species(x) = x[1] * ": " * fmt(x[2])
+    return join(map(species, zip(keys(X), values(X))), ", ")
+end
+
+##############################################################################
+# CHONS
+##############################################################################
+
+function chons_get_fractions(gas; basis = :mole)
+    fracs = if (basis == :mole)
+        gas.elemental_mole_fraction 
+    else
+        gas.elemental_mass_fraction
+    end
+
+    get_element(n) = (n in gas.element_names) ? fracs(n) : 0
+
+    return map(x->pyconvert(Float64, x), [
+        get_element("C"),
+        get_element("H"),
+        get_element("O"),
+        get_element("N"),
+        get_element("S")
+    ])
 end
 
 function chons_fuel_formula(x, y, z, n, s)
@@ -77,17 +108,8 @@ function water_vaporization_enthalpy()
 end
 
 function complete_combustion_products(gas)
-    function get_element(name)
-        !(name in gas.element_names) && return 0.0
-        return gas.elemental_mole_fraction(name)
-    end
-
     # Get amounts of all of CHONS:
-    x = get_element("C")
-    y = get_element("H")
-    z = get_element("O")
-    n = get_element("N")
-    s = get_element("S")
+    x, y, z, n, s = chons_get_fractions(gas; basis = :mole)
 
     # Assume some NO can be formed.
     nox = 0.0
