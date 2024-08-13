@@ -112,7 +112,7 @@ pages = [
 
 
         "WallyToolbox Tutorials" => [
-            "WallyToolbox/Tutorials/combustion-flows.md",
+            "Tutorials/combustion-flows.md",
         ],
 
         "Software" =>[

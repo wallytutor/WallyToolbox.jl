@@ -20,8 +20,8 @@ using CairoMakie
 using Polynomials
 using PythonCall
 
-ct = pyimport("cantera")
-np = pyimport("numpy")
+const ct = pyimport("cantera")
+const np = pyimport("numpy")
 nothing; #hide
 ```
 
