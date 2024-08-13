@@ -5,6 +5,7 @@ EditURL = "https://github.com/wallytutor/WallyToolbox.jl/blob/main/docs/src/Wall
 CurrentModule = WallyToolbox
 DocTestSetup = quote
     using WallyToolbox
+    using PythonCall
 end
 ```
 
