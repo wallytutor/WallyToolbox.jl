@@ -4,3 +4,7 @@ pandas = ""
 matplotlib = ""
 pyvista = ""
 numpy = ""
+
+[pip.deps]
+cantera = ""
+pandas = ""
