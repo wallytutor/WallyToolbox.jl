@@ -39,7 +39,7 @@ julia> fuel.X
   0.0
 
 julia> String(fuel)
-"C(10.0000)H(8.0116)O(0.0000)"
+"C(10.000000)H(8.011606)O(0.000000)"
 ```
 """
 struct EmpiricalFuel
