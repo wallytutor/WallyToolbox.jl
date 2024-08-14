@@ -8,6 +8,8 @@ using PythonCall
 using CairoMakie
 using Printf
 
+import WallyToolbox: EmpiricalFuel
+
 const ct = Ref{Py}()
 
 function __init__()
@@ -20,6 +22,7 @@ end
 
 export cantera_string_to_dict
 export cantera_dict_to_string
+export cantera_elemental_composition
 
 export chons_get_fractions
 export chons_fuel_formula
@@ -46,6 +49,10 @@ end
 function cantera_dict_to_string(X; fmt = x->@sprintf("%.12f", x))
     species(x) = x[1] * ": " * fmt(x[2])
     return join(map(species, zip(keys(X), values(X))), ", ")
+end
+
+function cantera_elemental_composition(f::EmpiricalFuel)
+    return replace(String(f)[1:end-1], "("=>": ", ")"=>", ")
 end
 
 ##############################################################################
