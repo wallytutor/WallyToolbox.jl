@@ -8,6 +8,7 @@ using PythonCall
 using CairoMakie
 using Printf
 
+import DataFrames: DataFrame
 import WallyToolbox: EmpiricalFuel
 
 const ct = Ref{Py}()
@@ -198,7 +199,7 @@ function pure_species_heating_value(mech, fuel, oxid)
     return pyconvert(Float64, LHV), pyconvert(Float64, HHV)
 end
 
-function mixture_heating_value(mech, X_fuel, oxid)
+function mixture_heating_value(mech, X_fuel, oxid; verbose = false)
     gas = ct[].Solution(mech)
     gas.TPX = nothing, nothing, X_fuel
 
@@ -206,10 +207,22 @@ function mixture_heating_value(mech, X_fuel, oxid)
 
     hhv_mix, lhv_mix = 0.0, 0.0
     
+    table = []
+
     for (fuel, Y) in Y_fuel
         lhv, hhv = pure_species_heating_value(mech, fuel, oxid)
+        
+        if verbose
+            push!(table, [fuel, 100Y, lhv, hhv])
+        end
+
         lhv_mix += Y * lhv
         hhv_mix += Y * hhv
+    end
+
+    if verbose
+        table = mapreduce(permutedims, vcat, table)
+        @info DataFrame(table, ["compound", "Weight %", "LHV", "HHV"])
     end
 
     return lhv_mix, hhv_mix
