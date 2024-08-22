@@ -16,6 +16,7 @@ basepaths = {
     "MYENV_JABREF":       "JabRef-5.13-portable_windows",
     "MYENV_JULIA":        "julia-1.10.3",
     "MYENV_LAMMPS":       "LAMMPS-64bit-Python-17Apr2024-MSMPI",
+    "MYENV_MESHLAB":      "MeshLab2023.12d-windows",
     "MYENV_MIKTEX":       "basic-miktex-24.1-x64",
     "MYENV_MODELICA":     "OpenModelica1.23.0-64bit",
     "MYENV_OCTAVE":       "octave-8.4.0-w64",

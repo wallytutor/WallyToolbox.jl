@@ -81,6 +81,7 @@ CommonRoots=C:/Path/To/Local/TeX/Tree
 pointing to a directory implementing the user's [TeX Directory Structure](https://miktex.org/kb/tds).
 
 ## Domain-specific
+
 ### Science and Engineering
 
 Since these are mostly domain-specific, it is up to you to select from the list.
@@ -107,6 +108,7 @@ Again some domain-specific software, select what you need.
 - [FreeCAD](https://www.freecad.org/downloads.php)
 - [gmsh](https://gmsh.info/#Download)
 - [gnuplot](https://sourceforge.net/projects/gnuplot/files/gnuplot/6.0.0/)
+- [MeshLab](https://github.com/cnr-isti-vclab/meshlab)
 - [ParaView](https://www.paraview.org/download/)
 - [Salome](https://www.salome-platform.org/?page_id=2430)
 
