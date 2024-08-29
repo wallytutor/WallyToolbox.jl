@@ -57,6 +57,11 @@ class FluentInputRow:
             f'{self._outpar}',   # output-parameter
         ))
 
+    @property
+    def name(self):
+        """ Provides access to entry name. """
+        return self._name
+
 
 class FluentInputFile:
     """ Representation of an Ansys Fluent expressions input file.
@@ -70,7 +75,13 @@ class FluentInputFile:
             "parametername", "unit", "input-parameter",
             "output-parameter")
 
-    def __init__(self, rows: list[FluentInputRow]):
+    def __init__(self,
+            rows: list[FluentInputRow],
+            sort_list: bool = False
+        ) -> None:
+        if sort_list:
+            rows = sorted(rows, key=lambda x: x.name)
+
         self._data = ["\t".join(self.HEAD), *(map(repr, rows))]
         
     def append(self, row: FluentInputRow):
