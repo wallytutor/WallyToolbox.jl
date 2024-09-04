@@ -3,5 +3,6 @@
 cantera = ""
 pandas = ""
 matplotlib = ""
-pyvista = ""
 numpy = ""
+pyvista = ""
+scipy = ""
