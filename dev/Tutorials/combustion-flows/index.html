@@ -9,7 +9,580 @@ using PythonCall
 const ct = pyimport(&quot;cantera&quot;)
 const np = pyimport(&quot;numpy&quot;)</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">    CondaPkg Found dependencies: /home/runner/.julia/packages/PythonCall/S5MOg/CondaPkg.toml
     CondaPkg Found dependencies: /home/runner/work/WallyToolbox.jl/WallyToolbox.jl/CondaPkg.toml
-    CondaPkg Dependencies already up to date</code></pre><p>Since Cantera is not yet available from Julia (I am working on that!), we wrap the interfacing with Python code in function <code>fit_gas_properties</code> provided below. There is a slight possibility that this function or a more generic variant of it will at some point be integrated into <code>PyCanteraTools</code>.</p><pre><code class="language-julia hljs">function fit_gas_properties(sol; orders = Dict())
+    CondaPkg Resolving changes
+             + cantera
+             + libstdcxx-ng
+             + matplotlib
+             + numpy
+             + pandas
+             + python
+             + pyvista
+             + scipy
+    CondaPkg Creating environment
+             │ /home/runner/.julia/artifacts/7973f2c7725e2d0eef7a95159454c4145f0945a2/bin/micromamba
+             │ -r /home/runner/.julia/scratchspaces/0b3b1443-0f03-428d-bdfb-f27f9c1191ea/root
+             │ create
+             │ -y
+             │ -p /home/runner/work/WallyToolbox.jl/WallyToolbox.jl/docs/.CondaPkg/env
+             │ --override-channels
+             │ --no-channel-priority
+             │ cantera[version=&#39;*&#39;]
+             │ libstdcxx-ng[version=&#39;&gt;=3.4,&lt;13.0&#39;]
+             │ matplotlib[version=&#39;*&#39;]
+             │ numpy[version=&#39;*&#39;]
+             │ pandas[version=&#39;*&#39;]
+             │ python[version=&#39;&gt;=3.8,&lt;4&#39;,channel=&#39;conda-forge&#39;,build=&#39;*cpython*&#39;]
+             │ pyvista[version=&#39;*&#39;]
+             │ scipy[version=&#39;*&#39;]
+             └ -c conda-forge
+
+Transaction
+
+  Prefix: /home/runner/work/WallyToolbox.jl/WallyToolbox.jl/docs/.CondaPkg/env
+
+  Updating specs:
+
+   - cantera=*
+   - libstdcxx-ng[version=&#39;&gt;=3.4,&lt;13.0&#39;]
+   - matplotlib=*
+   - numpy=*
+   - pandas=*
+   - conda-forge::python[version=&#39;&gt;=3.8,&lt;4&#39;,build=*cpython*]
+   - pyvista=*
+   - scipy=*
+
+
+  Package                                      Version  Build                  Channel           Size
+───────────────────────────────────────────────────────────────────────────────────────────────────────
+  Install:
+───────────────────────────────────────────────────────────────────────────────────────────────────────
+
+  + _libgcc_mutex                                  0.1  conda_forge            conda-forge     Cached
+  + python_abi                                    3.12  5_cp312                conda-forge     Cached
+  + utfcpp                                       4.0.5  ha770c72_0             conda-forge     Cached
+  + libglvnd                                     1.7.0  ha4b6fd6_0             conda-forge     Cached
+  + libgfortran5                                13.2.0  ha4646dd_0             conda-forge     Cached
+  + ld_impl_linux-64                              2.40  hf3520f5_7             conda-forge     Cached
+  + ca-certificates                          2024.8.30  hbcca054_0             conda-forge     Cached
+  + libgomp                                     12.4.0  h77fa898_1             conda-forge     Cached
+  + libegl                                       1.7.0  ha4b6fd6_0             conda-forge     Cached
+  + libgfortran-ng                              13.2.0  h69a702a_0             conda-forge     Cached
+  + _openmp_mutex                                  4.5  2_gnu                  conda-forge     Cached
+  + libgcc                                      12.4.0  h77fa898_1             conda-forge     Cached
+  + libgcc-ng                                   12.4.0  h69a702a_1             conda-forge     Cached
+  + libstdcxx                                   12.4.0  hc0a3c3a_1             conda-forge     Cached
+  + xorg-recordproto                            1.14.2  h7f98852_1002          conda-forge     Cached
+  + fribidi                                     1.0.10  h36c2ea0_0             conda-forge     Cached
+  + libunistring                                0.9.10  h7f98852_0             conda-forge     Cached
+  + xorg-libxdmcp                                1.1.3  h7f98852_0             conda-forge     Cached
+  + pthread-stubs                                  0.4  h36c2ea0_1001          conda-forge     Cached
+  + xorg-inputproto                              2.3.2  h7f98852_1002          conda-forge     Cached
+  + xorg-renderproto                            0.11.1  h7f98852_1002          conda-forge     Cached
+  + xorg-xproto                                 7.0.31  h7f98852_1007          conda-forge     Cached
+  + xorg-kbproto                                 1.0.7  h7f98852_1002          conda-forge     Cached
+  + c-ares                                      1.33.0  ha66036c_0             conda-forge     Cached
+  + libev                                         4.33  hd590300_2             conda-forge     Cached
+  + libbrotlicommon                              1.1.0  hd590300_1             conda-forge     Cached
+  + libopenblas                                 0.3.27  pthreads_hac2b453_1    conda-forge     Cached
+  + libgettextpo                                0.22.5  he02047a_3             conda-forge     Cached
+  + gettext-tools                               0.22.5  he02047a_3             conda-forge     Cached
+  + libxcrypt                                   4.4.36  hd590300_1             conda-forge     Cached
+  + openssl                                      3.3.1  h4bc722e_2             conda-forge     Cached
+  + ncurses                                        6.5  he02047a_1             conda-forge     Cached
+  + metis                                        5.1.0  h59595ed_1007          conda-forge     Cached
+  + libpciaccess                                  0.18  hd590300_0             conda-forge     Cached
+  + keyutils                                     1.6.1  h166bdaf_0             conda-forge     Cached
+  + alsa-lib                                    1.2.12  h4ab18f5_0             conda-forge     Cached
+  + libffi                                       3.4.2  h7f98852_5             conda-forge     Cached
+  + x264                                    1!164.3095  h166bdaf_2             conda-forge     Cached
+  + libopus                                      1.3.1  h7f98852_1             conda-forge     Cached
+  + libiconv                                      1.17  hd590300_2             conda-forge     Cached
+  + lame                                         3.100  h166bdaf_1003          conda-forge     Cached
+  + bzip2                                        1.0.8  h4bc722e_7             conda-forge     Cached
+  + libdeflate                                    1.21  h4bc722e_0             conda-forge     Cached
+  + libjpeg-turbo                                3.0.0  hd590300_1             conda-forge     Cached
+  + ocl-icd                                      2.3.2  hd590300_1             conda-forge     Cached
+  + libzlib                                      1.3.1  h4ab18f5_1             conda-forge     Cached
+  + nettle                                       3.9.1  h7ab15ed_0             conda-forge     Cached
+  + libtasn1                                    4.19.0  h166bdaf_0             conda-forge     Cached
+  + dav1d                                        1.2.1  hd590300_0             conda-forge     Cached
+  + xorg-xextproto                               7.3.0  h0b41bf4_1003          conda-forge     Cached
+  + xorg-libice                                  1.1.1  hd590300_0             conda-forge     Cached
+  + libogg                                       1.3.5  h4ab18f5_0             conda-forge     Cached
+  + xorg-libxau                                 1.0.11  hd590300_0             conda-forge     Cached
+  + libwebp-base                                 1.4.0  hd590300_0             conda-forge     Cached
+  + libuuid                                     2.38.1  h0b41bf4_0             conda-forge     Cached
+  + libnsl                                       2.0.1  hd590300_0             conda-forge     Cached
+  + libexpat                                     2.6.2  h59595ed_0             conda-forge     Cached
+  + xz                                           5.2.6  h166bdaf_0             conda-forge     Cached
+  + libstdcxx-ng                                12.4.0  h4852527_1             conda-forge     Cached
+  + libbrotlienc                                 1.1.0  hd590300_1             conda-forge     Cached
+  + libbrotlidec                                 1.1.0  hd590300_1             conda-forge     Cached
+  + libblas                                      3.9.0  23_linux64_openblas    conda-forge     Cached
+  + libgettextpo-devel                          0.22.5  he02047a_3             conda-forge     Cached
+  + libedit                               3.1.20191231  he28a2e2_2             conda-forge     Cached
+  + readline                                       8.2  h8228510_1             conda-forge     Cached
+  + libdrm                                     2.4.122  h4ab18f5_0             conda-forge     Cached
+  + libzip                                      1.10.1  h2629f0a_3             conda-forge     Cached
+  + libssh2                                     1.11.0  h0841786_0             conda-forge     Cached
+  + pcre2                                        10.44  hba22ea6_2             conda-forge     Cached
+  + tk                                          8.6.13  noxft_h4845f30_101     conda-forge     Cached
+  + zlib                                         1.3.1  h4ab18f5_1             conda-forge     Cached
+  + libpng                                      1.6.43  h2797004_0             conda-forge     Cached
+  + libsqlite                                   3.46.0  hde9e2c9_0             conda-forge     Cached
+  + p11-kit                                     0.24.1  hc5aa10d_0             conda-forge     Cached
+  + xorg-fixesproto                                5.0  h7f98852_1002          conda-forge     Cached
+  + libxcb                                        1.16  hd590300_0             conda-forge     Cached
+  + xorg-libsm                                   1.2.4  h7391055_0             conda-forge     Cached
+  + expat                                        2.6.2  h59595ed_0             conda-forge     Cached
+  + libvorbis                                    1.3.7  h9c3ff4c_0             conda-forge     Cached
+  + eigen                                        3.4.0  h00ab1b0_0             conda-forge     Cached
+  + libnghttp2                                  1.58.0  h47da74e_1             conda-forge     Cached
+  + libasprintf                                 0.22.5  he8f35ee_3             conda-forge     Cached
+  + qhull                                       2020.2  h434a139_5             conda-forge     Cached
+  + mysql-common                                 9.0.1  h70512c7_0             conda-forge     Cached
+  + hdf4                                        4.2.15  h2a13503_7             conda-forge     Cached
+  + libaec                                       1.1.3  h59595ed_0             conda-forge     Cached
+  + nlohmann_json                               3.11.3  he02047a_1             conda-forge     Cached
+  + lz4-c                                        1.9.4  hcb278e6_0             conda-forge     Cached
+  + jsoncpp                                      1.9.5  h4bd325d_1             conda-forge     Cached
+  + gmp                                          6.3.0  hac33072_2             conda-forge     Cached
+  + x265                                           3.5  h924138e_3             conda-forge     Cached
+  + graphite2                                   1.3.13  h59595ed_1003          conda-forge     Cached
+  + zstd                                         1.5.6  ha6fb4c9_0             conda-forge     Cached
+  + lerc                                         4.0.0  h27087fc_0             conda-forge     Cached
+  + pixman                                      0.43.2  h59595ed_0             conda-forge     Cached
+  + icu                                           75.1  he02047a_0             conda-forge     Cached
+  + libabseil                               20240116.2  cxx17_he02047a_1       conda-forge     Cached
+  + wayland                                     1.23.0  h5291e77_0             conda-forge     Cached
+  + snappy                                       1.2.1  ha2e4443_0             conda-forge     Cached
+  + svt-av1                                      2.1.2  hac33072_0             conda-forge     Cached
+  + openh264                                     2.4.1  h59595ed_0             conda-forge     Cached
+  + libvpx                                      1.14.1  hac33072_0             conda-forge     Cached
+  + aom                                          3.9.1  hac33072_0             conda-forge     Cached
+  + pugixml                                       1.14  h59595ed_0             conda-forge     Cached
+  + double-conversion                            3.3.0  h59595ed_0             conda-forge     Cached
+  + yaml-cpp                                     0.8.0  h59595ed_0             conda-forge     Cached
+  + fmt                                         11.0.2  h434a139_0             conda-forge     Cached
+  + brotli-bin                                   1.1.0  hd590300_1             conda-forge     Cached
+  + libcblas                                     3.9.0  23_linux64_openblas    conda-forge     Cached
+  + liblapack                                    3.9.0  23_linux64_openblas    conda-forge     Cached
+  + krb5                                        1.21.3  h659f571_0             conda-forge     Cached
+  + libglib                                     2.80.3  h315aac3_2             conda-forge     Cached
+  + freetype                                    2.12.1  h267a509_2             conda-forge     Cached
+  + gl2ps                                        1.4.2  hae5d5c5_1             conda-forge     Cached
+  + sqlite                                      3.46.0  h6d4b2fc_0             conda-forge     Cached
+  + xcb-util-wm                                  0.4.2  hb711507_0             conda-forge     Cached
+  + xcb-util-renderutil                         0.3.10  hb711507_0             conda-forge     Cached
+  + xcb-util-keysyms                             0.4.1  hb711507_0             conda-forge     Cached
+  + xcb-util                                     0.4.1  hb711507_2             conda-forge     Cached
+  + xorg-libx11                                  1.8.9  hb711507_1             conda-forge     Cached
+  + libtheora                                    1.1.1  h4ab18f5_1006          conda-forge     Cached
+  + libasprintf-devel                           0.22.5  he8f35ee_3             conda-forge     Cached
+  + mpfr                                         4.2.1  h38ae2d0_2             conda-forge     Cached
+  + mysql-libs                                   9.0.1  ha479ceb_0             conda-forge     Cached
+  + libtiff                                      4.6.0  h46a8edc_4             conda-forge     Cached
+  + libxml2                                     2.12.7  he7c6b58_4             conda-forge     Cached
+  + libprotobuf                                 4.25.3  h08a7969_0             conda-forge     Cached
+  + blosc                                       1.21.6  hef167b5_0             conda-forge     Cached
+  + brotli                                       1.1.0  hd590300_1             conda-forge     Cached
+  + libcurl                                      8.9.1  hdb1bdb2_0             conda-forge     Cached
+  + libcups                                      2.3.3  h4637d8d_4             conda-forge     Cached
+  + libpq                                         16.4  h482b261_0             conda-forge     Cached
+  + dbus                                        1.13.6  h5008d03_3             conda-forge     Cached
+  + fontconfig                                  2.14.2  h14ed4e7_0             conda-forge     Cached
+  + xcb-util-image                               0.4.0  hb711507_2             conda-forge     Cached
+  + xkeyboard-config                              2.42  h4ab18f5_0             conda-forge     Cached
+  + libglx                                       1.7.0  ha4b6fd6_0             conda-forge     Cached
+  + xorg-libxext                                 1.3.4  h0b41bf4_2             conda-forge     Cached
+  + xorg-libxrender                             0.9.11  hd590300_0             conda-forge     Cached
+  + xorg-libxfixes                               5.0.3  h7f98852_1004          conda-forge     Cached
+  + xorg-libxt                                   1.3.0  hd590300_1             conda-forge     Cached
+  + gettext                                     0.22.5  he02047a_3             conda-forge     Cached
+  + openjpeg                                     2.5.2  h488ebb8_0             conda-forge     Cached
+  + lcms2                                         2.16  hb7c19ff_0             conda-forge     Cached
+  + libxslt                                     1.1.39  h76b75d6_0             conda-forge     Cached
+  + libllvm18                                   18.1.8  h8b73ec9_2             conda-forge     Cached
+  + libhwloc                                    2.11.1  default_hecaa2ac_1000  conda-forge     Cached
+  + proj                                         9.4.1  h54d7996_1             conda-forge     Cached
+  + hdf5                                        1.14.3  nompi_hdf9ad27_105     conda-forge     Cached
+  + xcb-util-cursor                              0.1.4  h4ab18f5_2             conda-forge     Cached
+  + libxkbcommon                                 1.7.0  h2c5496b_1             conda-forge     Cached
+  + libgl                                        1.7.0  ha4b6fd6_0             conda-forge     Cached
+  + libglu                                       9.0.0  ha6d2627_1004          conda-forge     Cached
+  + xorg-libxxf86vm                              1.1.5  h4bc722e_1             conda-forge     Cached
+  + xorg-libxi                                  1.7.10  h4bc722e_1             conda-forge     Cached
+  + libidn2                                      2.3.7  hd590300_0             conda-forge     Cached
+  + libclang13                                  18.1.8  default_h9def88c_4     conda-forge     Cached
+  + libclang-cpp18.1                            18.1.8  default_hf981a13_4     conda-forge     Cached
+  + tbb                                      2021.12.0  h434a139_3             conda-forge     Cached
+  + libnetcdf                                    4.9.2  nompi_h135f659_114     conda-forge     Cached
+  + glew                                         2.1.0  h9c3ff4c_2             conda-forge     Cached
+  + xorg-libxtst                                 1.2.5  h4bc722e_0             conda-forge     Cached
+  + gnutls                                       3.8.7  h32866dd_0             conda-forge     Cached
+  + suitesparse                                  7.8.1  h41f34aa_0             conda-forge     Cached
+  + tbb-devel                                2021.12.0  hfcbfbdb_3             conda-forge     Cached
+  + libopenvino                               2024.3.0  h2da1b83_0             conda-forge     Cached
+  + sundials                                     7.1.1  ha52427a_0             conda-forge     Cached
+  + libopenvino-tensorflow-lite-frontend      2024.3.0  he02047a_0             conda-forge     Cached
+  + libopenvino-tensorflow-frontend           2024.3.0  h39126c6_0             conda-forge     Cached
+  + libopenvino-pytorch-frontend              2024.3.0  he02047a_0             conda-forge     Cached
+  + libopenvino-paddle-frontend               2024.3.0  h07e8aee_0             conda-forge     Cached
+  + libopenvino-onnx-frontend                 2024.3.0  h07e8aee_0             conda-forge     Cached
+  + libopenvino-ir-frontend                   2024.3.0  h5c03a75_0             conda-forge     Cached
+  + libopenvino-intel-npu-plugin              2024.3.0  h2da1b83_0             conda-forge     Cached
+  + libopenvino-intel-gpu-plugin              2024.3.0  h2da1b83_0             conda-forge     Cached
+  + libopenvino-intel-cpu-plugin              2024.3.0  h2da1b83_0             conda-forge     Cached
+  + libopenvino-hetero-plugin                 2024.3.0  h5c03a75_0             conda-forge     Cached
+  + libopenvino-auto-plugin                   2024.3.0  hb045406_0             conda-forge     Cached
+  + libopenvino-auto-batch-plugin             2024.3.0  hb045406_0             conda-forge     Cached
+  + font-ttf-dejavu-sans-mono                     2.37  hab24e00_0             conda-forge     Cached
+  + font-ttf-inconsolata                         3.000  h77eed37_0             conda-forge     Cached
+  + font-ttf-source-code-pro                     2.038  h77eed37_0             conda-forge     Cached
+  + font-ttf-ubuntu                               0.83  h77eed37_2             conda-forge     Cached
+  + tzdata                                       2024a  h8827d51_1             conda-forge     Cached
+  + wayland-protocols                             1.36  hd8ed1ab_0             conda-forge     Cached
+  + fonts-conda-forge                                1  0                      conda-forge     Cached
+  + fonts-conda-ecosystem                            1  0                      conda-forge     Cached
+  + python                                      3.12.5  h2ad013b_0_cpython     conda-forge     Cached
+  + libva                                       2.22.0  hb711507_0             conda-forge     Cached
+  + cairo                                       1.18.0  hebfffa5_3             conda-forge     Cached
+  + harfbuzz                                     9.0.0  hda332d3_1             conda-forge     Cached
+  + qt6-main                                     6.7.2  hb12f9c5_5             conda-forge     Cached
+  + libass                                      0.17.3  h1dc1e6a_0             conda-forge     Cached
+  + ffmpeg                                       7.0.2  gpl_hebc05b9_101       conda-forge     Cached
+  + wheel                                       0.44.0  pyhd8ed1ab_0           conda-forge     Cached
+  + setuptools                                  73.0.1  pyhd8ed1ab_0           conda-forge     Cached
+  + pip                                           24.2  pyh8b19718_1           conda-forge     Cached
+  + aiohappyeyeballs                             2.4.0  pyhd8ed1ab_0           conda-forge     Cached
+  + attrs                                       24.2.0  pyh71513ae_0           conda-forge     Cached
+  + pycparser                                     2.22  pyhd8ed1ab_0           conda-forge     Cached
+  + six                                         1.16.0  pyh6c4a22f_0           conda-forge     Cached
+  + munkres                                      1.1.4  pyh9f0ad1d_0           conda-forge     Cached
+  + pyparsing                                    3.1.4  pyhd8ed1ab_0           conda-forge     Cached
+  + cycler                                      0.12.1  pyhd8ed1ab_0           conda-forge     Cached
+  + pytz                                        2024.1  pyhd8ed1ab_0           conda-forge     Cached
+  + python-tzdata                               2024.1  pyhd8ed1ab_0           conda-forge     Cached
+  + hyperframe                                   6.0.1  pyhd8ed1ab_0           conda-forge     Cached
+  + charset-normalizer                           3.3.2  pyhd8ed1ab_0           conda-forge     Cached
+  + hpack                                        4.0.0  pyh9f0ad1d_0           conda-forge     Cached
+  + pysocks                                      1.7.1  pyha2e5f31_6           conda-forge     Cached
+  + idna                                           3.8  pyhd8ed1ab_0           conda-forge     Cached
+  + certifi                                  2024.8.30  pyhd8ed1ab_0           conda-forge     Cached
+  + platformdirs                                 4.2.2  pyhd8ed1ab_0           conda-forge     Cached
+  + packaging                                     24.1  pyhd8ed1ab_0           conda-forge     Cached
+  + scooby                                      0.10.0  pyhd8ed1ab_0           conda-forge     Cached
+  + typing_extensions                           4.12.2  pyha770c72_0           conda-forge     Cached
+  + python-dateutil                              2.9.0  pyhd8ed1ab_0           conda-forge     Cached
+  + h2                                           4.1.0  pyhd8ed1ab_0           conda-forge     Cached
+  + typing-extensions                           4.12.2  hd8ed1ab_0             conda-forge     Cached
+  + multidict                                    6.0.5  py312h98912ed_0        conda-forge     Cached
+  + frozenlist                                   1.4.1  py312h98912ed_0        conda-forge     Cached
+  + msgpack-python                               1.0.8  py312h2492b07_0        conda-forge     Cached
+  + pyside6                                      6.7.2  py312hb5137db_2        conda-forge     Cached
+  + tornado                                      6.4.1  py312h9a8786e_0        conda-forge     Cached
+  + ruamel.yaml.clib                             0.2.8  py312h98912ed_0        conda-forge     Cached
+  + loguru                                       0.7.2  py312h7900ff3_2        conda-forge     Cached
+  + brotli-python                                1.1.0  py312h30efb56_1        conda-forge     Cached
+  + pillow                                      10.4.0  py312h287a98d_0        conda-forge     Cached
+  + kiwisolver                                   1.4.5  py312h8572e83_1        conda-forge     Cached
+  + numpy                                        2.1.0  py312h1103770_0        conda-forge     Cached
+  + cffi                                        1.17.0  py312h1671c18_0        conda-forge     Cached
+  + fonttools                                   4.53.1  py312h41a817b_0        conda-forge     Cached
+  + yarl                                         1.9.4  py312h98912ed_0        conda-forge     Cached
+  + ruamel.yaml                                 0.18.6  py312h98912ed_0        conda-forge     Cached
+  + libcantera                                   3.0.1  h6436c1b_9             conda-forge     Cached
+  + contourpy                                    1.2.1  py312h8572e83_0        conda-forge     Cached
+  + scipy                                       1.14.0  py312h499d17b_2        conda-forge     Cached
+  + pandas                                       2.2.2  py312h1d6d2e6_1        conda-forge     Cached
+  + zstandard                                   0.23.0  py312h3483029_0        conda-forge     Cached
+  + cantera                                      3.0.1  py312h6436c1b_9        conda-forge     Cached
+  + matplotlib-base                              3.9.2  py312h854627b_0        conda-forge     Cached
+  + matplotlib                                   3.9.2  py312h7900ff3_0        conda-forge     Cached
+  + aiosignal                                    1.3.1  pyhd8ed1ab_0           conda-forge     Cached
+  + urllib3                                      2.2.2  pyhd8ed1ab_1           conda-forge     Cached
+  + requests                                    2.32.3  pyhd8ed1ab_0           conda-forge     Cached
+  + pooch                                        1.8.2  pyhd8ed1ab_0           conda-forge     Cached
+  + aiohttp                                     3.10.5  py312h41a817b_0        conda-forge     Cached
+  + wslink                                       2.1.2  pyhd8ed1ab_0           conda-forge     Cached
+  + vtk-base                                     9.3.1  qt_py312hb690231_202   conda-forge     Cached
+  + vtk-io-ffmpeg                                9.3.1  qt_py312he1e5eab_202   conda-forge     Cached
+  + vtk                                          9.3.1  qt_py312hadc0db7_202   conda-forge     Cached
+  + pyvista                                     0.44.1  pyhd8ed1ab_0           conda-forge     Cached
+
+  Summary:
+
+  Install: 252 packages
+
+  Total download: 0 B
+
+───────────────────────────────────────────────────────────────────────────────────────────────────────
+
+
+
+Transaction starting
+Linking _libgcc_mutex-0.1-conda_forge
+Linking python_abi-3.12-5_cp312
+Linking utfcpp-4.0.5-ha770c72_0
+Linking libglvnd-1.7.0-ha4b6fd6_0
+Linking libgfortran5-13.2.0-ha4646dd_0
+Linking ld_impl_linux-64-2.40-hf3520f5_7
+Linking ca-certificates-2024.8.30-hbcca054_0
+Linking libgomp-12.4.0-h77fa898_1
+Linking libegl-1.7.0-ha4b6fd6_0
+Linking libgfortran-ng-13.2.0-h69a702a_0
+Linking _openmp_mutex-4.5-2_gnu
+Linking libgcc-12.4.0-h77fa898_1
+Linking libgcc-ng-12.4.0-h69a702a_1
+Linking libstdcxx-12.4.0-hc0a3c3a_1
+Linking xorg-recordproto-1.14.2-h7f98852_1002
+Linking fribidi-1.0.10-h36c2ea0_0
+Linking libunistring-0.9.10-h7f98852_0
+Linking xorg-libxdmcp-1.1.3-h7f98852_0
+Linking pthread-stubs-0.4-h36c2ea0_1001
+Linking xorg-inputproto-2.3.2-h7f98852_1002
+Linking xorg-renderproto-0.11.1-h7f98852_1002
+Linking xorg-xproto-7.0.31-h7f98852_1007
+Linking xorg-kbproto-1.0.7-h7f98852_1002
+Linking c-ares-1.33.0-ha66036c_0
+Linking libev-4.33-hd590300_2
+Linking libbrotlicommon-1.1.0-hd590300_1
+Linking libopenblas-0.3.27-pthreads_hac2b453_1
+Linking libgettextpo-0.22.5-he02047a_3
+Linking gettext-tools-0.22.5-he02047a_3
+Linking libxcrypt-4.4.36-hd590300_1
+Linking openssl-3.3.1-h4bc722e_2
+Linking ncurses-6.5-he02047a_1
+Linking metis-5.1.0-h59595ed_1007
+Linking libpciaccess-0.18-hd590300_0
+Linking keyutils-1.6.1-h166bdaf_0
+Linking alsa-lib-1.2.12-h4ab18f5_0
+Linking libffi-3.4.2-h7f98852_5
+Linking x264-1!164.3095-h166bdaf_2
+Linking libopus-1.3.1-h7f98852_1
+Linking libiconv-1.17-hd590300_2
+Linking lame-3.100-h166bdaf_1003
+Linking bzip2-1.0.8-h4bc722e_7
+Linking libdeflate-1.21-h4bc722e_0
+Linking libjpeg-turbo-3.0.0-hd590300_1
+Linking ocl-icd-2.3.2-hd590300_1
+Linking libzlib-1.3.1-h4ab18f5_1
+Linking nettle-3.9.1-h7ab15ed_0
+Linking libtasn1-4.19.0-h166bdaf_0
+Linking dav1d-1.2.1-hd590300_0
+Linking xorg-xextproto-7.3.0-h0b41bf4_1003
+Linking xorg-libice-1.1.1-hd590300_0
+Linking libogg-1.3.5-h4ab18f5_0
+Linking xorg-libxau-1.0.11-hd590300_0
+Linking libwebp-base-1.4.0-hd590300_0
+Linking libuuid-2.38.1-h0b41bf4_0
+Linking libnsl-2.0.1-hd590300_0
+Linking libexpat-2.6.2-h59595ed_0
+Linking xz-5.2.6-h166bdaf_0
+Linking libstdcxx-ng-12.4.0-h4852527_1
+Linking libbrotlienc-1.1.0-hd590300_1
+Linking libbrotlidec-1.1.0-hd590300_1
+Linking libblas-3.9.0-23_linux64_openblas
+Linking libgettextpo-devel-0.22.5-he02047a_3
+Linking libedit-3.1.20191231-he28a2e2_2
+Linking readline-8.2-h8228510_1
+Linking libdrm-2.4.122-h4ab18f5_0
+Linking libzip-1.10.1-h2629f0a_3
+Linking libssh2-1.11.0-h0841786_0
+Linking pcre2-10.44-hba22ea6_2
+Linking tk-8.6.13-noxft_h4845f30_101
+Linking zlib-1.3.1-h4ab18f5_1
+Linking libpng-1.6.43-h2797004_0
+Linking libsqlite-3.46.0-hde9e2c9_0
+Linking p11-kit-0.24.1-hc5aa10d_0
+Linking xorg-fixesproto-5.0-h7f98852_1002
+Linking libxcb-1.16-hd590300_0
+Linking xorg-libsm-1.2.4-h7391055_0
+Linking expat-2.6.2-h59595ed_0
+Linking libvorbis-1.3.7-h9c3ff4c_0
+Linking eigen-3.4.0-h00ab1b0_0
+Linking libnghttp2-1.58.0-h47da74e_1
+Linking libasprintf-0.22.5-he8f35ee_3
+Linking qhull-2020.2-h434a139_5
+Linking mysql-common-9.0.1-h70512c7_0
+Linking hdf4-4.2.15-h2a13503_7
+Linking libaec-1.1.3-h59595ed_0
+Linking nlohmann_json-3.11.3-he02047a_1
+Linking lz4-c-1.9.4-hcb278e6_0
+Linking jsoncpp-1.9.5-h4bd325d_1
+Linking gmp-6.3.0-hac33072_2
+Linking x265-3.5-h924138e_3
+Linking graphite2-1.3.13-h59595ed_1003
+Linking zstd-1.5.6-ha6fb4c9_0
+Linking lerc-4.0.0-h27087fc_0
+Linking pixman-0.43.2-h59595ed_0
+Linking icu-75.1-he02047a_0
+Linking libabseil-20240116.2-cxx17_he02047a_1
+Linking wayland-1.23.0-h5291e77_0
+Linking snappy-1.2.1-ha2e4443_0
+Linking svt-av1-2.1.2-hac33072_0
+Linking openh264-2.4.1-h59595ed_0
+Linking libvpx-1.14.1-hac33072_0
+Linking aom-3.9.1-hac33072_0
+Linking pugixml-1.14-h59595ed_0
+Linking double-conversion-3.3.0-h59595ed_0
+Linking yaml-cpp-0.8.0-h59595ed_0
+Linking fmt-11.0.2-h434a139_0
+Linking brotli-bin-1.1.0-hd590300_1
+Linking libcblas-3.9.0-23_linux64_openblas
+Linking liblapack-3.9.0-23_linux64_openblas
+Linking krb5-1.21.3-h659f571_0
+Linking libglib-2.80.3-h315aac3_2
+Linking freetype-2.12.1-h267a509_2
+Linking gl2ps-1.4.2-hae5d5c5_1
+Linking sqlite-3.46.0-h6d4b2fc_0
+Linking xcb-util-wm-0.4.2-hb711507_0
+Linking xcb-util-renderutil-0.3.10-hb711507_0
+Linking xcb-util-keysyms-0.4.1-hb711507_0
+Linking xcb-util-0.4.1-hb711507_2
+Linking xorg-libx11-1.8.9-hb711507_1
+Linking libtheora-1.1.1-h4ab18f5_1006
+Linking libasprintf-devel-0.22.5-he8f35ee_3
+Linking mpfr-4.2.1-h38ae2d0_2
+Linking mysql-libs-9.0.1-ha479ceb_0
+Linking libtiff-4.6.0-h46a8edc_4
+Linking libxml2-2.12.7-he7c6b58_4
+Linking libprotobuf-4.25.3-h08a7969_0
+Linking blosc-1.21.6-hef167b5_0
+Linking brotli-1.1.0-hd590300_1
+Linking libcurl-8.9.1-hdb1bdb2_0
+Linking libcups-2.3.3-h4637d8d_4
+Linking libpq-16.4-h482b261_0
+Linking dbus-1.13.6-h5008d03_3
+Linking fontconfig-2.14.2-h14ed4e7_0
+Linking xcb-util-image-0.4.0-hb711507_2
+Linking xkeyboard-config-2.42-h4ab18f5_0
+Linking libglx-1.7.0-ha4b6fd6_0
+Linking xorg-libxext-1.3.4-h0b41bf4_2
+Linking xorg-libxrender-0.9.11-hd590300_0
+Linking xorg-libxfixes-5.0.3-h7f98852_1004
+Linking xorg-libxt-1.3.0-hd590300_1
+Linking gettext-0.22.5-he02047a_3
+Linking openjpeg-2.5.2-h488ebb8_0
+Linking lcms2-2.16-hb7c19ff_0
+Linking libxslt-1.1.39-h76b75d6_0
+Linking libllvm18-18.1.8-h8b73ec9_2
+Linking libhwloc-2.11.1-default_hecaa2ac_1000
+Linking proj-9.4.1-h54d7996_1
+Linking hdf5-1.14.3-nompi_hdf9ad27_105
+Linking xcb-util-cursor-0.1.4-h4ab18f5_2
+Linking libxkbcommon-1.7.0-h2c5496b_1
+Linking libgl-1.7.0-ha4b6fd6_0
+Linking libglu-9.0.0-ha6d2627_1004
+Linking xorg-libxxf86vm-1.1.5-h4bc722e_1
+Linking xorg-libxi-1.7.10-h4bc722e_1
+Linking libidn2-2.3.7-hd590300_0
+Linking libclang13-18.1.8-default_h9def88c_4
+Linking libclang-cpp18.1-18.1.8-default_hf981a13_4
+Linking tbb-2021.12.0-h434a139_3
+Linking libnetcdf-4.9.2-nompi_h135f659_114
+Linking glew-2.1.0-h9c3ff4c_2
+Linking xorg-libxtst-1.2.5-h4bc722e_0
+Linking gnutls-3.8.7-h32866dd_0
+Linking suitesparse-7.8.1-h41f34aa_0
+Linking tbb-devel-2021.12.0-hfcbfbdb_3
+Linking libopenvino-2024.3.0-h2da1b83_0
+Linking sundials-7.1.1-ha52427a_0
+Linking libopenvino-tensorflow-lite-frontend-2024.3.0-he02047a_0
+Linking libopenvino-tensorflow-frontend-2024.3.0-h39126c6_0
+Linking libopenvino-pytorch-frontend-2024.3.0-he02047a_0
+Linking libopenvino-paddle-frontend-2024.3.0-h07e8aee_0
+Linking libopenvino-onnx-frontend-2024.3.0-h07e8aee_0
+Linking libopenvino-ir-frontend-2024.3.0-h5c03a75_0
+Linking libopenvino-intel-npu-plugin-2024.3.0-h2da1b83_0
+Linking libopenvino-intel-gpu-plugin-2024.3.0-h2da1b83_0
+Linking libopenvino-intel-cpu-plugin-2024.3.0-h2da1b83_0
+Linking libopenvino-hetero-plugin-2024.3.0-h5c03a75_0
+Linking libopenvino-auto-plugin-2024.3.0-hb045406_0
+Linking libopenvino-auto-batch-plugin-2024.3.0-hb045406_0
+Linking font-ttf-dejavu-sans-mono-2.37-hab24e00_0
+Linking font-ttf-inconsolata-3.000-h77eed37_0
+Linking font-ttf-source-code-pro-2.038-h77eed37_0
+Linking font-ttf-ubuntu-0.83-h77eed37_2
+Linking tzdata-2024a-h8827d51_1
+Linking wayland-protocols-1.36-hd8ed1ab_0
+Linking fonts-conda-forge-1-0
+Linking fonts-conda-ecosystem-1-0
+Linking python-3.12.5-h2ad013b_0_cpython
+Linking libva-2.22.0-hb711507_0
+Linking cairo-1.18.0-hebfffa5_3
+Linking harfbuzz-9.0.0-hda332d3_1
+Linking qt6-main-6.7.2-hb12f9c5_5
+Linking libass-0.17.3-h1dc1e6a_0
+Linking ffmpeg-7.0.2-gpl_hebc05b9_101
+Linking wheel-0.44.0-pyhd8ed1ab_0
+Linking setuptools-73.0.1-pyhd8ed1ab_0
+Linking pip-24.2-pyh8b19718_1
+Linking aiohappyeyeballs-2.4.0-pyhd8ed1ab_0
+Linking attrs-24.2.0-pyh71513ae_0
+Linking pycparser-2.22-pyhd8ed1ab_0
+Linking six-1.16.0-pyh6c4a22f_0
+Linking munkres-1.1.4-pyh9f0ad1d_0
+Linking pyparsing-3.1.4-pyhd8ed1ab_0
+Linking cycler-0.12.1-pyhd8ed1ab_0
+Linking pytz-2024.1-pyhd8ed1ab_0
+Linking python-tzdata-2024.1-pyhd8ed1ab_0
+Linking hyperframe-6.0.1-pyhd8ed1ab_0
+Linking charset-normalizer-3.3.2-pyhd8ed1ab_0
+Linking hpack-4.0.0-pyh9f0ad1d_0
+Linking pysocks-1.7.1-pyha2e5f31_6
+Linking idna-3.8-pyhd8ed1ab_0
+Linking certifi-2024.8.30-pyhd8ed1ab_0
+Linking platformdirs-4.2.2-pyhd8ed1ab_0
+Linking packaging-24.1-pyhd8ed1ab_0
+Linking scooby-0.10.0-pyhd8ed1ab_0
+Linking typing_extensions-4.12.2-pyha770c72_0
+Linking python-dateutil-2.9.0-pyhd8ed1ab_0
+Linking h2-4.1.0-pyhd8ed1ab_0
+Linking typing-extensions-4.12.2-hd8ed1ab_0
+Linking multidict-6.0.5-py312h98912ed_0
+Linking frozenlist-1.4.1-py312h98912ed_0
+Linking msgpack-python-1.0.8-py312h2492b07_0
+Linking pyside6-6.7.2-py312hb5137db_2
+Linking tornado-6.4.1-py312h9a8786e_0
+Linking ruamel.yaml.clib-0.2.8-py312h98912ed_0
+Linking loguru-0.7.2-py312h7900ff3_2
+Linking brotli-python-1.1.0-py312h30efb56_1
+Linking pillow-10.4.0-py312h287a98d_0
+Linking kiwisolver-1.4.5-py312h8572e83_1
+Linking numpy-2.1.0-py312h1103770_0
+Linking cffi-1.17.0-py312h1671c18_0
+Linking fonttools-4.53.1-py312h41a817b_0
+Linking yarl-1.9.4-py312h98912ed_0
+Linking ruamel.yaml-0.18.6-py312h98912ed_0
+Linking libcantera-3.0.1-h6436c1b_9
+Linking contourpy-1.2.1-py312h8572e83_0
+Linking scipy-1.14.0-py312h499d17b_2
+Linking pandas-2.2.2-py312h1d6d2e6_1
+Linking zstandard-0.23.0-py312h3483029_0
+Linking cantera-3.0.1-py312h6436c1b_9
+Linking matplotlib-base-3.9.2-py312h854627b_0
+Linking matplotlib-3.9.2-py312h7900ff3_0
+Linking aiosignal-1.3.1-pyhd8ed1ab_0
+Linking urllib3-2.2.2-pyhd8ed1ab_1
+Linking requests-2.32.3-pyhd8ed1ab_0
+Linking pooch-1.8.2-pyhd8ed1ab_0
+Linking aiohttp-3.10.5-py312h41a817b_0
+Linking wslink-2.1.2-pyhd8ed1ab_0
+Linking vtk-base-9.3.1-qt_py312hb690231_202
+Linking vtk-io-ffmpeg-9.3.1-qt_py312he1e5eab_202
+Linking vtk-9.3.1-qt_py312hadc0db7_202
+Linking pyvista-0.44.1-pyhd8ed1ab_0
+
+Transaction finished
+
+To activate this environment, use:
+
+    micromamba activate /home/runner/work/WallyToolbox.jl/WallyToolbox.jl/docs/.CondaPkg/env
+
+Or to execute a single command in this environment, use:
+
+    micromamba run -p /home/runner/work/WallyToolbox.jl/WallyToolbox.jl/docs/.CondaPkg/env mycommand</code></pre><p>Since Cantera is not yet available from Julia (I am working on that!), we wrap the interfacing with Python code in function <code>fit_gas_properties</code> provided below. There is a slight possibility that this function or a more generic variant of it will at some point be integrated into <code>PyCanteraTools</code>.</p><pre><code class="language-julia hljs">function fit_gas_properties(sol; orders = Dict())
     T = pyconvert(Vector{Float64}, sol.T)
 
     mu = pyconvert(Vector{Float64}, sol.viscosity)
@@ -117,4 +690,4 @@ gas.TPX = nothing, nothing, X_hydr</code></pre><p>The elemental mass fractions o
  0.0</code></pre><p>For preserving the flow characteristics of the simplified fuel, it is important to ensure the new <em>artificial</em> composition preserves the mean molecular mass. Doing so will keep constant inlet flow rate if using mass flow boundary conditions, as it is usual in combustion simulations.</p><pre><code class="language-julia hljs">mw = pyconvert(Float64, gas.mean_molecular_weight)
 mw</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">16.659571428571425</code></pre><p>Below we compute the stoichiometric coefficient of carbon in the target <em>artificial</em> species; it is simply a mass to mole fraction conversion, as one might promptly recognize.</p><pre><code class="language-julia hljs">scaler = :C =&gt; Y[1]*mw/1000atomicmass(:C)</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">:C =&gt; 1.043956043956044</code></pre><p>Using the mass fractions and the scaler one can easily compute the new hypothetical species using <code>hfo_empirical_formula</code>. It must be emphasized that although this function was initially conceived for handling heavy-fuel oils (HFOs) it is can also be used for any species in the <em>CHONS</em> chemistry family.</p><pre><code class="language-julia hljs">empirical_fuel = hfo_empirical_formula(Y; scaler)
 
-String(empirical_fuel)</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">&quot;C(1.043956)H(4.087912)O(0.000000)N(0.000000)S(0.000000)&quot;</code></pre><p>To wrap-up we verify that the new species really matches the target molecular mass; because of round-off errors and possible differences in atomic masses between Cantera and our database <sup class="footnote-reference"><a id="citeref-1" href="#footnote-1">[1]</a></sup>.</p><pre><code class="language-julia hljs">1000ChemicalCompound(Dict(zip(&quot;CHONS&quot;, empirical_fuel.X))).M ≈ mw</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">true</code></pre><p>There are a few extra steps that one must be aware; with the newly created species we need to create (by some means not described here) a new mechanism containing the hypothetical species. Once that is done, one needs to compute the heating values related to that fuel, <em>e.g.</em> using <code>mixture_heating_value</code>, what will lead to unphysical values at first. The formation enthalpy of the referred species needs to be corrected in mechanism data (generally NASA7 polynomials, for which it is done in the fifth coefficient) to match the reference fuel energy release.</p><section class="footnotes is-size-7"><ul><li class="footnote" id="footnote-1"><a class="tag is-link" href="#citeref-1">1</a>There should not be any difference because the database used internally by WallyToolbox is an extraction of Cantera source code.</li></ul></section></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../../WallyToolbox/Internals/Documents/">« Documents</a><a class="docs-footer-nextpage" href="../../Software/Elmer/">Elmer Multiphysics »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.5.0 on <span class="colophon-date" title="Wednesday 4 September 2024 17:24">Wednesday 4 September 2024</span>. Using Julia version 1.10.5.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+String(empirical_fuel)</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">&quot;C(1.043956)H(4.087912)O(0.000000)N(0.000000)S(0.000000)&quot;</code></pre><p>To wrap-up we verify that the new species really matches the target molecular mass; because of round-off errors and possible differences in atomic masses between Cantera and our database <sup class="footnote-reference"><a id="citeref-1" href="#footnote-1">[1]</a></sup>.</p><pre><code class="language-julia hljs">1000ChemicalCompound(Dict(zip(&quot;CHONS&quot;, empirical_fuel.X))).M ≈ mw</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">true</code></pre><p>There are a few extra steps that one must be aware; with the newly created species we need to create (by some means not described here) a new mechanism containing the hypothetical species. Once that is done, one needs to compute the heating values related to that fuel, <em>e.g.</em> using <code>mixture_heating_value</code>, what will lead to unphysical values at first. The formation enthalpy of the referred species needs to be corrected in mechanism data (generally NASA7 polynomials, for which it is done in the fifth coefficient) to match the reference fuel energy release.</p><section class="footnotes is-size-7"><ul><li class="footnote" id="footnote-1"><a class="tag is-link" href="#citeref-1">1</a>There should not be any difference because the database used internally by WallyToolbox is an extraction of Cantera source code.</li></ul></section></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../../WallyToolbox/Internals/Documents/">« Documents</a><a class="docs-footer-nextpage" href="../../Software/Elmer/">Elmer Multiphysics »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.5.0 on <span class="colophon-date" title="Friday 6 September 2024 07:24">Friday 6 September 2024</span>. Using Julia version 1.10.5.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
