@@ -176,7 +176,7 @@ function pure_species_heating_value(mech, fuel, oxid)
     # Read gas and set condition.
     gas = ct[].Solution(mech)
     gas.TP = 298.15, ct[].one_atm
-    gas.set_equivalence_ratio(1.0, fuel, oxid)
+    gas.set_equivalence_ratio(1.0, fuel, oxid)#, basis="mole")
     
     # Retrieve enthalpy and mass fraction of fuel.
     h1 = gas.enthalpy_mass
