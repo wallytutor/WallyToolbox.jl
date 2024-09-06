@@ -59,6 +59,14 @@ sudo mkdir /mnt/z
 sudo mount -t drvfs Z: /mnt/z
 ```
 
+### Following writing to a file
+
+This is equivalent to Linux `tail -f <file-path>`:
+
+```bash
+Get-Content -Path "<file-path>" -Wait
+```
+
 ---
 ## Regular expressions
 
