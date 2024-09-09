@@ -112,6 +112,10 @@ function oxidizer_mass_flow_rate(f::EmpiricalFuel; y_o2 = 0.23)
     return (1//2) * rhs * m_o2 / y_o2
 end
 
+function ChemicalCompound(f::EmpiricalFuel)
+    return ChemicalCompound(Dict(zip(f.elements, f.X)))
+end
+
 ##############################################################################
 # Heavy fuel oil
 ##############################################################################
