@@ -191,26 +191,40 @@ class FluentDpmFile:
             for k, row in enumerate(fp.readlines()):
                 self._parse_row(k, row)
 
+    def _get_patch(self, row: str) -> None:
+        self._patch = FluentSchemePatch(row)
+
+    def _get_header(self, row: str) -> None:
+        self._header = FluentSchemeHeader(row).names
+
+        # XXX: special case => when running with DEM collision
+        # model, everything is fine, but when normal DPM is run
+        # the `name` of injection (in outer parenthesis?) also
+        # figures in header; try to understand better...
+        if self._header[-1] == "name":
+            self._header.pop()
+
+        self._ncols = len(self._header)
+
     def _parse_row(self, k: int, row: str) -> None:
         match k:
             case 0:
-                self._patch = FluentSchemePatch(row)
+                self._get_patch(row)
                 return
             case 1:
-                self._header = FluentSchemeHeader(row)
-                self._ncols = len(self._header.names)
+                self._get_header(row)
                 return
 
         data = FluentSchemeTableRow(row)
 
         if len(data.values) != self._ncols:
-            raise ValueError(f"Malformed file at row {k}")
+            raise ValueError(f"Malformed file at row {k+1}")
             
         self._data.append(data.values)
 
     def to_dataframe(self):
         """ Convert parsed data to a data frame for analysis. """
-        return pd.DataFrame(self._data, columns=self._header.names)
+        return pd.DataFrame(self._data, columns=self._header)
 
 
 #######################################################################
