@@ -125,6 +125,8 @@ It is highly discouraged to use Octave for any large project, but it might be in
 - Fiji
 - FileZilla
 - Ipopt
+- Jamovi
+- JASP
 - lazarus
 - MSYS2
 - MUSEN
