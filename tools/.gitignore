@@ -21,6 +21,7 @@ bin/OpenModelica*
 bin/pandoc*
 bin/ParaView*
 bin/PortableGit*
+bin/radcal*
 bin/SALOME*
 bin/SU2*
 bin/texstudio*

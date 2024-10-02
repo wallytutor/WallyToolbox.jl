@@ -94,6 +94,7 @@ Since these are mostly domain-specific, it is up to you to select from the list.
 - [FreeFem++](https://github.com/FreeFem/FreeFem-sources/releases)
 - [LAMMPS](https://packages.lammps.org/windows.html)
 - [OpenModelica](https://openmodelica.org/download/download-windows/)
+- [RadCal](https://github.com/firemodels/radcal)
 - [SU2](https://su2code.github.io/download.html)
 
 For DualSPHysics one might also want to install [this FreeCAD addon](https://github.com/DualSPHysics/DesignSPHysics) and [this Blender addon](https://github.com/EPhysLab-UVigo/VisualSPHysics).

@@ -13,8 +13,8 @@ set PATH=%HERE%;%PATH%
 @REM @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 @REM Coding environment
-set GIT_VERSION=PortableGit-2.45.1
-set VSCODE_VERSION=VSCode-win32-x64-1.89.1
+set GIT_VERSION=PortableGit-2.46.2
+set VSCODE_VERSION=VSCode-win32-x64-1.93.1
 
 @REM Molecular dynamics
 set LAMMPS_VERSION=LAMMPS-64bit-Python-17Apr2024-MSMPI
@@ -27,7 +27,7 @@ set GMSH_VERSION=gmsh-4.13.0-Windows64-sdk
 set GNUPLOT_VERSION=gp600-win64-mingw
 set INKSCAPE_VERSION=inkscape-1.3.2_2023-11-25_091e20e-x64
 set MESHLAB_VERSION=MeshLab2023.12d-windows
-set PARAVIEW_VERSION=ParaView-5.12.0-Windows-Python3.10-msvc2017-AMD64
+set PARAVIEW_VERSION=ParaView-5.13.1-Windows-Python3.10-msvc2017-AMD64
 set SALOME_VERSION=SALOME-9.12.0
 
 @REM Simulation software
@@ -40,13 +40,13 @@ set MODELICA_VERSION=OpenModelica1.23.0-64bit
 set SU2_VERSION=SU2-v8.0.1-win64-mpi
 
 @REM LaTeX environment
-set JABREF_VERSION=JabRef-5.13-portable_windows
+set JABREF_VERSION=JabRef-5.15-portable_windows
 set MIKTEX_VERSION=basic-miktex-24.1-x64
 set TEXSTUDIO_VERSION=texstudio-4.8.0-win-portable-qt6
-set PANDOC_VERSION=pandoc-3.2
+set PANDOC_VERSION=pandoc-3.4
 
 @REM Main languages
-set JULIA_VERSION=julia-1.10.4
+set JULIA_VERSION=julia-1.10.5
 set WINPYTHON_VERSION=WPy64-31180
 set PYTHON_VERSION=python-3.11.8.amd64
 set OCTAVE_VERSION=octave-8.4.0-w64
