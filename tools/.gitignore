@@ -14,6 +14,7 @@ bin/inkscape*
 bin/JabRef*
 bin/julia*
 bin/LAMMPS*
+bin/lite-xl*
 bin/MeshLab*
 bin/obsidian*
 bin/octave*

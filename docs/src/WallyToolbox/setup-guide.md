@@ -129,6 +129,7 @@ It is highly discouraged to use Octave for any large project, but it might be in
 - Jamovi
 - JASP
 - lazarus
+- [lite-xl](https://github.com/lite-xl/lite-xl)
 - MSYS2
 - MUSEN
 - Notepad
