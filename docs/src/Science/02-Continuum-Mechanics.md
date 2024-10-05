@@ -178,7 +178,7 @@ which is a manifestation of fluctuation-dissipation theorem. This can be extende
 ---
 ## Biddle course
 
-### 015
+### 015 Introduction to radiation
 
 ![@video](https://www.youtube.com/embed/iOwpPodGenA?si=3xdV_BJoykUJpf5j)
 
@@ -204,12 +204,32 @@ $$
 
 - Other useful concepts are the *fractional emitted power* up to a given wavelength which can be used to compute the *band emission* over an interval.
 
-### 016
+### 016 Radiation surface properties
 
 ![@video](https://www.youtube.com/embed/GatZqqYXW24?si=nb_LnGQmKfpRlbE9)
 
 
-### 017
+- Incident radiation $G$ can be reflected ($\rho$), absorbed ($\alpha$), or transmitted ($\tau$); emitted radiation is always less then the black-body idealization by a factor given by the emissivity ($\epsilon$).
+
+- From energy balance one derives $\rho + \alpha + \tau = 1$; for opaque surfaces $\tau = 0$.
+
+- Radiosity $J$ of an opaque surface is given by $J=\epsilon{}E_{b}+\rho{}G$; the net radiation leaving a surface $q^{\prime\prime}=J-G$. Applying the previous definition $J=\epsilon{}E_{b}+\rho{}G-G=J=\epsilon{}E_{b}-\alpha{}G$.
+
+- The spectral properties $\epsilon_{\lambda}=\alpha_{\lambda}$ if (1) irradiation is diffuse or (2) the surface is diffuse; by diffuse we understand independence on emission/absorption angle. The values $\epsilon=\alpha$ if surface is grey, meaning properties are independent on wavelength $\lambda$ (simple attenuation of black-body).
+
+- Emissivity (or other properties) can be computed by averaging emissive power (or incident radiation, as applicable) over spectral emissivity and computing the value with respect to black-body radiation, or simply
+
+$$
+\epsilon =
+%
+\dfrac{\displaystyle\int_{0}^{\infty}\epsilon_{\lambda}E_{b,\lambda}d\lambda}{E_{b}}
+%
+\quad\text{where}\quad
+%
+E_{b} = \displaystyle\int_{0}^{\infty}E_{b,\lambda}d\lambda
+$$
+
+### 017 Radiation surface properties examples
 
 ![@video](https://www.youtube.com/embed/HPfs_LrqK0E?si=virGFddMJxImbL3t)
 
