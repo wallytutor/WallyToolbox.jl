@@ -342,4 +342,4 @@ In this expression the *big-D* notation represents a material or convective deri
 ---
 ## Radiative heat transfer
 
-In a complement to previous section, the following notes are mostly based on [Pr. Dr. John Biddle's](https://www.cpp.edu/meonline/heat-transfer.shtml) lectures and additional elements from ([[@Modest2022]]).
+In a complement to previous section, the following notes are mostly based on [Pr. Dr. John Biddle's](https://www.cpp.edu/meonline/heat-transfer.shtml) lectures (based on ([[@Incropera2011]])) and additional elements from ([[@Modest2022]]).

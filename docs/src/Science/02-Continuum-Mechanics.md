@@ -1,8 +1,10 @@
 # Notes by video lecture
 
+## Bazant course
+
 This section organizes notes by lecture, serving as a basis for writing the body of the main text or as complementary material for those willing to follow Bazant's course only. The playlist with all lectures is found in this [link](https://www.youtube.com/playlist?list=PLkdIY_5Zxa7WYkMvY48WQIxSZE-bI7R4w).
 
-## 019 Steady homogeneous reaction-diffusion
+### 019 Steady homogeneous reaction-diffusion
 
 #reaction-diffusion
 
@@ -20,7 +22,7 @@ C_{\infty} &\sim& C_{0}\sqrt{\dfrac{D}{k}}
 \end{cases}
 $$
 
-## 020 The Damköhler number
+### 020 The Damköhler number
 
 #dimless-damkohler
 
@@ -42,7 +44,7 @@ Limiting cases are:
 
 - $\mathrm{Da}\gg{1}$: fast reaction-limited transport; a thin layer of reaction products limits the affected depth and diffusion layer is thin beyond that. The relative amount of material that diffuses with respect to the other limiting case is $C/(C_0L^{d-1})\sim{}1/\sqrt{\mathrm{Da}}$.
 
-## 021 Dimensionless equations
+### 021 Dimensionless equations
 
 ![@video](https://www.youtube.com/embed/rrZgH7y15XU)
 
@@ -57,7 +59,7 @@ $$
 \end{cases}
 $$
 
-## 022 Symmetric domains
+### 022 Symmetric domains
 
 #bessel-function
 
@@ -65,7 +67,7 @@ $$
 
 *Always start any modeling with the simplest geometry that captures the basic features of the system being modeled; e.g. when expanding a solution of reaction-diffusion into exponential terms, it is worth noticing that they can be replaced by hyperbolic functions, and since $\sinh$ breaks the symmetry, that term may be eliminated already during constant identification from boundary conditions*.
 
-## 023 Steady convection-diffusion
+### 023 Steady convection-diffusion
 
 #dimless-peclet #plug-flow #convection-diffusion
 
@@ -105,7 +107,7 @@ $$
 
 In the limiting case of $\mathrm{Pe}\gg{1}$ diffusion is much slower than convection and the flow can be approximated as purely advective; this characterizes the plug-flow regime.
 
-## 024 Equilibrium drift-diffusion
+### 024 Equilibrium drift-diffusion
 
 #diffusion #mobility
 
@@ -141,34 +143,92 @@ which is a manifestation of fluctuation-dissipation theorem. This can be extende
 
 > [!todo]  Find and read the reference with the argument of equality by Einstein.
 
-## 025 Thickness of Earths atmosphere
+### 025 Thickness of Earths atmosphere
 
 ![@video](https://www.youtube.com/embed/aEe10NkgI98)
 
 *This video presents a simple example; there is nothing inherently theoretical I would like to extract from it; recommend it in notes because analysis is interesting.*
 
-## 026 Péclet number
+### 026 Péclet number
 
 #dimless-peclet #plug-flow #convection-diffusion
  
 ![@video](https://www.youtube.com/embed/hdkt3S78f8A)
 
-## 027
+### 027
 
 ![@video](https://www.youtube.com/embed/NX_KwqHmXe8)
 
-## 028
+### 028
 
 ![@video](https://www.youtube.com/embed/IuKyK3ysekI)
 
-## 029
+### 029
 
 ![@video](https://www.youtube.com/embed/0BU9KNXCPa0)
 
-## 030
+### 030
 
 ![@video](https://www.youtube.com/embed/b7T32rqo2UI)
 
-## 031
+### 031
 
 ![@video]()
+
+---
+## Biddle course
+
+### 015
+
+![@video](https://www.youtube.com/embed/iOwpPodGenA?si=3xdV_BJoykUJpf5j)
+
+- Electromagnetic radiation by a body due to its temperature; spectra range from 0.1 to 100 $\mu{m}$.
+
+- Black body: emits the maximum possible radiation at a given wavelength and absorbs all incident radiation according to black body emissive power $E_{b,\lambda}$.
+
+$$
+E_{b,\lambda} = \dfrac{C_{1}}{\lambda^5\left[\exp\left(\dfrac{C_2}{\lambda{}T}\right)-1\right]}
+$$
+
+- The distribution $E_{b,\lambda}$ is displaced towards the right as temperature decreases (Wien's shift): as temperature decreases the wavelength at maximum emission moves towards the infrared.
+
+$$
+\lambda_{max}T=C_{3}=2897.6\:\mu{m}\cdotp{K}
+$$
+
+- The total emissive power $E_{b}$ obtained by integrating its spectral counterpart $E_{b,\lambda}$ gives rise to Stefan-Boltzmann law:
+
+$$
+E_{b} = \sigma{}T^4
+$$
+
+- Other useful concepts are the *fractional emitted power* up to a given wavelength which can be used to compute the *band emission* over an interval.
+
+### 016
+
+![@video](https://www.youtube.com/embed/GatZqqYXW24?si=nb_LnGQmKfpRlbE9)
+
+
+### 017
+
+![@video](https://www.youtube.com/embed/HPfs_LrqK0E?si=virGFddMJxImbL3t)
+
+### 018
+
+![@video](https://www.youtube.com/embed/CiSA_MQv41I?si=8MH2MJrU7y_YxKxJ)
+
+### 019
+
+![@video](https://www.youtube.com/embed/nz8wA8VCV5I?si=0_63MDit0s9jg74T)
+
+### 020
+
+![@video](https://www.youtube.com/embed/H5sFz47N0rY?si=IhbJF7jRtVf0FzY4)
+
+### 021
+
+![@video](https://www.youtube.com/embed/CUZGj-NxqnU?si=A8Wg6qFZLaZMSgun)
+
+### 022
+
+![@video](https://www.youtube.com/embed/yxHZomAnKqw?si=5Z0K10v_AnXKHGPV)
