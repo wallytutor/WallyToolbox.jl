@@ -30,7 +30,7 @@ Now you can launch the editor with access to the deployed software by clicking [
 
 ## Minimal working environment
 
-These are required to get your system working for the first time. After installing `VS Code`, enable its [portable mode](https://code.visualstudio.com/docs/editor/portable) and install required extensions (Python and Julia support, ...). Also notice that there is a [`tools/vscode/`](https://github.com/wallytutor/WallyToolbox.jl/tree/main/tools/vscode) directory for keeping user configurations in a version controlled way.
+These are required to get your system working for the first time. After installing `VS Code`, do **NOT** enable its [portable mode](https://code.visualstudio.com/docs/editor/portable) (because the VBS file for launching will point to a specific user-data folder) and install required extensions (Python and Julia support, ...). Also notice that there is a [`tools/vscode/`](https://github.com/wallytutor/WallyToolbox.jl/tree/main/tools/vscode) directory for keeping user configurations in a version controlled way.
 
 - [VS Code](https://code.visualstudio.com/Download)
 - [Git](https://git-scm.com/download/win)

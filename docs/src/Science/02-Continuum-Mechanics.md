@@ -208,7 +208,6 @@ $$
 
 ![@video](https://www.youtube.com/embed/GatZqqYXW24?si=nb_LnGQmKfpRlbE9)
 
-
 - Incident radiation $G$ can be reflected ($\rho$), absorbed ($\alpha$), or transmitted ($\tau$); emitted radiation is always less then the black-body idealization by a factor given by the emissivity ($\epsilon$).
 
 - From energy balance one derives $\rho + \alpha + \tau = 1$; for opaque surfaces $\tau = 0$.
@@ -232,6 +231,8 @@ $$
 ### 017 Radiation surface properties examples
 
 ![@video](https://www.youtube.com/embed/HPfs_LrqK0E?si=virGFddMJxImbL3t)
+
+- 
 
 ### 018
 
