@@ -13,4 +13,23 @@ The following video provides a discussion of the above steps.
 
 ## Documentation
 
-Other than the `docs/` directory under the extracted folder tree, there is a [wiki](https://github.com/DualSPHysics/DualSPHysics/wiki) where the updated version of the documentation is maintained.
+Other than the `docs/` directory under the extracted folder tree, there is a [wiki](https://github.com/DualSPHysics/DualSPHysics/wiki) where the updated version of the documentation is maintained. There is little to no documentation of XML input format, what is reverse-engineered below.
+
+The root of a simulation settings file is the `<case>` block, which by its turn is composed of `<casedef>` and `<execution>`. 
+
+### `<casedef>`
+
+It is used mainly for declaration of constants under `<constantsdef>` and `<geometry>`.
+
+### `<execution>`
+
+Under this block one may declare `<parameters>` related to solution controls declared through `<parameter>` entries, especially choice of algorithms, numerical parameters for tuning integration, and results related settings. It also provides the `<simulationdomain>`, which describes the bounding box of the system (generally left to defaults). 
+
+#### `<parameter>`
+
+The syntax of  `<parameter>` entries is as follows:
+
+```xml
+<parameter key="paramName" value="someValue" comment="Description" />
+<parameter key="Rho" value="1000.0" comment="A density" units_comment="kg/m^3" />
+```

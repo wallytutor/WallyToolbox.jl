@@ -253,3 +253,41 @@ $$
 ### 022
 
 ![@video](https://www.youtube.com/embed/yxHZomAnKqw?si=5Z0K10v_AnXKHGPV)
+
+---
+## Bansal course
+
+### 025 Discrete ordinate method
+
+![@video](https://www.youtube.com/embed/8mzKCYdu4xI?si=9RqEO_Ns12zXO9jM)
+
+- Discretize finite angular directions (RTE transformed in a set of simultaneous first order PDE's), so that radiative heat flux and incident radiation are solved only over those directions.
+
+- Depending on the order of the chosen method, a given set of ordinates and weights needs to be chosen to enforce zeroth (total intensity), first (energy conservation), and second (volumetric) moments:
+
+$$
+\begin{align}
+\displaystyle\int_{4\pi}d\Omega
+& = \sum_{i=1}^{n}w_{i}
+  = 4\pi
+\\[12pt]
+%
+\displaystyle\int_{4\pi}\hat{s}\;d\Omega
+& = \sum_{i=1}^{n}w_{i}\hat{s}_{i}
+  = 0
+\\[12pt]
+%
+\displaystyle\int_{4\pi}\hat{s}\cdotp\hat{s}\;d\Omega
+& = \sum_{i=1}^{n}w_{i}\hat{s}_{i}\hat{s}_{i}
+  = \dfrac{4\pi}{3}\delta
+%
+\end{align}
+$$
+
+- The method is limited by false scattering (beam broadening) due to spatial discretization error; because of angular discretization some cells may not receive radiation.
+
+### Weighted sum of gray gases
+
+![@video](https://www.youtube.com/embed/zTWhyQA5POQ?si=qQxd1os9gA0J__NW)
+
+- 
