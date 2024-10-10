@@ -21,7 +21,7 @@
     "extensions.ignoreRecommendations": true,
     "python.createEnvironment.trigger": "off",
 
-    "workbench.colorTheme": "Dracula Theme",
+    "workbench.colorTheme": "Julia (Monokai Vibrant)",
     "workbench.startupEditor": "none",
     "workbench.tree.indent": 12,
 
@@ -154,5 +154,6 @@
         "**/constant/g": "OpenFOAM",
         "**/0/*": "OpenFOAM"
     },
+    "redhat.telemetry.enabled": false,
 
 }

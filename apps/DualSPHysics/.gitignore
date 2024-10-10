@@ -1,0 +1,8 @@
+# Batch script files provided with DualSPHysics; use julia module:
+*.bat
+
+# Standard output folder naming:
+*_out/
+
+# Generated logs:
+log.*

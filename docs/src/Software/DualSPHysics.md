@@ -33,3 +33,9 @@ The syntax of  `<parameter>` entries is as follows:
 <parameter key="paramName" value="someValue" comment="Description" />
 <parameter key="Rho" value="1000.0" comment="A density" units_comment="kg/m^3" />
 ```
+
+## Guidelines
+
+### Pressure probes
+
+*See case `main/01_DamBreak` for details*. Due to the use of the dynamic boundaries, probes used for  measuring quantities should not be placed at the exact position of boundary particles. The forces exerted by the boundary particles create a small gap between them and fluid particles (1.5 times h); as a result, probes placed inside the gap will have a reduced fluid particle population and will produce either an incorrect or no result. To avoid this issue, it is proposed that probes are placed at a distance $1.5 h$ from the boundary positions.
