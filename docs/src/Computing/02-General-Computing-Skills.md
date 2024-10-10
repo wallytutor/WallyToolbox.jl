@@ -104,3 +104,14 @@ Regular expressions (or simply *regex*) processing is a must-have skill for anyo
 ### LaTeX Workshop
 
 - [Configuring builds in VS Code with LaTeX Workshop](https://tex.stackexchange.com/questions/478865/vs-code-latex-workshop-custom-recipes-file-location) for building with `pdflatex`. Finally I ended creating my own workflows in this [file](https://github.com/wallytutor/WallyToolbox.jl/blob/main/tools/vscode/user-data/User/settings.json).
+
+---
+## Python
+
+### Installing packages behind proxy
+
+To install a package behind a proxy requiring SSL one can enforce trusted hosts to avoid certificate hand-shake and allow installation. This is done with the following options:
+
+```ps1
+pip install --trusted-host pypi.org --trusted-host files.pythonhosted.org <pkg>
+```

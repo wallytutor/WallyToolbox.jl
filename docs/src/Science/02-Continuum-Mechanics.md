@@ -286,7 +286,7 @@ $$
 
 - The method is limited by false scattering (beam broadening) due to spatial discretization error; because of angular discretization some cells may not receive radiation.
 
-### Weighted sum of gray gases
+### 035 Weighted sum of gray gases
 
 ![@video](https://www.youtube.com/embed/zTWhyQA5POQ?si=qQxd1os9gA0J__NW)
 
