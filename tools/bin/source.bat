@@ -142,7 +142,7 @@ REG ADD "HKCU\Software\Cantera\Cantera 3.0" /v InstallDir /t REG_SZ /d %CANTERA_
 @REM CONFIGURE FREEFEM
 @REM @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-set %FREEFEM_HOME%=%HERE%%FREEFEM_VERSION%
+set FREEFEM_HOME=%HERE%%FREEFEM_VERSION%
 
 set PATH=%FREEFEM_HOME%;%PATH%
 
