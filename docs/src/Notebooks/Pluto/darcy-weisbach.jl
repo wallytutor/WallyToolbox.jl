@@ -96,17 +96,29 @@ md"""
 For the selection of `nlsolve` consider checking the documentation of [NonlinearSolve](https://docs.sciml.ai/NonlinearSolve/stable/solvers/nonlinear_system_solvers/).
 """
 
+# ╔═╡ 77f494a0-9749-4989-8eab-ff64bd3b3648
+function sutherland_viscosity(T, T0, μ0, Sμ)
+	return μ0 * (T/T0)^(3//2) * (T0 + Sμ) / (T + Sμ)
+end
+
+# ╔═╡ dba151fc-0e84-498a-af43-2af17b3670ce
+function air_viscosity(T)
+	return sutherland_viscosity(T, 273.15, 1.716e-05, 111.0)
+end
+
 # ╔═╡ 60985445-5a27-41fd-9956-c88f47704274
 function solve_channel(model, D, L, p; 
 		nlsolve = TrustRegion(),
-		μ = 1.86e-05,
-		ε = 0.2,
-		f = 0.01,
-		U = 100.0
+		ε = 0.1,
+		f = 0.06,
+		U = 500.0,
+		T = 300
 	)
+	T = T_REF + T
+	
 	ps = [
-		model.ρ  => DENSITY * (300.0/T_REF),
-		model.μ  => μ,
+		model.ρ  => DENSITY * (T_REF/T),
+		model.μ  => air_viscosity(T),
 		model.ε  => ε/1000,
 		model.D  => D/1000,
 		model.L  => L/1000,
@@ -146,7 +158,7 @@ let
 end
 
 # ╔═╡ a02cd203-8122-444d-a0cc-af32ce1ffd5c
-fd_use = fd_colebrook
+fd_use = fd_haaland
 
 # ╔═╡ 0aefabd3-44d7-4e00-9ce5-1973bc7b1705
 mdot_cool = let
@@ -175,7 +187,7 @@ mdot_tangential = let
 	L = 14.41 / sin(deg2rad(50))
 
 	model = darcy_weisbach(fd_use)
-	N * solve_channel(model, D, L, 107.0)	
+	N * solve_channel(model, D, L, 108.0)	
 end
 
 # ╔═╡ 3357de42-e48c-4e4d-a7df-58d916a1c9b5
@@ -202,11 +214,13 @@ mdot_external / mdot_tot, mdot_cool / mdot_tot, mdot_tangential / mdot_tot
 # ╟─360e9495-3384-477b-a211-ffa8bb3d1fac
 # ╠═882d83ed-65e5-4b24-b4d2-305e5f63baf3
 # ╟─795203f6-f46b-4a47-8cd4-f50b2dc7ef38
+# ╠═77f494a0-9749-4989-8eab-ff64bd3b3648
+# ╠═dba151fc-0e84-498a-af43-2af17b3670ce
 # ╠═60985445-5a27-41fd-9956-c88f47704274
 # ╟─bd79f2ef-db5e-442b-98eb-a209820cbefe
-# ╟─a02cd203-8122-444d-a0cc-af32ce1ffd5c
-# ╠═0aefabd3-44d7-4e00-9ce5-1973bc7b1705
-# ╠═570dfee3-ee8e-47cb-87be-ab0f467f5f17
-# ╠═067d1351-7739-4d14-a5c7-203a4e86bb59
+# ╠═a02cd203-8122-444d-a0cc-af32ce1ffd5c
+# ╟─0aefabd3-44d7-4e00-9ce5-1973bc7b1705
+# ╟─570dfee3-ee8e-47cb-87be-ab0f467f5f17
+# ╟─067d1351-7739-4d14-a5c7-203a4e86bb59
 # ╟─3357de42-e48c-4e4d-a7df-58d916a1c9b5
 # ╠═8fcaed37-d179-449c-8d43-8d0ad9a6c35e
