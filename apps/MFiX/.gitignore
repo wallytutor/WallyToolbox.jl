@@ -1,7 +1,0 @@
-*.pvd
-*.stl
-*.vtk
-*.vtp
-*.vtu
-
-VTU_FRAME_INDEX.TXT
