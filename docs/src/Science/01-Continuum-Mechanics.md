@@ -347,7 +347,7 @@ In a complement to previous section, the following notes are mostly based on [Pr
 ---
 ## Combustion
 
-These notes are mostly based on Warnatz 2006. 
+These notes are mostly based on ([[@Warnatz2006]]), except where mentioned otherwise.
 
 ### NOx formation
 
