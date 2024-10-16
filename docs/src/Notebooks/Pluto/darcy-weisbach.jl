@@ -16,9 +16,39 @@ begin
 	using NonlinearSolve
 end
 
+# ╔═╡ 3f9fdb0e-caab-40df-99f8-cf0e5ec8deff
+md"""
+# Darcy-Weisbash equation
+"""
+
 # ╔═╡ 56fcb1bb-ba82-4140-8d02-1095232c8202
 "Air density at normal state for mass flow calculations."
 const DENSITY = P_REF * M_AIR / (GAS_CONSTANT * T_REF)
+
+# ╔═╡ 02b25aaa-0531-48ee-b8f5-8376fb8e6db5
+md"""
+## Properties
+"""
+
+# ╔═╡ 53881209-6da6-4bee-aaf2-8a52cfdf28cb
+md"""
+Parameters for Sutherland model are found in [Comsol's documentation](https://doc.comsol.com/5.5/doc/com.comsol.help.cfd/cfd_ug_fluidflow_high_mach.08.27.html).
+"""
+
+# ╔═╡ 77f494a0-9749-4989-8eab-ff64bd3b3648
+function sutherland_viscosity(T, T0, μ0, Sμ)
+	return μ0 * (T/T0)^(3//2) * (T0 + Sμ) / (T + Sμ)
+end
+
+# ╔═╡ dba151fc-0e84-498a-af43-2af17b3670ce
+function air_viscosity(T)
+	return sutherland_viscosity(T, 273.15, 1.716e-05, 111.0)
+end
+
+# ╔═╡ c3607947-d88e-4f10-921d-be654330ad9a
+md"""
+## Relationships
+"""
 
 # ╔═╡ 38ed939b-62e9-476f-aa75-9de9b19ba5b0
 md"""
@@ -62,20 +92,30 @@ end
 # function fd_goudar_sonnad(f, Re, ξ)
 # function fd_churchill(f, Re, ξ)
 
+# ╔═╡ 00812f04-a14c-434f-a0ac-bf0943976a0c
+md"""
+## Model
+"""
+
+# ╔═╡ 795203f6-f46b-4a47-8cd4-f50b2dc7ef38
+md"""
+For the selection of `nlsolve` consider checking the documentation of [NonlinearSolve](https://docs.sciml.ai/NonlinearSolve/stable/solvers/nonlinear_system_solvers/).
+"""
+
 # ╔═╡ 882d83ed-65e5-4b24-b4d2-305e5f63baf3
 function darcy_weisbach(fd_eqn)
 	vars = @variables begin
 		f, [bounds = (0.0, 1.0)]
-		U, [bounds = (0.0, Inf)]
+		U, [bounds = (0.0, 1000.0)]
 	end
 
-	params = @parameters begin
-		ρ
-		μ
-		ε
-		D
-		L
-		Δp
+	pars = @parameters begin
+		ρ,  [bounds = (1.0e-03, Inf)]
+		μ,  [bounds = (1.0e-07, Inf)]
+		ε,  [bounds = (0.0e+00, Inf)]
+		D,  [bounds = (1.0e-06, Inf)]
+		L,  [bounds = (1.0e-06, Inf)]
+		Δp, [bounds = (1.0e-06, Inf)]
 	end
 
 	Re = ρ * U * D / μ
@@ -86,35 +126,20 @@ function darcy_weisbach(fd_eqn)
 		0 ~ fd_eqn(f, Re, ε/D)
 	]
 
-	@mtkbuild ns = NonlinearSystem(eqs)
+	@mtkbuild ns = NonlinearSystem(eqs, vars, pars)
 
 	return ns
-end
-
-# ╔═╡ 795203f6-f46b-4a47-8cd4-f50b2dc7ef38
-md"""
-For the selection of `nlsolve` consider checking the documentation of [NonlinearSolve](https://docs.sciml.ai/NonlinearSolve/stable/solvers/nonlinear_system_solvers/).
-"""
-
-# ╔═╡ 77f494a0-9749-4989-8eab-ff64bd3b3648
-function sutherland_viscosity(T, T0, μ0, Sμ)
-	return μ0 * (T/T0)^(3//2) * (T0 + Sμ) / (T + Sμ)
-end
-
-# ╔═╡ dba151fc-0e84-498a-af43-2af17b3670ce
-function air_viscosity(T)
-	return sutherland_viscosity(T, 273.15, 1.716e-05, 111.0)
 end
 
 # ╔═╡ 60985445-5a27-41fd-9956-c88f47704274
 function solve_channel(model, D, L, p; 
 		nlsolve = TrustRegion(),
-		ε = 0.1,
+		ε = 0.05,
 		f = 0.06,
 		U = 500.0,
 		T = 300
 	)
-	T = T_REF + T
+	T += T_REF
 	
 	ps = [
 		model.ρ  => DENSITY * (T_REF/T),
@@ -130,10 +155,10 @@ function solve_channel(model, D, L, p;
 	sol = solve(prob, nlsolve)
 
 	if sol.retcode != ReturnCode.Success
-		@error("Solution failed with $(sol.retcode)!")
+		@error("Solution failed with `$(sol.retcode)`!")
 	end
 
-	ṁ = let
+	mdot = let
 		pars = prob.ps
 		
 		ρ = pars[model.ρ]
@@ -145,20 +170,39 @@ function solve_channel(model, D, L, p;
 		ρ * U * A
 	end
 
-	@info sol
+	@info(sol)
 	
-	return ṁ
+	return mdot
 end
+
+# ╔═╡ a02cd203-8122-444d-a0cc-af32ce1ffd5c
+fd_use = fd_colebrook
 
 # ╔═╡ bd79f2ef-db5e-442b-98eb-a209820cbefe
 let
-	model = darcy_weisbach(fd_colebrook)
+	model = darcy_weisbach(fd_use)
 	@info unknowns(model), parameters(model)
 	model
 end
 
-# ╔═╡ a02cd203-8122-444d-a0cc-af32ce1ffd5c
-fd_use = fd_haaland
+# ╔═╡ 1f115f6f-df6d-4134-8269-167736e3c238
+let
+	p1 = 101325 + 100 * 35.5
+	p2 = 101325
+
+	f = 0.06
+	L = 0.0120
+	D = 0.0044
+
+	T = 300.0
+	R = GAS_CONSTANT
+	
+	C = f*L/D + 2log(p1/p2)
+	G = sqrt((p1^2 - p2^2) / (R * T * C))
+	A = π * (D/2)^2
+
+	9 * G * A
+end
 
 # ╔═╡ 0aefabd3-44d7-4e00-9ce5-1973bc7b1705
 mdot_cool = let
@@ -203,8 +247,14 @@ end
 mdot_external / mdot_tot, mdot_cool / mdot_tot, mdot_tangential / mdot_tot
 
 # ╔═╡ Cell order:
+# ╟─3f9fdb0e-caab-40df-99f8-cf0e5ec8deff
 # ╟─dcfd03a0-8b23-11ef-202f-0557552ecc92
 # ╟─56fcb1bb-ba82-4140-8d02-1095232c8202
+# ╟─02b25aaa-0531-48ee-b8f5-8376fb8e6db5
+# ╟─53881209-6da6-4bee-aaf2-8a52cfdf28cb
+# ╟─77f494a0-9749-4989-8eab-ff64bd3b3648
+# ╟─dba151fc-0e84-498a-af43-2af17b3670ce
+# ╟─c3607947-d88e-4f10-921d-be654330ad9a
 # ╟─38ed939b-62e9-476f-aa75-9de9b19ba5b0
 # ╟─39b60b4e-4c94-4f45-8c6e-1ad9b65930aa
 # ╟─2144db16-84ed-40d0-8574-07d59cfba52b
@@ -212,15 +262,15 @@ mdot_external / mdot_tot, mdot_cool / mdot_tot, mdot_tangential / mdot_tot
 # ╟─42b0e51f-ec00-467c-a4b8-d9c9f4b4d9c2
 # ╟─1354c571-9c53-45e0-a9f6-eb135abc1e78
 # ╟─360e9495-3384-477b-a211-ffa8bb3d1fac
-# ╠═882d83ed-65e5-4b24-b4d2-305e5f63baf3
+# ╟─00812f04-a14c-434f-a0ac-bf0943976a0c
 # ╟─795203f6-f46b-4a47-8cd4-f50b2dc7ef38
-# ╠═77f494a0-9749-4989-8eab-ff64bd3b3648
-# ╠═dba151fc-0e84-498a-af43-2af17b3670ce
+# ╠═882d83ed-65e5-4b24-b4d2-305e5f63baf3
 # ╠═60985445-5a27-41fd-9956-c88f47704274
+# ╟─a02cd203-8122-444d-a0cc-af32ce1ffd5c
 # ╟─bd79f2ef-db5e-442b-98eb-a209820cbefe
-# ╠═a02cd203-8122-444d-a0cc-af32ce1ffd5c
-# ╟─0aefabd3-44d7-4e00-9ce5-1973bc7b1705
+# ╠═1f115f6f-df6d-4134-8269-167736e3c238
+# ╠═0aefabd3-44d7-4e00-9ce5-1973bc7b1705
 # ╟─570dfee3-ee8e-47cb-87be-ab0f467f5f17
 # ╟─067d1351-7739-4d14-a5c7-203a4e86bb59
 # ╟─3357de42-e48c-4e4d-a7df-58d916a1c9b5
-# ╠═8fcaed37-d179-449c-8d43-8d0ad9a6c35e
+# ╟─8fcaed37-d179-449c-8d43-8d0ad9a6c35e
