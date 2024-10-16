@@ -190,6 +190,7 @@ let
 	p1 = 101325 + 100 * 35.5
 	p2 = 101325
 
+	# f = 2.75
 	f = 0.06
 	L = 0.0120
 	D = 0.0044
@@ -269,7 +270,7 @@ mdot_external / mdot_tot, mdot_cool / mdot_tot, mdot_tangential / mdot_tot
 # ╟─a02cd203-8122-444d-a0cc-af32ce1ffd5c
 # ╟─bd79f2ef-db5e-442b-98eb-a209820cbefe
 # ╠═1f115f6f-df6d-4134-8269-167736e3c238
-# ╠═0aefabd3-44d7-4e00-9ce5-1973bc7b1705
+# ╟─0aefabd3-44d7-4e00-9ce5-1973bc7b1705
 # ╟─570dfee3-ee8e-47cb-87be-ab0f467f5f17
 # ╟─067d1351-7739-4d14-a5c7-203a4e86bb59
 # ╟─3357de42-e48c-4e4d-a7df-58d916a1c9b5
