@@ -68,6 +68,14 @@ Get-Content -Path "<file-path>" -Wait
 ```
 
 ---
+## Working on Linux
+
+Several recent Linux distributions use Gnome 3 as the default desktop manager. A few *innovations* introduced by this environment are not really interesting and falling back to classical modes is useful:
+
+- [Add minimize/maximize buttons to the corner of windows](https://askubuntu.com/questions/651347)
+- [Include a permanent configurable dock for applications](https://micheleg.github.io/dash-to-dock/)
+
+---
 ## Regular expressions
 
 Regular expressions (or simply *regex*) processing is a must-have skill for anyone doing scientific computing. Most programs produce results or logs in plain text and do not support specific data extraction from those. There *regex* becomes your best friend. Unfortunately during the years many flavors of regex appeared, each claiming to offer advantages or to be more formal than its predecessors. Due to this, learning regex is often language-specific (most of the time you create and process regex from your favorite language) and sometimes even package-specific. Needless to say, regex may be more difficult to master than assembly programming.
