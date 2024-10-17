@@ -14,6 +14,10 @@ begin
 	using WallyToolbox
 	using ModelingToolkit
 	using NonlinearSolve
+	using PlutoUI: TableOfContents
+	using Symbolics
+	
+	TableOfContents()
 end
 
 # ╔═╡ 3f9fdb0e-caab-40df-99f8-cf0e5ec8deff
@@ -247,6 +251,143 @@ end
 # ╔═╡ 8fcaed37-d179-449c-8d43-8d0ad9a6c35e
 mdot_external / mdot_tot, mdot_cool / mdot_tot, mdot_tangential / mdot_tot
 
+# ╔═╡ 6a6ad275-90d9-47d0-8b5e-a3d20efa9b0a
+md"""
+## Experimental
+"""
+
+# ╔═╡ db5fe5d7-e033-43ef-92d3-1dcbf3d64c17
+begin
+	tuplefy(d) = NamedTuple{Tuple(keys(d))}(values(d))
+	
+	########
+	
+	struct UnsolvableAlgebraicModel <: Exception
+		msg::String
+	
+		function UnsolvableAlgebraicModel(vars, pars)
+			return new(
+				"Unable to solve algebraic model containing [$(join(vars, ", "))] " *
+				"by providing only [$(join(pars, ", "))]! Please, revise the " *
+				"setup of the system!"
+			)
+		end
+	end
+	
+	function Base.showerror(io::IO, err::UnsolvableAlgebraicModel)
+	   print(io, "UnsolvableAlgebraicModel: ")
+	   print(io, err.msg)
+	end
+
+	########
+	
+	struct AlgebraicModel
+		vars::NamedTuple
+		eqns::Vector{Equation}
+		pars::Dict{Symbol, Float64}
+
+		function AlgebraicModel(vars, eqns, pars)
+			vars = Dict(map(v->(Symbol(v), v), vars))
+			return new(tuplefy(vars), eqns, pars)
+		end
+	end
+	
+	function replacement_solve(obj::AlgebraicModel)
+		subs = map(v->(v, get(obj.pars, Symbol(v), v)), values(obj.vars))
+		eqns = substitute(obj.eqns, Dict(subs))
+		return eqns
+	end
+
+	function structural_solve(obj::AlgebraicModel)
+		eqns = replacement_solve(obj)
+
+		has_pars = length(obj.pars) > 0
+		
+		if has_pars && length(obj.vars) - length(obj.pars) != length(eqns)
+			throw(UnsolvableAlgebraicModel(obj.vars, obj.pars))
+		end
+		
+		@mtkbuild ns = NonlinearSystem(eqns, [values(obj.vars)...], [])
+		prob = NonlinearProblem(ns, [], [])
+		sol = solve(prob)
+
+		solved_for = map(e->e.lhs, observed(ns))
+		
+		pars = tuplefy(obj.pars)
+		vars = NamedTuple(map(n->(Symbol(n), sol[n]), solved_for))
+		return merge(pars, vars)
+	end
+
+	########
+
+	function perfect_gas_constants(; pars...)
+		vars = @variables begin
+			k,  [bounds = (1, Inf)]
+			R,  [bounds = (0, Inf)]
+			cp, [bounds = (0, Inf)]
+			cv, [bounds = (0, Inf)]
+		end
+		
+		eqns = [
+			0 ~ cp - k * cv,
+			0 ~ cv - R / (k - 1)
+		]
+		
+		return AlgebraicModel(vars, eqns, pars)
+	end
+
+	function perfect_gas(; pars...)
+		model = perfect_gas_constants(;)
+	
+		vars = @variables begin
+			p,  [bounds = (0, Inf)]
+			ρ,  [bounds = (0, Inf)]
+			T,  [bounds = (0, Inf)]
+			h,  [bounds = (0, Inf)]
+			s,  [bounds = (0, Inf)]
+		end
+
+		R = model.vars.R
+		cp = model.vars.cp
+		
+		vars = [vars..., values(model.vars)...]
+		eqns = [
+			0 ~ p - ρ * R * T,
+			0 ~ h - cp * T,
+			0 ~ s - cp * log(T) + R * log(p),
+			model.eqns...
+		]
+	
+		return AlgebraicModel(vars, eqns, pars)	
+	end
+end
+
+# ╔═╡ be031284-d872-4e1c-b43d-53038b21f8e4
+let
+	model = perfect_gas_constants(; R=208, k=1.67)
+	solution = structural_solve(model)
+end
+
+# ╔═╡ 80dd3540-f5fb-4c2f-b6d5-b39ad599b8d5
+let
+	R = 208.0
+	k = 1.67
+	
+	model1 = perfect_gas(; R, k, p=1.70e+06, ρ=18.0)
+	model2 = perfect_gas(; R, k, p=2.48e+05, T=400.0)
+	
+	sol1 = structural_solve(model1)
+	sol2 = structural_solve(model2)
+
+	Δh = sol2.h - sol1.h
+	Δs = sol2.s - sol1.s
+
+	Δh, Δs
+end
+
+# ╔═╡ 3e85af5c-7160-4b60-9369-dfa9dad34f7e
+
+
 # ╔═╡ Cell order:
 # ╟─3f9fdb0e-caab-40df-99f8-cf0e5ec8deff
 # ╟─dcfd03a0-8b23-11ef-202f-0557552ecc92
@@ -275,3 +416,8 @@ mdot_external / mdot_tot, mdot_cool / mdot_tot, mdot_tangential / mdot_tot
 # ╟─067d1351-7739-4d14-a5c7-203a4e86bb59
 # ╟─3357de42-e48c-4e4d-a7df-58d916a1c9b5
 # ╟─8fcaed37-d179-449c-8d43-8d0ad9a6c35e
+# ╟─6a6ad275-90d9-47d0-8b5e-a3d20efa9b0a
+# ╠═db5fe5d7-e033-43ef-92d3-1dcbf3d64c17
+# ╠═be031284-d872-4e1c-b43d-53038b21f8e4
+# ╠═80dd3540-f5fb-4c2f-b6d5-b39ad599b8d5
+# ╠═3e85af5c-7160-4b60-9369-dfa9dad34f7e

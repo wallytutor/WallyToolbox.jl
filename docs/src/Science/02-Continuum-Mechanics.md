@@ -176,7 +176,15 @@ which is a manifestation of fluctuation-dissipation theorem. This can be extende
 ![@video]()
 
 ---
-## Biddle course
+## Biddle course on fluid mechanics
+
+### 026 Introduction to compressible flow
+
+![@video](https://www.youtube.com/embed/ewoUwCVa3QY?si=9XWMLZl9VCPmPuFy)
+
+
+---
+## Biddle course on heat transfer
 
 ### 015 Introduction to radiation
 

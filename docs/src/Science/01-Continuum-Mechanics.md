@@ -341,6 +341,48 @@ In this expression the *big-D* notation represents a material or convective deri
 
 ### Compressible flow
 
+This topic is discussed as treated in ([[@White2016]]) and based on [Pr. Dr. John Biddle's](https://www.cpp.edu/meonline/fluid-mechanics.shtml) course. The most important parameter in this case is the #Mach number, defined as the ratio of fluid velocity with respect to the velocity of sound in the medium. Increasing Mach number above certain levels introduces the phenomena of *choking* (duct flow rate sharply limited by sonic condition) and *shock waves* (nearly discontinuous property changes in supersonic flow).
+
+- Compressible flows $Ma > 0.3$ (non-negligible density changes introduced)
+- Continuity, momentum, energy, and state equations are coupled
+- Simplification regimes: reversible adiabatic and isentropic flows
+
+- External (aerodynamic) flow regions:
+	- $Ma<0.3$: incompressible flow
+	- $Ma\in[0.3; 0.8]$: subsonic flow
+	- $Ma\in[0.8; 1.2]$: transonic flow
+	- $Ma\in[1.2; 3.0]$: supersonic flow
+	- $Ma>3.0$: hypersonic flows
+
+- Internal (duct) flow regions can be more simply be categorized as subsonic ($Ma<1$) and supersonic ($Ma\ge{}1$) flows.
+
+- Specific heat ratio: generally between 1-1.7 for gases, slowly decreases with temperature; for air a value of 1.4 is generally employed in calculations.
+
+- Ideal gas is generally used for elementary computations; ideal gas constant is used in what follows $\Lambda=8314{}J\cdotp{}kmol^{-1}\cdotp{}K^{-1}$.
+
+$$
+\begin{align*}
+p &= \rho{}RT\\[12pt]
+R &= c_p - c_v = \dfrac{\Lambda}{M}\\[12pt]
+k &= \dfrac{c_p}{c_v}
+\end{align*}
+$$
+
+- Using the above expressions and first and second laws of thermodynamics one shows the following; this expression can be used to compute the entropy change across a shock wave.
+
+$$
+s_2 - s_1 =
+c_p\ln\dfrac{T_2}{T_1}-R\ln\dfrac{p_2}{p_1}=
+c_v\ln\dfrac{T_2}{T_1}-R\ln\dfrac{\rho_2}{\rho_1}
+$$
+
+- For isentropic flows these expressions simplify to the following power-laws:
+
+$$
+\dfrac{p_2}{p_1}=
+\left(\dfrac{T_2}{T_1}\right)^\dfrac{k}{k-1}=
+\left(\dfrac{\rho_2}{\rho_1}\right)^k
+$$
 
 
 ---
