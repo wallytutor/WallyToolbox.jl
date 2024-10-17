@@ -2,6 +2,7 @@
 
 export head, tail, body
 export defaultvalue
+export tuplefy
 export redirect_to_files
 export test_exhaustive
 
@@ -66,6 +67,9 @@ body(z) = @view z[2:end-1]
 
 "Syntax sugar for handling a possibly *nothing* value."
 defaultvalue(p, q) = isnothing(p) ? q : p
+
+"Syntax sugar for converting a dictionary into a named tuple."
+tuplefy(d) = NamedTuple{Tuple(keys(d))}(values(d))
 
 # TODO document these or deprecate?
 in_range_cc(x, lims) = lims[1] <= x <= lims[2]
