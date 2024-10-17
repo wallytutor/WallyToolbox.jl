@@ -386,7 +386,21 @@ let
 end
 
 # ╔═╡ 3e85af5c-7160-4b60-9369-dfa9dad34f7e
+let
+	R = 287.0
+	k = 1.4
+	
+	model1 = perfect_gas(; R, k, p=P_REF+3550.0, T=300.0)
+	model2 = perfect_gas(; R, k, p=P_REF, T=300.0)
+	
+	sol1 = structural_solve(model1)
+	sol2 = structural_solve(model2)
 
+	Δh = sol2.h - sol1.h
+	Δs = sol2.s - sol1.s
+
+	Δh, Δs
+end
 
 # ╔═╡ Cell order:
 # ╟─3f9fdb0e-caab-40df-99f8-cf0e5ec8deff
