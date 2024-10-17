@@ -8,6 +8,7 @@ bin/DWSIM*
 bin/Elmer*
 bin/FreeCAD*
 bin/FreeFem*
+bin/FileZilla*
 bin/gmsh*
 bin/gp*
 bin/inkscape*
