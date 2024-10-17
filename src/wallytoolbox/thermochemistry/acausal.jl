@@ -46,17 +46,22 @@ struct AlgebraicModel
 end
 
 function structural_solve(obj::AlgebraicModel)
+    # Clean-up symbols that were provided by user.
     eqns = replacement_solve(obj)
     
+    # Cannot solve if has parameters but DoF are not respected...
     if has_pars(obj) && has_dofs(obj, eqns)
         throw(UnsolvableAlgebraicModel(obj.vars, obj.pars))
     end
     
+    # XXX: can we eliminate this, the system is already solved here...
     @mtkbuild ns = NonlinearSystem(eqns, [values(obj.vars)...], [])
     sol = solve(NonlinearProblem(ns, [], []))
 
+    # Get names (LHS of equations) to retrieve solution.
     solved_for = map(e->e.lhs, observed(ns))
     
+    # Full-specification is found through parameters and variables.
     pars = tuplefy(obj.pars)
     vars = NamedTuple(map(n->(Symbol(n), sol[n]), solved_for))
     return merge(pars, vars)
