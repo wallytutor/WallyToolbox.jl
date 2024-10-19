@@ -384,6 +384,19 @@ $$
 \left(\dfrac{\rho_2}{\rho_1}\right)^k
 $$
 
+- The speed of sound is the rate of propagation of a pressure pulse of infinitesimal strength through a still fluid; it is a thermodynamic property. For small perturbations for which adiabatic or isentropic process applies it is defined as:
+
+$$
+a^2 = 
+\dfrac{\partial{}p}{\partial{}\rho}\biggr\vert_{s} =
+k\dfrac{\partial{}p}{\partial{}\rho}\biggr\vert_{T}
+$$
+
+- Applying the above equation to a perfect gas leads to:
+
+$$
+a^2 = \dfrac{kp}{\rho} = kRT
+$$
 
 ---
 ## Radiative heat transfer
