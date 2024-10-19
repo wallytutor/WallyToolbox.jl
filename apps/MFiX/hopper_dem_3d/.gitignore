@@ -1,0 +1,43 @@
+# Ignore generated repo
+*.git/
+
+# Solver build
+build*/
+
+# Common MFiX files
+!.graphics
+!.thumbnail
+!.ui_state
+!.visual_props
+
+# Run
+*.dll.a
+*.bat
+
+# Results
+*.csv
+*.env
+*.msh
+*.pid
+*.pvd
+*.stl
+*.vtk
+*.vtp
+*.vtu
+*.RES
+*.SP*
+
+# Logs
+*.log
+*.LOG
+*.OUT
+*.TXT
+*.stderr
+*.stdout
+
+# Project specifics
+!bimodal_psd.txt
+!geometry.stl
+!geometry_0002.stl
+!particle_input.csv
+test.png

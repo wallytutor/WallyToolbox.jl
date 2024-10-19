@@ -339,7 +339,70 @@ $$
 
 In this expression the *big-D* notation represents a material or convective derivative. It provides us the behavior of transported quantity in the fluid reference frame, what can be useful for some local analysis. Even more useful than that, under this form we can promptly simplify the remaining terms in the left-hand side for cases of constant diffusivity, incompressible flow, and absence of chemical reactions (in the order of appearance of terms). For numerical solution of transport equations for incompressible flows, using the null divergent of velocity can save us a lot of trouble.
 
+### Compressible flow
+
+This topic is discussed as treated in ([[@White2016]]) and based on [Pr. Dr. John Biddle's](https://www.cpp.edu/meonline/fluid-mechanics.shtml) course. The most important parameter in this case is the #Mach number, defined as the ratio of fluid velocity with respect to the velocity of sound in the medium. Increasing Mach number above certain levels introduces the phenomena of *choking* (duct flow rate sharply limited by sonic condition) and *shock waves* (nearly discontinuous property changes in supersonic flow).
+
+- Compressible flows $Ma > 0.3$ (non-negligible density changes introduced)
+- Continuity, momentum, energy, and state equations are coupled
+- Simplification regimes: reversible adiabatic and isentropic flows
+
+- External (aerodynamic) flow regions:
+	- $Ma<0.3$: incompressible flow
+	- $Ma\in[0.3; 0.8]$: subsonic flow
+	- $Ma\in[0.8; 1.2]$: transonic flow
+	- $Ma\in[1.2; 3.0]$: supersonic flow
+	- $Ma>3.0$: hypersonic flows
+
+- Internal (duct) flow regions can be more simply be categorized as subsonic ($Ma<1$) and supersonic ($Ma\ge{}1$) flows.
+
+- Specific heat ratio: generally between 1-1.7 for gases, slowly decreases with temperature; for air a value of 1.4 is generally employed in calculations.
+
+- Ideal gas is generally used for elementary computations; ideal gas constant is used in what follows $\Lambda=8314{}J\cdotp{}kmol^{-1}\cdotp{}K^{-1}$.
+
+$$
+\begin{align*}
+p &= \rho{}RT\\[12pt]
+R &= c_p - c_v = \dfrac{\Lambda}{M}\\[12pt]
+k &= \dfrac{c_p}{c_v}
+\end{align*}
+$$
+
+- Using the above expressions and first and second laws of thermodynamics one shows the following; this expression can be used to compute the entropy change across a shock wave.
+
+$$
+s_2 - s_1 =
+c_p\ln\dfrac{T_2}{T_1}-R\ln\dfrac{p_2}{p_1}=
+c_v\ln\dfrac{T_2}{T_1}-R\ln\dfrac{\rho_2}{\rho_1}
+$$
+
+- For isentropic flows these expressions simplify to the following power-laws:
+
+$$
+\dfrac{p_2}{p_1}=
+\left(\dfrac{T_2}{T_1}\right)^\dfrac{k}{k-1}=
+\left(\dfrac{\rho_2}{\rho_1}\right)^k
+$$
+
+
 ---
 ## Radiative heat transfer
 
 In a complement to previous section, the following notes are mostly based on [Pr. Dr. John Biddle's](https://www.cpp.edu/meonline/heat-transfer.shtml) lectures based on ([[@Incropera2011]]), and additional elements from ([[@Modest2022]]), which is approached by [Pr. Dr. Ankit Bansal](https://www.youtube.com/playlist?list=PLLy_2iUCG87CoKmut3KHHVPa3UqH1WuMK) in this [course](https://archive.nptel.ac.in/courses/112/107/112107256/).
+
+---
+## Combustion
+
+These notes are mostly based on ([[@Warnatz2006]]), except where mentioned otherwise.
+
+### NOx formation
+
+Four different possible routes:
+
+1. Thermal route (Zeldovich mechanism) at high temperatures; assumes steady state concentration of atomic nitrogen to simplify the rate law of NO formation. The required atomic oxygen concentration can be estimated from *partial-equilibrium* evaluated from $H_2$,, $O_2$, and $H_2O$ in the flame front. This is valid only above 1700 K, but this is no problem because the limiting rate constant in Zeldovich mechanism is very low at this level of temperatures.
+
+2. Prompt route (Fenimore mechanism), accounts for the role of $CH$ radicals in downstream side of flame front; it is favored in rich flames which accumulate acetylene due to $CH_3$ recombination, a precursor for $CH$ radicals. Its production can be important at temperatures as low as 1000 K.
+
+3. Nitrous oxide route
+
+4. Conversion of fuel nitrogen

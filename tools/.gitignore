@@ -8,6 +8,7 @@ bin/DWSIM*
 bin/Elmer*
 bin/FreeCAD*
 bin/FreeFem*
+bin/FileZilla*
 bin/gmsh*
 bin/gp*
 bin/inkscape*
@@ -16,6 +17,7 @@ bin/julia*
 bin/LAMMPS*
 bin/lite-xl*
 bin/MeshLab*
+bin/miniforge*
 bin/obsidian*
 bin/octave*
 bin/OpenModelica*

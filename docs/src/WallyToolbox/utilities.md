@@ -37,6 +37,7 @@ WallyToolbox.body
 
 ```@docs
 WallyToolbox.defaultvalue
+WallyToolbox.tuplefy
 WallyToolbox.redirect_to_files
 WallyToolbox.test_exhaustive
 ```

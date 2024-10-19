@@ -155,5 +155,6 @@
         "**/0/*": "OpenFOAM"
     },
     "redhat.telemetry.enabled": false,
+    "git.confirmSync": false,
 
 }
