@@ -43,7 +43,7 @@ function get_kernel_spec()
     ijulia_kernel = joinpath(dirname(pathof(IJulia)), "kernel.jl")
     
     kernel_spec = Dict(
-        "display_name" => "WallyTutor Julia 1.10.4",
+        "display_name" => "WallyTutor Julia",
         "argv" => [
             julia_path,
             "-i",
