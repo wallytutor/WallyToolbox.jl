@@ -81,7 +81,11 @@ function Base.String(f::EmpiricalFuel)
 end
 
 """
-    oxidizer_mass_flow_rate(f::EmpiricalFuel; y_o2 = 0.23)
+    oxidizer_mass_flow_rate(
+        f::EmpiricalFuel; 
+        y_o2 = 0.23, 
+        burn_nitrogen = false
+    )
 
 Computes the required amount of oxidizer to perform complete combustion
 of 1 kg provided empirical fuel. The value of `y_o2` represents the mass
@@ -90,11 +94,15 @@ fraction of oxygen in oxidizer; default value is typical for air.
 ```jldoctest
 julia> fuel = EmpiricalFuel([0.937, 0.063, 0.0]; scaler=:C=>10);
 
-julia> oxidizer_mass_flow_rate(fuel)
+julia> oxidizer_mass_flow_rate(fuel; burn_nitrogen = true)
 13.02691759229764
 ```
 """
-function oxidizer_mass_flow_rate(f::EmpiricalFuel; y_o2 = 0.23)
+function oxidizer_mass_flow_rate(
+        f::EmpiricalFuel;
+        y_o2 = 0.23,
+        burn_nitrogen = false
+    )
     m_o2 = molecularmass(Stoichiometry(; O = 2))
 
     fn = EmpiricalFuel(f.Y; f.elements, scaler=nothing)
@@ -106,8 +114,11 @@ function oxidizer_mass_flow_rate(f::EmpiricalFuel; y_o2 = 0.23)
 
     get_element(e) = fn.X[findall(==(e), fn.elements) |> first]
     rhs += -1*((:O in fn.elements) ? get_element(:O) : 0.0)
-    rhs +=  1*((:N in fn.elements) ? get_element(:N) : 0.0)
     rhs +=  2*((:S in fn.elements) ? get_element(:S) : 0.0)
+
+    if burn_nitrogen
+        rhs += 1*((:N in fn.elements) ? get_element(:N) : 0.0)
+    end
 
     return (1//2) * rhs * m_o2 / y_o2
 end

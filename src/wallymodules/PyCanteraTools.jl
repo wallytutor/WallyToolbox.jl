@@ -87,14 +87,22 @@ function chons_fuel_formula(x, y, z, n, s)
     return L"%$(formula)"
 end
 
-function chons_fuel_equation(x, y, z, n, s)
-    a =  (1/2)*(2x + 2s + n + y/2 - z)
+function chons_fuel_equation(x, y, z, n, s; burn_nitrogen = false)
+    a = 2x + 2s + y/2 - z
+    a = (burn_nitrogen ? a + n : a) / 2
+
     o2   = "$(@sprintf("%.6f", a))   \\:\\mathrm{O}_{2}"
-	co2  = "$(@sprintf("%.6f", x))   \\:\\mathrm{CO}_2"
-	h2o  = "$(@sprintf("%.6f", y/2)) \\:\\mathrm{H}_2\\mathrm{O}"
-	so2  = "$(@sprintf("%.6f", s))   \\:\\mathrm{SO}_2"
-	no1  = "$(@sprintf("%.6f", n))   \\:\\mathrm{NO}"
-    return L"\mathrm{HFO} + %$(o2) → %$(co2) + %$(h2o) + %$(so2) + %$(no1)"
+    co2  = "$(@sprintf("%.6f", x))   \\:\\mathrm{CO}_2"
+    h2o  = "$(@sprintf("%.6f", y/2)) \\:\\mathrm{H}_2\\mathrm{O}"
+    so2  = "$(@sprintf("%.6f", s))   \\:\\mathrm{SO}_2"
+
+    nit = if burn_nitrogen
+        "$(@sprintf("%.6f", n))   \\:\\mathrm{NO}"
+    else
+        "$(@sprintf("%.6f", n/2)) \\:\\mathrm{N}_2"
+    end
+
+    return L"\mathrm{HFO} + %$(o2) → %$(co2) + %$(h2o) + %$(so2) + %$(nit)"
 end
 
 ##############################################################################
