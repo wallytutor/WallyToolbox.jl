@@ -1,6 +1,10 @@
 # Continuum Mechanics
 
 ---
+## Thermodynamics
+
+
+---
 ## Analysis of transport phenomena
 
 Theses notes intend to provide in a very concise way overview of the mathematical fundamentals of transport phenomena. In this sense, they are devoted to generalities rather than specific closure models. You can even see them as a cheat-sheet or simple lecture notes. 
