@@ -3,6 +3,12 @@
 ---
 ## Thermodynamics
 
+The following focuses on aspects of thermodynamics of materials such as those described by ([[@Stolen2004]]) and ([[@Hillert2008]]). Computational aspects may be further explored in the works of ([[@Lukas2007]]) and ([[@Liu2016]]).
+
+### The laws of thermodynamics
+
+Simply put, the first law of thermodynamics provides the balance of exchange of heat, work, and mass between a system and its environment. The second law governs the evolution of the state inside the system.
+
 
 ---
 ## Analysis of transport phenomena
