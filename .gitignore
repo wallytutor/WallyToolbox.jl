@@ -1,5 +1,6 @@
 # Editors
 .vscode/
+.virtual_documents/
 
 # Conda (PythonCall)
 .CondaPkg/
