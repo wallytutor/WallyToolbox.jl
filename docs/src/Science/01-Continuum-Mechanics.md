@@ -9,6 +9,9 @@ The following focuses on aspects of thermodynamics of materials such as those de
 
 Simply put, the first law of thermodynamics provides the balance of exchange of heat, work, and mass between a system and its environment. The second law governs the evolution of the state inside the system.
 
+$$
+dU = dQ + dQ + \sum_i H_idN_i
+$$
 
 ---
 ## Analysis of transport phenomena
