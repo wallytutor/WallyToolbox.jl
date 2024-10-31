@@ -45,6 +45,7 @@ include("wallytoolbox/utilities.jl")
 include("wallytoolbox/unstable.jl")
 
 # Dependent direct includes.
+include("wallytoolbox/datascience.jl")
 include("wallytoolbox/thermochemistry.jl")
 include("wallytoolbox/transport.jl")
 include("wallytoolbox/flowsheet.jl")
