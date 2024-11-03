@@ -137,6 +137,21 @@ Modelica is an acausal programming language for systems modeling:
 - [Mathics](https://mathics.org/)
 - [Maxima](https://maxima.sourceforge.io/)
 
+### Optimization packages
+
+The following lists some #constrained-optimization packages:
+
+- [CVXPY](https://www.cvxpy.org/index.html)
+- [CVXOPT](https://cvxopt.org/?ref=localhost)
+- [PICOS](https://picos-api.gitlab.io/picos/index.html)
+- [Pyomo](https://www.pyomo.org/)
+- [CasADi](https://web.casadi.org/docs/)
+- [pymoo](https://pymoo.org/index.html)
+- [platypus](https://platypus.readthedocs.io/en/latest/index.html)
+- [MEALPY](https://mealpy.readthedocs.io/en/latest/?badge=latest)
+- [JuMP](https://jump.dev/)
+- [ModelingToolkit](https://docs.sciml.ai/ModelingToolkit/stable/tutorials/optimization/)
+
 ---
 ## Computational thermodynamics
 
@@ -157,7 +172,7 @@ This section contains other software to check; I don't necessarily know them and
 - [Dymos](https://openmdao.github.io/dymos/index.html)
 - [GitHub - flame-code/FLAME: FLAME: a library for atomistic modeling environments](https://github.com/flame-code/FLAME)
 - [stitching/stitching at main · lukasalexanderweber/stitching](https://github.com/lukasalexanderweber/stitching/tree/main/stitching)
-- [usnistgov/atomman: Atomistic Manipulation Toolkit](https://github.com/usnistgov/atomman
+- [usnistgov/atomman: Atomistic Manipulation Toolkit](https://github.com/usnistgov/atomman)
 - [GrossfieldLab/loos: LOOS: a lightweight object-oriented structure analysis library](https://github.com/GrossfieldLab/loos)
 - [glotzerlab/freud: Powerful, efficient particle trajectory analysis in scientific Python.](https://github.com/glotzerlab/freud)
 - [GitHub - xiaoh/sediFoam: CFD-DEM Solver with emphasis on sediment transport](https://github.com/xiaoh/sediFoam)
@@ -165,7 +180,7 @@ This section contains other software to check; I don't necessarily know them and
 - [GitHub - fwitte/fluprodia: Fluid property diagrams](https://github.com/fwitte/fluprodia)
 - [shiftkey/desktop](https://github.com/shiftkey/desktop/releases)
 - [bjodah/chempy: A package useful for chemistry written in Python](https://github.com/bjodah/chempy)
-- [BenLand100/chroma: Ultra-fast Photon Monte Carlo](https://github.com/BenLand100/chroma
+- [BenLand100/chroma: Ultra-fast Photon Monte Carlo](https://github.com/BenLand100/chroma)
 - [preCICE: coupling between different solutions](https://precice.org/index.html)
 - [ASALI](https://github.com/srebughini/ASALI)
 - [CSIRO](https://github.com/csiro/oss-directory)
