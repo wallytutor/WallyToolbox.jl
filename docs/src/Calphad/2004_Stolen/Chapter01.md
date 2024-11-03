@@ -6,12 +6,11 @@
 
 A thermodynamic description of a process needs a well-defined system. A thermodynamic system contains everything of thermodynamic interest for a particular chemical process within a boundary. The boundary is either a real or hypothetical enclosure or surface that confines the system and separates it from its surroundings. In order to describe the thermodynamic behavior of a physical system, the interaction between the system and its surroundings must be understood. Thermodynamic systems are thus classified into three main types according to the way they interact with the surroundings: isolated systems do not exchange energy or matter with their surroundings; closed systems exchange energy with the surroundings but not matter; and open systems exchange both energy and matter with their surroundings. 
 
-#system, #boundary, #surroundings
-#isolated-system, #closed-system, #open-system 
+#boundary, #surroundings, #system/isolated, #system/closed, #system/open 
 
 The system may be homogeneous or heterogeneous. An exact definition is difficult, but it is convenient to define a homogeneous system as one whose properties are the same in all parts, or at least their spatial variation is continuous. A heterogeneous system consists of two or more distinct homogeneous regions or phases, which are separated from one another by surfaces of discontinuity. The boundaries between phases are not strictly abrupt, but rather regions in which the properties change abruptly from the properties of one homogeneous phase to those of the other. For example, Portland cement consists of a mixture of the phases $\beta-Ca_2SiO_4$, $Ca_3SiO_5$, $Ca_3Al_2O_6$ and $Ca_4Al_2Fe_2O_10$. The different homogeneous phases are readily distinguished from each other macroscopically and the thermodynamics of the system can be treated based on the sum of the thermodynamics of each single homogeneous phase.
 
-#homogeneous-system, #heterogeneous-system, #phases
+#system/homogeneous, #system/heterogeneous, #phases
 
 In colloids, on the other hand, the different phases are not easily distinguished macroscopically due to the small particle size that characterizes these systems. So although a colloid also is a heterogeneous system, the effect of the surface thermodynamics must be taken into consideration in addition to the thermodynamics of each homogeneous phase. **In the following, when we speak about heterogeneous systems, it must be understood (if not stated otherwise) that the system is one in which each homogeneous phase is spatially sufficiently large to neglect surface energy contributions.** The contributions from surfaces become important in systems where the dimensions of the homogeneous regions are about $1\:\mu{}m$ or less in size. The thermodynamics of surfaces will be considered in Chapter 6.
 
@@ -25,12 +24,11 @@ A homogeneous system - solid, liquid or gas - is called a solution if the compos
 
 In thermodynamics the state of a system is specified in terms of macroscopic state variables such as volume, $V$, temperature, $T$, pressure, $p$, and the number of moles of the chemical constituents $i$, $n_i$. The laws of thermodynamics are founded on the concepts of internal energy ($U$), and entropy ($S$), which are functions of the state variables. Thermodynamic variables are categorized as intensive or extensive. Variables that are proportional to the size of the system (*e.g.* volume and internal energy) are called extensive variables, whereas variables that specify a property that is independent of the size of the system (*e.g.* temperature and pressure) are called intensive variables.
 
-#state-variables, #state-functions
-#intensive-variables, #extensive-variables
+#variablel/state, #state-functions, #variable/intensive, #variable/extensive
 
 A state function is a property of a system that has a value that depends on the conditions (state) of the system and not on how the system has arrived at those conditions (the thermal history of the system). For example, the temperature in a room at a given time does not depend on whether the room was heated up to that temperature or cooled down to it. The difference in any state function is identical for every process that takes the system from the same given initial state to the same given final state: it is independent of the path or process connecting the two states. Whereas the internal energy of a system is a state function, work and heat are not. Work and heat are not associated with one given state of the system, but are defined only in a transformation of the system. Hence the work performed and the heat adsorbed by the system between the initial and final states depend on the choice of the transformation path linking these two states.
 
-#work, #heat
+#energy/work, #energy/heat
 
 ### Thermodynamic processes and equilibrium
 
@@ -43,7 +41,7 @@ Glasses are a particular type of material that is neither stable nor metastable.
 
 #glass, #supercooling, #quench #egodic-states #frozen-in
 
- ![[fig1_1.png]]
+ ![[ch01/fig1_1.png]]
 Figure 1.1 Standard enthalpy of formation per mole $C$ of $C_{60}$ (1), $C_{70}$ (2) and diamond relative to graphite at 298 K and 1 bar.
 
 
@@ -53,242 +51,165 @@ Figure 1.1 Standard enthalpy of formation per mole $C$ of $C_{60}$ (1), $C_{70}$
 
 The first law of thermodynamics may be expressed as: **Whenever any process occurs, the sum of all changes in energy, taken over all the systems participating in the process, is zero.**
 
-The important consequence of the first law is that energy is always conserved. This
-law governs the transfer of energy from one place to another, in one form or another:
-as heat energy, mechanical energy, electrical energy, radiation energy, etc. The
-energy contained within a thermodynamic system is termed the internal energy or
-simply the energy of the system, U. In all processes, reversible or irreversible, the
-change in internal energy must be in accord with the first law of thermodynamics.
+The important consequence of the first law is that energy is always conserved. This law governs the transfer of energy from one place to another, in one form or another: as heat energy, mechanical energy, electrical energy, radiation energy, etc. The energy contained within a thermodynamic system is termed the internal energy or simply the energy of the system, $U$. In all processes, reversible or irreversible, the change in internal energy must be in accord with the first law of thermodynamics.
 
-Work is done when an object is moved against an opposing force. It is equivalent
-to a change in height of a body in a gravimetric field. The energy of a system is its
-capacity to do work. When work is done on an otherwise isolated system, its
-capacity to do work is increased, and hence the energy of the system is increased.
-When the system does work its energy is reduced because it can do less work than
-before. When the energy of a system changes as a result of temperature differences
-between the system and its surroundings, the energy has been transferred as heat.
-Not all boundaries permit transfer of heat, even when there is a temperature differ-
-ence between the system and its surroundings. A boundary that does not allow heat
-transfer is called adiabatic. Processes that release energy as heat are called exo-
-thermic, whereas processes that absorb energy as heat are called endothermic.
+#energy/first-law, #energy/conservation, #energy/internal 
+
+Work is done when an object is moved against an opposing force. It is equivalent to a change in height of a body in a gravimetric field. The energy of a system is its capacity to do work. When work is done on an otherwise isolated system, its capacity to do work is increased, and hence the energy of the system is increased. When the system does work its energy is reduced because it can do less work than before. When the energy of a system changes as a result of temperature differences between the system and its surroundings, the energy has been transferred as heat. Not all boundaries permit transfer of heat, even when there is a temperature difference between the system and its surroundings. A boundary that does not allow heat transfer is called adiabatic. Processes that release energy as heat are called exothermic, whereas processes that absorb energy as heat are called endothermic.
+
+#adiabatic, #process/endothermic, #process/exothermic
 
 The mathematical expression of the first law is
 
-Sau = ¥dq + Ydw =0 (1.1)
+$$
+\Sigma{}dU=\Sigma{}dq + \Sigma{}dw = 0
+$$
 
-where U, q and w are the internal energy, the heat and the work, and each summa-
-tion covers all systems participating in the process. Applications of the first law
-involve merely accounting processes. Whenever any process occurs, the net energy
-taken up by the given system will be exactly equal to the energy lost by the sur-
-roundings and vice versa, i.e. simply the principle of conservation of energy.
+where $U$, $q$ and $w$ are the internal energy, the heat and the work, and each summation covers all systems participating in the process. Applications of the first law involve merely accounting processes. Whenever any process occurs, the net energy taken up by the given system will be exactly equal to the energy lost by the surroundings and vice versa, *i.e.* simply the principle of conservation of energy.
 
- 
+ In the present book we are primarily concerned with the work arising from a change in volume. In the simplest example, work is done when a gas expands and drives back the surrounding atmosphere. The work done when a system expands its volume by an infinitesimal small amount $dV$ against a constant external pressure is
 
-‘in volume. In the simplest example, work is done when a gas expands and drives back
-the surrounding atmosphere. The work done when a system expands its volume by an
-infinitesimal small amount dV against a constant external pressure is
+$$
+dw = -p_{ext}dV
+$$
+#energy/work/mechanical #energy/work/electromagnetic 
 
-dw =—pexdV (1.2)
-
----
-
-Table 1.1 Conjugate pairs of variables in work terms for the fundamental equation for the
-internal energy U. Here fis force of elongation, / is length in the direction of the force, ois
-surface tension, Ag is surface area, Qj is the electric potential of the phase containing spe-
-cies i, gj is the contribution of species i to the electric charge of a phase, E is electric field
-strength, p is the electric dipole moment of the system, B is magnetic field strength (mag-
-netic flux density), and m is the magnetic moment of the system. The dots indicate scalar
-products of vectors.
-
- 
-
-Type of work Intensive variable Extensive variable Differential work in dU
-
- 
-
-Mechanical
-
-Pressure—volume -p Vv -pdVv
-Elastic f 1 fal
-Surface o As odAg
-
-Electromagnetic
-Charge transfer ®; 4h dq;
-Electric polarization E p E-dp
-Magnetic polarization B m B-dm
-
- 
+Table 1.1 Conjugate pairs of variables in work terms for the fundamental equation for the internal energy $U$. Here $f$ is force of elongation, $l$ is length in the direction of the force, $\sigma$ is surface tension, $A_s$ is surface area, $\Phi_i$ is the electric potential of the phase containing species $i$, $q_i$ is the contribution of species $i$ to the electric charge of a phase, $\mathbf{E}$ is electric field strength, $\mathbf{p}$ is the electric dipole moment of the system, $\mathbf{B}$ is magnetic field strength (magnetic flux density), and $\mathbf{m}$ is the magnetic moment of the system. The dots indicate scalar products of vectors.
+ ![[ch01/tab1_1.png]]
 
 The negative sign shows that the internal energy of the system doing the work
 decreases.
-In general, dw is written in the form (intensive variable)-d(extensive variable) or
 
-as a product of a force times a displacement of some kind. Several types of work
-
-‘tions of materials. A number of types of work that may be involved in a
-
-thermodynamic system are summed up in Table 1.1. The last column gives the form
-of work in the equation for the internal energy.
+In general, $dw$ is written in the form *(intensive variable)-d(extensive variable)* or as a product of a force times a displacement of some kind. Several types of work terms may be involved in a single thermodynamic system, and electrical, mechanical, magnetic and gravitational fields are of special importance in certain applications of materials. A number of types of work that may be involved in a thermodynamic system are summed up in Table 1.1. The last column gives the form of work in the equation for the internal energy.
 
 ### Heat capacity and definition of enthalpy
 
-In general, the change in internal energy or simply the energy of a system U may
-now be written as
+In general, the change in internal energy or simply the energy of a system $U$ may now be written as
 
-dU =dq + dwyy + dWyon-e (1.3)
+$$
+dU = dq + dw_{pV} + dw_{non-e}
+$$
 
-where dw py and diyon-¢ are the expansion (or pV) work and the additional non-
-expansion (or non-pV) work, respectively. A system kept at constant volume
-cannot do expansion work; hence in this case dw py =0. If the system also does not
-do any other kind of work, then dw,,.. =0. So here the first law yields
+where $dw_{pV}$ and $dw_{non-e}$ are the expansion (or $pV$) work and the additional non-expansion (or non-$pV$) work, respectively. A system kept at constant volume cannot do expansion work; hence in this case $dw_{pV}=0$. If the system also does not do any other kind of work, then $dw_{non-e}=0$. So here the first law yields
 
-dU =dgy (1.4)
-
-where the subscript denotes a change at constant volume. For a measurable change,
-the increase in the internal energy of a substance is
+$$
+dU = dq_{V}
+$$
+where the subscript denotes a change at constant volume. For a measurable change, the increase in the internal energy of a substance is
 
----
 
-AU =qy (1.5)
+$$
+\Delta{}U = q_{V}
+$$
 
-The temperature dependence of the internal energy is given by the heat capacity
-at constant volume at a given temperature, formally defined by
+#energy/heat-capacity
 
-oU
-Cy =| — 1.6
-v (z \ (1.6)
+The temperature dependence of the internal energy is given by the **heat capacity at constant volume** at a given temperature, formally defined by
 
-For a constant-volume system, an infinitesimal change in temperature gives an
-infinitesimal change in internal energy and the constant of proportionality is the
-heat capacity at constant volume
+$$
+C_{V}=\left(\dfrac{\partial{}U}{\partial{}T}\right)_{V}
+$$
 
-dU =CydT (1.7)
+For a constant-volume system, an infinitesimal change in temperature gives an infinitesimal change in internal energy and the constant of proportionality is the heat capacity at constant volume
 
-The change in internal energy is equal to the heat supplied only when the system
-is confined to a constant volume. When the system is free to change its volume,
-some of the energy supplied as heat is returned to the surroundings as expansion
-work. Work due to the expansion of a system against a constant external pressure,
-Pext gives the following change in internal energy:
+$$
+dU = C_{V}dT
+$$
 
-dU =dq + dw =dq — pox, dV (1.8)
+The change in internal energy is equal to the heat supplied only when the system is confined to a constant volume. When the system is free to change its volume, some of the energy supplied as heat is returned to the surroundings as expansion work. Work due to the expansion of a system against a constant external pressure, $p_{ext}$ gives the following change in internal energy:
 
-For processes taking place at constant pressure it is convenient to introduce the
-enthalpy function, H, defined as
+$$
+dU = dq + dw = dq - p_{ext}dV
+$$
 
-H=U+pV (1.9)
+#energy/enthalpy #function/enthalpy
+
+For processes taking place at constant pressure it is convenient to introduce the enthalpy function, $H$, defined as
+
+$$
+H = U + pV
+$$
+
 Differentiation gives
 
-dH =d(U + pV) =dg + dw + Vdp + pdV (1.10)
+$$
+dH = d(U + pV) = dq + dw + Vdp + pdV
+$$
+
 When only work against a constant external pressure is done:
 
-dw =—pexpdV (1.11)
-and eq. (1.10) becomes
+$$
+dw = -p_{ext}dV
+$$
 
-dH =dq +Vdp (1.12)
-Since dp = 0 (constant pressure),
+and equation (1.10) becomes
 
-dH =dq, (1.13)
-
----
+$$
+dH = dq + Vdp
+$$
 
-and
+Since $dp = 0$ (constant pressure),
 
-AH = dp (1.14)
-
-The enthalpy of a substance increases when its temperature is raised. The tem-
-
-perature dependence of the enthalpy is given by the heat capacity at constant
-pressure at a given temperature, formally defined by
-
-Cy (2 (1.15)
-ar),
-
-Hence, fora constant pressure system, an infinitesimal change in temperature gives
-an infinitesimal change in enthalpy and the constant of proportionality is the heat
-capacity at constant pressure.
-
- 
-
-dH =C,dT (1.16)
-
-of VT
-
-Kr
-
-where @ and ky are the isobaric expansivity and the isothermal compressibility
-
-respectively, defined by
-
-anf (1.18)
-via J,
-
- 
-
-Cp -Cy = (1.17)
+$$
+dH = dq_{p}
+$$
 
 and
 
-kp =f (1.19)
-V\& Je
+$$
+\Delta{}H=q_{p}
+$$
 
-Typical values of the isobaric expansivity and the isothermal compressibility are
+#energy/heat-capacity 
 
-given in Table 1.2. The difference between the heat capacities at constant volume
+The enthalpy of a substance increases when its temperature is raised. The temperature dependence of the enthalpy is given by the **heat capacity at constant pressure** at a given temperature, formally defined by
 
-Since the heat absorbed or released by a system at constant pressure is equal to
-its change in enthalpy, enthalpy is often called heat content. If a phase transforma-
-tion (i.e. melting or transformation to another solid polymorph) takes place within
-
----
+$$
+C_{p}=\left(\dfrac{\partial{}H}{\partial{}T}\right)_{p}
+$$
 
+Hence, fora constant pressure system, an infinitesimal change in temperature gives an infinitesimal change in enthalpy and the constant of proportionality is the heat capacity at constant pressure.
 
-Table 1.2 The isobaric expansivity and iso-
-thermal compressibility of selected compounds at
+ $$
+dH = C_{p}dT
+$$
 
- 
+The heat capacity at constant volume and constant pressure at a given temperature are related through
 
-300 K.
-Compound @NO-SK-1— x;/10-!2 Pa
-Mgo 3.12 6.17
-Al,03 1.62 3.97
-MnO 3.46 6.80
-Fe304 3.56 4.52
-NaCl 118 417
-C (diamond) 0.54 1.70
-C (graphite) 2.49 179
-Al 69 13.2
-130]
-= 120
-A
-Guo f
-= r 3
-> 100)
-° @/ 105K"
-90]
-ALO, 2
-80|
+$$
+C_{p} - C_{V} = \dfrac{\alpha^2VT}{\kappa_T}
+$$
 
- 
+where $\alpha$ and $\kappa_T$ are the isobaric expansivity and the isothermal compressibility respectively, defined by
 
- 
+$$
+\alpha = \dfrac{1}{V}\left(\dfrac{\partial{}V}{\partial{}T}\right)_{p}
+$$
 
- 
+and
 
- 
+$$
+\kappa_T = \dfrac{1}{V}\left(\dfrac{\partial{}V}{\partial{}p}\right)_{T}
+$$
 
-500 1000 1500 500 1000 1500
-TIK
+#property/isothermal-compressibility #property/isobaric-expansivity
 
+Typical values of the isobaric expansivity and the isothermal compressibility are given in Table 1.2. The difference between the heat capacities at constant volume and constant pressure is generally negligible for solids at low temperatures where the thermal expansivity becomes very small, but the difference increases with temperature; see for example the data for $Al_2O_3$ in Figure 1.2.
+
+Table 1.2 The isobaric expansivity and isothermal compressibility of selected compounds at 300 K.
+![[ch01/tab1_2.png]]
+
+![[ch01/fig1_2.png]]
 Figure 1.2 Molar heat capacity at constant pressure and at constant volume, isobaric
 expansivity and isothermal compressibility of Al2O3 as a function of temperature.
 
-the system, heat may be adsorbed or released without a change in temperature. At
-constant pressure the heat merely transforms a portion of the substance (e.g. from
-solid to liquid — ice—water). Such a change is called a first-order phase transition
-and will be defined formally in Chapter 2. The standard enthalpy of aluminium rel-
-ative to 0 K is given as a function of temperature in Figure 1.3. The standard
-enthalpy of fusion and in particular the standard enthalpy of vaporization con-
-tribute significantly to the total enthalpy increment.
+Since the heat absorbed or released by a system at constant pressure is equal to its change in enthalpy, enthalpy is often called heat content. If a phase transformation (*i.e.* melting or transformation to another solid polymorph) takes place within the system, heat may be adsorbed or released without a change in temperature. At constant pressure the heat merely transforms a portion of the substance (e.g. from solid to liquid - ice - water). Such a change is called a first-order phase transition and will be defined formally in [Chapter 2](Chapter02.md). The standard enthalpy of aluminium relative to 0 K is given as a function of temperature in Figure 1.3. The standard enthalpy of fusion and in particular the standard enthalpy of vaporization contribute significantly to the total enthalpy increment.
+
+
+#phase/transformation/order #energy/enthalpy/fusion #energy/enthalpy/vaporization
+
+![[ch01/fig1_3.png]]
+Figure 1.3 Standard enthalpy of aluminium relative to 0 K. The standard enthalpy of fusion ($\Delta_{fus}H_m^0$) is significantly smaller than the standard enthalpy of vaporization ($\Delta_{vap}H_m^0$).
 
 ### Reference and standard states
 
@@ -299,26 +220,6 @@ defined. It is often convenient to choose a reference state as an arbitrary zero
 Often the reference state of a condensed element/compound is chosen to be at a
 pressure of | bar and in the most stable polymorph of that element/compound at the
 
----
-1.2 The first law of thermodynamics 9
-
-   
-
-400
-T, 300 Avap Ha= 294 kJ mol
-z
-2 200)
-of
-&
-<I 100 Agyg,= 10.8 kJ mol!
-© 500 1000 1500 2000 2500 3000
-
-TIK
-
-Figure 1.3 Standard enthalpy of aluminium relative to 0 K. The standard enthalpy of fusion
-
-(AjusHm) is significantly smaller than the standard enthalpy of vaporization (AyayHm)-
-
 temperature at which the reaction or process is taking place. This reference state is
 called a standard state due to its large practical importance. The term standard
 

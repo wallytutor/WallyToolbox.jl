@@ -869,7 +869,7 @@ In some phase diagrams one may find very deep eutectics between two intermediate
 phases, for example for the Mg—Zn system. It is unusual that the shape of the liquidus
 curve differs significantly on the two sides of a congruently melting compound. If such
 behavior is experimentally well determined to occur, one has to consider a model in
-which #G/dx" of the liquid changes rapidly between the two sides, as can be deduced
+which G/dx" of the liquid changes rapidly between the two sides, as can be deduced
 from the Gibbs—Konovaloy rule, Eq. (2.50). Appropriate models are, for example, the
 associate solution (5.7.1) and the partially ionic-liquid model (5.9.4).
 
