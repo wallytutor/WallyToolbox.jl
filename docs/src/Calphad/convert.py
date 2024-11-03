@@ -1,148 +1,62 @@
 # -*- coding: utf-8 -*-
-""" Provides conversion of PDF to text. """
 from pathlib import Path
-from pprint import pprint
-from typing import Optional
-from typing import Union
-from typing import Tuple
-from PIL import Image
-from PyPDF2 import PdfFileReader
-from pdf2image import convert_from_path
-from pytesseract import pytesseract
-from pytesseract import image_to_string
-import imghdr
 import logging
-import warnings
+import sys
+sys.path.insert(0, "../../../src/py")
 
 
-PathType = Union[str, Path]
-""" Allowed formats for a path. """
+from pdf_convert import get_converter
+
+converter = get_converter()
+
+# pdf_path = "sandbox/2007_Lukas_CALPHAD.pdf"
+# contents = {
+#     "Chapter0": {"first_page": 11,  "last_page": 16},
+#     "Chapter0": {"first_page": 17,  "last_page": 55},
+#     "Chapter0": {"first_page": 57,  "last_page": 67},
+#     "Chapter0": {"first_page": 68,  "last_page": 87},
+#     "Chapter0": {"first_page": 89,  "last_page": 170},
+#     "Chapter0": {"first_page": 171, "last_page": 212},
+#     "Chapter0": {"first_page": 213, "last_page": 252},
+#     "Chapter0": {"first_page": 253, "last_page": 273},
+#     "Chapter0": {"first_page": 274, "last_page": 305},
+#     "Chapter0": {"first_page": 309, "last_page": 316},
+# }
+
+# pdf_path = "sandbox/1998_Saunders_CALPHAD.pdf"
+# contents = {
+#     "Chapter01": {"first_page": 18,  "last_page": 21},
+#     "Chapter02": {"first_page": 24,  "last_page": 46},
+#     "Chapter03": {"first_page": 50,  "last_page": 74},
+#     "Chapter04": {"first_page": 78,  "last_page": 104},
+#     "Chapter05": {"first_page": 108, "last_page": 143},
+#     "Chapter06": {"first_page": 146, "last_page": 195},
+#     "Chapter07": {"first_page": 198, "last_page": 243},
+#     "Chapter08": {"first_page": 246, "last_page": 275},
+#     "Chapter09": {"first_page": 278, "last_page": 313},
+#     "Chapter10": {"first_page": 316, "last_page": 425},
+#     "Chapter11": {"first_page": 428, "last_page": 478},
+#     "Chapter12": {"first_page": 480, "last_page": 482},
+# }
 
 
-class Convert:
-    def __init__(self):
-        self._logger = self.make_logger()
+pdf_path = "sandbox/2004_Stolen_Thermodynamics.pdf"
+pdf_dir = "2004_Stolen"
 
-    @staticmethod
-    def make_logger() -> logging.Logger:
-        """ Create logger for application. """
-        fmt = logging.Formatter(
-            "[%(asctime)s]@[%(filename)s:%(lineno)d] "
-            "%(levelname)s: %(message)s")
+contents = {
+    "Chapter01": {"first_page": 11,  "last_page": 37},
+    "Chapter02": {"first_page": 38,  "last_page": 64},
+    "Chapter03": {"first_page": 65,  "last_page": 91},
+    "Chapter04": {"first_page": 92,  "last_page": 133},
+}
 
-        fh = logging.FileHandler("convert.log")
-        fh.setLevel(logging.DEBUG)
-        fh.setFormatter(fmt)
+pdf_dir = Path(pdf_dir)
+pdf_dir.mkdir(exist_ok=True)
 
-        sh = logging.StreamHandler()
-        sh.setLevel(logging.DEBUG)
-        sh.setFormatter(fmt)
+for destination, config in contents.items():
+    if (target := pdf_dir / f"{destination}.md").exists():
+        logging.info(f"Skipping {target}")
+        continue
 
-        logger = logging.getLogger("convert")
-        logger.setLevel(logging.DEBUG)
-        logger.addHandler(fh)
-        logger.addHandler(sh)
-
-        return logger
-
-    def ensure_command(self, tesseract_cmd: PathType,
-                       poppler_path: PathType
-                       ) -> Tuple[Path, Path]:
-        """ Ensure required commands/directories are in path. """
-        tesseract_cmd = Path(tesseract_cmd or "/usr/bin/tesseract")
-        if not tesseract_cmd.exists():
-            raise FileNotFoundError(tesseract_cmd)
-
-        poppler_path = Path(poppler_path or "/usr/bin")
-        if not poppler_path.exists():
-            raise NotADirectoryError(poppler_path)
-
-        if not (poppler_path / "pdftotext").exists():
-            raise FileNotFoundError("pdftotext")
-        
-        self._logger.info(F"tesseract is {tesseract_cmd}")
-        self._logger.info(F"poppler at {poppler_path}")
-
-        return (tesseract_cmd, poppler_path)
-
-    def test_if_pdf(self, pdf_path: PathType):
-        """ Check if file is really a PDF. """
-        doc = PdfFileReader(pdf_path)
-
-        if doc.getIsEncrypted():
-            raise RuntimeError(F"PDF is encrypted: {pdf_path}")
-
-        if doc.getNumPages() > 100:
-            n_pages = doc.getNumPages()
-            self._logger.warn(F"{pdf_path} is too long ({n_pages})")
-
-        pprint(doc.documentInfo)
-
-    def pdf2txt(self, pdf_path: PathType,
-                tesseract_cmd: Optional[PathType] = None,
-                poppler_path: Optional[PathType] = None,
-                dpi: Optional[int] = 150,
-                first_page: Optional[int] = None,
-                last_page: Optional[int] = None,
-                userpw: Optional[str] = None,
-                thread_count: Optional[int] = 8
-                ):
-        """ In-memory convertion of PDF to text. """
-        cmds = self.ensure_command(tesseract_cmd, poppler_path)
-        pytesseract.tesseract_cmd, poppler_path = cmds
-
-        try:
-            self.test_if_pdf(pdf_path)
-
-            image_list = convert_from_path(
-                pdf_path,
-                dpi=dpi,
-                output_folder=None,
-                first_page=first_page,
-                last_page=last_page,
-                fmt="ppm",
-                jpegopt=None,
-                thread_count=thread_count,
-                userpw=userpw,
-                use_cropbox=False,
-                strict=False,
-                transparent=False,
-                single_file=False,
-                # output_file=uuid_generator(),
-                poppler_path=poppler_path,
-                grayscale=False,
-                size=None,
-                paths_only=False,
-            )
-
-            texts = ""
-            for idx, image in enumerate(image_list):
-                self._logger.info(F"Image {idx+1}/{len(image_list)}")
-                texts += image_to_string(image)
-                texts += "\n===========\n"
-        except Exception as err:
-            raise RuntimeError(F"While converting pdf2txt: {err}")
-
-        return texts
-
-    # TODO support direct image conversion.
-    # def img2txt(img_path, valid, tesseract_cmd):
-    #     """ Extract text from image file. """
-    #     # Set path of executable.
-    #     pytesseract.tesseract_cmd = tesseract_cmd
-    #     base_error = "While converting img2txt"
-    #     file_format = imghdr.what(img_path)
-    #
-    #     if file_format is None:
-    #         raise ValueError(f"{base_error}: unable to get file format")
-    #
-    #     if file_format not in valid:
-    #         raise ValueError(f"{base_error}: {file_format} not in {valid}")
-    #
-    #     try:
-    #         with Image.open(img_path, mode="r") as img:
-    #             texts_list = image_to_string(img)
-    #     except (IOError, Exception) as err:
-    #         raise IOError(f"{base_error}: {err}")
-    #
-    #     return texts_list
+    with open(target, "w") as fp:
+        fp.write(converter(pdf_path, **config))
