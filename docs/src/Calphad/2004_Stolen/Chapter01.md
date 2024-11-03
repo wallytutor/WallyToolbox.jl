@@ -1,150 +1,57 @@
-Chemical Thermodynamics of Materials: Macroscopic and Microscopic Aspects.
-Svein Stolen and Tor Grande
-Copyright 2004 John Wiley & Sons, Ltd. ISBN: 0-471-49230-2
+# Thermodynamic foundations
 
-Thermodynamic
-foundations
+## Basic concepts
 
-1.1 Basic concepts
+### Thermodynamic systems
 
-Thermodynamic systems
+A thermodynamic description of a process needs a well-defined system. A thermodynamic system contains everything of thermodynamic interest for a particular chemical process within a boundary. The boundary is either a real or hypothetical enclosure or surface that confines the system and separates it from its surroundings. In order to describe the thermodynamic behavior of a physical system, the interaction between the system and its surroundings must be understood. Thermodynamic systems are thus classified into three main types according to the way they interact with the surroundings: isolated systems do not exchange energy or matter with their surroundings; closed systems exchange energy with the surroundings but not matter; and open systems exchange both energy and matter with their surroundings. 
 
-A thermodynamic description of a process needs a well-defined system. A thermo-
-dynamic system contains everything of thermodynamic interest for a particular
-chemical process within a boundary. The boundary is either a real or hypothetical
-enclosure or surface that confines the system and separates it from its surroundings.
-In order to describe the thermodynamic behaviour of a physical system, the interac-
-tion between the system and its surroundings must be understood. Thermodynamic
-systems are thus classified into three main types according to the way they interact
-with the surroundings: isolated systems do not exchange energy or matter with their
-surroundings; closed systems exchange energy with the surroundings but not matter;
-and open systems exchange both energy and matter with their surroundings.
+#system, #boundary, #surroundings
+#isolated-system, #closed-system, #open-system 
 
-The system may be homogeneous or heterogeneous. An exact definition is difficult,
-but it is convenient to define a homogeneous system as one whose properties are the
+The system may be homogeneous or heterogeneous. An exact definition is difficult, but it is convenient to define a homogeneous system as one whose properties are the same in all parts, or at least their spatial variation is continuous. A heterogeneous system consists of two or more distinct homogeneous regions or phases, which are separated from one another by surfaces of discontinuity. The boundaries between phases are not strictly abrupt, but rather regions in which the properties change abruptly from the properties of one homogeneous phase to those of the other. For example, Portland cement consists of a mixture of the phases $\beta-Ca_2SiO_4$, $Ca_3SiO_5$, $Ca_3Al_2O_6$ and $Ca_4Al_2Fe_2O_10$. The different homogeneous phases are readily distinguished from each other macroscopically and the thermodynamics of the system can be treated based on the sum of the thermodynamics of each single homogeneous phase.
 
- 
+#homogeneous-system, #heterogeneous-system, #phases
 
- 
+In colloids, on the other hand, the different phases are not easily distinguished macroscopically due to the small particle size that characterizes these systems. So although a colloid also is a heterogeneous system, the effect of the surface thermodynamics must be taken into consideration in addition to the thermodynamics of each homogeneous phase. **In the following, when we speak about heterogeneous systems, it must be understood (if not stated otherwise) that the system is one in which each homogeneous phase is spatially sufficiently large to neglect surface energy contributions.** The contributions from surfaces become important in systems where the dimensions of the homogeneous regions are about $1\:\mu{}m$ or less in size. The thermodynamics of surfaces will be considered in Chapter 6.
 
-same in all parts, or at least their spatial variation is continuous. A heterogeneous
-system consists of two or more distinct homogeneous regions or phases, which are sepa-
-rated from one another by surfaces of discontinuity. The boundaries between phases are
-not strictly abrupt, but rather regions in which the properties change abruptly from the
-properties of one homogeneous phase to those of the other. For example, Portland
-cement consists of a mixture of the phases B-Ca2SiO4, Ca3SiOs, Ca3AlyO¢ and
-Ca4Al,Fe20}19. The different homogeneous phases are readily distinguished from each
+#colloids
+
+A homogeneous system - solid, liquid or gas - is called a solution if the composition of the system can be varied. The components of the solution are the substances of fixed composition that can be mixed in varying amounts to form the solution. The choice of the components is often arbitrary and depends on the purpose of the problem that is considered. The solid solution $LaCr_{1-y}Fe_yO_3$ can be treated as a quasi-binary system with $LaCrO_3$ and $LaFeO_3$ as components. Alternatively, the compound may be regarded as forming from $La_2O_3$, $Fe_2O_3$ and $Cr_2O_3$ or from the elements $La$, $Fe$, $Cr$ and $O_2(g)$. In $La_2O_3$ or $LaCrO_3$, for example, the elements are present in a definite ratio, and independent variation is not allowed. $La_2O_3$ can thus be treated as a single component system. We will come back to this important topic in discussing the Gibbs phase rule in [Chapter 4](Chapter04.md).
+
+#solution
+
+### Thermodynamic variables
+
+In thermodynamics the state of a system is specified in terms of macroscopic state variables such as volume, $V$, temperature, $T$, pressure, $p$, and the number of moles of the chemical constituents $i$, $n_i$. The laws of thermodynamics are founded on the concepts of internal energy ($U$), and entropy ($S$), which are functions of the state variables. Thermodynamic variables are categorized as intensive or extensive. Variables that are proportional to the size of the system (*e.g.* volume and internal energy) are called extensive variables, whereas variables that specify a property that is independent of the size of the system (*e.g.* temperature and pressure) are called intensive variables.
+
+#state-variables, #state-functions
+#intensive-variables, #extensive-variables
+
+A state function is a property of a system that has a value that depends on the conditions (state) of the system and not on how the system has arrived at those conditions (the thermal history of the system). For example, the temperature in a room at a given time does not depend on whether the room was heated up to that temperature or cooled down to it. The difference in any state function is identical for every process that takes the system from the same given initial state to the same given final state: it is independent of the path or process connecting the two states. Whereas the internal energy of a system is a state function, work and heat are not. Work and heat are not associated with one given state of the system, but are defined only in a transformation of the system. Hence the work performed and the heat adsorbed by the system between the initial and final states depend on the choice of the transformation path linking these two states.
+
+#work, #heat
+
+### Thermodynamic processes and equilibrium
+
+The state of a physical system evolves irreversibly towards a time-independent state in which we see no further macroscopic physical or chemical changes. This is the state of thermodynamic equilibrium, characterized for example by a uniform temperature throughout the system but also by other features. A non-equilibrium state can be defined as a state where irreversible processes drive the system towards the state of equilibrium. The rates at which the system is driven towards equilibrium range from extremely fast to extremely slow. In the latter case the isolated system may appear to have reached equilibrium. Such a system, which fulfills the characteristics of an equilibrium system but is not the true equilibrium state, is called a metastable state. Carbon in the form of diamond is stable for extremely long periods of time at ambient pressure and temperature, but transforms to the more stable form, graphite, if given energy sufficient to climb the activation energy barrier. Buckminsterfullerene, $C_{60}$, and the related $C_{70}$ and carbon nanotubes, are other metastable modifications of carbon. The enthalpies of
+three modifications of carbon relative to graphite are given in Figure 1.1 (1, 2).
+
+#equilibrium, #metastability, #irreversibility
+
+Glasses are a particular type of material that is neither stable nor metastable. Glasses are usually prepared by rapid cooling of liquids. Below the melting point the liquid become supercooled and is therefore metastable with respect to the equilibrium crystalline solid state. At the glass transition the supercooled liquid transforms to a glass. The properties of the glass depend on the quenching rate (thermal history) and do not fulfill the requirements of an equilibrium phase. **Glasses represent non-ergodic states, which means that they are not able to explore their entire phase space, and glasses are thus not in internal equilibrium.** Both stable states (such as liquids above the melting temperature) and metastable states (such as supercooled liquids between the melting and glass transition temperatures) are in internal equilibrium and thus ergodic. Frozen-in degrees of freedom are frequently present, even in crystalline compounds. Glassy crystals exhibit translational periodicity of the molecular center of mass, whereas the molecular orientation is frozen either in completely random directions or randomly among a preferred set of orientations. **Strictly  spoken, only ergodic states can be treated in terms of classical thermodynamics.**
+
+#glass, #supercooling, #quench #egodic-states #frozen-in
+
+ ![[fig1_1.png]]
+Figure 1.1 Standard enthalpy of formation per mole $C$ of $C_{60}$ (1), $C_{70}$ (2) and diamond relative to graphite at 298 K and 1 bar.
+
 
----
-2 1 Thermodynamic foundations
+## The first law of thermodynamics
 
-other macroscopically and the thermodynamics of the system can be treated based
-on the sum of the thermodynamics of each single homogeneous phase.
+### Conservation of energy
 
-In colloids, on the other hand, the different phases are not easily distinguished
-macroscopically due to the small particle size that characterizes these systems. So
-although a colloid also is a heterogeneous system, the effect of the surface thermo-
-dynamics must be taken into consideration in addition to the thermodynamics of
-each homogeneous phase. In the following, when we speak about heterogeneous
-systems, it must be understood (if not stated otherwise) that the system is one in
-which each homogeneous phase is spatially sufficiently large to neglect surface
-energy contributions. The contributions from surfaces become important in sys-
-tems where the dimensions of the homogeneous regions are about | tm or les:
-size. The thermodynamics of surfaces will be considered in Chapter 6.
-
-A homogeneous system — solid, liquid or gas — is called a solution if the compo-
-sition of the system can be varied. The components of the solution are the sub-
-stances of fixed composition that can be mixed in varying amounts to form the
-solution. The choice of the components is often arbitrary and depends on the pur-
-pose of the problem that is considered. The solid solution LaCrj_yFeyO3 can be
-treated as a quasi-binary system with LaCrO3 and LaFeO3 as components. Alterna-
-tively, the compound may be regarded as forming from La203, Fe2O3 and Cr203 or
-from the elements La, Fe, Cr and Op (g). In LayO3 or LaCrO3, for example, the ele-
-ments are present in a definite ratio, and independent variation is not allowed.
-La O3 can thus be treated as a single component system. We will come back to this
-important topic in discussing the Gibbs phase rule in Chapter 4.
-
- 
-
-Thermodynamic variables
-
-In thermodynamics the state of a system is specified in terms of macroscopic state
-variables such as volume, V, temperature, 7, pressure, p, and the number of moles of
-the chemical constituents i, n;. The laws of thermodynamics are founded on the con-
-cepts of internal energy (U), and entropy (S), which are functions of the state variables.
-Thermodynamic variables are categorized as intensive or extensive. Variables that are
-proportional to the size of the system (e.g. volume and internal energy) are called
-extensive variables, whereas variables that specify a property that is independent of
-the size of the system (e.g. temperature and pressure) are called intensive variables.
-
-A state function is a property of a system that has a value that depends on the
-conditions (state) of the system and not on how the system has arrived at those con-
-ditions (the thermal history of the system). For example, the temperature in a room
-at a given time does not depend on whether the room was heated up to that tempera-
-ture or cooled down to it. The difference in any state function is identical for every
-process that takes the system from the same given initial state to the same given
-final state: it is independent of the path or process connecting the two states.
-Whereas the internal energy of a system is a state function, work and heat are not.
-Work and heat are not associated with one given state of the system, but are defined
-only in a transformation of the system. Hence the work performed and the heat
-
----
-1.1 Basic concepts 3
-
-adsorbed by the system between the initial and final states depend on the choice of
-the transformation path linking these two states.
-
- 
-
-Thermodynamic processes and equilibrium
-
-The state of a physical system evolves irreversibly towards a time-independent state in
-which we see no further macroscopic physical or chemical changes. This is the state of
-thermodynamic equilibrium, characterized for example by a uniform temperature
-throughout the system but also by other features. A non-equilibrium state can be
-defined as a state where irreversible processes drive the system towards the state of equi-
-librium. The rates at which the system is driven towards equilibrium range from
-extremely fast to extremely slow. In the latter case the isolated system may appear to
-have reached equilibrium. Such a system, which fulfils the characteristics of an equilib-
-rium system but is not the true equilibrium state, is called a metastable state. Carbon in
-the form of diamond is stable for extremely long periods of time at ambient pressure and
-temperature, but transforms to the more stable form, graphite, if given energy sufficient
-to climb the activation energy barrier. Buckminsterfullerene, Cgo, and the related C79
-and carbon nanotubes, are other metastable modifications of carbon. The enthalpies of
-three modifications of carbon relative to graphite are given in Figure 1.1 [1, 2].
-Glasses are a particular type of material that is neither stable nor metastable.
-Glasses are usually prepared by rapid cooling of liquids. Below the melting point the
-liquid become supercooled and is therefore metastable with respect to the equilib-
-rium crystalline solid state. At the glass transition the supercooled liquid transforms
-to a glass. The properties of the glass depend on the quenching rate (thermal history)
-and do not fulfil the requirements of an equilibrium phase. Glasses represent non-
-ergodic states, which means that they are not able to explore their entire phase space,
-and glasses are thus not in internal equilibrium. Both stable states (such as liquids
-above the melting temperature) and metastable states (such as supercooled liquids
-between the melting and glass transition temperatures) are in internal equilibrium
-and thus ergodic. Frozen-in degrees of freedom are frequently present, even in crys-
-talline compounds. Glassy crystals exhibit translational periodicity of the molecular
-
-graphite diamond
-
- 
-
-Figure 1.1 Standard enthalpy of formation per mol C of C¢o [1], C70 [2] and diamond rela-
-tive to graphite at 298 K and 1 bar.
-
----
-4 1 Thermodynamic foundations
-
-centre of mass, whereas the molecular orientation is frozen either in completely
-random directions or randomly among a preferred set of orientations. Strictly
-
-1.2 The first law of thermodynamics
-
-Conservation of energy
-The first law of thermodynamics may be expressed as:
-
-Whenever any process occurs, the sum of all changes in energy, taken over all
-the systems participating in the process, is zero.
+The first law of thermodynamics may be expressed as: **Whenever any process occurs, the sum of all changes in energy, taken over all the systems participating in the process, is zero.**
 
 The important consequence of the first law is that energy is always conserved. This
 law governs the transfer of energy from one place to another, in one form or another:
@@ -184,9 +91,6 @@ infinitesimal small amount dV against a constant external pressure is
 dw =—pexdV (1.2)
 
 ---
-a
-
-1.2 The first law of thermodynamics
 
 Table 1.1 Conjugate pairs of variables in work terms for the fundamental equation for the
 internal energy U. Here fis force of elongation, / is length in the direction of the force, ois
@@ -226,7 +130,7 @@ as a product of a force times a displacement of some kind. Several types of work
 thermodynamic system are summed up in Table 1.1. The last column gives the form
 of work in the equation for the internal energy.
 
-Heat capacity and definition of enthalpy
+### Heat capacity and definition of enthalpy
 
 In general, the change in internal energy or simply the energy of a system U may
 now be written as
@@ -244,7 +148,7 @@ where the subscript denotes a change at constant volume. For a measurable change
 the increase in the internal energy of a substance is
 
 ---
-6 1 Thermodynamic foundations
+
 AU =qy (1.5)
 
 The temperature dependence of the internal energy is given by the heat capacity
@@ -286,7 +190,7 @@ Since dp = 0 (constant pressure),
 dH =dq, (1.13)
 
 ---
-1.2 The first law of thermodynamics 7
+
 and
 
 AH = dp (1.14)
@@ -336,12 +240,10 @@ its change in enthalpy, enthalpy is often called heat content. If a phase transf
 tion (i.e. melting or transformation to another solid polymorph) takes place within
 
 ---
-8 1 Thermodynamic foundations
+
 
 Table 1.2 The isobaric expansivity and iso-
 thermal compressibility of selected compounds at
-
- 
 
  
 
@@ -388,7 +290,7 @@ ative to 0 K is given as a function of temperature in Figure 1.3. The standard
 enthalpy of fusion and in particular the standard enthalpy of vaporization con-
 tribute significantly to the total enthalpy increment.
 
-Reference and standard states
+### Reference and standard states
 
 Thermodynamics deals with processes and reactions and is rarely concerned with
 the absolute values of the internal energy or enthalpy of a system, for example, only
@@ -1398,36 +1300,26 @@ potential of one component in a solution cannot be varied independently of the
 chemical potentials of the other components of the solution. This relation will be
 further discussed and used in Chapter 3.
 
-References
+## References
 
-[1] _H.D.Beckhaus, T. Ruchardt, M. Kao, F, Diederich and C. S. Foote, Angew. Chem. Int.
-Ed., 1992, 31, 63.
+(1) H.D.Beckhaus, T. Ruchardt, M. Kao, F, Diederich and C. S. Foote, Angew. Chem. Int. Ed., 1992, 31, 63.
 
-[2] H.P. Diogo, M. E. M. da Piedade, A. D. Darwish and T. J. S. Dennis, J. Phys. Chem.
-Solids, 1997, 58, 1965.
+(2) H.P. Diogo, M. E. M. da Piedade, A. D. Darwish and T. J. S. Dennis, J. Phys. Chem. Solids, 1997, 58, 1965.
 
-[3] S.K. Saxena, N. Chatterjee, Y. Fei and G. Shen, Thermodynamic Data on Oxides and
-Silicates, Berlin: Springer-Verlag, 1993.
+(3) S.K. Saxena, N. Chatterjee, Y. Fei and G. Shen, Thermodynamic Data on Oxides and Silicates, Berlin: Springer-Verlag, 1993.
 
-[4] E. D. West, J. Am. Chem. Soc., 1959, 81, 29.
+(4) E. D. West, J. Am. Chem. Soc., 1959, 81, 29.
 
-[5] _E. D. Eastman and W. C. McGavock, J. Am. Chem. Soc., 1937, 59, 145.
+(5) E. D. Eastman and W. C. McGavock, J. Am. Chem. Soc., 1937, 59, 145.
 
 Further reading
 
-P. W. Atkins and J. de Paula, Physical Chemistry, 7th edn. Oxford: Oxford University Press,
-2001.
+P. W. Atkins and J. de Paula, Physical Chemistry, 7th edn. Oxford: Oxford University Press, 2001.
 
-E, A. Guggenheim, Thermodynamics: An Advanced Treatment for Chemists and Physicists,
-7th edn. Amsterdam: North-Holland, 1985.
+E, A. Guggenheim, Thermodynamics: An Advanced Treatment for Chemists and Physicists, 7th edn. Amsterdam: North-Holland, 1985.
 
-K. S. Pitzer, Thermodynamics. New York: McGraw-Hill, 1995. (Based on G. N. Lewis and
-M. Randall, Thermodynamics and the free energy of chemical substances. New York:
-McGraw-Hill, 1923.)
+K. S. Pitzer, Thermodynamics. New York: McGraw-Hill, 1995. (Based on G. N. Lewis and M. Randall, Thermodynamics and the free energy of chemical substances. New York: McGraw-Hill, 1923.)
 
-D. Kondepudi and I. Prigogine, Modern Thermodynamics: from Heat Engines to
-Dissipative Structures. Chichester: John Wiley & Sons, 1998.
+D. Kondepudi and I. Prigogine, Modern Thermodynamics: from Heat Engines to Dissipative Structures. Chichester: John Wiley & Sons, 1998.
 
 F. D. Rossini, Chemical Thermodynamics. Chichester: John Wiley & Sons, 1950.
-
----
