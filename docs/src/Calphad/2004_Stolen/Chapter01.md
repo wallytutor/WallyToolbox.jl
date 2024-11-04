@@ -174,7 +174,7 @@ Hence, fora constant pressure system, an infinitesimal change in temperature giv
 dH = C_{p}dT
 $$
 
-The heat capacity at constant volume and constant pressure at a given temperature are related through
+The heat capacity at constant volume and constant pressure at a given temperature are related through #To-Do/prove
 
 $$
 C_{p} - C_{V} = \dfrac{\alpha^2VT}{\kappa_T}
@@ -189,7 +189,7 @@ $$
 and
 
 $$
-\kappa_T = \dfrac{1}{V}\left(\dfrac{\partial{}V}{\partial{}p}\right)_{T}
+\kappa_T = -\dfrac{1}{V}\left(\dfrac{\partial{}V}{\partial{}p}\right)_{T}
 $$
 
 #property/isothermal-compressibility #property/isobaric-expansivity
@@ -203,7 +203,7 @@ Table 1.2 The isobaric expansivity and isothermal compressibility of selected co
 Figure 1.2 Molar heat capacity at constant pressure and at constant volume, isobaric
 expansivity and isothermal compressibility of Al2O3 as a function of temperature.
 
-Since the heat absorbed or released by a system at constant pressure is equal to its change in enthalpy, enthalpy is often called heat content. If a phase transformation (*i.e.* melting or transformation to another solid polymorph) takes place within the system, heat may be adsorbed or released without a change in temperature. At constant pressure the heat merely transforms a portion of the substance (e.g. from solid to liquid - ice - water). Such a change is called a first-order phase transition and will be defined formally in [Chapter 2](Chapter02.md). The standard enthalpy of aluminium relative to 0 K is given as a function of temperature in Figure 1.3. The standard enthalpy of fusion and in particular the standard enthalpy of vaporization contribute significantly to the total enthalpy increment.
+Since the heat absorbed or released by a system at constant pressure is equal to its change in enthalpy, enthalpy is often called heat content. If a phase transformation (*i.e.* melting or transformation to another solid polymorph) takes place within the system, heat may be adsorbed or released without a change in temperature. At constant pressure the heat merely transforms a portion of the substance (*e.g.* from solid to liquid - ice - water). Such a change is called a first-order phase transition and will be defined formally in [Chapter 2](Chapter02.md). The standard enthalpy of aluminium relative to 0 K is given as a function of temperature in Figure 1.3. The standard enthalpy of fusion and in particular the standard enthalpy of vaporization contribute significantly to the total enthalpy increment.
 
 
 #phase/transformation/order #energy/enthalpy/fusion #energy/enthalpy/vaporization
@@ -213,94 +213,29 @@ Figure 1.3 Standard enthalpy of aluminium relative to 0 K. The standard enthalpy
 
 ### Reference and standard states
 
-Thermodynamics deals with processes and reactions and is rarely concerned with
-the absolute values of the internal energy or enthalpy of a system, for example, only
-with the changes in these quantities. Hence the energy changes must be well
-defined. It is often convenient to choose a reference state as an arbitrary zero.
-Often the reference state of a condensed element/compound is chosen to be at a
-pressure of | bar and in the most stable polymorph of that element/compound at the
+Thermodynamics deals with processes and reactions and is rarely concerned with the absolute values of the internal energy or enthalpy of a system, for example, only with the changes in these quantities. Hence the energy changes must be well defined. It is often convenient to choose a reference state as an arbitrary zero. Often the reference state of a condensed element/compound is chosen to be at a pressure of 1 bar and in the most stable polymorph of that element/compound at the temperature at which the reaction or process is taking place. This reference state is called a standard state due to its large practical importance.  The term standard state and the symbol $^0$ are reserved for $p = 1\:bar$. The term reference state will be used for states obtained from standard states by a change of pressure. It is important to note that the standard state chosen should be specified explicitly, since it is indeed possible to choose different standard states. The standard state may even be a virtual state, one that cannot be obtained physically.
+
+#energy/enthalpy/reference-state #energy/enthalpy/standard-state
+
+Let us give an example of a standard state that not involves the most stable polymorph of the compound at the temperature at which the system is considered. Cubic zirconia, $ZrO_2$, is a fast-ion conductor stable only above 2300 °C. Cubic zirconia can, however, be stabilized to lower temperatures by forming a solid solution with for example $Y_2O_3$ or $CaO$. The composition-temperature stability field of this important phase is marked by $Css$ in the $ZrO_2$-$CaZrO_3$ phase diagram shown in Figure 1.4 (phase diagrams are treated formally in [Chapter 4](Chapter04.md)). In order to describe the thermodynamics of this solid solution phase at, for example, 1500 °C, it is convenient to define the metastable cubic high-temperature modification of zirconia as the standard state instead of the tetragonal modification that is stable at 1500 °C. The standard state of pure $ZrO_2$ (used as a component of the solid solution) and the investigated solid solution thus take the same crystal structure.
+
+The standard state for gases is discussed in [Chapter 2](Chapter02.md).
+
+### Enthalpy of physical transformations and chemical reactions
+
+The enthalpy that accompanies a change of physical state at standard conditions is called the standard enthalpy of transition and is denoted A ,,,H°. Enthalpy changes accompanying chemical reactions at standard conditions are in general termed standard enthalpies of reaction and denoted A, H°. Two simple examples are given in Table 1.3. In general, from the first law, the standard enthalpy of a reaction is given by where the sum is over the standard molar enthalpy of the reactants i and products j (vy; and v; are the stoichiometric coefficients of reactants and products in the chemical reaction).
 
-temperature at which the reaction or process is taking place. This reference state is
-called a standard state due to its large practical importance. The term standard
 
-The term reference state will be
-used for states obtained from standard states by a change of pressure. It is impor-
-tant to note that the standard state chosen should be specified explicitly, since it is
-indeed possible to choose different standard states.
-
-Let us give an example of a standard state that not involves the most stable
-polymorph of the compound at the temperature at which the system is considered.
-Cubic zirconia, ZrOg, is a fast-ion conductor stable only above 2300 °C. Cubic zir-
-conia can, however, be stabilized to lower temperatures by forming a solid solution
-with for example Y203 or CaO. The composition—temperature stability field of this
-important phase is marked by Css in the ZrO,—CaZrO 3 phase diagram shown in
-Figure 1.4 (phase diagrams are treated formally in Chapter 4). In order to describe
-the thermodynamics of this solid solution phase at, for example, 1500 °C, it is con-
-venient to define the metastable cubic high-temperature modification of zirconia
-as the standard state instead of the tetragonal modification that is stable at 1500 °C.
-The standard state of pure ZrO (used as a component of the solid solution) and the
-investigated solid solution thus take the same crystal structure.
-
-The standard state for gases is discussed in Chapter 2.
-
-Enthalpy of physical transformations and chemical reactions
-
-The enthalpy that accompanies a change of physical state at standard conditions is
-called the standard enthalpy of transition and is denoted A ,,,H°. Enthalpy changes
-accompanying chemical reactions at standard conditions are in general termed stan-
-dard enthalpies of reaction and denoted A, H°. Two simple examples are given in
-Table 1.3. In general, from the first law, the standard enthalpy of a reaction is given by
-
----
-10 1 Thermodynamic foundations
-
- 
-
-   
-
- 
-
- 
-
- 
-
- 
-
- 
-
-2500 CaZr0,
-2000
-2
-© 1500
-w
-1000 SSASEEZOP CaZrO. CaZr0y
-Mss + CaZr,Oy +CaZrO,
-Mss 3
-500
-0 1 20 «230 40 SO
-Z10, *Ca0 CaZr0,
-
+![[ch01/fig1_4.png]]
 Figure 1.4 The ZrO2-CaZrO3 phase diagram. Mss, Tss and Css denote monoclinic,
 tetragonal and cubic solid solutions.
 
-Table 1.3 Examples of a physical transformation and a chemical reaction and their respec-
-tive enthalpy changes. Here Ag,,Hy, denotes the standard molar enthalpy of fusion.
+Table 1.3 Examples of a physical transformation and a chemical reaction and their respective enthalpy changes. Here Ag,,Hy, denotes the standard molar enthalpy of fusion.
+![[ch01/tab1_3.png]]
 
- 
-
- 
-
- 
-
-Reaction Enthalpy change
-Al (s) = Al (liq) AusH®, = AgsH2, = 10789 J mol at Thus
-3SiO> (s) + 2Np (g) = Si3Nq (s) + 302 (g) A,H° = 1987.8 kJ mol-! at 298.15 K
-AH? =) vjHaD- LvtmO (1.20)
-J t
-
-where the sum is over the standard molar enthalpy of the reactants i and products j
-(vy; and v; are the stoichiometric coefficients of reactants and products in the chem-
-ical reaction).
+$$
+\Delta_rH^0 = \sum_j{\nu_jH_m^0(j)} - \sum_i{\nu_iH_m^0(i)}
+$$
 
 Of particular importance is the standard molar enthalpy of formation, A;H,,
 which corresponds to the standard reaction enthalpy for the formation of one mole
@@ -317,22 +252,14 @@ to A, H@, for the reaction
 
 SiO (s) + Aly03 (s) = AlySiOs (s) (1.21)
 
----
-1.2 The first law of thermodynamics 11
 
 Table 1.4 The enthalpy of formation of the three polymorphs of AlpSiOs, kyanite, andalu-
 site and sillimanite at 298.15 K [3].
-
- 
-
- 
 
 Reaction ArH, /kJ mol!
 2 Al (s) + Si (8) + 5/2 Op (g) = ALpSiOs (kyanite) -2596.0
 2 Al (s) + Si (8) + 5/2 Op (g) = ALSiOs (andalusite) -2591.7
 2 Al (s) + Si (8) + 5/2 Op (g) = AlpSiOs (sillimanite) -2587.8
-
- 
 
 These are derived by subtraction of the standard molar enthalpy of formation of
 the binary oxides, since standard enthalpies of individual reactions can be com-
@@ -361,10 +288,6 @@ Table 1.5 The enthalpy of formation of kyanite, andalusite and sillimanite from 
 constituent oxides [3]. The enthalpy of transition between the different polymorphs is also
 given. All enthalpies are given for T= 298.15 K.
 
- 
-
- 
-
 Reaction A,HE, = Ag ox H9, (kJ mol!
 ‘Als03 (s) + SiO> (s) = AlpSiOs (kyanite) -9.6
 
@@ -375,11 +298,6 @@ Al203 (s) + SiO> (s) = AlpSiOs (sillimanite) -14
 AlsSiOs (kyanite) = AlpSiOs (andalusite) 43
 
 ALSi05 (andalusite) = AlySi0s (sillimanite) 39
-
- 
-
----
-12 1 Thermodynamic foundations
 
 Ty
 AH yy (T))=AH (Ty) + FC
@@ -410,13 +328,9 @@ pam =
 
 iC pm) dvic pam (i) (1.25)
 
- 
+## The second and third laws of thermodynamics
 
-1.3 The second and third laws of thermodynamics
-
-The second law and the definition of entropy
-
- 
+### The second law and the definition of entropy
 
 A system can in principle undergo an indefinite number of processes under the con-
 straint that energy is conserved. While the first law of thermodynamics identifies
@@ -429,7 +343,8 @@ spontaneous change, AS jo >0.
 
 The law implies that for a reversible process, the sum of all changes in entropy,
 taken over all the systems participating in the process, AS jot, is zero.
-Reversible and non-reversible processes
+
+### Reversible and non-reversible processes
 
 Any change in state of a system in thermal and mechanical contact with its sur-
 roundings at a given temperature is accompanied by a change in entropy of the
@@ -437,8 +352,6 @@ system, dS, and of the surroundings, dS.y,:
 
 dS + dS yp 20 (1.26)
 
----
-1.3 The second and third laws of thermodynamics 13
 
 The sum is equal to zero for reversible processes, where the system is always
 under equilibrium conditions, and larger than zero for irreversible processes. The
@@ -460,8 +373,7 @@ a spontaneous process takes place. The second law identifies the spontaneous
 changes, but in terms of both the system and the surroundings. However, it is pos-
 sible to consider the specific system only. This is the topic of the next section.
 
-Conditions for equilibrium and the definition of Helmholtz and Gibbs
-energies
+### Conditions for equilibrium and the definition of Helmholtz and Gibbs energies
 
 Let us consider a closed system in thermal equilibrium with its surroundings at a
 given temperature 7, where no non-expansion work is possible. Imagine a change
@@ -481,8 +393,7 @@ dynamics for a system at constant volume thus gives
 
 TdS > dU (1.32)
 
----
-14 1 Thermodynamic foundations
+
 Correspondingly, when heat is transferred at constant pressure (pV work only),
 TdS > dH (1.33)
 
@@ -512,8 +423,6 @@ Ina process at constant T and p in aclosed system doing only expansion work it f
 lows from eq. (1.33) that the spontaneous direction of change is in the direction of
 decreasing G. At equilibrium the value of G is at a minimum.
 
----
-1.3 The second and third laws of thermodynamics 15
 
 Equilibrium conditions in terms of internal energy and enthalpy are less appli-
 cable since these correspond to systems at constant entropy and volume and at con-
@@ -531,7 +440,7 @@ tively, of the system decrease. These are, however, only other measures of the
 second law and imply that the total entropy of the system and the surroundings
 increases.
 
-Maximum work and maximum non-expansion work
+### Maximum work and maximum non-expansion work
 
 The Helmholtz and Gibbs energies are useful also in that they define the maximum
 work and the maximum non-expansion work a system can do, respectively. The
@@ -558,8 +467,7 @@ and non-expansion work.
 
 dw =dWyon-e — PAV (1.47)
 
----
-16 1 Thermodynamic foundations
+
 For a system at constant pressure it can be shown that
 
 dw =dH -TdS (1.48)
@@ -579,7 +487,7 @@ converted into electrical energy in a fuel cell working at these conditions usin
 H)(g) as fuel. Since the Gibbs energy relates to the energy free for non-expansion
 work, it has in previous years been called the free energy.
 
-The variation of entropy with temperature
+### The variation of entropy with temperature
 
 For a reversible change the entropy increment is dS = dq/T. The variation of the
 entropy from 7| to 7 is therefore given by
@@ -601,46 +509,13 @@ C)aT
 S(Tp)= S(T) + f (1.52)
 T, Tr
 
- 
 
 The entropy of a particular compound at a specific temperature can be determined
 through measurements of the heat capacity as a function of temperature, adding
 entropy increments connected with first-order phase transitions of the compound:
 
-* CT)
-T
-
-Tow
-ST)=SO)+ | of)
-) T
-
 dT + Aus Sm +] Yar (1.53)
 
-Tes
-
----
-1.3 The second and third laws of thermodynamics 17
-
- 
-
- 
-
- 
-
- 
-
-200
-Al AvapSin =
-L150 105.3 J. K7!mol™
-g —
-1 Anse =
-% 199 frm =
-& 11.56 J K mol
-a se
-50
-0
-0 500 1000 1500 2000 2500 3000
-TIK
 Figure 1.5 Standard entropy of aluminium relative to 0 K. The standard entropy of fusion
 (Agus Sm) is significantly smaller than the standard entropy of boiling (A yap Sm)-
 
@@ -661,7 +536,8 @@ q,
 
 where A,C pm (T) is given by eq. (1.25).
 
-The third law of thermodynamics
+### The third law of thermodynamics
+
 The third law of thermodynamics may be formulated as:
 
 If the entropy of each element in some perfect crystalline state at T= 0 K is taken
@@ -677,21 +553,14 @@ that are not in internal thermodynamic equilibrium, such as glasses and glassy
 crystals. Such non-ergodic states do have a finite entropy at the absolute zero,
 called zero-point entropy or residual entropy at 0 K.
 
----
-18 1 Thermodynamic foundations
 
 Cym/IK™ mol!
 AggS/I. Ko! molt
 
- 
-
- 
-
 0 100 200 300 400°
 TIK
 
-Figure 1.6 Heat capacity of rhombic and monoclinic sulfur [4,5] and the derived entropy of
-transition between the two polymorphs.
+Figure 1.6 Heat capacity of rhombic and monoclinic sulfur [4,5] and the derived entropy of transition between the two polymorphs.
 
 The third law of thermodynamics can be verified experimentally. The stable
 rhombic low-temperature modification of sulfur transforms to monoclinic sulfur at
@@ -715,7 +584,7 @@ shown in the figure, increases with temperature and at the transition temperatur
 standard enthalpy of melting. The third law of thermodynamics is thereby con-
 firmed. The entropies of both modifications are zero at 0 K.
 
-The Maxwell relations
+### The Maxwell relations
 
 Maxwell used the mathematical properties of state functions to derive a set of
 useful relationships. These are often referred to as the Maxwell relations. Recall
@@ -723,8 +592,6 @@ the first law of thermodynamics, which may be written as
 
 dU =dq + dw (1.57)
 
----
-1.3 The second and third laws of thermodynamics 19
 
 For a reversible change in a closed system and in the absence of any non-expansion
 work this equation transforms into
@@ -741,12 +608,9 @@ changed, and U can be regarded as a function of S and V. We therefore have
 au (2) as+f22Z) av (1.59)
 as Jy av )s
 
- 
-
 It follows from eqs. (1.58) and (1.59) that
 
  
-
 Ww) Lp (1.60)
 a jy
 
@@ -770,8 +634,6 @@ may be deduced from (eq. 1.58):
 or) (2 (1.64)
 vi, as jy
 
----
-20 1 Thermodynamic foundations
 
 Table 1.6 The Maxwell relations.
 
@@ -809,7 +671,7 @@ energy dU, for example, is thus described in terms of dS and dV. The arrow from 
 T implies that TdS is a positive contribution to dU, while the arrow from p to V
 implies that pdV is a negative contribution. Hence dU =TdS — pdV follows.
 
-Properties of the Gibbs energy
+### Properties of the Gibbs energy
 
 Thermodynamics applied to real material systems often involves the Gibbs energy,
 since this is the most convenient choice for systems at constant pressure and tem-
@@ -820,8 +682,6 @@ be expressed in terms of infinitesimal changes in pressure, dp, and temperature,
 ac -{22) 4 oF), aT (1.65)
 Op )r or
 
----
-1.3 The second and third laws of thermodynamics 21
 
 The Gibbs energy is related to enthalpy and entropy through G = H — TS. For an
 infinitesimal change in the system
@@ -869,37 +729,8 @@ i
 A,S° is not necessarily positive and the Gibbs energy of a reaction may increase
 with temperature.
 
----
-22 1 Thermodynamic foundations
 
- 
-
- 
-
- 
-
- 
-
- 
-
-0
-~T 50
-3 Trg= 933.47 K es
-& -100 li :
-Z ‘a:
-o
-& -150
-of
-6
-ag ~200 Al a
-cS Teap= 2790.8 K
-250
-0 1000 2000 3000
-TIK
-
-Figure 1.8 Standard Gibbs energy of solid, liquid and gaseous aluminium relative to the
-standard Gibbs energy of solid aluminium at T= 0 K as a function of temperature (at p = 1
-bar).
+Figure 1.8 Standard Gibbs energy of solid, liquid and gaseous aluminium relative to the standard Gibbs energy of solid aluminium at T= 0 K as a function of temperature (at p = 1 bar).
 
 The pressure derivative of the Gibbs energy (eq. 1.68) at constant temperature is
 Vv
@@ -932,69 +763,10 @@ Pr
 A,G(pp) =A,G(pi) + | Ay Vp (1.74)
 Pi
 
----
-1.3 The second and third laws of thermodynamics 23
 
- 
+Figure 1.9 Standard Gibbs energy of graphite and diamond at T = 298 K relative to the standard Gibbs energy of graphite at | bar as a function of pressure.
 
- 
-
- 
-
- 
-
-Ln
-
-3
-
-= c
-
-Z5 Lo
-
-3 Zt
-
-°F Diamond .--~ \
-
-= a 1,
-
-Bh 's
-
-mS Graphite
-
-I
-
-EO
-
-S00 05 10 15 2.0
-p/GPa
-
-Figure 1.9 Standard Gibbs energy of graphite and diamond at T = 298 K relative to the
-standard Gibbs energy of graphite at | bar as a function of pressure.
-
- 
-
- 
-
- 
-
- 
-
- 
-
-0
-= -l <
-te Kyanite ‘
-= 2 a Sillimanite
-a “a
-& 3b
-Be
-4 Andalusite ALSiO,
-Bo 0.5 1.0 15 2.0
-p/GPa
-
-Figure 1.10 The standard Gibbs energy of formation from the binary constitutent oxides of
-the kyanite, sillimanite and andalusite modifications of Al7SiOs as a function of pressure at
-800 K. Data are taken from [3]. All three oxides are treated as incompressible.
+Figure 1.10 The standard Gibbs energy of formation from the binary constitutent oxides of the kyanite, sillimanite and andalusite modifications of Al7SiOs as a function of pressure at 800 K. Data are taken from [3]. All three oxides are treated as incompressible.
 
 A,V is not necessarily positive, and to compare the relative stability of the different
 modifications of a ternary compound like AlpSiOs the volume of formation of the
@@ -1012,17 +784,9 @@ The thermodynamic data used in the calculations are given in Table 1.7 [3].!
 ambient pressure at high temperatures. At ambient pressure, mullite (3Al203-2SiO2), is
 usually found in refractory materials based on these minerals.
 
----
-24 1 Thermodynamic foundations
 
 Table 1.7 Thermodynamic properties of the kyanite, sillimanite and andalusite poly-
 morphs of Al7SiOs at 800 K [3].
-
- 
-
- 
-
- 
 
 Compound AH SQV ArawHl Aco At Atala
 
@@ -1039,11 +803,9 @@ ALO; 1622.62 152.2 25.8
 
 SiO -879.63 100.1 23.3
 
- 
+## Open systems
 
-1.4 Open systems
-
-Definition of the chemical potential
+### Definition of the chemical potential
 
 A homogeneous open system consists of a single phase and allows mass transfer
 across its boundaries. The thermodynamic functions depend not only on tempera-
@@ -1067,19 +829,11 @@ oni Ip PR ji
 
 Equation (1.68) can for an open system be expressed as
 
- 
-
- 
-
- 
-
 G =-SdT + Vdp + > w;dn; (1.78)
 i
 The internal energy, enthalpy and Helmholtz energy can be expressed in an analo-
 gous manner:
 
----
-1.4 Open systems 25
 
 dU =TdS — pdV + Yj dn; (1.79)
 i
@@ -1095,18 +849,12 @@ The chemical potential is thus defined by any of the following partial derivativ
 
 én; )y Pl jai en; TV ngs én; SPM jei én; SV npg;
 
-Conditions for equilibrium in a heterogeneous system
+### Conditions for equilibrium in a heterogeneous system
 
- 
-
- 
-
- 
 
 Recall that the equilibrium condition for a closed system at constant T and p was
 given by eq. (1.41). For an open system the corresponding equation is
 
- 
 
 (dG)r pn, =9 (1.83)
 For such a system, which allows transfer of both heat and mass, the chemical poten-
@@ -1117,7 +865,7 @@ ue =p? =p =... (1.84)
 Here a, B and y denote different phases in the system, whereas i denotes the dif-
 ferent components of the system.
 
-Partial molar properties
+### Partial molar properties
 
 In open systems consisting of several components the thermodynamic properties
 of each component depend on the overall composition in addition to T and p.
@@ -1130,13 +878,11 @@ conditions are defined as
 A, {#) (1.85)
 Oi NP pn jo
 
- 
+
 
 5 {2) (1.86)
 On; )y PAR i
 
----
-26 1 Thermodynamic foundations
 
 7; {*) (1.87)
 én; TPM pi
@@ -1144,14 +890,10 @@ On; )y PAR i
 Note that the partial molar derivatives may also be taken under conditions other
 than constant p and 7.
 
- 
-
-The Gibbs-Duhem equation
+### The Gibbs-Duhem equation
 
 In the absence of non pV-work, an extensive property such as the Gibbs energy of a
 system can be shown to be a function of the partial derivatives:
-
- 
 
 on; i i
 
@@ -1189,8 +931,7 @@ derived:
 YinidV; =0 (1.94)
 i
 
----
-1.4 Open systems 27
+
 Yinjd5; =0 (1.95)
 i
 ¥in,dH; =0 (1.96)
@@ -1213,7 +954,7 @@ further discussed and used in Chapter 3.
 
 (5) E. D. Eastman and W. C. McGavock, J. Am. Chem. Soc., 1937, 59, 145.
 
-Further reading
+## Further reading
 
 P. W. Atkins and J. de Paula, Physical Chemistry, 7th edn. Oxford: Oxford University Press, 2001.
 
