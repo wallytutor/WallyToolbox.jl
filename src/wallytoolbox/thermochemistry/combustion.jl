@@ -97,6 +97,14 @@ julia> fuel = EmpiricalFuel([0.937, 0.063, 0.0]; scaler=:C=>10);
 julia> oxidizer_mass_flow_rate(fuel; burn_nitrogen = true)
 13.02691759229764
 ```
+
+For simple compositions (in relative molar quantities) one can use the
+more straightforward interface illustrated below:
+
+```jldoctest
+julia> oxidizer_mass_flow_rate(C=1, H=4, y_o2=1.0)
+3.989029483263729
+```
 """
 function oxidizer_mass_flow_rate(
         f::EmpiricalFuel;
@@ -121,6 +129,16 @@ function oxidizer_mass_flow_rate(
     end
 
     return (1//2) * rhs * m_o2 / y_o2
+end
+
+function oxidizer_mass_flow_rate(;
+        y_o2 = 0.23,
+        burn_nitrogen = false,
+        kw...
+    )
+    compound = ChemicalCompound(; kw...)
+    f = EmpiricalFuel(compound.Y; compound.elements)
+    return oxidizer_mass_flow_rate(f; y_o2, burn_nitrogen)
 end
 
 function ChemicalCompound(f::EmpiricalFuel)
