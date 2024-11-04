@@ -7,6 +7,7 @@ module PyCanteraTools
 using PythonCall
 using CairoMakie
 using Printf
+using Unitful
 
 import DataFrames: DataFrame
 import WallyToolbox: EmpiricalFuel
@@ -180,7 +181,11 @@ function complete_combustion_products(gas)
     return X_products
 end
 
-function pure_species_heating_value(mech, fuel, oxid)
+
+hv_units(add_units) = (add_units ? u"MJ/kg" : 1.0)
+
+
+function pure_species_heating_value(mech, fuel, oxid; add_units = false)
     # Read gas and set condition.
     gas = ct[].Solution(mech)
     gas.TP = 298.15, ct[].one_atm
@@ -204,21 +209,28 @@ function pure_species_heating_value(mech, fuel, oxid)
     LHV = -1.0e-06 * (h2 - h1) / Y_fuel
     HHV = LHV - 1.0e-06 * HV_water / Y_fuel
 
-    return pyconvert(Float64, LHV), pyconvert(Float64, HHV)
+    LHV = pyconvert(Float64, LHV) * hv_units(add_units)
+    HHV = pyconvert(Float64, HHV) * hv_units(add_units)
+
+    return LHV, HHV
 end
 
-function mixture_heating_value(mech, X_fuel, oxid; verbose = false)
+function mixture_heating_value(mech, X_fuel, oxid;
+        verbose = false,
+        add_units = false
+    )
     gas = ct[].Solution(mech)
     gas.TPX = nothing, nothing, X_fuel
 
     Y_fuel = pyconvert(Dict{String, Float64}, gas.mass_fraction_dict())
 
-    hhv_mix, lhv_mix = 0.0, 0.0
+    hhv_mix = 0.0 * hv_units(add_units)
+    lhv_mix = 0.0 * hv_units(add_units)
     
     table = []
 
     for (fuel, Y) in Y_fuel
-        lhv, hhv = pure_species_heating_value(mech, fuel, oxid)
+        lhv, hhv = pure_species_heating_value(mech, fuel, oxid; add_units)
         
         if verbose
             push!(table, [fuel, 100Y, lhv, hhv])
@@ -230,7 +242,7 @@ function mixture_heating_value(mech, X_fuel, oxid; verbose = false)
 
     if verbose
         table = mapreduce(permutedims, vcat, table)
-        @info DataFrame(table, ["compound", "Weight %", "LHV", "HHV"])
+        @info(DataFrame(table, ["compound", "Weight %", "LHV", "HHV"]))
     end
 
     return lhv_mix, hhv_mix
