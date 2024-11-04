@@ -1,5 +1,22 @@
 # Ansys Fluent
 
+## Exporting data
+
+| Format                   | Data   | Status |
+| ------------------------ | ------ | ------ |
+| CGNS ADF                 | Center | Failed |
+| CGNS HFD5                | Center | Failed |
+| CGNS HFD5                | Node   | Passed |
+| Tecplot                  | N/A    | Failed |
+| EnSight Case Gold binary | Node   | Passed |
+
+Data can be exported to #CGNS #HDF5 format (readable by #ParaView); so far I have not tried to export data from multiple regions at once (after a crash in a first trial). Same procedure applies to the other formats reported as passing in the table above.
+
+- In #Fluent `File > Export > Solution Data...` (Node values only!)
+- In #ParaView read data and select `CGNS Series Reader`
+
+Please notice that several problems arise when handling large datasets (slowness, crashes, ...).
+
 ## General purpose
 
 | Macro          | Notes                                                                                                                               |
