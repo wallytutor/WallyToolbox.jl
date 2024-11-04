@@ -221,112 +221,76 @@ Let us give an example of a standard state that not involves the most stable pol
 
 The standard state for gases is discussed in [Chapter 2](Chapter02.md).
 
-### Enthalpy of physical transformations and chemical reactions
-
-The enthalpy that accompanies a change of physical state at standard conditions is called the standard enthalpy of transition and is denoted A ,,,H°. Enthalpy changes accompanying chemical reactions at standard conditions are in general termed standard enthalpies of reaction and denoted A, H°. Two simple examples are given in Table 1.3. In general, from the first law, the standard enthalpy of a reaction is given by where the sum is over the standard molar enthalpy of the reactants i and products j (vy; and v; are the stoichiometric coefficients of reactants and products in the chemical reaction).
-
 
 ![[ch01/fig1_4.png]]
-Figure 1.4 The ZrO2-CaZrO3 phase diagram. Mss, Tss and Css denote monoclinic,
+Figure 1.4 The $ZrO_2$-$CaZrO_3$ phase diagram. $Mss$, $Tss$ and $Css$ denote monoclinic,
 tetragonal and cubic solid solutions.
 
-Table 1.3 Examples of a physical transformation and a chemical reaction and their respective enthalpy changes. Here Ag,,Hy, denotes the standard molar enthalpy of fusion.
-![[ch01/tab1_3.png]]
+### Enthalpy of physical transformations and chemical reactions
+
+The enthalpy that accompanies a change of physical state at standard conditions is called the standard enthalpy of transition and is denoted $\Delta_{trs}H^0$. Enthalpy changes accompanying chemical reactions at standard conditions are in general termed standard enthalpies of reaction and denoted $\Delta_{r}H^0$. Two simple examples are given in Table 1.3. In general, from the first law, the standard enthalpy of a reaction is given by
 
 $$
 \Delta_rH^0 = \sum_j{\nu_jH_m^0(j)} - \sum_i{\nu_iH_m^0(i)}
 $$
 
-Of particular importance is the standard molar enthalpy of formation, A;H,,
-which corresponds to the standard reaction enthalpy for the formation of one mole
-of a compound from its elements in their standard states. The standard enthalpies
-of formation of three different modifications of AlpSiOs are given as examples in
-Table 1.4 [3]. Compounds like these, which are formed by combination of
-electropositive and electronegative elements, generally have large negative
-enthalpies of formation due to the formation of strong covalent or ionic bonds. In
-contrast, the difference in enthalpy of formation between the different modifica-
-tions is small. This is more easily seen by consideration of the enthalpies of forma-
-tion of these ternary oxides from their binary constituent oxides, often termed the
-standard molar enthalpy of formation from oxides, A ¢_,x Hy, Which correspond
-to A, H@, for the reaction
-
-SiO (s) + Aly03 (s) = AlySiOs (s) (1.21)
+where the sum is over the standard molar enthalpy of the reactants $i$ and products $j$ ($\nu_i$ and $\nu_i$; are the stoichiometric coefficients of reactants and products in the chemical reaction).
 
 
-Table 1.4 The enthalpy of formation of the three polymorphs of AlpSiOs, kyanite, andalu-
-site and sillimanite at 298.15 K [3].
+Table 1.3 Examples of a physical transformation and a chemical reaction and their respective enthalpy changes. Here $\Delta_{fus}H_m^0$ denotes the standard molar enthalpy of fusion.
+![[ch01/tab1_3.png]]
 
-Reaction ArH, /kJ mol!
-2 Al (s) + Si (8) + 5/2 Op (g) = ALpSiOs (kyanite) -2596.0
-2 Al (s) + Si (8) + 5/2 Op (g) = ALSiOs (andalusite) -2591.7
-2 Al (s) + Si (8) + 5/2 Op (g) = AlpSiOs (sillimanite) -2587.8
+#energy/enthalpy/formation 
 
-These are derived by subtraction of the standard molar enthalpy of formation of
-the binary oxides, since standard enthalpies of individual reactions can be com-
-bined to obtain the standard enthalpy of another reaction. Thus,
+Of particular importance is the standard molar enthalpy of formation, $\Delta_{f}H_m^0$ which corresponds to the standard reaction enthalpy for the formation of one mole of a compound from its elements in their standard states. The standard enthalpies of formation of three different modifications of $Al_2SiO_5$ are given as examples in Table 1.4 (3). Compounds like these, which are formed by combination of electropositive and electronegative elements, generally have large negative enthalpies of formation due to the formation of strong covalent or ionic bonds. In contrast, the difference in enthalpy of formation between the different modifications is small. This is more easily seen by consideration of the enthalpies of formation of these ternary oxides from their binary constituent oxides, often termed the standard molar enthalpy of formation from oxides, $\Delta_{f,ox}H_m^0$, which correspond to $\Delta_{r}H_m^0$ for the reaction
 
-AgoxH m (Al SiO5) = ApH p, (Ab SiO5) — ApH, (ALO3) (1.22)
+$$
+SiO_2(s) + Al_2O_3(s) = Al_2SiO_5(s)
+$$
 
-—A;H (SiO)
+Table 1.4 The enthalpy of formation of the three polymorphs of $Al_2SiO_5$, kyanite, andalusite and sillimanite at 298.15 K (3).
+![[ch01/tab1_4.png]]
 
-The standard enthalpy of an overall reaction is the sum of the standard
-enthalpies of the individual reactions that can be used to describe the overall
-reaction of AljSiOs.
+These are derived by subtraction of the standard molar enthalpy of formation of the binary oxides, since standard enthalpies of individual reactions can be combined to obtain the standard enthalpy of another reaction. Thus,
 
-Whereas the enthalpy of formation of Al)SiOs5 from the elements is large and
-negative, the enthalpy of formation from the binary oxides is much less so.
-AgoxH m is furthermore comparable to the enthalpy of transition between the dif-
-ferent polymorphs, as shown for AlpSiOs in Table 1.5 [3]. The enthalpy of fusion is
-also of similar magnitude.
+$$
+\Delta_{f,ox}H_m^0 = \Delta_{f}H_m^0(Al_2SiO_5) - \Delta_{f}H_m^0(Al_2O_3) - \Delta_{f}H_m^0(SiO_2)
+$$
 
-The temperature dependence of reaction enthalpies can be determined from the
-heat capacity of the reactants and products. When a substance is heated from T| to
-T2 at a particular pressure p, assuming no phase transition is taking place, its molar
-enthalpy change from AH, (T;) to AH, (T>) is
+#energy/first-law/hess 
 
-Table 1.5 The enthalpy of formation of kyanite, andalusite and sillimanite from the binary
-constituent oxides [3]. The enthalpy of transition between the different polymorphs is also
-given. All enthalpies are given for T= 298.15 K.
+This use of the first law of thermodynamics is called **Hess's law**: The standard enthalpy of an overall reaction is the sum of the standard enthalpies of the individual reactions that can be used to describe the overall reaction of $Al_2SiO_5$.
 
-Reaction A,HE, = Ag ox H9, (kJ mol!
-‘Als03 (s) + SiO> (s) = AlpSiOs (kyanite) -9.6
+Whereas the enthalpy of formation of $Al_2SiO_5$ from the elements is large and negative, the enthalpy of formation from the binary oxides is much less so. $\Delta_{f,ox}H_m$ is furthermore comparable to the enthalpy of transition between the different polymorphs, as shown for $Al_2SiO_5$ in Table 1.5 (3). The enthalpy of fusion is also of similar magnitude.
 
-Als03 (s) + SiO> (s) = AlpSiOs (andalusite) 53
+Table 1.5 The enthalpy of formation of kyanite, andalusite and sillimanite from the binary constituent oxides (3). The enthalpy of transition between the different polymorphs is also given. All enthalpies are given for T= 298.15 K.
+![[ch01/tab1_5.png]]
 
-Al203 (s) + SiO> (s) = AlpSiOs (sillimanite) -14
+#energy/enthalpy/reaction 
 
-AlsSiOs (kyanite) = AlpSiOs (andalusite) 43
+The temperature dependence of reaction enthalpies can be determined from the heat capacity of the reactants and products. When a substance is heated from $T_1$ to $T_2$ at a particular pressure $p$, assuming no phase transition is taking place, its molar enthalpy change from $\Delta{}H_m(T_1)$ to $\Delta{}H_m(T_2)$ is
 
-ALSi05 (andalusite) = AlySi0s (sillimanite) 39
+$$
+\Delta{}H_m(T_2)=\Delta{}H_m(T_1) + \int_{T_1}^{T_2}C_{p,m}dT
+$$
 
-Ty
-AH yy (T))=AH (Ty) + FC
-qT
+This equation applies to each substance in a reaction and a change in the standard reaction enthalpy (*i.e.* $p$ is now $p^0$ = 1 bar) going from $T_1$ to $T_2$ is given by
 
-(1.23)
+$$
+\Delta_{r}H_m^0(T_2)=
+\Delta_{r}H_m^0(T_1) +
+\int_{T_1}^{T_2}\Delta_{r}C_{p,m}^0dT
+$$
 
-pmdT
+where $\Delta_{r}C_{p,m}^0$ is the difference in the standard molar heat capacities at constant pressure of the products and reactants under standard conditions taking the stoichiometric coefficients that appear in the chemical equation into consideration:
 
-This equation applies to each substance in a reaction and a change in the standard
-reaction enthalpy (i.e. p is now p® = | bar) going from T| to T> is given by
+$$
+\Delta_{r}C_{p,m}^0=
+\sum_j\nu_jC_{p,m}^0(j) -
+\sum_i\nu_iC_{p,m}^0(i)
+$$
 
-A,H°(T))=A,H°(T)) + + fa, Cc
-qT
-
-(1.24)
-
-pm
-
-where A Com is the difference in the standard molar heat capacities at constant
-
-pressure of the products and reactants under standard conditions taking the
-stoichiometric coefficients that appear in the chemical equation into consideration:
-
-A,C?,
-
-pam =
-
-iC pm) dvic pam (i) (1.25)
+The heat capacity difference is in general small for a reaction involving condensed phases only.
 
 ## The second and third laws of thermodynamics
 
