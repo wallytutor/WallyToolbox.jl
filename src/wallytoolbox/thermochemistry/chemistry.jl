@@ -355,13 +355,20 @@ function specific_heat(obj::ShomateThermo, T)
         @warn("Temperature $(T) K outside valid range $(obj.validity_range)")        
     end
 
-    t = 0.001T
-    p0 = obj.coefs[3] + t * obj.coefs[4]
-    p1 = obj.coefs[2] + t * p0
-    return t * p1 + obj.coefs[5] / t^2 + obj.coefs[1]
+    return specific_heat_shomate(0.001T, obj.coefs)
 end
 
 @doc "Evaluates the specific heat of materials [J/(kg.K)]." specific_heat
+
+#############################################################################
+# specific_heat() internals
+#############################################################################
+
+specific_heat_maierkelley(T, a) = error("Not implemented!")
+
+function specific_heat_shomate(t, a)
+    return a[1] + t * (a[2] + t * (a[3] + t * a[4])) + a[5] / t^2
+end
 
 #############################################################################
 # enthalpy()
