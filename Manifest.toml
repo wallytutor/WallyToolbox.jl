@@ -2,7 +2,7 @@
 
 julia_version = "1.10.4"
 manifest_format = "2.0"
-project_hash = "38ec91818315080ccd94ba5ea24da2764dd59ca7"
+project_hash = "4f9ed14693f21834654f592e253409e42ce6cb2c"
 
 [[deps.ADTypes]]
 git-tree-sha1 = "6778bcc27496dae5723ff37ee30af451db8b35fe"
@@ -2004,6 +2004,12 @@ deps = ["JuliaInterpreter"]
 git-tree-sha1 = "1ce1834f9644a8f7c011eb0592b7fd6c42c90653"
 uuid = "6f1432cf-f94c-5a45-995e-cdbf5db27b0b"
 version = "3.0.1"
+
+[[deps.LsqFit]]
+deps = ["Distributions", "ForwardDiff", "LinearAlgebra", "NLSolversBase", "Printf", "StatsAPI"]
+git-tree-sha1 = "40acc20cfb253cf061c1a2a2ea28de85235eeee1"
+uuid = "2fda8390-95c7-5789-9bda-21331edee243"
+version = "0.15.0"
 
 [[deps.Luxor]]
 deps = ["Base64", "Cairo", "Colors", "DataStructures", "Dates", "FFMPEG", "FileIO", "PolygonAlgorithms", "PrecompileTools", "Random", "Rsvg"]
