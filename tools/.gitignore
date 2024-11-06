@@ -33,6 +33,9 @@ bin/VSCode*
 bin/WPy64*
 bin/Winpython*
 
+# Overrides file
+bin/overrides.bat
+
 # Jupyter ignores
 jupyter/
 

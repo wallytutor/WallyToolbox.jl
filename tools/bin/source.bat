@@ -53,6 +53,14 @@ set OCTAVE_VERSION=octave-8.4.0-w64
 @REM set WINPYTHON_VERSION=WPy64-31231b3
 @REM set PYTHON_VERSION=python-3.12.3.amd64
 
+if exist "%HERE%overrides.bat" ( 
+    echo Overriding some setups.
+    call %HERE%overrides.bat
+    echo %VSCODE_VERSION%
+) else ( 
+    echo No override file found... keeping defaults.
+)
+
 @REM @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @REM CONFIGURE VSCODE
 @REM @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
