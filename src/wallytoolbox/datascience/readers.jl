@@ -8,8 +8,12 @@ export read_csv
 # CSV
 ##############################################################################
 
-function read_csv(fname; sep::Char = ',')::DataFrame
-	data, header = readdlm(fname, sep; header=true)
+function read_csv(fname;
+        sep::Char = ',',
+        comments = true,
+        comment_char = '#'
+    )::DataFrame
+	data, header = readdlm(fname, sep; header=true, comments, comment_char)
 	return DataFrame(data, vec(Symbol.(header)))
 end
 
