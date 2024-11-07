@@ -1,8 +1,8 @@
-
 [deps]
 cantera = ""
 pandas = ""
 matplotlib = ""
-numpy = ""
 pyvista = ""
+seaborn = ""
+numpy = ""
 scipy = ""
