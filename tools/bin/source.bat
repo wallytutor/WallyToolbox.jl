@@ -203,6 +203,9 @@ set JULIA_DEPOT_PATH=%HERE%%JULIA_VERSION%-win64\depot
 set JUPYTER=%PYTHON_HOME%\Scripts\jupyter.exe
 set JUPYTER_DATA_DIR=%HERE%..\jupyter
 
+@REM Workaround for creating CondaPkg elsewhere
+@REM set JULIA_CONDAPKG_ENV=%HERE%CondaPkg
+
 set WALLYROOT=%HERE%..\..\
 
 @REM @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
