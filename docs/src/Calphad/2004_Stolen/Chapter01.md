@@ -296,138 +296,127 @@ The heat capacity difference is in general small for a reaction involving conden
 
 ### The second law and the definition of entropy
 
-A system can in principle undergo an indefinite number of processes under the con-
-straint that energy is conserved. While the first law of thermodynamics identifies
-the allowed changes, a new state function, the entropy S, is needed to identify the
-spontaneous changes among the allowed changes. The second law of thermody-
-namics may be expressed as
+#function/state #function/entropy
 
-The entropy of a system and its surroundings increases in the course of a
-spontaneous change, AS jo >0.
+A system can in principle undergo an indefinite number of processes under the constraint that energy is conserved. While the first law of thermodynamics identifies the allowed changes, a new state function, the entropy $S$, is needed to identify the spontaneous changes among the allowed changes. The second law of thermodynamics may be expressed as: *The entropy of a system and its surroundings increases in the course of a spontaneous change, $\Delta{}S_{tot}>0$.*
 
-The law implies that for a reversible process, the sum of all changes in entropy,
-taken over all the systems participating in the process, AS jot, is zero.
+The law implies that for a reversible process, the sum of all changes in entropy, taken over all the systems participating in the process, $\Delta{}S_{tot}$, is zero.
 
 ### Reversible and non-reversible processes
 
-Any change in state of a system in thermal and mechanical contact with its sur-
-roundings at a given temperature is accompanied by a change in entropy of the
-system, dS, and of the surroundings, dS.y,:
+Any change in state of a system in thermal and mechanical contact with its surroundings at a given temperature is accompanied by a change in entropy of the system, $dS$, and of the surroundings, $dS_{sur}$:
 
-dS + dS yp 20 (1.26)
+$$
+dS + dS_{sur} \ge 0
+$$
 
 
-The sum is equal to zero for reversible processes, where the system is always
-under equilibrium conditions, and larger than zero for irreversible processes. The
-entropy change of the surroundings is defined as
+#process/reversible #process/irreversible
 
-d
-dS uy =f (1.27)
+The sum is equal to zero for reversible processes, where the system is always under equilibrium conditions, and larger than zero for irreversible processes. The entropy change of the surroundings is defined as
 
-where dq is the heat supplied to the system during the process. It follows that for
-any change:
+$$
+dS_{sur}=-\dfrac{dq}{T}
+$$
 
-as (1.28)
+where $dq$ is the heat supplied to the system during the process. It follows that for any change:
 
-which is known as the Clausius inequality. If we are looking at an isolated system
-ds >0 (1.29)
+$$
+dS \ge \dfrac{dq}{T}
+$$
 
-Hence, for an isolated system, the entropy of the system alone must increase when
-a spontaneous process takes place. The second law identifies the spontaneous
-changes, but in terms of both the system and the surroundings. However, it is pos-
-sible to consider the specific system only. This is the topic of the next section.
+which is known as the **Clausius inequality**. If we are looking at an isolated system 
+
+$$
+dS\ge{}0
+$$
+
+#clausius-inequality
+
+Hence, for an isolated system, the entropy of the system alone must increase when a spontaneous process takes place. The second law identifies the spontaneous changes, but in terms of both the system and the surroundings. However, it is possible to consider the specific system only. This is the topic of the next section.
 
 ### Conditions for equilibrium and the definition of Helmholtz and Gibbs energies
 
-Let us consider a closed system in thermal equilibrium with its surroundings at a
-given temperature 7, where no non-expansion work is possible. Imagine a change
-in the system and that the energy change is taking place as a heat exchange between
-the system and the surroundings. The Clausius inequality (eq. 1.28) may then be
-expressed as
+Let us consider a closed system in thermal equilibrium with its surroundings at a given temperature 7, where no non-expansion work is possible. Imagine a change in the system and that the energy change is taking place as a heat exchange between the system and the surroundings. The Clausius inequality (eq. 1.28) may then be expressed as
 
-ds -— 20 (1.30)
+(1.30)
 
 If the heat is transferred at constant volume and no non-expansion work is done,
 
-as -1U 59 (1.31)
-T
+ (1.31)
 
-The combination of the Clausius inequality (eq. 1.30) and the first law of thermo-
-dynamics for a system at constant volume thus gives
+The combination of the Clausius inequality (eq. 1.30) and the first law of thermodynamics for a system at constant volume thus gives
 
-TdS > dU (1.32)
+(1.32)
 
 
 Correspondingly, when heat is transferred at constant pressure (pV work only),
-TdS > dH (1.33)
+
+(1.33)
 
 For convenience, two new thermodynamic functions are defined, the Helmholtz
 (A) and Gibbs (G) energies:
 
 A=U -TS (1.34)
-and
-G=H-TS (1.35)
-For an infinitesimal change in the system
-dA = dU —TdS — SdT (1.36)
-and
-dG =dH —TdS — SdT (1.37)
-At constant temperature eqs. (1.36) and (1.37) reduce to
-dA =dU —TdS (1.38)
-and
-dG =dH -TdS (1.39)
-Thus for a system at constant temperature and volume, the equilibrium condition is
-dApy =0 (1.40)
-Ina process at constant 7 and V in a closed system doing only expansion work it
-follows from eq. (1.32) that the spontaneous direction of change is in the direction
-of decreasing A. At equilibrium the value of A is at a minimum.
-For a system at constant temperature and pressure, the equilibrium condition is
-dG, =0 (1.41)
-Ina process at constant T and p in aclosed system doing only expansion work it fol-
 
-lows from eq. (1.33) that the spontaneous direction of change is in the direction of
+and
+
+G=H-TS (1.35)
+
+For an infinitesimal change in the system
+
+dA = dU —TdS — SdT (1.36)
+
+and
+
+dG =dH —TdS — SdT (1.37)
+
+At constant temperature eqs. (1.36) and (1.37) reduce to
+
+dA =dU —TdS (1.38)
+
+and
+
+dG =dH -TdS (1.39)
+
+Thus for a system at constant temperature and volume, the equilibrium condition is 
+
+dApy =0 (1.40) 
+
+In a process at constant 7 and V in a closed system doing only expansion work it follows from eq. (1.32) that the spontaneous direction of change is in the direction
+of decreasing A. At equilibrium the value of A is at a minimum. For a system at constant temperature and pressure, the equilibrium condition is
+
+dG, =0 (1.41) 
+
+Ina process at constant T and p in a closed system doing only expansion work it follows from eq. (1.33) that the spontaneous direction of change is in the direction of
 decreasing G. At equilibrium the value of G is at a minimum.
 
 
-Equilibrium conditions in terms of internal energy and enthalpy are less appli-
-cable since these correspond to systems at constant entropy and volume and at con-
-stant entropy and pressure, respectively
+Equilibrium conditions in terms of internal energy and enthalpy are less applicable since these correspond to systems at constant entropy and volume and at constant entropy and pressure, respectively
 
 dUs y =0 (1.42)
+
 dH » =0 (1.43)
 
-The Helmholtz and Gibbs energies on the other hand involve constant tempera-
-ture and volume and constant temperature and pressure, respectively. Most experi-
-ments are done at constant T and p, and most simulations at constant T and V. Thus,
-we have now defined two functions of great practical use. In a spontaneous process
-at constant p and T or constant p and V, the Gibbs or Helmholtz energies, respec-
-tively, of the system decrease. These are, however, only other measures of the
-second law and imply that the total entropy of the system and the surroundings
-increases.
+The Helmholtz and Gibbs energies on the other hand involve constant temperature and volume and constant temperature and pressure, respectively. Most experiments are done at constant T and p, and most simulations at constant T and V. Thus, we have now defined two functions of great practical use. In a spontaneous process at constant p and T or constant p and V, the Gibbs or Helmholtz energies, respectively, of the system decrease. These are, however, only other measures of the second law and imply that the total entropy of the system and the surroundings increases.
 
 ### Maximum work and maximum non-expansion work
 
-The Helmholtz and Gibbs energies are useful also in that they define the maximum
-work and the maximum non-expansion work a system can do, respectively. The
-combination of the Clausius inequality TdS > dg and the first law of thermody-
-namics dU =dg + dw gives
+The Helmholtz and Gibbs energies are useful also in that they define the maximum work and the maximum non-expansion work a system can do, respectively. The combination of the Clausius inequality TdS > dg and the first law of thermodynamics dU =dg + dw gives
 
 dw = dU —TdS (1.44)
 
-Thus the maximum work (the most negative value of dw) that can be done by a
-system is
+Thus the maximum work (the most negative value of dw) that can be done by a system is
 
 dWypax = dU -TdS (1.45)
+
 At constant temperature dA = dU — TdS and
+
 Wmax = 4A (1.46)
 
-If the entropy of the system decreases some of the energy must escape as heat in
-order to produce enough entropy in the surroundings to satisfy the second law of
-thermodynamics. Hence the maximum work is less than| AU |. AA is the part of the
-change in internal energy that is free to use for work. Hence the Helmholtz energy
-is in some older books termed the (isothermal) work content.
+If the entropy of the system decreases some of the energy must escape as heat in order to produce enough entropy in the surroundings to satisfy the second law of thermodynamics. Hence the maximum work is less than| AU |. AA is the part of the change in internal energy that is free to use for work. Hence the Helmholtz energy is in some older books termed the (isothermal) work content.
 
-The total amount of work is conveniently separated into expansion (or pV) work
-and non-expansion work.
+The total amount of work is conveniently separated into expansion (or pV) work and non-expansion work.
 
 dw =dWyon-e — PAV (1.47)
 
@@ -441,20 +430,13 @@ non -e,max
 At constant temperature dG = dH — TdS and
 Wnon-emax = AG (1.49)
 
-Hence, while the change in Helmholtz energy relates to the total work, the change
-in Gibbs energy at constant temperature and pressure represents the maximum
-non-expansion work a system can do.
+Hence, while the change in Helmholtz energy relates to the total work, the change in Gibbs energy at constant temperature and pressure represents the maximum non-expansion work a system can do.
 
-Since A,G° for the formation of 1 mol of water from hydrogen and oxygen gas at
-298 K and | bar is —237 kJ mol-!, up to 237 kJ mol"! of ‘chemical energy’ can be
-converted into electrical energy in a fuel cell working at these conditions using
-H)(g) as fuel. Since the Gibbs energy relates to the energy free for non-expansion
-work, it has in previous years been called the free energy.
+Since A,G° for the formation of 1 mol of water from hydrogen and oxygen gas at 298 K and | bar is —237 kJ mol-!, up to 237 kJ mol"! of ‘chemical energy’ can be converted into electrical energy in a fuel cell working at these conditions using H)(g) as fuel. Since the Gibbs energy relates to the energy free for non-expansion work, it has in previous years been called the free energy.
 
 ### The variation of entropy with temperature
 
-For a reversible change the entropy increment is dS = dq/T. The variation of the
-entropy from 7| to 7 is therefore given by
+For a reversible change the entropy increment is dS = dq/T. The variation of the entropy from 7| to 7 is therefore given by
 
 Ty
 edd rey
@@ -462,41 +444,26 @@ S(T) = S(T, ey 1.50
 (Tz) me} r (1.50)
 i
 
-For a process taking place at constant pressure and that does not involve any non-
-pV work
+For a process taking place at constant pressure and that does not involve any non-pV work
 
 dq rey = dH =C,dT (1.51)
+
 and
-t
 
-C)aT
 S(Tp)= S(T) + f (1.52)
-T, Tr
 
-
-The entropy of a particular compound at a specific temperature can be determined
-through measurements of the heat capacity as a function of temperature, adding
-entropy increments connected with first-order phase transitions of the compound:
+The entropy of a particular compound at a specific temperature can be determined through measurements of the heat capacity as a function of temperature, adding entropy increments connected with first-order phase transitions of the compound:
 
 dT + Aus Sm +] Yar (1.53)
 
-Figure 1.5 Standard entropy of aluminium relative to 0 K. The standard entropy of fusion
-(Agus Sm) is significantly smaller than the standard entropy of boiling (A yap Sm)-
+![[ch01/fig1_5.png]]
+Figure 1.5 Standard entropy of aluminium relative to 0 K. The standard entropy of fusion (Agus Sm) is significantly smaller than the standard entropy of boiling (A yap Sm)-
 
-The variation of the standard entropy of aluminium from 0 K to the melt at 3000 K
-is given in Figure 1.5. The standard entropy of fusion and in particular the standard
-entropy of vaporization contribute significantly to the total entropy increment.
+The variation of the standard entropy of aluminium from 0 K to the melt at 3000 K is given in Figure 1.5. The standard entropy of fusion and in particular the standard entropy of vaporization contribute significantly to the total entropy increment.
 
-Equation (1.53) applies to each substance in a reaction and a change in the stan-
-dard entropy of a reaction (p is now p° = | bar) going from 7| to 72 is given by
-(neglecting for simplicity first-order phase transitions in reactants and products)
+Equation (1.53) applies to each substance in a reaction and a change in the standard entropy of a reaction (p is now p° = | bar) going from 7| to 72 is given by (neglecting for simplicity first-order phase transitions in reactants and products)
 
-PAC o mT
-A,S°r)=A,8%(n)+ [MO g
-
-IT (1.54)
-T
-q,
+(1.54)
 
 where A,C pm (T) is given by eq. (1.25).
 
@@ -524,35 +491,22 @@ AggS/I. Ko! molt
 0 100 200 300 400°
 TIK
 
+![[ch01/fig1_6.png]]
 Figure 1.6 Heat capacity of rhombic and monoclinic sulfur [4,5] and the derived entropy of transition between the two polymorphs.
 
-The third law of thermodynamics can be verified experimentally. The stable
-rhombic low-temperature modification of sulfur transforms to monoclinic sulfur at
-368.5 K (p = | bar). At that temperature, 7j;s, the two polymorphs are in equilib-
-rium and the standard molar Gibbs energies of the two modifications are equal. We
-therefore have
+The third law of thermodynamics can be verified experimentally. The stable rhombic low-temperature modification of sulfur transforms to monoclinic sulfur at 368.5 K (p = | bar). At that temperature, 7j;s, the two polymorphs are in equilibrium and the standard molar Gibbs energies of the two modifications are equal. We therefore have
 
 AusGm =AusHm —TsAtes Sm =0 (1.55)
 
-It follows that the standard molar entropy of the transition can be derived from the
-measured standard molar enthalpy of transition through the relationship
+It follows that the standard molar entropy of the transition can be derived from the measured standard molar enthalpy of transition through the relationship
 
 AusSm =AtsHm / Tus (1.56)
 
-Calorimetric experiments give A,,,H;, =401.66 J mol-! and thus Ay, 5), = 1.09
-JK-! mol"! [4]. The entropies of the two modifications can alternatively be derived
-through integration of the heat capacities for rhombic and monoclinic sulfur given
-in Figure 1.6 [4,5]. The entropy difference between the two modifications, also
-shown in the figure, increases with temperature and at the transition temperature
-(368.5 K) it is in agreement with the standard entropy of transition derived from the
-standard enthalpy of melting. The third law of thermodynamics is thereby con-
-firmed. The entropies of both modifications are zero at 0 K.
+Calorimetric experiments give A,,,H;, =401.66 J mol-! and thus Ay, 5), = 1.09 JK-! mol"! [4]. The entropies of the two modifications can alternatively be derived through integration of the heat capacities for rhombic and monoclinic sulfur given in Figure 1.6 [4,5]. The entropy difference between the two modifications, also shown in the figure, increases with temperature and at the transition temperature (368.5 K) it is in agreement with the standard entropy of transition derived from the standard enthalpy of melting. The third law of thermodynamics is thereby confirmed. The entropies of both modifications are zero at 0 K.
 
 ### The Maxwell relations
 
-Maxwell used the mathematical properties of state functions to derive a set of
-useful relationships. These are often referred to as the Maxwell relations. Recall
-the first law of thermodynamics, which may be written as
+Maxwell used the mathematical properties of state functions to derive a set of useful relationships. These are often referred to as the Maxwell relations. Recall the first law of thermodynamics, which may be written as
 
 dU =dq + dw (1.57)
 
@@ -600,31 +554,10 @@ vi, as jy
 
 
 Table 1.6 The Maxwell relations.
+![[ch01/tab1_6.png]]
 
- 
-
- 
-
- 
-
- 
-
-Thermodynamic Differential Equilibrium Maxwell's relations
-function condition
-U(S,V) dU = TdS — pdV (dU)s y=0 (=), -{2),
-av. as
-H(S,p) dH = TdS + Vdp or -(3),
-op), \es
-A(T,V) dA =-SdT - pdv (dA)py=0 (5) “
-av), \arly
-G(T, p) dG =-SdT + Vdp (dG)rp=0 as
-OP), (a,
-Vv A T
-U G
-Ss H P
-
-Figure 1.7 The thermodynamic square. Note that the two arrows enable one to get the right
-sign in the equations given in the second column in Table 1.6.
+![[ch01/fig1_7.png]]
+Figure 1.7 The thermodynamic square. Note that the two arrows enable one to get the right sign in the equations given in the second column in Table 1.6.
 
 Using H =U + pV, A=U —TS andG =H —TS the remaining three Maxwell rela-
 tions given in Table 1.6 are easily derived starting with the fundamental equation (eq.
@@ -694,6 +627,7 @@ A,S° is not necessarily positive and the Gibbs energy of a reaction may increas
 with temperature.
 
 
+![[ch01/fig1_8.png]]
 Figure 1.8 Standard Gibbs energy of solid, liquid and gaseous aluminium relative to the standard Gibbs energy of solid aluminium at T= 0 K as a function of temperature (at p = 1 bar).
 
 The pressure derivative of the Gibbs energy (eq. 1.68) at constant temperature is
@@ -728,8 +662,10 @@ A,G(pp) =A,G(pi) + | Ay Vp (1.74)
 Pi
 
 
+![[ch01/fig1_9.png]]
 Figure 1.9 Standard Gibbs energy of graphite and diamond at T = 298 K relative to the standard Gibbs energy of graphite at | bar as a function of pressure.
 
+![[ch01/fig1_10.png]]
 Figure 1.10 The standard Gibbs energy of formation from the binary constitutent oxides of the kyanite, sillimanite and andalusite modifications of Al7SiOs as a function of pressure at 800 K. Data are taken from [3]. All three oxides are treated as incompressible.
 
 A,V is not necessarily positive, and to compare the relative stability of the different
@@ -751,21 +687,7 @@ usually found in refractory materials based on these minerals.
 
 Table 1.7 Thermodynamic properties of the kyanite, sillimanite and andalusite poly-
 morphs of Al7SiOs at 800 K [3].
-
-Compound AH SQV ArawHl Aco At Atala
-
-moet TKI mmol! mort JKT Tmo = Gm mor!
-mol! mol!
-
-Sillimanite -2505.57 252.4 50.4 —3.32 0.1 -3400 .
-
-Kyanite 2513.06 240.1 44.8 10.81 -12.2 1050 43
-
-Andalusite -2509.08 248.8 52.2 6.83 -3.5 4030 3.1
-
-ALO; 1622.62 152.2 25.8
-
-SiO -879.63 100.1 23.3
+![[ch01/tab1_7.png]]
 
 ## Open systems
 
