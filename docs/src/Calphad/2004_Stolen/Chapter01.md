@@ -337,68 +337,97 @@ Hence, for an isolated system, the entropy of the system alone must increase whe
 
 ### Conditions for equilibrium and the definition of Helmholtz and Gibbs energies
 
-Let us consider a closed system in thermal equilibrium with its surroundings at a given temperature 7, where no non-expansion work is possible. Imagine a change in the system and that the energy change is taking place as a heat exchange between the system and the surroundings. The Clausius inequality (eq. 1.28) may then be expressed as
+Let us consider a closed system in thermal equilibrium with its surroundings at a given temperature $T$, where no non-expansion work is possible. Imagine a change in the system and that the energy change is taking place as a heat exchange between the system and the surroundings. The Clausius inequality (eq. 1.28) may then be expressed as
 
-(1.30)
+$$
+dS - \dfrac{dq}{T} \ge{}0
+$$
 
 If the heat is transferred at constant volume and no non-expansion work is done,
 
- (1.31)
+$$
+dS - \dfrac{dU}{T} \ge{}0
+$$
 
 The combination of the Clausius inequality (eq. 1.30) and the first law of thermodynamics for a system at constant volume thus gives
 
-(1.32)
+$$
+TdS\ge{}dU
+$$
 
 
-Correspondingly, when heat is transferred at constant pressure (pV work only),
+Correspondingly, when heat is transferred at constant pressure ($pV$ work only),
 
-(1.33)
+$$
+TdS\ge{}dH
+$$
+
+>[!NOTE] Demonstration
+>| $dU = dq + dW = dq - pdV \implies{} dq = dU + pdV = d(U + pV) = dH$
+
+#energy/helmholtz #energy/gibbs
 
 For convenience, two new thermodynamic functions are defined, the Helmholtz
-(A) and Gibbs (G) energies:
+($A$) and Gibbs ($G$) energies:
 
-A=U -TS (1.34)
-
+$$
+A = U - TS
+$$
 and
 
-G=H-TS (1.35)
+$$
+G = H - TS
+$$
 
 For an infinitesimal change in the system
 
-dA = dU —TdS — SdT (1.36)
-
+$$
+dA = dU - TdS - SdT
+$$
 and
 
-dG =dH —TdS — SdT (1.37)
+$$
+dG = dH - TdS - SdT
+$$
 
 At constant temperature eqs. (1.36) and (1.37) reduce to
 
-dA =dU —TdS (1.38)
-
+$$
+dA = dU - TdS
+$$
 and
 
-dG =dH -TdS (1.39)
+$$
+dG = dH - TdS
+$$
+
+#equilibrium 
 
 Thus for a system at constant temperature and volume, the equilibrium condition is 
 
-dApy =0 (1.40) 
+$$
+dA_{T,V} = 0
+$$
+In a process at constant $T$ and $V$ in a closed system doing only expansion work it follows from eq. (1.32) that the spontaneous direction of change is in the direction of decreasing $A$. At equilibrium the value of $A$ is at a minimum. For a system at constant temperature and pressure, the equilibrium condition is
 
-In a process at constant 7 and V in a closed system doing only expansion work it follows from eq. (1.32) that the spontaneous direction of change is in the direction
-of decreasing A. At equilibrium the value of A is at a minimum. For a system at constant temperature and pressure, the equilibrium condition is
+$$
+dG_{T,p} = 0\qquad\text{(1.41)}
+$$
 
-dG, =0 (1.41) 
-
-Ina process at constant T and p in a closed system doing only expansion work it follows from eq. (1.33) that the spontaneous direction of change is in the direction of
-decreasing G. At equilibrium the value of G is at a minimum.
+In a process at constant $T$ and $p$ in a closed system doing only expansion work it follows from eq. (1.33) that the spontaneous direction of change is in the direction of decreasing $G$. At equilibrium the value of $G$ is at a minimum.
 
 
 Equilibrium conditions in terms of internal energy and enthalpy are less applicable since these correspond to systems at constant entropy and volume and at constant entropy and pressure, respectively
 
-dUs y =0 (1.42)
+$$
+dU_{S,V} = 0\qquad\text{(1.42)}
+$$
 
-dH » =0 (1.43)
+$$
+dH_{S,p} = 0\qquad\text{(1.43)}
+$$
 
-The Helmholtz and Gibbs energies on the other hand involve constant temperature and volume and constant temperature and pressure, respectively. Most experiments are done at constant T and p, and most simulations at constant T and V. Thus, we have now defined two functions of great practical use. In a spontaneous process at constant p and T or constant p and V, the Gibbs or Helmholtz energies, respectively, of the system decrease. These are, however, only other measures of the second law and imply that the total entropy of the system and the surroundings increases.
+The Helmholtz and Gibbs energies on the other hand involve constant temperature and volume and constant temperature and pressure, respectively. Most experiments are done at constant $T$ and $p$, and most simulations at constant $T$ and $V$. Thus, we have now defined two functions of great practical use. In a spontaneous process at constant $p$ and $T$ or constant $p$ and $V$, the Gibbs or Helmholtz energies, respectively, of the system decrease. These are, however, only other measures of the second law and imply that the total entropy of the system and the surroundings increases.
 
 ### Maximum work and maximum non-expansion work
 
