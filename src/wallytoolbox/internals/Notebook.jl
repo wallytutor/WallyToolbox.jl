@@ -4,8 +4,9 @@ module Notebook
 using IJulia
 using JSON
 using Pkg
+using Pluto
 
-export launch_notebook, launch_jupyterlab
+export launch_notebook, launch_jupyterlab, launch_pluto
 
 function ensure_jupyter_data()
     jupyter_dir = get(ENV, "JUPYTER_DATA_DIR", nothing)
@@ -83,6 +84,45 @@ end
 function launch_jupyterlab(; detached = true)
     dump_kernel_spec()
     jupyterlab(; dir=pwd(), detached)
+end
+
+"Launch a Pluto notebook session with a template notebook."
+function launch_pluto(;
+        browser = false,
+        port = 2505,
+        autoreload = true,
+        capture_stdout = true
+    )
+    if !haskey(ENV, "WALLYROOT")
+        @error("""\
+            Running `launch_pluto` assumes you have a properly set \
+            WallyToolbox environment. Please make sure that environment \
+            variable `WALLYROOT` points to WallyToolbox.jl project root \
+            directory. Trying to start anyways...
+        """)
+    end
+
+    # Get and ensure `pluto_notebooks` directory:
+    conf_dir = joinpath(ENV["JULIA_DEPOT_PATH"], "pluto_notebooks")
+    !isdir(conf_dir) && mkdir(conf_dir)
+
+    # Copy latest version of template file to conf_dir:
+    pluto_init = joinpath(@__DIR__, "pluto_init.jl")
+    pluto_temp = joinpath(conf_dir, "template.jl")
+    cp(pluto_init, pluto_temp)
+
+    session = Pluto.ServerSession()
+    session.options.server.launch_browser = browser
+    session.options.server.port = port
+    session.options.server.root_url = "http://127.0.0.1:$(port)/"
+    session.options.server.auto_reload_from_file = autoreload
+    session.options.evaluation.capture_stdout = capture_stdout
+    session.options.server.notebook = pluto_temp
+
+    Pluto.run(session)
+
+    @info("Closing Pluto session, cleaning up...")
+    rm(pluto_temp)
 end
 
 end # (Notebook)
