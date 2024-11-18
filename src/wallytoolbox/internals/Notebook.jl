@@ -91,7 +91,8 @@ function launch_pluto(;
         browser = false,
         port = 2505,
         autoreload = true,
-        capture_stdout = true
+        capture_stdout = true,
+        pre_cleanup = true
     )
     if !haskey(ENV, "WALLYROOT")
         @error("""\
@@ -109,7 +110,7 @@ function launch_pluto(;
     # Copy latest version of template file to conf_dir:
     pluto_init = joinpath(@__DIR__, "pluto_init.jl")
     pluto_temp = joinpath(conf_dir, "template.jl")
-    cp(pluto_init, pluto_temp)
+    cp(pluto_init, pluto_temp; force = pre_cleanup)
 
     session = Pluto.ServerSession()
     session.options.server.launch_browser = browser
