@@ -605,52 +605,35 @@ perature. We will thus consider briefly the properties of the Gibbs energy. As t
 natural variables for the Gibbs energy are T and p, an infinitesimal change, dG, can
 be expressed in terms of infinitesimal changes in pressure, dp, and temperature, dT.
 
-ac -{22) 4 oF), aT (1.65)
-Op )r or
+(1.65)
 
 
 The Gibbs energy is related to enthalpy and entropy through G = H — TS. For an
 infinitesimal change in the system
 
-dG =dH —TdS — SdT (1.66)
+(1.66)
+
 Similarly, H = U + pV gives
-dH =dU + pdV + Vdp (1.67)
+
+(1.67)
 
 Thus in the absence of non-expansion work for a closed system, the following
 important equation
 
-dG =Vdp— SdT (1.68)
+ (1.68)
 
 is easily derived using also eq. (1.58). Equations (1.65) and (1.68) implies that the
 temperature derivative of the Gibbs energy at constant pressure is —S:
 
-0G
-=-S (1.69)
-(=),
-
- 
+(1.69)
 
 and thus that
 
-T,
-G(T;) =G(T,) - j sar (1.70)
-;
+(1.70)
 
-where i and f denote the initial and final p and T conditions. Since S is positive fora
-compound, the Gibbs energy of a compound decreases when temperature is
-increased at constant pressure. G decreases most rapidly with temperature when S
-is large and this fact leads to entropy-driven melting and vaporization of com-
-pounds when the temperature is raised. The standard molar Gibbs energy of solid,
-liquid and gaseous aluminium is shown as a function of temperature in Figure 1.8.
-The corresponding enthalpy and entropy is given in Figures 1.2 and 1.5. The
-melting (vaporization) temperature is given by the temperature at which the Gibbs
-energy of the solid (gas) and the liquid crosses, as marked in Figure 1.8.
-Equation (1.70) applies to each substance in a reaction and a change in the stan-
-dard Gibbs energy of a reaction (p is now p® = | bar) going from 7; to Tf is given by
+where i and f denote the initial and final p and T conditions. Since S is positive fora compound, the Gibbs energy of a compound decreases when temperature is increased at constant pressure. G decreases most rapidly with temperature when S is large and this fact leads to entropy-driven melting and vaporization of compounds when the temperature is raised. The standard molar Gibbs energy of solid, liquid and gaseous aluminium is shown as a function of temperature in Figure 1.8. The corresponding enthalpy and entropy is given in Figures 1.2 and 1.5. The melting (vaporization) temperature is given by the temperature at which the Gibbs energy of the solid (gas) and the liquid crosses, as marked in Figure 1.8. Equation (1.70) applies to each substance in a reaction and a change in the standard Gibbs energy of a reaction (p is now p® = | bar) going from 7; to Tf is given by
 
-T;
-A,G°(p) =A,G°(T) ~ JA, S°AT (71)
-i
+(1.71)
 
 A,S° is not necessarily positive and the Gibbs energy of a reaction may increase
 with temperature.
@@ -660,20 +643,12 @@ with temperature.
 Figure 1.8 Standard Gibbs energy of solid, liquid and gaseous aluminium relative to the standard Gibbs energy of solid aluminium at T= 0 K as a function of temperature (at p = 1 bar).
 
 The pressure derivative of the Gibbs energy (eq. 1.68) at constant temperature is
-Vv
 
- 
-
-0G
-=V (1.72)
-| op ),
+(1.72)
 
 and the pressure variation of the Gibbs energy is given as
 
-Pr
-
-G(p_) =G(pi) + | Vap (1.73)
-Pi
+(1.73)
 
 Since V is positive for a compound, the Gibbs energy of a compound increases
 when pressure is increased at constant temperature. Thus, while disordered phases
@@ -686,9 +661,7 @@ thus transforms to the much denser diamond modification of carbon at 1.5 GPa at
 Equation (1.73) applies to each substance in a reaction and a change in the Gibbs
 energy of a reaction going from pj to p¢ is given by
 
-Pr
-A,G(pp) =A,G(pi) + | Ay Vp (1.74)
-Pi
+(1.74)
 
 
 ![[ch01/fig1_9.png]]
@@ -697,21 +670,9 @@ Figure 1.9 Standard Gibbs energy of graphite and diamond at T = 298 K relative t
 ![[ch01/fig1_10.png]]
 Figure 1.10 The standard Gibbs energy of formation from the binary constitutent oxides of the kyanite, sillimanite and andalusite modifications of Al7SiOs as a function of pressure at 800 K. Data are taken from [3]. All three oxides are treated as incompressible.
 
-A,V is not necessarily positive, and to compare the relative stability of the different
-modifications of a ternary compound like AlpSiOs the volume of formation of the
-ternary oxide from the binary constituent oxides is considered for convenience.
-The pressure dependence of the Gibbs energies of formation from the binary con-
-stituent oxides of kyanite, sillimanite and andalusite polymorphs of AljSiOs are
-shown in Figure 1.10. Whereas sillimanite and andalusite have positive volumes of
-formation and are destabilized by pressure relative to the binary oxides, kyanite
-has a negative volume of formation and becomes the stable high-pressure phase.
-The thermodynamic data used in the calculations are given in Table 1.7 [3].!
+A,V is not necessarily positive, and to compare the relative stability of the different modifications of a ternary compound like AlpSiOs the volume of formation of the ternary oxide from the binary constituent oxides is considered for convenience. The pressure dependence of the Gibbs energies of formation from the binary constituent oxides of kyanite, sillimanite and andalusite polymorphs of AljSiOs are shown in Figure 1.10. Whereas sillimanite and andalusite have positive volumes of formation and are destabilized by pressure relative to the binary oxides, kyanite has a negative volume of formation and becomes the stable high-pressure phase. The thermodynamic data used in the calculations are given in Table 1.7 [3].!
 
- 
-
-1 Note that these three minerals, which are common in the Earth’s crust, are not stable at
-ambient pressure at high temperatures. At ambient pressure, mullite (3Al203-2SiO2), is
-usually found in refractory materials based on these minerals.
+1 Note that these three minerals, which are common in the Earth’s crust, are not stable at ambient pressure at high temperatures. At ambient pressure, mullite (3Al203-2SiO2), is usually found in refractory materials based on these minerals.
 
 
 Table 1.7 Thermodynamic properties of the kyanite, sillimanite and andalusite poly-
@@ -722,140 +683,92 @@ morphs of Al7SiOs at 800 K [3].
 
 ### Definition of the chemical potential
 
-A homogeneous open system consists of a single phase and allows mass transfer
-across its boundaries. The thermodynamic functions depend not only on tempera-
-ture and pressure but also on the variables necessary to describe the size of the
-system and its composition. The Gibbs energy of the system is therefore a function
-of T, p and the number of moles of the chemical components i, n;:
-G=G(T,p,n;) (1.75)
+A homogeneous open system consists of a single phase and allows mass transfer across its boundaries. The thermodynamic functions depend not only on temperature and pressure but also on the variables necessary to describe the size of the system and its composition. The Gibbs energy of the system is therefore a function of T, p and the number of moles of the chemical components i, n;: G=G(T,p,n;) (1.75)
 
 The exact differential of G may be written
 
-a(S) ar+(2) [2] dn; (1.76)
-OT Jn P Irn, TT panjei
+(1.76)
 
-The partial derivatives of G with respect to T and p, respectively, we recall are —S
-and V. The partial derivative of G with respect to nj is the chemical potential of
-component /, Ll;
+The partial derivatives of G with respect to T and p, respectively, we recall are -S and V. The partial derivative of G with respect to nj is the chemical potential of component /, Ll;
 
-eG
-Mi (3 | (1.77)
-oni Ip PR ji
+(1.77)
 
 Equation (1.68) can for an open system be expressed as
 
-G =-SdT + Vdp + > w;dn; (1.78)
-i
-The internal energy, enthalpy and Helmholtz energy can be expressed in an analo-
-gous manner:
+ (1.78)
+
+The internal energy, enthalpy and Helmholtz energy can be expressed in an analogous manner:
 
 
-dU =TdS — pdV + Yj dn; (1.79)
-i
+(1.79)
 
-dH =TdS + Vdp + ¥°u;dn; (1.80)
-i
+(1.80)
 
-dA =-SdT — pdV +) u;dn; (1.81)
-
-i
+(1.81)
 
 The chemical potential is thus defined by any of the following partial derivatives:
-
-én; )y Pl jai en; TV ngs én; SPM jei én; SV npg;
 
 ### Conditions for equilibrium in a heterogeneous system
 
 
-Recall that the equilibrium condition for a closed system at constant T and p was
-given by eq. (1.41). For an open system the corresponding equation is
+Recall that the equilibrium condition for a closed system at constant T and p was given by eq. (1.41). For an open system the corresponding equation is
 
+(1.83)
 
-(dG)r pn, =9 (1.83)
-For such a system, which allows transfer of both heat and mass, the chemical poten-
-tial of each species must be the same in all phases present in equilibrium; hence
+For such a system, which allows transfer of both heat and mass, the chemical potential of each species must be the same in all phases present in equilibrium; hence
 
-ue =p? =p =... (1.84)
+ (1.84)
 
-Here a, B and y denote different phases in the system, whereas i denotes the dif-
-ferent components of the system.
+Here a, B and y denote different phases in the system, whereas i denotes the different components of the system.
 
 ### Partial molar properties
 
-In open systems consisting of several components the thermodynamic properties
-of each component depend on the overall composition in addition to T and p.
-Chemical thermodynamics in such systems relies on the partial molar properties
-of the components. The partial molar Gibbs energy at constant p, T and nj (eq. 1.77)
-has been given a special name due to its great importance: the chemical potential.
-The corresponding partial molar enthalpy, entropy and volume under the same
-conditions are defined as
+In open systems consisting of several components the thermodynamic properties of each component depend on the overall composition in addition to T and p. Chemical thermodynamics in such systems relies on the partial molar properties of the components. The partial molar Gibbs energy at constant p, T and nj (eq. 1.77) has been given a special name due to its great importance: the chemical potential. The corresponding partial molar enthalpy, entropy and volume under the same conditions are defined as
 
-A, {#) (1.85)
-Oi NP pn jo
-
-
-
-5 {2) (1.86)
-On; )y PAR i
+(1.85)
+(1.86)
 
+(1.87)
 
-7; {*) (1.87)
-én; TPM pi
-
-Note that the partial molar derivatives may also be taken under conditions other
-than constant p and 7.
+Note that the partial molar derivatives may also be taken under conditions other than constant p and 7.
 
 ### The Gibbs-Duhem equation
 
 In the absence of non pV-work, an extensive property such as the Gibbs energy of a
 system can be shown to be a function of the partial derivatives:
 
-on; i i
+(1.88)
 
-0G =
-| } =)0,G; = Vin; (1.88)
-i TPM jei
-
-In this context G itself is often referred to as the integral Gibbs energy.
-For a binary system consisting of the two components A and B the integral Gibbs
+In this context G itself is often referred to as the integral Gibbs energy. For a binary system consisting of the two components A and B the integral Gibbs
 
 energy eq. (1.88) is
 
-G=ngly +nplp (1.89)
+(1.89)
+
 Differentiation of eq. (1.89) gives
 
 dG =nadua +daaty +ngdig +dngug (1.90)
+
 By using eq. (1.78) at constant T and p, G is also given by
 
-dG =uUadn,y +Upgdng (1.91)
+(1.91)
 
-By combining the two last equations, the Gibbs—Duhem equation for a binary
-system at constant 7 and p is obtained:
+By combining the two last equations, the Gibbs-Duhem equation for a binary system at constant 7 and p is obtained:
 
-nad, +ngdug=0 ie. S'nj;du; =0 (1.92)
-i
+(1.92)
 
-In general, for an arbitrary system with i components, the Gibbs—Duhem equa-
-tion is obtained by combining eq. (1.78) and eq. (1.90):
+In general, for an arbitrary system with i components, the Gibbs-Duhem equation is obtained by combining eq. (1.78) and eq. (1.90):
 
-SdT -Vdp + > njdp; =0 (1.93)
-i
-Expressions for the other intensive parameters such as V, S and H can also be
-derived:
+(1.93)
 
-YinidV; =0 (1.94)
-i
+Expressions for the other intensive parameters such as V, S and H can also be derived:
+
+ (1.94)
 
+ (1.95)
+ (1.96)
 
-Yinjd5; =0 (1.95)
-i
-¥in,dH; =0 (1.96)
-i
-
-The physical significance of the Gibbs-Duhem equation is that the chemical
-potential of one component in a solution cannot be varied independently of the
-chemical potentials of the other components of the solution. This relation will be
-further discussed and used in Chapter 3.
+The physical significance of the Gibbs-Duhem equation is that the chemical potential of one component in a solution cannot be varied independently of the chemical potentials of the other components of the solution. This relation will be further discussed and used in [Chapter 3](Chapter03.md).
 
 ## References
 
