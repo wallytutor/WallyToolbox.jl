@@ -53,6 +53,10 @@ set OCTAVE_VERSION=octave-8.4.0-w64
 @REM set WINPYTHON_VERSION=WPy64-31231b3
 @REM set PYTHON_VERSION=python-3.12.3.amd64
 
+@REM Java
+set GANTT_VERSION=ganttproject-3.3.3312
+set JAVA_HOME=%HERE%\bellsoft-jre17.0.13+12-windows-amd64-full\jre-17.0.13-full
+
 if exist "%HERE%overrides.bat" ( 
     echo Overriding some setups.
     call %HERE%overrides.bat
@@ -160,6 +164,7 @@ set PATH=%FREEFEM_HOME%;%PATH%
 
 set PATH=%HERE%%VSCODE_VERSION%;%PATH%
 set PATH=%HERE%%GIT_VERSION%\cmd;%PATH%
+set PATH=%HERE%%GANTT_VERSION%;%PATH%
 set PATH=%HERE%%BLENDER_VERSION%;%PATH%
 set PATH=%HERE%%DUALSPHYSICS_VERSION%\bin\windows;%PATH%
 set PATH=%HERE%%FREECAD_VERSION%\bin;%PATH%

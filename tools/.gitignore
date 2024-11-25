@@ -1,5 +1,6 @@
 # Executables
 bin/basic-miktex*
+bin/bellsoft*
 bin/blender*
 bin/Cantera*
 bin/casadi*
@@ -7,6 +8,7 @@ bin/DualSPHysics*
 bin/DWSIM*
 bin/Elmer*
 bin/FreeCAD*
+bin/ganttproject*
 bin/FreeFem*
 bin/FileZilla*
 bin/gmsh*

@@ -28,7 +28,7 @@ Once you have finished installing everything, comment out all `set PATH` related
 
 Now you can launch the editor with access to the deployed software by clicking [`tools/code.vbs`](https://github.com/wallytutor/WallyToolbox.jl/blob/main/tools/code.vbs). It is recommended you create a symbolic link to this file in your desktop for each of use later, as navigating to this directory every time may be excruciating.
 
-## Minimal working environment
+## Minimal environment
 
 These are required to get your system working for the first time. After installing `VS Code`, do **NOT** enable its [portable mode](https://code.visualstudio.com/docs/editor/portable) (because the VBS file for launching will point to a specific user-data folder) and install required extensions (Python and Julia support, ...). Also notice that there is a [`tools/vscode/`](https://github.com/wallytutor/WallyToolbox.jl/tree/main/tools/vscode) directory for keeping user configurations in a version controlled way.
 
@@ -79,6 +79,13 @@ CommonRoots=C:/Path/To/Local/TeX/Tree
 ```
 
 pointing to a directory implementing the user's [TeX Directory Structure](https://miktex.org/kb/tds).
+
+## Project management
+
+Project management tools may be useful; you can try Gantt Project liste below. Full integration to the working environment is not yet established and you might need to tweak the launch script (tip, `JAVA_HOME` environment variable) to get it working.
+
+- [Gantt Project](https://www.ganttproject.biz/download/free#zip)
+- [JRE (select full version)](https://bell-sw.com/pages/downloads/#jdk-21-lts)
 
 ## Domain-specific
 
