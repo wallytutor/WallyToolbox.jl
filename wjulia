@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+# Consider doing the following with `juliaup`
+# juliaup add 1.10.6 && juliaup default 1.10.6
+
+# Configure path to desired Julia executable:
+JULIA_CMD="${HOME}/.juliaup/bin/julia"
+
+# Get the directory of the currently executing script:
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+# Launch julia from current project:
+julia --project="${SCRIPT_DIR}" -i -e "using WallyToolbox" %*
