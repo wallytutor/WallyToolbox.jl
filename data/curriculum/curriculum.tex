@@ -3,12 +3,12 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \documentclass[
-	english,%
-	nologo,%
-	noflag,%
-	booktabs,%
-	helvetica,%
-	totpages%
+    english,%
+    nologo,%
+    noflag,%
+    booktabs,%
+    helvetica,%
+    totpages%
 ]{curriculum}%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -16,10 +16,10 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \hypersetup{%
-	pdfauthor   = {Walter Dal'Maz Silva},
-	pdftitle    = {Curriculum Vitae - Walter Dal'Maz Silva},
-	pdfsubject  = {Curriculum Vitae},
-	pdfkeywords = {Engineer, PhD, Materials Science, Scientific Computing}
+    pdfauthor   = {Walter Dal'Maz Silva},
+    pdftitle    = {Curriculum Vitae - Walter Dal'Maz Silva},
+    pdfsubject  = {Curriculum Vitae},
+    pdfkeywords = {Engineer, PhD, Materials Science, Scientific Computing}
 }%
 
 \ecvaddress{69 cours Richard Vitton, Lyon 69003, France}%
@@ -39,6 +39,61 @@
 \ecvhomepage{www.linkedin.com/in/walter-dal-maz-silva/}
 
 \date{2023-08-21}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Skills
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand{\skillsComputational}{%
+    \ecvsection{Computational skills}%
+
+    \ecvitem{}{%
+        \barplot{%
+            %
+            {Scientific programming in Python, Julia, and C++}/0.95,
+            %
+            {Development of low-order process numerical models}/0.95,
+            %
+            {Materials thermodynamics with Thermo-Calc and OpenCALPHAD}/0.9,
+            %
+            {Data analysis, modeling, and computer vision}/0.9,
+            %
+            {Process CFD simulation with Ansys Fluent and OpenFOAM}/0.8
+        }%
+    }%
+}
+
+\newcommand{\skillsIndustry}{%
+    \ecvsection{Industry skills}%
+
+    \ecvitem{}{%
+        \barplot{%
+            {Materials and process specification procedures}/0.95,
+            %
+            {International standards (ISO, ASTM, NACE, API, AWS, ASME, DNV)}/0.9,
+            %
+            {Project management, planning, and quality tools (FMEA, 5S)}/0.8
+        }
+    }%
+}
+
+\newcommand{\skillsMaterials}{%
+    \ecvsection{Materials skills}%
+
+    \ecvitem{}{%
+        \barplot{%
+            {Thermal and thermochemical processing of materials}/0.95,
+            %
+            {Materials selection for mechanical design}/0.95,
+            %
+            {Materials chemical and microstructural analysis}/0.85,
+            %
+            {Mechanical characterization of metals and ceramics}/0.8,
+            %
+            {Thermal (DSC, DTA, TG) and x-ray diffraction analyses}/0.8
+        }%
+    }%
+}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Document
@@ -80,50 +135,9 @@ Walter Dal'Maz Silva
 
 \clearpage
 
-\ecvsection{Industry skills}%
-
-\ecvitem{}{%
-	\barplot{%
-		{Materials and process specification procedures}/0.95,
-		%
-		{International standards (ISO, ASTM, NACE, API, AWS, ASME, DNV)}/0.9,
-		%
-		{Project management, planning, and quality tools (FMEA, 5S)}/0.8
-	}
-}%
-
-\ecvsection{Materials skills}%
-
-\ecvitem{}{%
-	\barplot{%
-		{Thermal and thermochemical processing of materials}/0.95,
-		%
-		{Materials selection for mechanical design}/0.95,
-		%
-		{Materials chemical and microstructural analysis}/0.85,
-		%
-		{Mechanical characterization of metals and ceramics}/0.8,
-		%
-		{Thermal (DSC, DTA, TG) and x-ray diffraction analyses}/0.8
-	}
-}%
-
-\ecvsection{Computational skills}%
-
-\ecvitem{}{%
-	\barplot{%
-		%
-		{Scientific programming in Python, Julia, and C++}/0.95,
-		%
-		{Development of low-order process numerical models}/0.95,
-		%
-		{Materials thermodynamics with Thermo-Calc and OpenCALPHAD}/0.9,
-		%
-		{Data analysis, modeling, and computer vision}/0.9,
-		%
-		{Process CFD simulation with Ansys Fluent and OpenFOAM}/0.8
-	}
-}%
+\skillsComputational%
+\skillsIndustry%
+\skillsMaterials%
 
 %$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
