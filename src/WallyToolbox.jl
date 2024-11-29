@@ -4,13 +4,13 @@ module WallyToolbox
 using Reexport
 
 "Path to supporting modules annex to WallyToolbox."
-const WALLYTOOLBOXPATH = joinpath(@__DIR__, "wallymodules")
+const WALLYTOOLBOXPATH = abspath(joinpath(@__DIR__, "wallymodules"))
 
 "Path to data files used by WallyToolbox."
-const WALLYTOOLBOXDATA = joinpath(@__DIR__, "..", "data")
+const WALLYTOOLBOXDATA = abspath(joinpath(@__DIR__, "..", "data"))
 
 "Path to Python modules from legacy Majordome package."
-const MAJORDOMEPATH = joinpath(@__DIR__, "py")
+const MAJORDOMEPATH = abspath(joinpath(@__DIR__, "py"))
 
 function __init__()
     # Make other modules available, that's all!
