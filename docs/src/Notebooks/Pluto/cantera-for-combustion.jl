@@ -559,19 +559,165 @@ with_theme() do
 	f
 end
 
-# ╔═╡ 04b30214-c098-4dc3-b24d-17175ec2d831
+# ╔═╡ a3f45a13-62f6-4714-85b7-89bf371b4630
+md"""
+Once checked the energetic suitability of the mechanism, we proceed with combustion delay evaluation. This choice is the reasonable one for actual applications given the deviations from ideal behavior. Here as assume ignition delay is measured by the peak of a reference radical species.
 
+Computation is performed in a closed constant pressure reactor starting at the same temperature as reference paper. Solution is advanced in time using internal time-step size over the interval expected to capture ignition.
+"""
+
+# ╔═╡ 04b30214-c098-4dc3-b24d-17175ec2d831
+function one_reactor_sim(gas; max_time_step = 1e-3, atol = 1e-15, rtol = 1e-10)
+    """ Create reactor for ignition time simulation. """
+    reactor = ct.IdealGasConstPressureReactor(gas)
+    reactor.volume = 1.0
+    reactor.chemistry_enabled = true
+    reactor.energy_enabled = true
+
+    network = ct.ReactorNet([reactor])
+    network.max_time_step = max_time_step
+    network.atol = atol
+    network.rtol = rtol
+
+    return network, reactor
+end
+
+# ╔═╡ 526141a7-718b-4417-a879-9919c1fd58f4
+md"""
+Below we select ``OH`` as the default radical for detecting ignition delay.
+"""
+
+# ╔═╡ dd5968c6-9be6-41b4-aeb1-dd65794f14c6
+ignition_delay(states; species = "OH") = states.t[states(species).Y.argmax()]
 
 # ╔═╡ 522d990a-f7c9-4f27-ab17-88ab87af3768
+time_history = let
+	estimated_ignition_delay_time = 0.1
+	phi = 1.0
+	
+	gas = ct.Solution("gri30.yaml")
+	gas.TP = 1200.0, ct.one_atm
+	gas.set_equivalence_ratio(phi, fuel, oxid, basis="mole")
+	
+	t = 0.0
+	network, reactor = one_reactor_sim(gas)
+	
+	time_history = ct.SolutionArray(gas, extra=("t",))
+	time_history.append(reactor.thermo.state, t=t)
 
+	while t < estimated_ignition_delay_time
+	    t = PyCanteraTools.jlfloat(network.step())
+	    time_history.append(reactor.thermo.state, t=t)
+	end
 
-# ╔═╡ 840dd247-8103-461c-a5d9-36c533c1352a
+	time_history
+end;
 
+# ╔═╡ f354034e-7156-4491-b756-833bc079619c
+md"""
+We recover the ignition time as reported by [Zhao et al. (2011)](https://doi.org/10.1007/s11434-010-4345-3) for reference. The next plot illustrates good agreement even though simulation was not carried with same mechanism.
+"""
+
+# ╔═╡ e327da08-1fce-4044-a8ae-0a8f46fe76a2
+with_theme() do
+	t = 1000PyCanteraTools.jlvec(time_history.t)
+	X = 1000PyCanteraTools.jlvec(time_history("OH").X.ravel())
+	T = PyCanteraTools.jlvec(time_history.T) .- T_REF
+	
+	tau = PyCanteraTools.jlfloat(ignition_delay(time_history))
+	tau = round(1000tau; digits=2)
+	
+	grids = (xgridstyle = :dot, ygridstyle = :dot)
+	
+	f = Figure(size = (650, 600))
+
+	ax1 = Axis(f[1, 1]; grids...)
+	ax2 = Axis(f[2, 1]; grids...)
+
+	ax1.title  = "Computed ignition delay $(tau) ms"
+	ax1.ylabel = L"Mole fraction $\mathrm{OH}$ [$\times{}1000$]"
+	ax2.ylabel = L"Temperature [$^\circ$C]"
+	ax2.xlabel = L"Time [$ms$]"
+	
+	lines!(ax1, t, X; color = :black)
+	lines!(ax2, t, T; color = :black)
+	vlines!(ax1, tau; color = :red, linestyle = :dash)
+	vlines!(ax2, tau; color = :red, linestyle = :dash)
+	
+	ax1.xticks = 0:10:100
+	ax2.xticks = 0:10:100
+	
+	ax1.yticks = 0.0:5.0:20
+	ax2.yticks = 800:400:2400
+	
+	xlims!(ax1, extrema(ax1.xticks.val))
+	xlims!(ax2, extrema(ax2.xticks.val))
+	
+	ylims!(ax1, -1, 20)
+	ylims!(ax2, extrema(ax2.yticks.val))
+
+	f
+end
+
+# ╔═╡ 215e07f8-faca-49f7-a0b5-b5f53b844b80
+md"""
+Another important element to show is the negative temperature coefficient (NTC) of the mechanism. This is shown by demonstrating a faster combustion with increased initial temperature.
+"""
+
+# ╔═╡ 953234a8-cc26-4606-bb97-ebc23e1c7322
+md"""
+```python
+# TODO: finish translating from Python!
+
+T = np.arange(2000, 999, -25)
+
+estimated_ignition_delay_times = 0.1 * np.ones_like(T, dtype=float)
+
+extra = {"tau": estimated_ignition_delay_times}
+ignition_delays = ct.SolutionArray(gas, shape=T.shape, extra=extra)
+ignition_delays.set_equivalence_ratio(phi, X_fuel, X_oxid, basis="mole")
+ignition_delays.TP = T, ct.one_atm
+
+# A scan is performed over all array elements to compute ignition delays.
+
+for k, state in enumerate(ignition_delays):
+    gas.TPX = state.TPX
+    network, reactor = make_simulation(gas)
+    reference_species_history = []
+    time_history = []
+
+    t = 0
+    while t < estimated_ignition_delay_times[k]:
+        t = network.step()
+        time_history.append(t)
+        reference_species_history.append(gas[reference_species].X[0])
+
+    i_ign = np.array(reference_species_history).argmax()
+    ignition_delays.tau[k] = time_history[i_ign] * 1e3
+
+# The following plot displays the characteristic curve for NTC checks.
+
+plt.close("all")
+plt.style.use("seaborn-white")
+fig, ax = plt.subplots(1, 1, figsize=(6, 4))
+fig.suptitle(f"Negative Temperature Coefficient Check")
+ax.semilogy(1000 / ignition_delays.T, ignition_delays.tau)
+ax.grid(linestyle=":")
+ax.set_ylabel("Ignition Delay [ms]")
+ax.set_xlabel("$1000\\times{}T^{-1}\:[K^{-1}]$ ")
+ax.set_xlim(0.5, 1.0)
+ax.set_ylim(0.01, 1000.0)
+fig.tight_layout()
+```
+"""
 
 # ╔═╡ ff5573c6-2a94-455a-8d7f-f8ff2ab384e7
 md"""
 ## Hydrogen combustion
 """
+
+# ╔═╡ 37c27593-b099-417f-83c4-517eeb670aba
+
 
 # ╔═╡ Cell order:
 # ╟─9d15ec6c-04a7-4f5c-908b-310a774ff044
@@ -634,7 +780,14 @@ md"""
 # ╠═c15061b4-bf4e-467c-bf36-eb7007f91b26
 # ╟─8a7d9457-ceee-43e8-98e9-14bec9475c69
 # ╟─1604a7a7-0252-4695-bde1-13f6fc6356ba
+# ╟─a3f45a13-62f6-4714-85b7-89bf371b4630
 # ╠═04b30214-c098-4dc3-b24d-17175ec2d831
+# ╟─526141a7-718b-4417-a879-9919c1fd58f4
+# ╠═dd5968c6-9be6-41b4-aeb1-dd65794f14c6
 # ╠═522d990a-f7c9-4f27-ab17-88ab87af3768
-# ╠═840dd247-8103-461c-a5d9-36c533c1352a
+# ╟─f354034e-7156-4491-b756-833bc079619c
+# ╟─e327da08-1fce-4044-a8ae-0a8f46fe76a2
+# ╟─215e07f8-faca-49f7-a0b5-b5f53b844b80
+# ╟─953234a8-cc26-4606-bb97-ebc23e1c7322
 # ╟─ff5573c6-2a94-455a-8d7f-f8ff2ab384e7
+# ╠═37c27593-b099-417f-83c4-517eeb670aba
