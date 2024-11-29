@@ -51,6 +51,7 @@ export mixture_heating_value
 jlbool(x)  = pyconvert(Bool, x)
 jlint(x)   = pyconvert(Int64, x)
 jlfloat(x) = pyconvert(Float64, x)
+jlstr(x)   = pyconvert(String, x)
 jlvec(x; T=Float64) = pyconvert(Vector{T}, x)
 
 ##############################################################################

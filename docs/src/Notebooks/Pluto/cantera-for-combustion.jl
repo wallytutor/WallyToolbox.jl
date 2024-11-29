@@ -418,6 +418,161 @@ I have personally used this to post-process OpenFOAM results read by [PyVista](h
 You could also scan temperature and pressure ranges to evaluate the required properties.
 """
 
+# ╔═╡ 4f9d5ca2-5ba3-49c9-acbd-82606a413d07
+md"""
+## Methane combustion
+
+In what follows we adapt this [reference from Cantera](https://cantera.org/examples/jupyter/thermo/flame_temperature.ipynb.html) to compute flame temperature produced by mixing methane and air. This initial estimations are used to check the suitability from current models and kinetics mechanisms to applications to high temperature material processing. Overall combustion equation at unity fuel to oxidizer ratio is
+
+```math
+\mathrm{CH_4 + 2 O_2 + 7.52 N_2 \rightarrow 2 H_2O + CO_2 + 7.52 N_2 + \Delta{H}}
+```
+
+In what follows we numerically investigate the role of non-stoichiometric mixing.
+
+For complete combustion a filtered version of the mechanism is used so that nominal released heat is found. A second solution object is created with the whole set of species to compute incomplete combustion.
+"""
+
+# ╔═╡ 9c7930f2-a18c-4d5e-b4a3-0eda53920aac
+begin
+	species_pair(s) = (PyCanteraTools.jlstr(s.name), s)
+	
+	species_keep = ("CH4", "O2", "CO2", "H2O", "N2", "AR")
+	species_mech = ct.Species.list_from_file("gri30.yaml")
+	
+	species_full = Dict(map(species_pair, species_mech))
+	species_calc = [species_full[s] for s in species_keep]
+
+	gas1 = ct.Solution(thermo="IdealGas", species=species_calc)
+	gas2 = ct.Solution(thermo="IdealGas", species=values(species_full))
+	gas3 = ct.Solution("2S_CH4_BFER.yaml")
+end;
+
+# ╔═╡ af2fa456-07a3-496d-93d6-fa7f5f3480cf
+md"""
+Next we make use of manipulation of `SolutionArray` shown before to conceive a function for computing multiple equilibria and adiabatic flame temperatures, residual oxygen, and lower-heating values. This is implemented in `adiabatic_flame_states`.
+"""
+
+# ╔═╡ eb36681a-fb76-44e2-9b99-e1a3869886d5
+function adiabatic_flame_states(gas, phi, fuel, oxid; basis = "mole")
+	# Allocate memory for multiple states:
+	sol = ct.SolutionArray(gas, shape=(length(phi),))
+
+	# Set initial state of mixture at equivalence ratio:
+	sol.TP = 298.15, ct.one_atm
+	sol.set_equivalence_ratio(phi, fuel, oxid, basis=basis)
+
+	# Get enthalpy and fuel content before combustion:
+	h0 = PyCanteraTools.jlvec(sol.enthalpy_mass)
+	y_fuel = PyCanteraTools.jlvec(sol(fuel).Y.ravel())
+
+	# Equilibrate and retrieve flame temperature:
+	sol.equilibrate("HP")
+	T_equi = PyCanteraTools.jlvec(sol.T)
+	
+	# Reset temperature for enthalpy change calculation:
+	sol.TP = 298.15, ct.one_atm
+
+	# Retrieve oxygen and enthalpy after combustion:
+	x_oxid = PyCanteraTools.jlvec(sol("O2").X.ravel())
+	h1 = PyCanteraTools.jlvec(sol.enthalpy_mass)
+
+	# Compute lower heating value:
+	lhv = -(h1 .- h0) ./ (1e6y_fuel)
+	
+	return (T = T_equi .- T_REF, X = 100x_oxid, LHV = lhv)
+end
+
+# ╔═╡ 4b575958-5429-43bf-b11d-5f6c059a34ab
+md"""
+Equilibrium under constant enthalpy and pressure is evaluated for $\phi\in[0.6;1.8]$ with air as oxidizer. The [lower heating value (LHV)](https://en.wikipedia.org/wiki/Heat_of_combustion#Lower_heating_value) is also computed as described [here](https://cantera.org/examples/jupyter/thermo/heating_value.ipynb.html).
+
+Below we make use of the developed function to perform these evaluations.
+"""
+
+# ╔═╡ c15061b4-bf4e-467c-bf36-eb7007f91b26
+begin
+	fuel = "CH4"
+	oxid = "O2:0.21, N2:0.78, AR:0.01"
+	phi = LinRange(0.6, 1.8, 100)
+	
+	sol1 = adiabatic_flame_states(gas1, phi, fuel, oxid)
+	sol2 = adiabatic_flame_states(gas2, phi, fuel, oxid)
+	sol3 = adiabatic_flame_states(gas3, phi, fuel, oxid)
+end;
+
+# ╔═╡ 8a7d9457-ceee-43e8-98e9-14bec9475c69
+md"""
+Plotting it all together one verify good agreement with the Gri-Mech 3.0, thus validating the model. It must be noticed that for any heat transfer simulation, the 1-step mechanism must be avoided above an equivalence ratio ~0.8.
+"""
+
+# ╔═╡ 1604a7a7-0252-4695-bde1-13f6fc6356ba
+with_theme() do
+	opts1 = (color = :black, label = "1S")
+	opts3 = (color = :red,   label = "2S")
+	opts2 = (color = :blue,  label = "Gri-Mech 3.0")
+	grids = (xgridstyle = :dot, ygridstyle = :dot)
+	
+	f = Figure(size = (650, 800))
+
+	ax1 = Axis(f[1, 1]; grids...)
+	ax2 = Axis(f[2, 1]; grids...)
+	ax3 = Axis(f[3, 1]; grids...)
+
+	ax1.ylabel = L"Temperature [$^\circ$C]"
+	ax2.ylabel = L"Excess $O_2$ [%]"
+	ax3.ylabel = L"Lower heating value [$MJ\cdotp{}kg^{-1}$]"
+	ax3.xlabel = L"Equivalence ratio$$"
+	
+	lines!(ax1, phi, sol1.T; opts1...)
+	lines!(ax2, phi, sol1.X; opts1...)
+	lines!(ax3, phi, sol1.LHV; opts1...)
+
+	lines!(ax1, phi, sol3.T; opts3...)
+	lines!(ax2, phi, sol3.X; opts3...)
+	lines!(ax3, phi, sol3.LHV; opts3...)
+	
+	lines!(ax1, phi, sol2.T; opts2...)
+	lines!(ax2, phi, sol2.X; opts2...)
+	lines!(ax3, phi, sol2.LHV; opts2...)
+
+	ax1.xticks = 0.6:0.2:1.8
+	ax2.xticks = 0.6:0.2:1.8
+	ax3.xticks = 0.6:0.2:1.8
+	
+	ax1.yticks = 1400:200:2200
+	ax2.yticks = 0:2:8
+	ax3.yticks = 20:10:60
+	
+	xlims!(ax1, extrema(ax1.xticks.val))
+	xlims!(ax2, extrema(ax2.xticks.val))
+	xlims!(ax3, extrema(ax3.xticks.val))
+	
+	ylims!(ax1, extrema(ax1.yticks.val))
+	ylims!(ax2, extrema(ax2.yticks.val))
+	ylims!(ax3, extrema(ax3.yticks.val))
+	
+	axislegend(ax1; position = :rt, labelsize=12)
+	axislegend(ax2; position = :rt, labelsize=12)
+	axislegend(ax3; position = :rt, labelsize=12)
+	
+	f
+end
+
+# ╔═╡ 04b30214-c098-4dc3-b24d-17175ec2d831
+
+
+# ╔═╡ 522d990a-f7c9-4f27-ab17-88ab87af3768
+
+
+# ╔═╡ 840dd247-8103-461c-a5d9-36c533c1352a
+
+
+# ╔═╡ ff5573c6-2a94-455a-8d7f-f8ff2ab384e7
+md"""
+## Hydrogen combustion
+"""
+
 # ╔═╡ Cell order:
 # ╟─9d15ec6c-04a7-4f5c-908b-310a774ff044
 # ╟─b31efe8b-182a-4228-9722-192d913fd8a8
@@ -471,3 +626,15 @@ You could also scan temperature and pressure ranges to evaluate the required pro
 # ╠═be646930-c893-4fcb-9e3e-e1408c1da9ac
 # ╟─65067cb0-7339-464e-b237-cb99a370b4c1
 # ╟─fe078411-c131-4ef2-9b05-8f71fba0b0e4
+# ╟─4f9d5ca2-5ba3-49c9-acbd-82606a413d07
+# ╠═9c7930f2-a18c-4d5e-b4a3-0eda53920aac
+# ╟─af2fa456-07a3-496d-93d6-fa7f5f3480cf
+# ╠═eb36681a-fb76-44e2-9b99-e1a3869886d5
+# ╟─4b575958-5429-43bf-b11d-5f6c059a34ab
+# ╠═c15061b4-bf4e-467c-bf36-eb7007f91b26
+# ╟─8a7d9457-ceee-43e8-98e9-14bec9475c69
+# ╟─1604a7a7-0252-4695-bde1-13f6fc6356ba
+# ╠═04b30214-c098-4dc3-b24d-17175ec2d831
+# ╠═522d990a-f7c9-4f27-ab17-88ab87af3768
+# ╠═840dd247-8103-461c-a5d9-36c533c1352a
+# ╟─ff5573c6-2a94-455a-8d7f-f8ff2ab384e7
