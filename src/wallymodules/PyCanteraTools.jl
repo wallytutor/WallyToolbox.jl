@@ -11,11 +11,21 @@ using Unitful
 
 import DataFrames: DataFrame
 import WallyToolbox: EmpiricalFuel
+import WallyToolbox: T_REF, P_REF
 
 const ct = Ref{Py}()
 
 function __init__()
     ct[] = pyimport("cantera")
+
+    # WallyToolbox mechanisms are found here:
+	path = joinpath(WallyToolbox.WALLYTOOLBOXDATA, "kinetics")
+
+    # Add all sub-directories to Cantera import path:
+	for entry in readdir(path)
+		dpath = joinpath(path, entry)
+		isdir(dpath) && ct[].add_directory(dpath)
+	end
 end
 
 ##############################################################################
@@ -25,6 +35,8 @@ end
 export cantera_string_to_dict
 export cantera_dict_to_string
 export cantera_elemental_composition
+export load_solution_state
+export report
 
 export chons_get_fractions
 export chons_fuel_formula
@@ -55,6 +67,33 @@ end
 
 function cantera_elemental_composition(f::EmpiricalFuel)
     return replace(String(f)[1:end-1], "("=>": ", ")"=>", ")
+end
+
+function load_solution_state(
+        mech::String,
+        comp::Union{String, Dict{String, Float64}};
+        T::Float64 = T_REF,
+        P::Float64 = P_REF,
+        basis::Symbol = :mole
+    )
+    sol = ct[].Solution(mech)
+
+    # Cantera does not support Julia dictionaries as it supports strings.
+    C = (comp isa Dict) ? pydict(comp) : comp
+
+    if basis == :mole
+        sol.TPX = T, P, C
+    elseif basis == :mass
+        sol.TPY = T, P, C
+    else
+        error("Unknown composition basis $(basis)")
+    end
+
+    return sol
+end
+
+function report(sol; kw...)
+	return pyconvert(String, sol.report(; kw...))
 end
 
 ##############################################################################
