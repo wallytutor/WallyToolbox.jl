@@ -1,0 +1,242 @@
+#############################################################################
+# MECHANISM
+#############################################################################
+
+description: |-
+  Lumped combustion mechanism for natural gas and HFO.
+
+  Properties were adapter from GRI-Mech 3.0 and Norinaga (2009); changes in
+  formation enthalpy of fuel species were made to match required heating
+  values of reference fuels for which this lumped mechanism was built for.
+
+units: {length: cm, time: s, quantity: mol, activation-energy: cal/mol}
+
+#############################################################################
+# PHASES
+#############################################################################
+
+phases:
+- name: gas
+  thermo: ideal-gas
+  elements: [O, H, C, N]
+  species: [NAT, PFO, O2, H2O, CO, CO2, N2]
+  kinetics: gas
+  reactions: all
+  transport: mixture-averaged
+  state:
+    T: 300.0
+    P: 101325.0
+
+#############################################################################
+# SPECIES
+#
+# Below in this comment we keep the original references of CH4 and A2; the
+# fifth coefficients were modified to match heating value of the gas. Do not
+# remove high temperature coefficients because negative specific heat may
+# arise in CFD simulations!
+#
+# - name: CH4
+#   composition: {C: 1, H: 4}
+#   thermo:
+#     model: NASA7
+#     temperature-ranges: [200.0, 1000.0, 3500.0]
+#     data:
+#     - [5.14987613, -0.0136709788, 4.91800599e-05, -4.84743026e-08, 1.66693956e-11,
+#       -1.02466476e+04, -4.64130376]
+#     - [0.074851495, 0.0133909467, -5.73285809e-06, 1.22292535e-09, -1.0181523e-13,
+#       -9468.34459, 18.437318]
+#     note: L8/88
+#   transport:
+#     model: gas
+#     geometry: nonlinear
+#     well-depth: 141.4
+#     diameter: 3.746
+#     polarizability: 2.6
+#     rotational-relaxation: 13.0
+#
+# - name: A2
+#   composition: {C: 10, H: 8}
+#   note: HR11/99BLYP00
+#   thermo:
+#     model: NASA7
+#     temperature-ranges: [300.0, 1401.0, 5000.0]
+#     data:
+#     - [-8.83645988, 0.109300567, -9.55200914e-05, 4.21647669e-08, -7.3985171e-12,
+#       1.66533366e+04, 62.1064766]
+#     - [23.4025312, 0.0242434427, -8.36282016e-06, 1.30620111e-09, -7.61153748e-14,
+#       6519.11936, -107.434728]
+#   transport:
+#     model: gas
+#     geometry: nonlinear
+#     diameter: 6.18
+#     well-depth: 630.4
+#     polarizability: 16.5
+#     rotational-relaxation: 1.0
+#############################################################################
+
+species:
+
+- name: NAT
+  composition: {C: 1.04396, H: 4.08791}
+  thermo:
+    model: NASA7
+    temperature-ranges: [200.0, 1000.0, 3500.0]
+    data:
+    - [5.14987613, -0.0136709788, 4.91800599e-05, -4.84743026e-08, 1.66693956e-11,
+      -1.0303425e+04, -4.64130376]
+    - [0.074851495, 0.0133909467, -5.73285809e-06, 1.22292535e-09, -1.0181523e-13,
+      -9525.12199, 18.437318]
+    note: L8/88
+  transport:
+    model: gas
+    geometry: nonlinear
+    well-depth: 141.4
+    diameter: 3.746
+    polarizability: 2.6
+    rotational-relaxation: 13.0
+
+- name: PFO
+  composition: {C: 10, H: 8}
+  thermo:
+    model: NASA7
+    temperature-ranges: [300.0, 1401.0, 5000.0]
+    data:
+    - [-8.83645988, 0.109300567, -9.55200914e-05, 4.21647669e-08, -7.3985171e-12,
+      6.56329e+04, 62.1064766]
+    - [23.4025312, 0.0242434427, -8.36282016e-06, 1.30620111e-09, -7.61153748e-14,
+      55498.682759999996, -107.434728]
+  transport:
+    model: gas
+    geometry: nonlinear
+    diameter: 6.18
+    well-depth: 630.4
+    polarizability: 16.5
+    rotational-relaxation: 1.0
+
+- name: O2
+  composition: {O: 2}
+  thermo:
+    model: NASA7
+    temperature-ranges: [200.0, 1000.0, 3500.0]
+    data:
+    - [3.78245636, -2.99673416e-03, 9.84730201e-06, -9.68129509e-09, 3.24372837e-12,
+      -1063.94356, 3.65767573]
+    - [3.28253784, 1.48308754e-03, -7.57966669e-07, 2.09470555e-10, -2.16717794e-14,
+      -1088.45772, 5.45323129]
+    note: TPIS89
+  transport:
+    model: gas
+    geometry: linear
+    well-depth: 107.4
+    diameter: 3.458
+    polarizability: 1.6
+    rotational-relaxation: 3.8
+  
+- name: H2O
+  composition: {H: 2, O: 1}
+  thermo:
+    model: NASA7
+    temperature-ranges: [200.0, 1000.0, 3500.0]
+    data:
+    - [4.19864056, -2.0364341e-03, 6.52040211e-06, -5.48797062e-09, 1.77197817e-12,
+      -3.02937267e+04, -0.849032208]
+    - [3.03399249, 2.17691804e-03, -1.64072518e-07, -9.7041987e-11, 1.68200992e-14,
+      -3.00042971e+04, 4.9667701]
+    note: L8/89
+  transport:
+    model: gas
+    geometry: nonlinear
+    well-depth: 572.4
+    diameter: 2.605
+    dipole: 1.844
+    rotational-relaxation: 4.0
+
+- name: CO
+  composition: {C: 1, O: 1}
+  thermo:
+    model: NASA7
+    temperature-ranges: [200.0, 1000.0, 3500.0]
+    data:
+    - [3.57953347, -6.1035368e-04, 1.01681433e-06, 9.07005884e-10, -9.04424499e-13,
+      -1.4344086e+04, 3.50840928]
+    - [2.71518561, 2.06252743e-03, -9.98825771e-07, 2.30053008e-10, -2.03647716e-14,
+      -1.41518724e+04, 7.81868772]
+    note: TPIS79
+  transport:
+    model: gas
+    geometry: linear
+    well-depth: 98.1
+    diameter: 3.65
+    polarizability: 1.95
+    rotational-relaxation: 1.8
+
+- name: CO2
+  composition: {C: 1, O: 2}
+  thermo:
+    model: NASA7
+    temperature-ranges: [200.0, 1000.0, 3500.0]
+    data:
+    - [2.35677352, 8.98459677e-03, -7.12356269e-06, 2.45919022e-09, -1.43699548e-13,
+      -4.83719697e+04, 9.90105222]
+    - [3.85746029, 4.41437026e-03, -2.21481404e-06, 5.23490188e-10, -4.72084164e-14,
+      -4.8759166e+04, 2.27163806]
+    note: L7/88
+  transport:
+    model: gas
+    geometry: linear
+    well-depth: 244.0
+    diameter: 3.763
+    polarizability: 2.65
+    rotational-relaxation: 2.1
+
+- name: N2
+  composition: {N: 2}
+  thermo:
+    model: NASA7
+    temperature-ranges: [300.0, 1000.0, 5000.0]
+    data:
+    - [3.298677, 1.4082404e-03, -3.963222e-06, 5.641515e-09, -2.444854e-12,
+      -1020.8999, 3.950372]
+    - [2.92664, 1.4879768e-03, -5.68476e-07, 1.0097038e-10, -6.753351e-15,
+      -922.7977, 5.980528]
+    note: '121286'
+  transport:
+    model: gas
+    geometry: linear
+    well-depth: 97.53
+    diameter: 3.621
+    polarizability: 1.76
+    rotational-relaxation: 4.0
+
+#############################################################################
+# REACTIONS
+#############################################################################
+
+reactions:
+
+# As proposed by Fluent:
+#
+# - equation: NAT + 1.54396 O2 => 1.04396 CO + 2.04396 H2O
+#   rate-constant: {A: 1.0e+03, b: 0.0, Ea: 20000}
+#   orders: {NAT: 1.0, O2: 0.8}
+#
+# - equation: CO + 0.5 O2 => CO2
+#   rate-constant: {A: 2.0e+08, b: 0.7, Ea: 12000}
+#   orders: {CO: 1.0, O2: 0.25}
+
+# As proposed in 2-step mechanism:
+#
+- equation: NAT + 2.06593 O2 => 1.04396 CO2 + 2.04396 H2O
+  rate-constant: {A: 1.1e+10, b: 0.0, Ea: 20000}
+  orders: {NAT: 1.0, O2: 0.5}
+
+- equation: CO + 0.5 O2 <=> CO2
+  rate-constant: {A: 2.0e+08, b: 0.7, Ea: 12000}
+
+- equation: PFO + 12 O2 => 10 CO2 + 4 H2O
+  rate-constant: {A: 1.0e+05, b: 0.7, Ea: 12000}
+  orders: {PFO: 0.25, O2: 1.5}
+
+#############################################################################
+# EOF
+#############################################################################
