@@ -39,7 +39,7 @@ md"""
 md"""
 This notebook aims at providing the minimal basis of practicing combustion and kinetics analysis with Cantera from Julia. It is intended to be self-contained, except for those elements provided by local module `PyCanteraTools`, which are part of `WallyToolbox`.
 
-For more, please check [the docs](https://cantera.org/)
+If you are starting with Cantera, please check the [tutorial](https://cantera.org/tutorials/python-tutorial.html), but keep in mind it is provided in plain Python (and our goal here is to use Cantera from Julia!). For more, please check [the docs](https://cantera.org/)
 """
 
 # ╔═╡ 106bd29e-6cc5-430f-ad50-51f10aa1fca1
@@ -132,8 +132,16 @@ Computing equilibrium at constant room temperature and pressure provides the com
 # ╔═╡ 718457c9-c13e-452b-8c49-ac04cdf1055f
 begin
 	gas.equilibrate("TP")
-	@info report(gas; threshold=0.001)
+	@info report_state(gas; threshold=0.001)
 end
+
+# ╔═╡ f546936f-a6cd-4b33-b0b6-a48c33a5923b
+md"""
+The following functionality provides the inspection of relative net reaction rates for reversible equations; this is a means of checking convergence of equilibrium calculations.
+"""
+
+# ╔═╡ 6306a3e4-1da6-4aca-a62e-53b08d623198
+maximum(net_relative_progress(gas)) < 1.0e-06
 
 # ╔═╡ e59a579d-55c6-4b01-99b5-04eb7264c13f
 md"""
@@ -144,13 +152,13 @@ Once an equilibrium as been computed, the state of the solution changed; to perf
 begin
 	gas.TP = 500.0, 101325.0
 	gas.set_equivalence_ratio(1.0, fuel=X_nat, oxidizer=X_air, basis="mole")
-	@info report(gas, threshold=1.0e-05)
+	@info report_state(gas, threshold=1.0e-05)
 end
 
 # ╔═╡ 39eb0994-d697-4941-82d8-1b37df30982e
 begin
 	gas.equilibrate("HP")
-	@info report(gas, threshold=1.0e-05)
+	@info report_state(gas, threshold=1.0e-05)
 end
 
 # ╔═╡ 180d8567-3f03-45d5-a38e-b4c42d4f823b
@@ -189,7 +197,7 @@ let
 	q_mix = q_gas + q_air1 + q_air2
 	q_mix.equilibrate("HP")
 
-	@info report(q_mix, threshold=1.0e-05)
+	@info report_state(q_mix, threshold=1.0e-05)
 end
 
 # ╔═╡ 3d2632cb-9fa9-44c4-b217-51d6e348420c
@@ -227,11 +235,188 @@ let
 	qty.equilibrate("HP")
 
 	@info("Total mass = $(qty.mass) kg")
-	@info(report(qty; threshold=1e-10))
+	@info(report_state(qty; threshold=1e-10))
 end
 
 # ╔═╡ 69f921ac-eb3a-46db-a5cd-7c6b44f7835e
+md"""
+## Solution properties
 
+Imagine a situation where one needs to compute global combustion (for energy purposes only) in a CFD simulation using a three-fluid mixture approach (fuel, oxidizer, exhaust): what are the thermophysical and transport properties to use for the exhaust (or even fuel and oxidizer if they are not pure species)? 
+
+In this brief tutorial we will compute transport properties of multiple compositions of a gas using the [`SolutionArray`](https://cantera.org/documentation/docs-2.5/sphinx/html/cython/importing.html#representing-multiple-states) class of Cantera.
+
+This will be done with the classical Berkley's [GRI-Mech 3.0](http://combustion.berkeley.edu/gri-mech/version30/text30.html) mechanims for combustion, which is provided with required parameters for computation of transport properties.
+
+For producing smooth curves we use 100 states defined in what follows.
+"""
+
+# ╔═╡ 9f2522c6-8445-44b2-9907-27a12562c5c8
+num_states = 100
+
+# ╔═╡ cc37c9ec-28d8-4535-8427-fb6fa783478b
+md"""
+To create a `SolutionArray` we must first create the phase we want to perform computations with.
+
+The default phase in `gri30.yaml` mechanism in Cantera >2.5 already contains transport properties for mixture-averaged computations (notice that Lennard-Jones data must be available in the mechanism properties database).
+
+Utility class `SolutionArray` supports any shape, but here we stick to a 1-D array for ease of plotting.
+
+You can inspect the default state of the loaded solution.
+"""
+
+# ╔═╡ 3765f384-18b5-44a8-b3da-3b8ee45f0046
+sol = let
+	gas = ct.Solution("gri30.yaml")
+	sol = ct.SolutionArray(gas, shape=(num_states,))
+end
+
+# ╔═╡ e9e34790-d0f9-4104-8f2a-d5956bd9f273
+md"""
+Now assume for some reason we need to compute properties for a $\mathrm{N_2-CH_4}$ mixture.
+
+For the computations that follow we need to set their quantities in array, so we get their indices.
+"""
+
+# ╔═╡ 8830ff90-8900-4ca7-8ce4-42dc0a5f140c
+begin
+	idx_n2 = PyCanteraTools.jlint(sol.species_index("N2"))
+	idx_ch4 = PyCanteraTools.jlint(sol.species_index("CH4"))
+end;
+
+# ╔═╡ 33a1231f-964b-4329-b6f0-df4dab3d6617
+md"""
+To cover the full composition range we use `LinRange` to get `num_states` compositions for ``\mathrm{CH_4}``.
+"""
+
+# ╔═╡ d3f25a8d-51c0-4b9c-b142-72e05e5a7ca2
+x_ch4 = LinRange(0.0, 1.0, num_states)
+
+# ╔═╡ 9092776a-530e-4117-b6c0-73c534ed9311
+md"""
+Next we allocate the matrix of compositions for all the states and all the species.
+
+This zeros matrix must have as many rows as states and as many columns as species in the mechanism.
+
+Julias's useful array slicing can be used to set/compute composition for the species we retrieved the indices as follows.
+"""
+
+# ╔═╡ dc7ef9f5-f67c-4597-ba7d-54dfc0f55fea
+begin
+	X = zeros(num_states, PyCanteraTools.jlint(gas.n_species))
+
+	# XXX: notice that Julia is 1-based and Cantera indexes are
+	# 0-based as Python! Fix the index here!
+	X[:, idx_ch4+1] = x_ch4
+	X[:, idx_n2+1] = 1.0 .- X[:, idx_ch4+1]
+
+	X
+end
+
+# ╔═╡ e5a4bf0d-cc0e-4d42-81cc-e499550de833
+md"""
+In `SolutionArray` you cannot set `X` alone; in this case we repeat the temperature and pressure, then append the tuple with the newly computed `X` matrix. All the defined solution properties are automatically evaluated based on new state.
+"""
+
+# ╔═╡ 3ecef36c-b981-4e8c-b710-99451b8f1f93
+begin
+	sol.TPX = sol.T, sol.P, X
+	sol
+end
+
+# ╔═╡ 1c080861-4a76-4f09-901a-18b438f9c392
+md"""
+Below we display gas viscosity, heat capacity and thermal conductivity. We could also have computed thermal difusivity using the density, but that is left as an exercise for you. Since the composition is quite simple, can you check it against the literature?
+"""
+
+# ╔═╡ d07e4d17-554b-47c3-84cd-fefdbbcea2ba
+with_theme() do
+	μ = PyCanteraTools.jlvec(sol.viscosity) * 1e5
+	c = PyCanteraTools.jlvec(sol.cp_mass)
+	k = PyCanteraTools.jlvec(sol.thermal_conductivity) * 1000
+
+	f = Figure(size = (650, 800))
+
+	ax1 = Axis(f[1, 1])
+	ax2 = Axis(f[2, 1])
+	ax3 = Axis(f[3, 1])
+
+	ax1.ylabel = L"Viscosity [$10^5\times\mathrm{Pa\cdotp{}s}$]"
+	ax2.ylabel = L"Heat capacity [$\mathrm{J\cdotp{}kg^{-1}\cdotp{}K^{-1}}$]"
+	ax3.ylabel = L"Thermal conductivity [$\mathrm{mW\cdotp{}m^{-1}\cdotp{}K^{-1}}$]"
+	ax3.xlabel = L"$\mathrm{CH_4}$ mole percentage"
+	
+	lines!(ax1, 100x_ch4, μ; color = :black)
+	lines!(ax2, 100x_ch4, c; color = :black)
+	lines!(ax3, 100x_ch4, k; color = :black)
+
+	ax1.xticks = 0:20:100
+	ax2.xticks = 0:20:100
+	ax3.xticks = 0:20:100
+
+	ax1.yticks = 1:0.2:2
+	ax2.yticks = 1000:300:2500
+	ax3.yticks = 26:2:36
+	
+	ylims!(ax1, 1, 2)
+	ylims!(ax2, 1000, 2500)
+	ylims!(ax3, 26, 36)
+	
+	xlims!(ax1, 0, 100)
+	xlims!(ax2, 0, 100)
+	xlims!(ax3, 0, 100)
+	
+	f
+end
+
+# ╔═╡ e0baf847-406e-47bb-9fb2-b47a7bbbb31d
+md"""
+You can explore other concepts than thermophysical properties using `SolutionArray` objects, *e.g.* what is the adiabatic flame temperature of hydrogen combustion in pure oxygen with equivalence ratios from 0.5 to 2.0?
+"""
+
+# ╔═╡ be646930-c893-4fcb-9e3e-e1408c1da9ac
+h2_sol = let
+	η = LinRange(0.5, 2.5, num_states)
+	
+	gas = ct.Solution("gri30.yaml")
+	
+	sol = ct.SolutionArray(gas, shape=(num_states,))
+	sol.set_equivalence_ratio(η, "H2", "O2")
+	sol.equilibrate("HP")
+
+	T = PyCanteraTools.jlvec(sol.T) .- T_REF
+
+	(η = η, T = T)
+end;
+
+# ╔═╡ 65067cb0-7339-464e-b237-cb99a370b4c1
+with_theme() do
+	f = Figure(size = (650, 400))
+	
+	ax = Axis(f[1, 1])
+	ax.title = L"Adiabatic flame temperature of $H_2-O_2$ mixtures"
+	ax.xlabel = L"Equivalence ratio - $\eta$"
+	ax.ylabel = L"Temperature [$^\circ{}$C]"
+
+	lines!(ax, h2_sol.η, h2_sol.T; color = :red)
+
+	ax.xticks = 0.5:0.25:2.5
+	ax.yticks = 2300:100:2900
+	
+	xlims!(ax, extrema(ax.xticks.val))
+	ylims!(ax, extrema(ax.yticks.val))
+	
+	f
+end
+
+# ╔═╡ fe078411-c131-4ef2-9b05-8f71fba0b0e4
+md"""
+There are many possibilities from here in terms of what you can compute.
+
+I have personally used this to post-process OpenFOAM results read by [PyVista](https://docs.pyvista.org/) from VTK files.
+
+You could also scan temperature and pressure ranges to evaluate the required properties.
+"""
 
 # ╔═╡ Cell order:
 # ╟─9d15ec6c-04a7-4f5c-908b-310a774ff044
@@ -258,6 +443,8 @@ end
 # ╟─590314c1-f15a-417e-ae56-7c8478ca0a77
 # ╟─7c0f99d9-44a5-4e33-82d3-a21e49a8e331
 # ╠═718457c9-c13e-452b-8c49-ac04cdf1055f
+# ╟─f546936f-a6cd-4b33-b0b6-a48c33a5923b
+# ╠═6306a3e4-1da6-4aca-a62e-53b08d623198
 # ╟─e59a579d-55c6-4b01-99b5-04eb7264c13f
 # ╠═ae8818e6-4814-4540-95fc-c5f1c7ff5f68
 # ╠═39eb0994-d697-4941-82d8-1b37df30982e
@@ -266,4 +453,21 @@ end
 # ╠═e2862cfd-77ee-4be6-b735-011bd27e524a
 # ╟─3d2632cb-9fa9-44c4-b217-51d6e348420c
 # ╠═509e4e39-4781-492d-8de4-08ac783accd5
-# ╠═69f921ac-eb3a-46db-a5cd-7c6b44f7835e
+# ╟─69f921ac-eb3a-46db-a5cd-7c6b44f7835e
+# ╟─9f2522c6-8445-44b2-9907-27a12562c5c8
+# ╟─cc37c9ec-28d8-4535-8427-fb6fa783478b
+# ╠═3765f384-18b5-44a8-b3da-3b8ee45f0046
+# ╟─e9e34790-d0f9-4104-8f2a-d5956bd9f273
+# ╠═8830ff90-8900-4ca7-8ce4-42dc0a5f140c
+# ╟─33a1231f-964b-4329-b6f0-df4dab3d6617
+# ╠═d3f25a8d-51c0-4b9c-b142-72e05e5a7ca2
+# ╟─9092776a-530e-4117-b6c0-73c534ed9311
+# ╠═dc7ef9f5-f67c-4597-ba7d-54dfc0f55fea
+# ╟─e5a4bf0d-cc0e-4d42-81cc-e499550de833
+# ╠═3ecef36c-b981-4e8c-b710-99451b8f1f93
+# ╟─1c080861-4a76-4f09-901a-18b438f9c392
+# ╟─d07e4d17-554b-47c3-84cd-fefdbbcea2ba
+# ╟─e0baf847-406e-47bb-9fb2-b47a7bbbb31d
+# ╠═be646930-c893-4fcb-9e3e-e1408c1da9ac
+# ╟─65067cb0-7339-464e-b237-cb99a370b4c1
+# ╟─fe078411-c131-4ef2-9b05-8f71fba0b0e4

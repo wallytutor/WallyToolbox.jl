@@ -12,6 +12,7 @@ using Unitful
 import DataFrames: DataFrame
 import WallyToolbox: EmpiricalFuel
 import WallyToolbox: T_REF, P_REF
+import WallyToolbox
 
 const ct = Ref{Py}()
 
@@ -36,7 +37,8 @@ export cantera_string_to_dict
 export cantera_dict_to_string
 export cantera_elemental_composition
 export load_solution_state
-export report
+export report_state
+export net_relative_progress
 
 export chons_get_fractions
 export chons_fuel_formula
@@ -44,6 +46,12 @@ export chons_fuel_equation
 
 export pure_species_heating_value
 export mixture_heating_value
+
+# XXX: find a home for us in WallyToolbox, pls!
+jlbool(x)  = pyconvert(Bool, x)
+jlint(x)   = pyconvert(Int64, x)
+jlfloat(x) = pyconvert(Float64, x)
+jlvec(x; T=Float64) = pyconvert(Vector{T}, x)
 
 ##############################################################################
 # UTILITIES
@@ -92,8 +100,28 @@ function load_solution_state(
     return sol
 end
 
-function report(sol; kw...)
+function report_state(sol; kw...)
 	return pyconvert(String, sol.report(; kw...))
+end
+
+function net_relative_progress(sol)
+	rf = sol.forward_rates_of_progress
+	rr = sol.reverse_rates_of_progress
+
+	n_reactions = jlint(sol.n_reactions)
+	res = zeros(n_reactions)
+
+	# XXX: it must be 0-based here for Python compat!
+	for i in 0:n_reactions-1
+		reversible = jlbool(sol.reaction(i).reversible)
+		
+		if reversible && (jlfloat(rf[i]) != 0.0)
+            # XXX: but `res` has Julia indexing...
+			res[i+1] = abs(jlfloat((rf[i] - rr[i]) / rf[i]))
+		end
+	end
+
+	return res
 end
 
 ##############################################################################
