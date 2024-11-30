@@ -4,6 +4,7 @@ export head, tail, body
 export defaultvalue
 export tuplefy
 export redirect_to_files
+export mute_execution
 export test_exhaustive
 
 ##############################################################################
@@ -89,6 +90,22 @@ function redirect_to_files(dofunc, outfile; errfile = nothing)
             end
         end
     end
+end
+
+"Manage redirection of all output to pipe."
+function mute_execution(dofunc, args...; kw...)
+    # XXX: this is the sequential version, it can be turn into async
+    # see *e.g.* https://discourse.julialang.org/t/64245/7
+	pipe = Pipe()
+
+	redirect_stdout(pipe) do
+		redirect_stderr(pipe) do
+			dofunc(args...; kw...)
+			close(Base.pipe_writer(pipe))
+		end
+	end
+	
+	return read(pipe, String)
 end
 
 "Run all assertions before throwing an error."
