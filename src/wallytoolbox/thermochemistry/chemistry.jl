@@ -4,6 +4,7 @@
 
 export Stoichiometry
 export ChemicalCompound
+export MassQuantity
 export ThermoCompound
 
 export PureWater
@@ -170,6 +171,32 @@ function ChemicalCompound(d::Dict)
 end
 
 ChemicalCompound(; kw...) = ChemicalCompound(Stoichiometry(; kw...))
+
+#############################################################################
+# Manipulate quantities of matter
+#############################################################################
+
+struct MassQuantity
+    amounts::Vector{ElementalQuantity}
+end
+
+function Base.:*(c::Number, s::ChemicalCompound)::MassQuantity
+    return MassQuantity(map(Pair, s.elements, c * s.Y))
+end
+
+function Base.:*(c::Number, s::MassQuantity)::MassQuantity
+    return MassQuantity(map((e)->e.first => c * e.second, s.amounts))
+end
+
+Base.:*(s::ChemicalCompound, c::Number)::MassQuantity = c * s
+
+Base.:*(s::MassQuantity, c::Number)::MassQuantity = c * s
+
+function Base.:+(a::MassQuantity, b::MassQuantity)::MassQuantity
+    da, db = Dict(a.amounts), Dict(b.amounts)
+    allkeys = [union(keys(da), keys(db))...]
+    return MassQuantity(map(k->k=>get(da, k, 0)+get(db, k, 0), allkeys))
+end
 
 ##############################################################################
 # Assembly more complex thermo compounds for use with databases
