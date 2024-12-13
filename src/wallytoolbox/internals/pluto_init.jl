@@ -6,30 +6,32 @@ using InteractiveUtils
 
 # ╔═╡ 9c925920-a59d-11ef-260d-1f53b08ff458
 begin
-	@info("Initializing toolbox...")
+    @info("Initializing toolbox...")
     using Pkg
-	
+    
     open("pluto_init.log", "w") do logs
-		Pkg.activate(ENV["WALLYROOT"]; io=logs)
-		Pkg.instantiate(; io=logs)
-	end
+        Pkg.activate(ENV["WALLYROOT"]; io=logs)
+        Pkg.instantiate(; io=logs)
+    end
 
-	using PlutoLinks
+    push!(LOAD_PATH, @__DIR__)
+
+    using PlutoLinks
     using PlutoUI: TableOfContents
-		
-	TableOfContents()
+        
+    TableOfContents()
 end
 
 # ╔═╡ a5749da6-9201-47cc-ab00-78474b1aceb3
 begin
-	@info("External toolbox...")
-	# using DataFrames
+    @info("External toolbox...")
+    # using DataFrames
 end
 
 # ╔═╡ 66c5df79-aa9e-4e3b-aa22-94b85c1328a7
 begin
-	@info("Local toolbox...")
-	@revise using WallyToolbox
+    @info("Local toolbox...")
+    @revise using WallyToolbox
 end
 
 # ╔═╡ ccbf51e6-7b46-432a-b8b8-9878c3625dac
