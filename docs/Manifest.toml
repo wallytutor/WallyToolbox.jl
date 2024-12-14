@@ -2,7 +2,7 @@
 
 julia_version = "1.10.6"
 manifest_format = "2.0"
-project_hash = "cb72404b2f6ef161930d0703659259bd1510a375"
+project_hash = "d0ab0d6cafd63fd28d6076702d7a959af4af1b7f"
 
 [[deps.ADTypes]]
 git-tree-sha1 = "72af59f5b8f09faee36b4ec48e014a79210f2f4f"
@@ -2944,6 +2944,18 @@ git-tree-sha1 = "592470bdf383cd34e88a21bbd7f1f7ffc52a21c6"
 uuid = "72656b73-756c-7461-726b-72656b6b696b"
 version = "1.1.0"
 
+[[deps.PlutoHooks]]
+deps = ["InteractiveUtils", "Markdown", "UUIDs"]
+git-tree-sha1 = "072cdf20c9b0507fdd977d7d246d90030609674b"
+uuid = "0ff47ea0-7a50-410d-8455-4348d5de0774"
+version = "0.0.5"
+
+[[deps.PlutoLinks]]
+deps = ["FileWatching", "InteractiveUtils", "Markdown", "PlutoHooks", "Revise", "UUIDs"]
+git-tree-sha1 = "8f5fa7056e6dcfb23ac5211de38e6c03f6367794"
+uuid = "0ff47ea0-7a50-410d-8455-4348d5de0420"
+version = "0.1.6"
+
 [[deps.PlutoStaticHTML]]
 deps = ["AbstractTrees", "Base64", "Dates", "Gumbo", "LazyArtifacts", "Pkg", "Pluto", "PrecompileTools", "RelocatableFolders", "SHA", "TOML", "tectonic_jll"]
 git-tree-sha1 = "a1281f204a1d0c3422bfec19daaa6ba80de85841"
@@ -3995,7 +4007,7 @@ uuid = "a44049a8-05dd-5a78-86c9-5fde0876e88c"
 version = "1.3.243+0"
 
 [[deps.WallyToolbox]]
-deps = ["BenchmarkTools", "CSV", "CUDA", "CairoMakie", "CommonSolve", "Conda", "CondaPkg", "CurveFit", "DataFrames", "DelaunayTriangulation", "DelimitedFiles", "DifferentialEquations", "Distributions", "DocStringExtensions", "Documenter", "DocumenterCitations", "ExtendableGrids", "FilePathsBase", "FiniteDifferences", "FiniteVolumeMethod", "Flux", "GLMakie", "Glob", "HDF5", "IJulia", "Interpolations", "Ipopt", "JLD2", "JSON", "JuMP", "JuliaFormatter", "KissSmoothing", "LaTeXStrings", "Latexify", "Libdl", "LightXML", "LinearAlgebra", "LinearSolve", "Logging", "LsqFit", "Luxor", "ModelingToolkit", "Mustache", "NaturalSort", "NonlinearSolve", "NumericalIntegration", "OrdinaryDiffEq", "PackageCompiler", "Pkg", "Plots", "Pluto", "PlutoStaticHTML", "PlutoUI", "Polynomials", "PrettyPrinting", "PrettyTables", "Printf", "ProgressMeter", "Psychro", "PythonCall", "Random", "Reexport", "Revise", "Roots", "SpecialFunctions", "Statistics", "StatsBase", "SteamTables", "SumTypes", "Symbolics", "Test", "Trapz", "Unitful", "Weave", "YAML", "cuDNN"]
+deps = ["BenchmarkTools", "CSV", "CUDA", "CairoMakie", "CommonSolve", "Conda", "CondaPkg", "CurveFit", "DataFrames", "DelaunayTriangulation", "DelimitedFiles", "DifferentialEquations", "Distributions", "DocStringExtensions", "Documenter", "DocumenterCitations", "ExtendableGrids", "FilePathsBase", "FiniteDifferences", "FiniteVolumeMethod", "Flux", "GLMakie", "Glob", "HDF5", "IJulia", "Interpolations", "Ipopt", "JLD2", "JSON", "JuMP", "JuliaFormatter", "KissSmoothing", "LaTeXStrings", "Latexify", "Libdl", "LightXML", "LinearAlgebra", "LinearSolve", "Logging", "LsqFit", "Luxor", "ModelingToolkit", "Mustache", "NaturalSort", "NonlinearSolve", "NumericalIntegration", "OrdinaryDiffEq", "PackageCompiler", "Pkg", "Plots", "Pluto", "PlutoLinks", "PlutoStaticHTML", "PlutoUI", "Polynomials", "PrettyPrinting", "PrettyTables", "Printf", "ProgressMeter", "Psychro", "PythonCall", "Random", "Reexport", "Revise", "Roots", "SpecialFunctions", "Statistics", "StatsBase", "SteamTables", "SumTypes", "Symbolics", "Test", "Trapz", "Unitful", "Weave", "YAML", "cuDNN"]
 path = ".."
 uuid = "969721ee-ac18-4660-9a9a-9ed720f93b3b"
 version = "0.1.0"
