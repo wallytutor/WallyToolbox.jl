@@ -164,8 +164,7 @@ struct SymbolicLinearKramersModel
     function SymbolicLinearKramersModel()
         # Declare symbols and unknowns.
         ps = @parameters R Φ ω β γ
-        @variables z
-        # @independent_variables z
+        @independent_variables z
         @variables h(z)
 
         # Declare a derivative.
@@ -265,7 +264,7 @@ julia> bed
 RotaryKilnBedSolution(τ = 13.169938 min, ηₘ = 5.913271 %)
 
 julia> bed.τ
-790.1963002204403
+790.1963002674551
 ```
 
 In the following dummy example we force a very thick *analytical* bed

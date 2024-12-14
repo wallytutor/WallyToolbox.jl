@@ -474,8 +474,6 @@ After using Stirling’s formula In(N!) © N- In(N) —N, neglecting —N for la
 identifying N,/N and Ng/N with the mole fractions x, and xg and taking Avogadro’s
 number for N, kN = R, it follows that
 
-ke In(W) © k-[N- In(N) — Ny - In(Ng) — Ng In(Ng)] = —R [xq + neq) +25 In(x)]
-(2.11)
 
 This formula is used extensively in chapter 5. Since chapter 5 deals with applied
 statistical thermodynamics, no further details are mentioned here. For a better understand-

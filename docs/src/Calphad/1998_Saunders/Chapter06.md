@@ -1404,9 +1404,6 @@ made to include ordering contributions and asymmetric effects (Miedema et al.
 were kept very simple and did not include additional parameters other than (V,,),
 which had already been used to determine (ns).
 
-AH (ca, ea) = £ (chs cb) 9 (C4s€B; Vins Vins)
-[-Pta9")*+0(ane')*—] (6.37)
-
 where f(c4, ch) = cych(1 + 8(cych)”) and cy, etc., are surface concentrations.
 These arise from the concept that in their ‘macroscopic atom’ model the enthalpy
 effects are generated at the common interface of dissimilar atomic cells. Such an

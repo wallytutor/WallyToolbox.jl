@@ -40,6 +40,7 @@ WallyToolbox.defaultvalue
 WallyToolbox.tuplefy
 WallyToolbox.redirect_to_files
 WallyToolbox.test_exhaustive
+WallyToolbox.mute_execution
 ```
 
 ## Literate programming
@@ -53,4 +54,5 @@ Because `WallyToolbox` is intended to be run from a portable Julia environment w
 ```@docs
 WallyToolbox.launch_notebook
 WallyToolbox.launch_jupyterlab
+WallyToolbox.launch_pluto
 ```

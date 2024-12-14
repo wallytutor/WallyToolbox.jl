@@ -174,7 +174,7 @@ setdocmetawrapper!(RadCalNet)
 format = get_format(user, sitename; latex = false)
 plugins = [CitationBibliography(bibtex)]
 
-workflow_pluto(notes, joinpath(wpath, "Notebooks", "Pluto"))
+workflow_pluto(notes, joinpath(wpath, "Pluto"))
 workflow_main(modules, pages, wpath, authors, format, sitename, plugins)
 
 rm(wpath; force = true, recursive = true)

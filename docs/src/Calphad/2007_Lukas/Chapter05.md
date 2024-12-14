@@ -322,9 +322,6 @@ volume because the pressure is below zero there.
 For solution-phase modeling the Murnaghan model must be integrated into a Gibbs
 energy and the expression is
 
-Gu (T, P) = G(T, p = 0) + [Unk (T)p)/"— 1] (5.8)
-
- 
 
 For high pressure, such as at the center of the Earth, the Murnaghan model is not
 sufficient and one must use higher-order terms. In most high-pressure models the volume
@@ -347,8 +344,6 @@ an adjustable function. This can be integrated to give a surprisingly simple Gib
 
 expression:
 
-Gu (T, p) = G(T, p = 0) + AO [eo Ee) 1] (5.10)
-
 ===========
 5.2.3
 
@@ -1209,14 +1204,7 @@ usually has many more constituents than components. For example, a model for gas
 the components O and H should include at least the six constituents H, H,, H,O, O, 05,
 and O,:
 
- 
 
-GY = Yn °Gu tu,
-
-"Gu, + Yu,0 Guyo + Yo Go + Yo, "Go, + Yo; Go;
-
-+RT [yy INO) + Yu, INOu,) + Yx,0 IN('u,0) + Yo In(Vo) + Yo, In(Yo,) + Yo, IN(Vo,)]
-(5.43)
 
 The sum of the constituent fractions is unity. If there are more constituents than
 components, there are internal degrees of freedom in the phase and one can obtain the
@@ -1225,18 +1213,6 @@ set of conditions.
 
 Comparing Eq. (5.42) with the general form of the Gibbs energy, Eq. (5.1), gives
 
- 
-
- 
-
-(5.44)
-
-ots -RD y;In(y,) (5.45)
-ial
-
-"6, =0 (5.46)
-
-mG =0 (5.47)
 
 The °G; parameters can, at least in principle, be determined separately for each con-
 stituent i, and thus there are no adjustable parameters in the ideal-substitutional-solution

@@ -368,16 +368,13 @@ high temperatures is not important in that case.
 7.3.2.1 BWG enthalpies. The enthalpy of formation of a random b.c.c._A2 solid
 solution, AH*2, is given by Inden (1991) as
 
-AH” = Renee [owe +29 +.. ] (7.5)
+
 
 where W‘) are interaction parameters associated with, Ist, 2nd ... k-th nearest
-neighbours and defined as W(*) = (Vga + Vag —2Viz}) and 2(*) is the co-
+neighbours and defined as W(*) = (Vga + Vag —2Viz) and 2(*) is the co-
 ordination number of the k-th shell. For the ordered B2 structure at 0 K, and when
 ip < 0.5, the corresponding expression is
 
-AHR, = en [eowo +2 WO) 4...)
-
-+ (ta — 29)(22W? + WO + yO 4.. )]. (7.6)
 
 General equations, including magnetic terms for various b.c.c. based structures
 have been tabulated (Inden 1975a); a typical application to a non-magnetic system
@@ -565,18 +562,12 @@ magnetic Cu-Zn, B2 phase (Inden 1975b) and magnetic Fe-Co, B2 alloys (Inden
 structural (chemical plus magnetic) component. For the A2/B2 case, the APB
 energy is given by:
 
-Nh = Ya/4<111>{110}
-= x Vib PW) + 02M) — WO +heP + AW] (7.14)
 
 where a = the lattice spacing of the sublattice and A, k, | are the Miller indices. For
 b.c.c.{110} planes the (h, k, 1) function reduces to /2. The equivalent formula for
 f.c.c., L1g structures is given by
 
-APB[111](L12) = a-?(1/3)7"?[(W® — 3w® 4 4w® — (7.15)
-APB[100}(L12) = @-?(1) [-W® + 4w® —...}. (7.16)
-
  
-
 Inden et al. (1986) and Khachaturyan and Morris (1987) can be consulted for
 equations that include longer-range terms. At least third-nearest-neighbour inter-
 action energies need to be taken into account for Li, structures and, in general,
