@@ -103,6 +103,8 @@ md"""
 - Dynamic quantities with units do not support literals as discussed [here](https://docs.sciml.ai/ModelingToolkit/stable/basics/Validation/#DynamicQuantities-Literals). To overcome this limitation one must create additional parameters or constants to accomodate fixed values.
 
 - Numerical array parameters are tunable by default; if they are intended to be treated as constant, then the annotation `tunable = false` must be added to their metadata.
+
+- When using `scalarize` to compose a system with other equations, unpack the resulting scalarized system (...). Although the list of equations would look the same withouht unpacking, the system will fail to assembly otherwise.
 """
 
 # ╔═╡ 5e252a2a-d44e-4678-83e7-83f9ebfe0ffb
@@ -351,10 +353,9 @@ end
 
 # ╔═╡ 78542421-ff40-4c7c-b04f-e175bcf8a171
 let
+	@warn("Thinking on how to get an arbitrary state equation working...")
+	
 	ns = 2
-
-	NONNEGATIVE = (0.0, Inf)
-	FRACTION    = (0.0, 1.0)
 	
 	@variables(begin
 		p,       [bounds = NONNEGATIVE, unit = u"Pa"]
@@ -374,16 +375,16 @@ let
 	
 	eqs = [
 		# Ideal gas law:
-		0 ~ p * V - n * R * T,
+		0 ~ p * V - n * R * T
 
 		# Mean molecular mass definition:
-		0 ~ W - sum([x * m for (x, m) in zip(X, M)]),
+		0 ~ W - meanmolecularmass(Y, M)
 
 		# Molar fraction definition:
-		0 ~ 1 - sum([x for x in X]),
+		0 ~ 1 - sum(scalarize(X))
 
 		# Mass fraction definition:
-		scalarize(Y .~ X .* M / W)...,
+		scalarize(Y .~ X .* M / W)...
 	]
 
 	ModelingToolkit.validate(eqs)
@@ -419,4 +420,4 @@ end
 # ╟─f268e793-e3db-444d-9814-c711b3097f45
 # ╠═61fb90ca-4746-4ea9-9ad6-7831270ce610
 # ╠═4565cbef-ec91-4864-8664-2c87d420e4a1
-# ╠═78542421-ff40-4c7c-b04f-e175bcf8a171
+# ╟─78542421-ff40-4c7c-b04f-e175bcf8a171
