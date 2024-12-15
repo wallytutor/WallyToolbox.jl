@@ -14,6 +14,9 @@ begin
         Pkg.instantiate(; io=logs)
     end
 
+    # If you need to install something else:
+    # Pkg.add("")
+
     push!(LOAD_PATH, @__DIR__)
 
     using PlutoLinks
