@@ -33,15 +33,11 @@ end
 # CONCENTRATIONS
 ##############################################################################
 
-"Convert mass fractions to mole fractions."
-function mass2molefraction(Y, W)
-    return meanmolecularmass(Y, W) * @. Y / W
-end
+mass2molefraction(Y, W) = meanmolecularmass(Y, W) * @. Y / W
+mole2massfraction(X, W) = (@. X * W) / sum(@. X * W)
 
-"Convert mole fractions to mass fractions."
-function mole2massfraction(X, W)
-    return (@. X * W) / sum(@. X * W)
-end
+@doc "Convert mass fractions to mole fractions." mass2molefraction
+@doc "Convert mole fractions to mass fractions." mole2massfraction
 
 ##############################################################################
 # EOF

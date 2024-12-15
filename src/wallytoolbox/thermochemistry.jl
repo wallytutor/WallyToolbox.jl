@@ -46,6 +46,7 @@ end
 
 include("thermochemistry/chemistry.jl")
 include("thermochemistry/mixture.jl")
+include("thermochemistry/kinetics.jl")
 include("thermochemistry/combustion.jl")
 include("thermochemistry/thermodata.jl")
 include("thermochemistry/acausal.jl")

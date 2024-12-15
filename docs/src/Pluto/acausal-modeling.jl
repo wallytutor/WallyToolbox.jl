@@ -105,6 +105,8 @@ md"""
 - Numerical array parameters are tunable by default; if they are intended to be treated as constant, then the annotation `tunable = false` must be added to their metadata.
 
 - When using `scalarize` to compose a system with other equations, unpack the resulting scalarized system (...). Although the list of equations would look the same withouht unpacking, the system will fail to assembly otherwise.
+
+- If having trouble with kinetics integration (or anything else that might be stiff), consider checking [`solve`](https://docs.sciml.ai/DiffEqDocs/stable/basics/common_solver_opts/#CommonSolve.solve-Tuple%7BSciMLBase.AbstractDEProblem,%20Vararg%7BAny%7D%7D) arguments. Closing tolerances might be required in very stiff problems.
 """
 
 # ╔═╡ 5e252a2a-d44e-4678-83e7-83f9ebfe0ffb
@@ -126,14 +128,18 @@ function simple_psr(; name, ns)
 		T(t),          [bounds = NONNEGATIVE, unit = u"K"]
 		(Yₛ(t))[1:ns], [bounds = FRACTION,    unit = u"kg/kg"]
 		(Yₖ(t))[1:ns], [bounds = FRACTION,    unit = u"kg/kg"]
+		(Xₛ(t))[1:ns], [bounds = FRACTION,    unit = u"mol/mol"]
+		(Xₖ(t))[1:ns], [bounds = FRACTION,    unit = u"mol/mol"]
 		(ω̇ₖ(t))[1:ns], [bounds = FRACTION,    unit = u"mol/(m^3*s)"]
 	end)
 
 	eqs = [
-		scalarize(@. ρ * Dt(Yₖ) ~ (ṁ / V) * (Yₛ - Yₖ) + ω̇ₖ * Wₖ)...,
-		Dt(ṁ) ~ 0,
-		Dt(p) ~ 0,
-		Dt(T) ~ 0,
+		scalarize(Xₛ ~ mass2molefraction(Yₛ, Wₖ))...
+		scalarize(Xₖ ~ mass2molefraction(Yₖ, Wₖ))...
+		scalarize(@. ρ * Dt(Yₖ) ~ (ṁ / V) * (Yₛ - Yₖ) + ω̇ₖ * Wₖ)...
+		Dt(ṁ) ~ 0
+		Dt(p) ~ 0
+		Dt(T) ~ 0
 	]
 
 	# XXX: for development only:
@@ -205,7 +211,7 @@ let
 	prob = ODEProblem(sys, x0, (0.0, 10.0), ps)
 	sol = solve(prob)
 
-	t = sol[:t]
+	time = sol[:t]
 	ρ = sol[r1.ρ]
 	Yk1 = sol[r1.Yₖ[1]]
 	Yk2 = sol[r1.Yₖ[2]]
@@ -216,8 +222,8 @@ let
 		f = Figure(size = (650, 250))
 		
 		ax = Axis(f[1, 1])
-		lines!(ax, t, Yk1; label = "1")
-		lines!(ax, t, Yk2; label = "2")
+		lines!(ax, time, Yk1; label = "1")
+		lines!(ax, time, Yk2; label = "2")
 		axislegend(ax)
 		xlims!(ax, 0, 10)
 		ylims!(ax, 0, 1)
@@ -226,7 +232,7 @@ let
 		ax.ylabel = "Mass fraction"
 		
 		ax = Axis(f[1, 2])
-		lines!(ax, t, ρ; label = "ρ")
+		lines!(ax, time, ρ; label = "ρ")
 		axislegend(ax)
 		xlims!(ax, 0, 10)
 		ylims!(ax, 0.9, 1.3)
@@ -289,7 +295,7 @@ let
 	prob = ODEProblem(sys, x0, (0.0, 10.0), ps)
 	sol = solve(prob)
 
-	t = sol[:t]
+	time = sol[:t]
 	
 	ρ1 = sol[r1.ρ]
 	ρ2 = sol[r2.ρ]
@@ -308,10 +314,10 @@ let
 		f = Figure(size = (650, 450))
 		
 		ax = Axis(f[1, 1])
-		lines!(ax, t, Yk1_r1; label = "1 (R1)")
-		lines!(ax, t, Yk2_r1; label = "2 (R1)")
-		lines!(ax, t, Yk1_r2; label = "1 (R2)")
-		lines!(ax, t, Yk2_r2; label = "2 (R2)")
+		lines!(ax, time, Yk1_r1; label = "1 (R1)")
+		lines!(ax, time, Yk2_r1; label = "2 (R1)")
+		lines!(ax, time, Yk1_r2; label = "1 (R2)")
+		lines!(ax, time, Yk2_r2; label = "2 (R2)")
 		axislegend(ax)
 		xlims!(ax, 0, 10)
 		ylims!(ax, 0, 1)
@@ -320,10 +326,10 @@ let
 		ax.ylabel = "Mass fraction"
 
 		ax = Axis(f[1, 2])
-		lines!(ax, t, Ys1_r1; label = "1 (R1)")
-		lines!(ax, t, Ys2_r1; label = "2 (R1)")
-		lines!(ax, t, Ys1_r2; label = "1 (R2)")
-		lines!(ax, t, Ys2_r2; label = "2 (R2)")
+		lines!(ax, time, Ys1_r1; label = "1 (R1)")
+		lines!(ax, time, Ys2_r1; label = "2 (R1)")
+		lines!(ax, time, Ys1_r2; label = "1 (R2)")
+		lines!(ax, time, Ys2_r2; label = "2 (R2)")
 		axislegend(ax)
 		xlims!(ax, 0, 10)
 		ylims!(ax, 0, 1)
@@ -332,8 +338,8 @@ let
 		ax.ylabel = "Mass fraction"
 		
 		ax = Axis(f[2, 1:2])
-		lines!(ax, t, ρ1; label = "ρ (R1)")
-		lines!(ax, t, ρ2; label = "ρ (R2)")
+		lines!(ax, time, ρ1; label = "ρ (R1)")
+		lines!(ax, time, ρ2; label = "ρ (R2)")
 		axislegend(ax)
 		xlims!(ax, 0, 10)
 		ylims!(ax, 0.8, 1.3)
@@ -345,11 +351,195 @@ let
 	end
 end
 
+# ╔═╡ 1ba323c3-ad6e-4083-9c75-97c4f19ba657
+md"""
+### Arbitrary kinetics API
+"""
+
+# ╔═╡ c2a6d64c-9af3-49ab-bbb6-8bbb2eb87386
+function post_graf(r, sol)
+	species_names = WallyToolbox.Graf2007.NAMES
+	
+	time = sol[:t]
+	ρ = 100sol[r.ρ]
+	Xk1 = 100sol[r.Xₖ[1]]
+	Xk2 = 100sol[r.Xₖ[2]]
+	Xk3 = 100sol[r.Xₖ[3]]
+	Xk4 = 100sol[r.Xₖ[4]]
+	Xk5 = 100sol[r.Xₖ[5]]
+	Xk6 = 100sol[r.Xₖ[6]]
+
+	with_theme(WALLYMAKIETHEME) do
+		f = Figure(size = (650, 450))
+		
+		ax = Axis(f[1, 1])
+		lines!(ax, time, Xk1; label = species_names[1])
+		axislegend(ax; position = :rb)
+		xlims!(ax, 0, 10)
+		ylims!(ax, 0, 35)
+		ax.xticks = 0:2:10
+		ax.yticks = 0:5:35
+		ax.xlabel = "Time"
+		ax.ylabel = "Mole percent"
+		
+		ax = Axis(f[1, 2])
+		lines!(ax, time, ρ; label = "ρ")
+		axislegend(ax)
+		xlims!(ax, 0, 10)
+		ylims!(ax, 1.35, 1.45)
+		ax.xticks = 0:2:10
+		ax.yticks = 1.35:0.02:1.45
+		ax.xlabel = "Time"
+		ax.ylabel = "Density x 100"
+
+		ax = Axis(f[2, 1])
+		lines!(ax, time, Xk3; label = species_names[3])
+		lines!(ax, time, Xk4; label = species_names[4])
+		axislegend(ax; position = :rb)
+		xlims!(ax, 0, 10)
+		ylims!(ax, 0, 0.3)
+		ax.xticks = 0:2:10
+		ax.yticks = 0:0.05:0.3
+		ax.xlabel = "Time"
+		ax.ylabel = "Mole percent"
+		
+		ax = Axis(f[2, 2])
+		lines!(ax, time, Xk2; label = species_names[2])
+		lines!(ax, time, Xk5; label = species_names[5])
+		lines!(ax, time, Xk6; label = species_names[6])
+		axislegend(ax; position = :rt)
+		xlims!(ax, 0, 10)
+		ylims!(ax, 0, 1.8)
+		ax.xticks = 0:2:10
+		ax.yticks = 0:0.3:1.8
+		ax.xlabel = "Time"
+		ax.ylabel = "Mole percent"
+		
+		f
+	end
+end
+
+# ╔═╡ e8ba3f51-d103-41ca-987f-8e6a0b37c7b2
+let
+	@info("Solve reactor 1 alone...")
+	kinetics = WallyToolbox.Graf2007
+	
+	kin = kinetics.Model()
+	ns = length(kin.names)
+	
+	@named r = simple_psr(; ns)
+	@parameters Ẏₛ[1:ns] [unit = u"1/s", tunable = false]
+
+	C = psr_species_concentration(r)
+	ω = kinetics.progress_rate(r.T, r.p, C)
+	
+	eqs = [
+		# Fix inlet composition:
+		scalarize(Dt(r.Yₛ) ~ Ẏₛ)...
+		
+		# Apply equation of state:
+		r.ρ ~ psr_density(r)
+
+		# Apply rate equations:
+		scalarize(r.ω̇ₖ ~ ω)...
+	]
+
+	# debug_validation(eqs)
+	sys = compose(ODESystem(eqs, t; name = :graf), r)
+	sys = structural_simplify(sys)
+	@info(equations(sys))
+
+	# Initially filled with N2
+	Y0 = let
+		X = zeros(ns)
+		X[1:end-1] .= 1.0e-06
+		X[end] = 1 - sum(X[1:end-1])
+		mole2massfraction(X, kin.molecular_masses)
+	end
+	
+	# Source gas is 36% C2H2
+	Ys = let
+		X = zeros(size(kin.molecular_masses))
+		X[1] = 0.36
+		X[end] = 1-X[1]
+		mole2massfraction(X, kin.molecular_masses)
+	end
+
+	# Case 6 of my PhD thesis
+	p = 5000u"Pa"
+	T = 1173.0u"K"
+	Q = 222u"cm^3/min"
+
+	# Reference mass flow rate
+	M = meanmolecularmass(Ys, kin.molecular_masses)
+	ρ = P_REF * M / (GAS_CONSTANT * 273.15) * 1u"kg/m^3"
+	V = pi * (1.4u"cm")^2 * 35u"cm"
+	ṁ = ustrip((ρ * Q) |> us"kg/s")
+	
+	x0 = [
+		r.ṁ  => ṁ
+		r.p  => ustrip(p)
+		r.T  => ustrip(T)
+		r.Yₖ => Y0
+		r.Yₛ => Ys
+	]
+
+	ps = [
+		r.V  => ustrip(V)
+		r.Wₖ => kin.molecular_masses
+		Ẏₛ   => zeros(ns)
+	]
+
+	prob = ODEProblem(sys, x0, (0.0, 10.0), ps)
+	
+	sol = solve(prob;
+		alg_hints = :stiff,
+		dtmax     = 0.01,
+		abstol    = 1.0e-09
+	)
+
+	post_graf(r, sol)
+end
+
 # ╔═╡ 61fb90ca-4746-4ea9-9ad6-7831270ce610
+md"""
+## Working with connectors
+"""
+
+# ╔═╡ c063ffbb-11f3-43b0-9c2a-fb70d08d81a7
+
+
+# ╔═╡ 24081da4-a6a0-485f-97b1-3aef18b93629
+
+
+# ╔═╡ 073efa3c-f1b8-4f9d-940e-7843b19e11db
+
+
+# ╔═╡ ffb46225-f9f2-4b62-acce-2871709283e9
+
+
+# ╔═╡ adb29a0e-461b-4be9-904f-1beb02a98ffa
+
+
+# ╔═╡ 4e2f097b-2996-4b81-a8ee-883393f2f141
+
+
+# ╔═╡ 76c0183c-8451-444d-a094-9cf11c9fbb1d
+
+
+# ╔═╡ 3cff719b-d354-4e29-a053-9e09f936ccac
+
+
+# ╔═╡ fade851e-164a-4616-ae12-bf4c5e26e0d9
+
+
+# ╔═╡ 7f2e2c70-07a3-4c24-ace6-0e0041408169
 
 
 # ╔═╡ 4565cbef-ec91-4864-8664-2c87d420e4a1
-
+md"""
+## Sandbox
+"""
 
 # ╔═╡ 78542421-ff40-4c7c-b04f-e175bcf8a171
 let
@@ -418,6 +608,19 @@ end
 # ╟─e81273c7-2aa5-40c4-a47f-1da71adc9c99
 # ╟─8661ff7c-9162-4faf-84c8-fd8a63dac86f
 # ╟─f268e793-e3db-444d-9814-c711b3097f45
-# ╠═61fb90ca-4746-4ea9-9ad6-7831270ce610
-# ╠═4565cbef-ec91-4864-8664-2c87d420e4a1
+# ╟─1ba323c3-ad6e-4083-9c75-97c4f19ba657
+# ╟─c2a6d64c-9af3-49ab-bbb6-8bbb2eb87386
+# ╟─e8ba3f51-d103-41ca-987f-8e6a0b37c7b2
+# ╟─61fb90ca-4746-4ea9-9ad6-7831270ce610
+# ╠═c063ffbb-11f3-43b0-9c2a-fb70d08d81a7
+# ╠═24081da4-a6a0-485f-97b1-3aef18b93629
+# ╠═073efa3c-f1b8-4f9d-940e-7843b19e11db
+# ╠═ffb46225-f9f2-4b62-acce-2871709283e9
+# ╠═adb29a0e-461b-4be9-904f-1beb02a98ffa
+# ╠═4e2f097b-2996-4b81-a8ee-883393f2f141
+# ╠═76c0183c-8451-444d-a094-9cf11c9fbb1d
+# ╠═3cff719b-d354-4e29-a053-9e09f936ccac
+# ╠═fade851e-164a-4616-ae12-bf4c5e26e0d9
+# ╠═7f2e2c70-07a3-4c24-ace6-0e0041408169
+# ╟─4565cbef-ec91-4864-8664-2c87d420e4a1
 # ╟─78542421-ff40-4c7c-b04f-e175bcf8a171

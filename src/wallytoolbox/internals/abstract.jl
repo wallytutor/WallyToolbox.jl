@@ -7,6 +7,7 @@
 abstract type AbstractMatter end
 abstract type AbstractThermodynamics end
 abstract type AbstractTransportModel end
+abstract type AbstractKineticsModel end
 
 ##############################################################################
 # MATERIALS
@@ -49,6 +50,12 @@ abstract type AbstractHeatCondTemperatureDep  <: AbstractHeatConductivity end
 abstract type AbstractMaxwellEffHeatCond      <: AbstractHeatCondTemperatureDep end
 
 ##############################################################################
+# KINETICS MODELS
+##############################################################################
+
+abstract type AbstractGasKinetics             <: AbstractKineticsModel end
+
+##############################################################################
 # LEGACY (ENTERING)
 ##############################################################################
 
@@ -66,8 +73,6 @@ abstract type AbstractMaxwellEffHeatCond      <: AbstractHeatCondTemperatureDep 
 # abstract type AbstractMixtureSubstance end
 # "Base type for simplified mixture phases."
 # abstract type AbstractMixturePhase end
-# "Base type for coded kinetics mechanisms."
-# abstract type AbstractKineticsMechanism end
 # "Base type of one-dimensional grids."
 # abstract type AbstractGrid1D end
 # "Base type for diffusion (heat, species, ...) models."
