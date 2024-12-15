@@ -54,33 +54,6 @@
 # end
 
 ################################################################################
-# FUNCTIONALITIES
-################################################################################
-
-# TODO maybe typing is a problem here!
-# function meanmolecularmass(
-#     Y::Union{Vector{Float64},SubArray},
-#     W::Vector{Float64}
-#     )::Float64
-#     return 1.0 / sum(@. Y / W)
-# end
-
-function meanmolecularmass(Y, W)
-    """ Mixture mean molecular mass [kg/mol]. """
-    return 1.0 / sum(@. Y / W)
-end
-
-function massfraction2molefraction(Y, W::Vector{Float64})
-    """ Convert mass fractions to mole fractions. """
-    return meanmolecularmass(Y, W) * @. Y / W
-end
-
-function molefraction2massfraction(X, W::Vector{Float64})
-    """ Convert mole fractions to mass fractions. """
-    return (@. X * W) / sum(@. X * W)
-end
-
-################################################################################
 # GAS PHASE MODELS
 ################################################################################
 

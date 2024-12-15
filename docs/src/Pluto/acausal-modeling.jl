@@ -156,6 +156,8 @@ end
 
 # ╔═╡ e81273c7-2aa5-40c4-a47f-1da71adc9c99
 begin
+	@info("Create individual reactors...")
+	
 	ns = 2
 
 	# XXX: literals are not accepted!
@@ -173,13 +175,13 @@ let
 	
 	eqs = [
 		# Fix inlet composition:
-		scalarize(Dt.(r1.Yₛ) .~ Ẏₛ)...
+		scalarize(Dt(r1.Yₛ) ~ Ẏₛ)...
 		
 		# Apply equation of state:
 		r1.ρ ~ psr_density(r1)
 
 		# Apply rate equations:
-		scalarize(r1.ω̇ₖ .~ psr_kinetics(r1))...
+		scalarize(r1.ω̇ₖ ~ psr_kinetics(r1))...
 	]
 	
 	cr1 = compose(ODESystem(eqs, t; name = :cr1), r1)
@@ -234,76 +236,117 @@ let
 	end
 end
 
-# ╔═╡ 2333ca2b-9649-439a-a831-081451cd4979
-
-
 # ╔═╡ f268e793-e3db-444d-9814-c711b3097f45
-# begin
-# 	eqs = [
-# 		# Mass conservation.
-# 		r2.ṁ ~ r1.ṁ
-
-# 		# Fixed conditions.
-# 		# r1.p ~ p
-# 		# r1.T ~ T
-# 		# r2.p ~ r1.p
-# 		# r2.T ~ r1.T
-# 		scalarize(Dt(r1.Yₛ) ~ Ẏₛ)
+let
+	@info("Solve chain of reactors...")
+	
+	eqs = [
+		# Fixed conditions.
+		scalarize(Dt(r1.Yₛ) ~ Ẏₛ)...
 		
-# 		# Equation of state.
-# 		r1.ρ ~ psr_density(r1, p, T)
-# 		r2.ρ ~ psr_density(r2, p, T)
+		# Equation of state.
+		r1.ρ ~ psr_density(r1)
+		r2.ρ ~ psr_density(r2)
 
-# 		# Cascade inlet composition.
-# 		scalarize(@. r2.Yₛ ~ r1.Yₖ)
+		# Cascade inlet composition.
+		scalarize(r2.Yₛ ~ r1.Yₖ)
+		
+		# Cascade mass conservation.
+		# r2.ṁ ~ r1.ṁ FIXME
 
-# 		# Plug-in kinetics.
-# 		scalarize(r1.ω̇ₖ ~ psr_kinetics(r1))
-# 		scalarize(r2.ω̇ₖ ~ psr_kinetics(r2))
-# 	]
+		# Plug-in kinetics.
+		scalarize(r1.ω̇ₖ ~ psr_kinetics(r1))...
+		scalarize(r2.ω̇ₖ ~ psr_kinetics(r2))...
+	]
 
-# 	# debug_validation(eqs)
-# 	connected = compose(ODESystem(eqs, t; name = :connected), r1, r2)
-# end
+	# debug_validation(eqs)
+	connected = compose(ODESystem(eqs, t; name = :connected), r1, r2)
+	sys = structural_simplify(connected)
+	@info(equations(sys))
+
+	W = [0.030, 0.015]
+	
+	x0 = [
+		r1.ṁ => 1.0
+		r1.p => 101325
+		r1.T => 298.15
+
+		# FIXME these are not working in chain!
+		r2.ṁ => 1.0
+		r2.p => 101325
+		r2.T => 298.15
+		
+		r1.Yₖ => [1, 0]
+		r1.Yₛ => [1, 0]
+		
+		r2.Yₖ => [1, 0]
+	]
+	
+	ps = [r1.Wₖ => W, r2.Wₖ => W, Ẏₛ => [0.0, 0.0]]
+	
+	prob = ODEProblem(sys, x0, (0.0, 10.0), ps)
+	sol = solve(prob)
+
+	t = sol[:t]
+	
+	ρ1 = sol[r1.ρ]
+	ρ2 = sol[r2.ρ]
+	
+	Yk1_r1 = sol[r1.Yₖ[1]]
+	Yk2_r1 = sol[r1.Yₖ[2]]
+	Yk1_r2 = sol[r2.Yₖ[1]]
+	Yk2_r2 = sol[r2.Yₖ[2]]
+
+	Ys1_r1 = sol[r1.Yₛ[1]]
+	Ys2_r1 = sol[r1.Yₛ[2]]
+	Ys1_r2 = sol[r2.Yₛ[1]]
+	Ys2_r2 = sol[r2.Yₛ[2]]
+	
+	with_theme(WALLYMAKIETHEME) do
+		f = Figure(size = (650, 450))
+		
+		ax = Axis(f[1, 1])
+		lines!(ax, t, Yk1_r1; label = "1 (R1)")
+		lines!(ax, t, Yk2_r1; label = "2 (R1)")
+		lines!(ax, t, Yk1_r2; label = "1 (R2)")
+		lines!(ax, t, Yk2_r2; label = "2 (R2)")
+		axislegend(ax)
+		xlims!(ax, 0, 10)
+		ylims!(ax, 0, 1)
+
+		ax.xlabel = "Time"
+		ax.ylabel = "Mass fraction"
+
+		ax = Axis(f[1, 2])
+		lines!(ax, t, Ys1_r1; label = "1 (R1)")
+		lines!(ax, t, Ys2_r1; label = "2 (R1)")
+		lines!(ax, t, Ys1_r2; label = "1 (R2)")
+		lines!(ax, t, Ys2_r2; label = "2 (R2)")
+		axislegend(ax)
+		xlims!(ax, 0, 10)
+		ylims!(ax, 0, 1)
+
+		ax.xlabel = "Time"
+		ax.ylabel = "Mass fraction"
+		
+		ax = Axis(f[2, 1:2])
+		lines!(ax, t, ρ1; label = "ρ (R1)")
+		lines!(ax, t, ρ2; label = "ρ (R2)")
+		axislegend(ax)
+		xlims!(ax, 0, 10)
+		ylims!(ax, 0.8, 1.3)
+
+		ax.xlabel = "Time"
+		ax.ylabel = "Density"
+		
+		f
+	end
+end
 
 # ╔═╡ 61fb90ca-4746-4ea9-9ad6-7831270ce610
-# begin
-# 	sys = structural_simplify(connected)
-# 	# sys = complete(connected)
-# 	equations(sys)
-# end
 
-# ╔═╡ 96e533fd-f68d-4168-9f12-0de926d0d797
-# begin
-# 	x0 = [
-# 		r1.Yₖ[1] => 1.0
-# 		r1.Yₖ[2] => 0.0
-# 	]
-# 	ps = [
-# 		r1.ṁ => 1.0
-# 		r1.Yₛ[1] => 1.0
-# 		r1.Yₛ[2] => 0.0
-# 		r1.Wₖ[1] => 0.030
-# 		r1.Wₖ[2] => 0.015
-# 		r2.Wₖ[1] => 0.030
-# 		r2.Wₖ[2] => 0.015
-# 	]
-	
-# 	prob = ODEProblem(sys, x0, (0.0, 100.0), ps)
-# 	# sol = solve(prob, Tsit5())
-# 	# sol[decay2.f]
-# end
 
 # ╔═╡ 4565cbef-ec91-4864-8664-2c87d420e4a1
-
-
-# ╔═╡ e21a99bb-ecd9-47a0-b39b-bbc20c6662bc
-
-
-# ╔═╡ fafafb1c-8e61-414e-9d40-f0356f445890
-
-
-# ╔═╡ 82f4db6b-44eb-40cc-a2ff-926b35237cca
 
 
 # ╔═╡ 78542421-ff40-4c7c-b04f-e175bcf8a171
@@ -371,14 +414,9 @@ end
 # ╟─703ff20d-f699-4720-a47c-061d3a425300
 # ╟─c4ad6410-a73f-4301-b08b-4d4fb2ef5653
 # ╟─c12d091e-4ff3-48be-8e20-f9bd4c0e3c19
-# ╠═e81273c7-2aa5-40c4-a47f-1da71adc9c99
-# ╠═8661ff7c-9162-4faf-84c8-fd8a63dac86f
-# ╠═2333ca2b-9649-439a-a831-081451cd4979
-# ╠═f268e793-e3db-444d-9814-c711b3097f45
+# ╟─e81273c7-2aa5-40c4-a47f-1da71adc9c99
+# ╟─8661ff7c-9162-4faf-84c8-fd8a63dac86f
+# ╟─f268e793-e3db-444d-9814-c711b3097f45
 # ╠═61fb90ca-4746-4ea9-9ad6-7831270ce610
-# ╠═96e533fd-f68d-4168-9f12-0de926d0d797
 # ╠═4565cbef-ec91-4864-8664-2c87d420e4a1
-# ╠═e21a99bb-ecd9-47a0-b39b-bbc20c6662bc
-# ╠═fafafb1c-8e61-414e-9d40-f0356f445890
-# ╠═82f4db6b-44eb-40cc-a2ff-926b35237cca
 # ╠═78542421-ff40-4c7c-b04f-e175bcf8a171
