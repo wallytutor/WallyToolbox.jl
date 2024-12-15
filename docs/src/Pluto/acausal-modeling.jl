@@ -107,6 +107,15 @@ md"""
 - When using `scalarize` to compose a system with other equations, unpack the resulting scalarized system (...). Although the list of equations would look the same withouht unpacking, the system will fail to assembly otherwise.
 
 - If having trouble with kinetics integration (or anything else that might be stiff), consider checking [`solve`](https://docs.sciml.ai/DiffEqDocs/stable/basics/common_solver_opts/#CommonSolve.solve-Tuple%7BSciMLBase.AbstractDEProblem,%20Vararg%7BAny%7D%7D) arguments. Closing tolerances might be required in very stiff problems.
+
+
+Relevant topics on Discouse:
+
+- [Acausal modeling of a chemical mixing process with heating using ModelingToolkit.jl](https://discourse.julialang.org/t/123475)
+
+- [ModelingToolkit model with structural_simplify error: How to initialize variables correctly?](https://discourse.julialang.org/t/108110)
+
+- [Component-based model for N reactors connected to a tank](https://discourse.julialang.org/t/119536)
 """
 
 # ╔═╡ 5e252a2a-d44e-4678-83e7-83f9ebfe0ffb
@@ -163,23 +172,23 @@ function psr_kinetics(r)
 end
 
 # ╔═╡ e81273c7-2aa5-40c4-a47f-1da71adc9c99
-begin
-	@info("Create individual reactors...")
-	
-	ns = 2
-
-	# XXX: literals are not accepted!
-	@parameters p = 101325   [unit = u"Pa"]
-	@parameters T = 300.00   [unit = u"K"]
-	@parameters Ẏₛ[1:ns]     [unit = u"1/s", tunable = false]
-	
-	@named r1 = simple_psr(; ns)
-	@named r2 = simple_psr(; ns)
+let
+	@info("Illustrate equations with a single reactor...")
+	@named r1 = simple_psr(; ns = 2)
 end
+
+# ╔═╡ 9b8954f0-b49c-41a2-bbe5-97b23bada857
+md"""
+### Single reactor solution
+"""
 
 # ╔═╡ 8661ff7c-9162-4faf-84c8-fd8a63dac86f
 let
-	@info("Solve reactor 1 alone...")
+	ns = 2
+
+	# XXX: literals are not accepted!
+	@parameters Ẏₛ[1:ns] [unit = u"1/s", tunable = false]
+	@named r1 = simple_psr(; ns)
 	
 	eqs = [
 		# Fix inlet composition:
@@ -244,9 +253,19 @@ let
 	end
 end
 
+# ╔═╡ eafe7043-b732-441b-b226-bd45b7da4ffd
+md"""
+### Chain of reactors
+"""
+
 # ╔═╡ f268e793-e3db-444d-9814-c711b3097f45
 let
-	@info("Solve chain of reactors...")
+	ns = 2
+
+	# XXX: literals are not accepted!
+	@parameters Ẏₛ[1:ns] [unit = u"1/s", tunable = false]
+	@named r1 = simple_psr(; ns)
+	@named r2 = simple_psr(; ns)
 	
 	eqs = [
 		# Fixed conditions.
@@ -421,7 +440,6 @@ end
 
 # ╔═╡ e8ba3f51-d103-41ca-987f-8e6a0b37c7b2
 let
-	@info("Solve reactor 1 alone...")
 	kinetics = WallyToolbox.Graf2007
 	
 	kin = kinetics.Model()
@@ -541,13 +559,10 @@ md"""
 ## Sandbox
 """
 
-# ╔═╡ 78542421-ff40-4c7c-b04f-e175bcf8a171
-let
-	@warn("Thinking on how to get an arbitrary state equation working...")
-	
-	ns = 2
-	
+# ╔═╡ a0d9b9d2-5dbf-436e-8999-8a684e2b5534
+function ideal_gas_law(; name, ns)
 	@variables(begin
+		ρ,       [bounds = NONNEGATIVE, unit = u"kg/m^3"]
 		p,       [bounds = NONNEGATIVE, unit = u"Pa"]
 		V,       [bounds = NONNEGATIVE, unit = u"m^3"]
 		n,       [bounds = NONNEGATIVE, unit = u"mol"]
@@ -566,24 +581,81 @@ let
 	eqs = [
 		# Ideal gas law:
 		0 ~ p * V - n * R * T
-
+		0 ~ ρ - p * W / (R * T)
+		
 		# Mean molecular mass definition:
 		0 ~ W - meanmolecularmass(Y, M)
 
 		# Molar fraction definition:
-		0 ~ 1 - sum(scalarize(X))
+		# 0 ~ 1 - sum(scalarize(X))
 
 		# Mass fraction definition:
 		scalarize(Y .~ X .* M / W)...
 	]
 
-	ModelingToolkit.validate(eqs)
+	# XXX: for development only:
+	# debug_validation(eqs)
 
-	# @mtkbuild sys = NonlinearSystem(eqs)
-	#, [p, V, n, T, X], [M, R])
-    # sol = solve(NonlinearProblem(ns, [], []))
+	return NonlinearSystem(eqs; name)
+end
+
+# ╔═╡ 78542421-ff40-4c7c-b04f-e175bcf8a171
+let
+	@warn("Thinking on how to get an arbitrary state equation working...")
+	@warn("It is getting better but I still need some work here...")
 	
-	eqs
+	ns = 2
+
+	@named r = ideal_gas_law(; ns)
+
+	@parameters p [unit = u"Pa"]
+	@parameters T [unit = u"K"]
+	@parameters n [unit = u"mol"]
+	@parameters V [unit = u"m^3"]
+	@parameters Y[1:ns] [unit = u"kg/kg", tunable = false]
+
+	eqs = [
+		r.p ~ p
+		r.T ~ T
+		r.V ~ V
+		# r.Y[1] ~ Y[1]
+		scalarize(r.Y ~ Y)...
+	]
+
+	# debug_validation(eqs)
+	sys = compose(NonlinearSystem(eqs; name = :igl), r)
+	sys = structural_simplify(sys)
+
+	normalized(v) = v ./ sum(v)
+	
+	ps = [
+		p   => 101325
+		T   => 298.15
+		V   => 50.0
+		Y   => normalized([0.77, 0.23])
+		# Y[1] => 0.6
+		r.M => [0.028, 0.032]
+	]
+
+	guesses = [
+		r.n => 1
+		r.X => ones(ns)
+		# r.X[2] => 1
+		# r.Y[2] => 1
+	]
+	prob = NonlinearProblem(sys, guesses, ps)
+	sol = solve(prob)
+
+	@info equations(sys)
+	@info unknowns(sys)
+	@info parameters(sys)
+	@info observed(sys)
+
+	@info sol[r.ρ]
+	@info sol[r.W]
+	@info sol[r.Y] sum(sol[r.Y])
+	@info sol[r.X] sum(sol[r.X])
+	@info sol
 end
 
 # ╔═╡ Cell order:
@@ -606,7 +678,9 @@ end
 # ╟─c4ad6410-a73f-4301-b08b-4d4fb2ef5653
 # ╟─c12d091e-4ff3-48be-8e20-f9bd4c0e3c19
 # ╟─e81273c7-2aa5-40c4-a47f-1da71adc9c99
+# ╟─9b8954f0-b49c-41a2-bbe5-97b23bada857
 # ╟─8661ff7c-9162-4faf-84c8-fd8a63dac86f
+# ╟─eafe7043-b732-441b-b226-bd45b7da4ffd
 # ╟─f268e793-e3db-444d-9814-c711b3097f45
 # ╟─1ba323c3-ad6e-4083-9c75-97c4f19ba657
 # ╟─c2a6d64c-9af3-49ab-bbb6-8bbb2eb87386
@@ -623,4 +697,5 @@ end
 # ╠═fade851e-164a-4616-ae12-bf4c5e26e0d9
 # ╠═7f2e2c70-07a3-4c24-ace6-0e0041408169
 # ╟─4565cbef-ec91-4864-8664-2c87d420e4a1
+# ╟─a0d9b9d2-5dbf-436e-8999-8a684e2b5534
 # ╟─78542421-ff40-4c7c-b04f-e175bcf8a171
