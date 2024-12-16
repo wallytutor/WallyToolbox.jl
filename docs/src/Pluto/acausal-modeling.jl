@@ -387,12 +387,14 @@ function post_graf(r, sol)
 	Xk4 = 100sol[r.Xₖ[4]]
 	Xk5 = 100sol[r.Xₖ[5]]
 	Xk6 = 100sol[r.Xₖ[6]]
+	Xk7 = 100sol[r.Xₖ[7]]
 
 	with_theme(WALLYMAKIETHEME) do
 		f = Figure(size = (650, 450))
 		
 		ax = Axis(f[1, 1])
 		lines!(ax, time, Xk1; label = species_names[1])
+				lines!(ax, time, Xk7; label = species_names[7])
 		axislegend(ax; position = :rb)
 		xlims!(ax, 0, 10)
 		ylims!(ax, 0, 35)
@@ -426,6 +428,7 @@ function post_graf(r, sol)
 		lines!(ax, time, Xk2; label = species_names[2])
 		lines!(ax, time, Xk5; label = species_names[5])
 		lines!(ax, time, Xk6; label = species_names[6])
+
 		axislegend(ax; position = :rt)
 		xlims!(ax, 0, 10)
 		ylims!(ax, 0, 1.8)
@@ -475,23 +478,36 @@ let
 		mole2massfraction(X, kin.molecular_masses)
 	end
 	
-	# Source gas is 36% C2H2
-	Ys = let
-		X = zeros(size(kin.molecular_masses))
-		X[1] = 0.36
-		X[end] = 1-X[1]
-		mole2massfraction(X, kin.molecular_masses)
+	# Source gas is 36% *C2H2*
+	Ys = let 
+	    # Mole fraction of acetylene (1) in system.
+	    x1 = 0.36
+	
+	    # Add acetylene impurities to initialization.
+	    # NOTE: in reference thesis it was assumed 98% purity and acetone
+	    # content of 1.8%, but that species is not available in Graf (2007).
+	    X = zeros(size(kin.molecular_masses))
+	    X[1] = 0.998 * x1
+	    X[4] = 0.002 * x1
+	    X[end] = 1 - sum(X[1:end-1])
+	
+	    # Convert to mass fractions for the model.
+	    mole2massfraction(X, kin.molecular_masses)
 	end
-
+	
 	# Case 6 of my PhD thesis
 	p = 5000u"Pa"
-	T = 1173.0u"K"
+	T = 1173.15u"K"
 	Q = 222u"cm^3/min"
-
+	
+	# Dimensions of reactor [m].
+	R = 1.4u"cm"
+	L = 35u"cm"
+	
 	# Reference mass flow rate
 	M = meanmolecularmass(Ys, kin.molecular_masses)
 	ρ = P_REF * M / (GAS_CONSTANT * 273.15) * 1u"kg/m^3"
-	V = pi * (1.4u"cm")^2 * 35u"cm"
+	V = pi * R^2 * L
 	ṁ = ustrip((ρ * Q) |> us"kg/s")
 	
 	x0 = [
@@ -524,8 +540,16 @@ md"""
 ## Working with connectors
 """
 
-# ╔═╡ c063ffbb-11f3-43b0-9c2a-fb70d08d81a7
+# ╔═╡ 84262231-3269-45b4-9dca-0ab510567187
+md"""
+Let's now try to transpose this to a more `ModelingToolkit` way with help of the [base tutorial](https://docs.sciml.ai/ModelingToolkit/stable/tutorials/acausal_components/).
+"""
 
+# ╔═╡ c063ffbb-11f3-43b0-9c2a-fb70d08d81a7
+@connector Pin begin
+    v(t)
+    i(t), [connect = Flow]
+end
 
 # ╔═╡ 24081da4-a6a0-485f-97b1-3aef18b93629
 
@@ -686,6 +710,7 @@ end
 # ╟─c2a6d64c-9af3-49ab-bbb6-8bbb2eb87386
 # ╟─e8ba3f51-d103-41ca-987f-8e6a0b37c7b2
 # ╟─61fb90ca-4746-4ea9-9ad6-7831270ce610
+# ╟─84262231-3269-45b4-9dca-0ab510567187
 # ╠═c063ffbb-11f3-43b0-9c2a-fb70d08d81a7
 # ╠═24081da4-a6a0-485f-97b1-3aef18b93629
 # ╠═073efa3c-f1b8-4f9d-940e-7843b19e11db

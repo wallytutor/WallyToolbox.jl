@@ -67,7 +67,7 @@ const NAMES = [
     "CH4",
     "C4H4",
     "C6H6",
-    "Cs",
+    "C(s)",
     "N2"
 ]
 
