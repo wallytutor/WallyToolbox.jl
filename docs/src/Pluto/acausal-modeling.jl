@@ -546,13 +546,71 @@ Let's now try to transpose this to a more `ModelingToolkit` way with help of the
 """
 
 # ╔═╡ c063ffbb-11f3-43b0-9c2a-fb70d08d81a7
-@connector Pin begin
-    v(t)
-    i(t), [connect = Flow]
+begin
+	Ns = 2
+	
+	@connector StirredReactor begin
+		ṁ(t),          [unit = u"kg/s"]
+	end
+
+	@mtkmodel OnePort begin
+	    @components begin
+	        p = StirredReactor()
+	        n = StirredReactor()
+	    end
+	    @variables begin
+	        ṁ(t),          [unit = u"kg/s"]
+			ρ(t),          [unit = u"kg/m^3"]
+			p(t),          [unit = u"Pa"]
+			T(t),          [unit = u"K"]
+			(Yₛ(t))[1:Ns], [unit = u"kg/kg"]
+			(Yₖ(t))[1:Ns], [unit = u"kg/kg"]
+			(Xₛ(t))[1:Ns], [unit = u"mol/mol"]
+			(Xₖ(t))[1:Ns], [unit = u"mol/mol"]
+			(ω̇ₖ(t))[1:Ns], [unit = u"mol/(m^3*s)"]
+	    end
+	    @equations begin
+	        0 ~ p.ṁ + n.ṁ
+	        ṁ ~ p.ṁ
+			# scalarize(Xₛ ~ mass2molefraction(Yₛ, Wₖ))...
+			# scalarize(Xₖ ~ mass2molefraction(Yₖ, Wₖ))...
+	    end
+	end
+
+	@mtkmodel SourceReservoir begin
+	    @components begin
+	        n = StirredReactor()
+	    end
+		@parameters begin
+			ṁ(t),          [unit = u"kg/s"]
+			p(t),          [unit = u"Pa"]
+			T(t),          [unit = u"K"]
+			(Y(t))[1:Ns],  [unit = u"kg/kg"]
+		end
+	    @equations begin
+	        n.ṁ ~ ṁ
+			n.p ~ p
+			n.T ~ T
+			n.Yₛ ~ Y
+	    end
+	end
+	
+	@mtkmodel ReactorChamber begin
+	    @extend OnePort()
+	    @parameters begin
+	        R = 1.0
+	    end
+	    @equations begin
+	        # v ~ i * R
+			# scalarize(@. ρ * Dt(Yₖ) ~ (ṁ / V) * (Yₛ - Yₖ) + ω̇ₖ * Wₖ)...
+	    end
+	end
 end
 
 # ╔═╡ 24081da4-a6a0-485f-97b1-3aef18b93629
-
+# Dt(ṁ) ~ 0
+# Dt(p) ~ 0
+# Dt(T) ~ 0
 
 # ╔═╡ 073efa3c-f1b8-4f9d-940e-7843b19e11db
 
