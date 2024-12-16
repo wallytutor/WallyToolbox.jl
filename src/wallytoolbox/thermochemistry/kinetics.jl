@@ -7,8 +7,13 @@ module TemplateKinetics
 const ERROR = "Template kinetics is a sample for developers only!"
 
 struct Model
-    Model() = @error(ERROR)
-    progress_rate(T, p, C) = @error(ERROR)
+    function Model()
+        @error(ERROR)
+    end
+end
+
+function progress_rate(T, p, C)
+    @error(ERROR)
 end
 
 end # (module TemplateKinetics)
