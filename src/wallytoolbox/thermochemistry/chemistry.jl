@@ -180,6 +180,8 @@ struct MassQuantity
     amounts::Vector{ElementalQuantity}
 end
 
+MassQuantity(d::Dict) = MassQuantity([n=>v for (n, v) in d])
+
 function Base.:*(c::Number, s::ChemicalCompound)::MassQuantity
     return MassQuantity(map(Pair, s.elements, c * s.Y))
 end
