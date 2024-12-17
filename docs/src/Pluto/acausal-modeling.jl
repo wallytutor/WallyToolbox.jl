@@ -545,96 +545,163 @@ md"""
 Let's now try to transpose this to a more `ModelingToolkit` way with help of the [base tutorial](https://docs.sciml.ai/ModelingToolkit/stable/tutorials/acausal_components/).
 """
 
-# ╔═╡ c063ffbb-11f3-43b0-9c2a-fb70d08d81a7
-begin
-	Ns = 2
+# ╔═╡ 71a42560-2dd7-468f-a484-57a51ba01615
+md"""
+### Mixer chain
+"""
+
+# ╔═╡ a9dc6cb2-fa1c-46b9-808f-c8706fc36e91
+let
+	@independent_variables begin
+		t 
+	end
+
+	D = Differential(t)
 	
-	@connector StirredReactor begin
-		ṁ(t),          [unit = u"kg/s"]
+	@connector Fluid begin
+		ṁₜ(t), [connect = Flow]
+		Yₖ(t)
 	end
 
-	@mtkmodel OnePort begin
+	@mtkmodel Reservoir begin
 	    @components begin
-	        p = StirredReactor()
-	        n = StirredReactor()
-	    end
-	    @variables begin
-	        ṁ(t),          [unit = u"kg/s"]
-			ρ(t),          [unit = u"kg/m^3"]
-			p(t),          [unit = u"Pa"]
-			T(t),          [unit = u"K"]
-			(Yₛ(t))[1:Ns], [unit = u"kg/kg"]
-			(Yₖ(t))[1:Ns], [unit = u"kg/kg"]
-			(Xₛ(t))[1:Ns], [unit = u"mol/mol"]
-			(Xₖ(t))[1:Ns], [unit = u"mol/mol"]
-			(ω̇ₖ(t))[1:Ns], [unit = u"mol/(m^3*s)"]
-	    end
-	    @equations begin
-	        0 ~ p.ṁ + n.ṁ
-	        ṁ ~ p.ṁ
-			# scalarize(Xₛ ~ mass2molefraction(Yₛ, Wₖ))...
-			# scalarize(Xₖ ~ mass2molefraction(Yₖ, Wₖ))...
-	    end
-	end
-
-	@mtkmodel SourceReservoir begin
-	    @components begin
-	        n = StirredReactor()
+	        r = Fluid()
 	    end
 		@parameters begin
-			ṁ(t),          [unit = u"kg/s"]
-			p(t),          [unit = u"Pa"]
-			T(t),          [unit = u"K"]
-			(Y(t))[1:Ns],  [unit = u"kg/kg"]
+			ṁₜ
+			Yₖ
 		end
 	    @equations begin
-	        n.ṁ ~ ṁ
-			n.p ~ p
-			n.T ~ T
-			n.Yₛ ~ Y
+	        r.ṁₜ ~ ṁₜ
+			r.Yₖ ~ Yₖ
 	    end
 	end
-	
-	@mtkmodel ReactorChamber begin
-	    @extend OnePort()
-	    @parameters begin
-	        R = 1.0
+
+	@mtkmodel Chamber begin
+	    @components begin
+	        p = Fluid()
+	        # n = Fluid()
+	    end
+		@parameters begin
+			V
+		end
+		@variables begin
+			ṁₜ(t)
+			Yₖ(t)
+		end
+	    @equations begin
+			ṁₜ ~ p.ṁₜ
+			D(Yₖ) ~ -(ṁₜ / V) * (p.Yₖ - Yₖ)
+			
+			# n.ṁₜ ~ p.ṁₜ
+			# n.Yₖ ~ Yₖ
+	    end
+	end
+
+	@mtkmodel Mixer begin
+	    @components begin
+			reservoir = Reservoir()
+			reactor_1 = Chamber()
+			# reactor_2 = Chamber()
 	    end
 	    @equations begin
-	        # v ~ i * R
-			# scalarize(@. ρ * Dt(Yₖ) ~ (ṁ / V) * (Yₛ - Yₖ) + ω̇ₖ * Wₖ)...
+			connect(reservoir.r, reactor_1.p)
+			# connect(reactor_1.n, reactor_2.p)
 	    end
 	end
+
+	@mtkbuild model = Mixer()
+
+	u0 = [
+		model.reactor_1.Yₖ => 0.0
+		# model.reactor_2.Yₖ => 0.0
+	]
+
+	ps = [
+		model.reservoir.ṁₜ => 1.0
+		model.reservoir.Yₖ => 0.1
+		model.reactor_1.V => 1.0
+		# model.reactor_2.V => 1.0
+	]
+	
+	prob = ODEProblem(model, u0, (0, 10.0), ps)
+	sol = solve(prob)
 end
 
-# ╔═╡ 24081da4-a6a0-485f-97b1-3aef18b93629
-# Dt(ṁ) ~ 0
-# Dt(p) ~ 0
-# Dt(T) ~ 0
-
-# ╔═╡ 073efa3c-f1b8-4f9d-940e-7843b19e11db
+# ╔═╡ ec643577-ae2c-4319-b942-8555a02edcd3
 
 
-# ╔═╡ ffb46225-f9f2-4b62-acce-2871709283e9
+# 
+# 
+# plot(sol)
+
+# ╔═╡ 2c372c1e-0025-49b5-8fc9-b819f30fde85
 
 
-# ╔═╡ adb29a0e-461b-4be9-904f-1beb02a98ffa
+# ╔═╡ be29091e-9f4d-4b6c-a483-776b8440db61
 
 
-# ╔═╡ 4e2f097b-2996-4b81-a8ee-883393f2f141
+# ╔═╡ c063ffbb-11f3-43b0-9c2a-fb70d08d81a7
+# begin
+# 	Ns = 2
+	
+# 	@connector StirredReactor begin
+# 		ṁ(t),          [unit = u"kg/s"]
+# 	end
 
+# 	@mtkmodel OnePort begin
+# 	    @components begin
+# 	        p = StirredReactor()
+# 	        n = StirredReactor()
+# 	    end
+# 	    @variables begin
+# 	        ṁ(t),          [unit = u"kg/s"]
+# 			ρ(t),          [unit = u"kg/m^3"]
+# 			p(t),          [unit = u"Pa"]
+# 			T(t),          [unit = u"K"]
+# 			(Yₛ(t))[1:Ns], [unit = u"kg/kg"]
+# 			(Yₖ(t))[1:Ns], [unit = u"kg/kg"]
+# 			(Xₛ(t))[1:Ns], [unit = u"mol/mol"]
+# 			(Xₖ(t))[1:Ns], [unit = u"mol/mol"]
+# 			(ω̇ₖ(t))[1:Ns], [unit = u"mol/(m^3*s)"]
+# 	    end
+# 	    @equations begin
+# 	        0 ~ p.ṁ + n.ṁ
+# 	        ṁ ~ p.ṁ
+# 			# scalarize(Xₛ ~ mass2molefraction(Yₛ, Wₖ))...
+# 			# scalarize(Xₖ ~ mass2molefraction(Yₖ, Wₖ))...
+# 	    end
+# 	end
 
-# ╔═╡ 76c0183c-8451-444d-a094-9cf11c9fbb1d
-
-
-# ╔═╡ 3cff719b-d354-4e29-a053-9e09f936ccac
-
-
-# ╔═╡ fade851e-164a-4616-ae12-bf4c5e26e0d9
-
-
-# ╔═╡ 7f2e2c70-07a3-4c24-ace6-0e0041408169
-
+# 	@mtkmodel SourceReservoir begin
+# 	    @components begin
+# 	        n = StirredReactor()
+# 	    end
+# 		@parameters begin
+# 			ṁ(t),          [unit = u"kg/s"]
+# 			p(t),          [unit = u"Pa"]
+# 			T(t),          [unit = u"K"]
+# 			(Y(t))[1:Ns],  [unit = u"kg/kg"]
+# 		end
+# 	    @equations begin
+# 	        n.ṁ ~ ṁ
+# 			n.p ~ p
+# 			n.T ~ T
+# 			n.Yₛ ~ Y
+# 	    end
+# 	end
+	
+# 	@mtkmodel ReactorChamber begin
+# 	    @extend OnePort()
+# 	    @parameters begin
+# 	        R = 1.0
+# 	    end
+# 	    @equations begin
+# 	        # v ~ i * R
+# 			# scalarize(@. ρ * Dt(Yₖ) ~ (ṁ / V) * (Yₛ - Yₖ) + ω̇ₖ * Wₖ)...
+# 	    end
+# 	end
+# end
 
 # ╔═╡ 4565cbef-ec91-4864-8664-2c87d420e4a1
 md"""
@@ -769,16 +836,12 @@ end
 # ╟─e8ba3f51-d103-41ca-987f-8e6a0b37c7b2
 # ╟─61fb90ca-4746-4ea9-9ad6-7831270ce610
 # ╟─84262231-3269-45b4-9dca-0ab510567187
+# ╟─71a42560-2dd7-468f-a484-57a51ba01615
+# ╠═a9dc6cb2-fa1c-46b9-808f-c8706fc36e91
+# ╠═ec643577-ae2c-4319-b942-8555a02edcd3
+# ╠═2c372c1e-0025-49b5-8fc9-b819f30fde85
+# ╠═be29091e-9f4d-4b6c-a483-776b8440db61
 # ╠═c063ffbb-11f3-43b0-9c2a-fb70d08d81a7
-# ╠═24081da4-a6a0-485f-97b1-3aef18b93629
-# ╠═073efa3c-f1b8-4f9d-940e-7843b19e11db
-# ╠═ffb46225-f9f2-4b62-acce-2871709283e9
-# ╠═adb29a0e-461b-4be9-904f-1beb02a98ffa
-# ╠═4e2f097b-2996-4b81-a8ee-883393f2f141
-# ╠═76c0183c-8451-444d-a094-9cf11c9fbb1d
-# ╠═3cff719b-d354-4e29-a053-9e09f936ccac
-# ╠═fade851e-164a-4616-ae12-bf4c5e26e0d9
-# ╠═7f2e2c70-07a3-4c24-ace6-0e0041408169
 # ╟─4565cbef-ec91-4864-8664-2c87d420e4a1
 # ╟─a0d9b9d2-5dbf-436e-8999-8a684e2b5534
 # ╟─78542421-ff40-4c7c-b04f-e175bcf8a171
