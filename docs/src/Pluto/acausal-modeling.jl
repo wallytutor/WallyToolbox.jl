@@ -108,6 +108,9 @@ md"""
 
 - If having trouble with kinetics integration (or anything else that might be stiff), consider checking [`solve`](https://docs.sciml.ai/DiffEqDocs/stable/basics/common_solver_opts/#CommonSolve.solve-Tuple%7BSciMLBase.AbstractDEProblem,%20Vararg%7BAny%7D%7D) arguments. Closing tolerances might be required in very stiff problems.
 
+- Using macro `@extend` only works in global context. That implies that a model extending another must be declared in a different cell, so in this study notebook I had to take care of variable naming while trying to get as general as possible.
+
+- Getting the sign convention for flow variables when using connectors might be tricky. If it is not working, try drawing a diagram of the intended system. In the mixer chain example below we set the flow leaving the `Source` object to be negative.
 
 Relevant topics on Discouse:
 
@@ -547,98 +550,166 @@ Let's now try to transpose this to a more `ModelingToolkit` way with help of the
 
 # ╔═╡ 71a42560-2dd7-468f-a484-57a51ba01615
 md"""
-### Mixer chain
+### Constant density mixer chain
 """
+
+# ╔═╡ 0060a8cc-2239-4b9e-9409-3a97f6be59ea
+"Represents fluid flow intensity and composition."
+@connector Solution begin
+	ṁ(t), [connect = Flow, unit = u"kg/s"]
+	Y(t), [unit = u"kg/kg"]
+end
+
+# ╔═╡ 4799a05e-b52d-412f-8b91-49caec3313d1
+"Constant mass flow rate and composition source."
+@mtkmodel SolutionSource begin
+	@components begin
+		n = Solution()
+	end
+	@parameters begin
+		ṁ, [unit = u"kg/s"]
+		Y, [unit = u"kg/kg"]
+	end
+	@equations begin
+		n.ṁ ~ -ṁ
+		n.Y ~ Y
+	end
+end
+
+# ╔═╡ 76866712-fa1e-4beb-8739-76a02dbe89e7
+"Mass flow sink for system closure."
+@mtkmodel SolutionSink begin
+	@components begin
+		p = Solution()
+	end
+	@variables begin
+		ṁ(t), [unit = u"kg/s"]
+		Y(t), [unit = u"kg/kg"]
+	end
+	@equations begin
+		p.ṁ ~ ṁ
+		p.Y ~ Y
+	end
+end
+
+# ╔═╡ 1222ff23-a81d-4318-8ed7-550b3d1f4df3
+"Constant volume chamber with inlet/outlet flows."
+@mtkmodel SolutionChamber begin
+	@components begin
+		p = Solution()
+		n = Solution()
+	end
+	@variables begin
+		ṁ(t), [unit = u"kg/s"]
+		Y(t), [unit = u"kg/kg"]
+	end
+	@equations begin
+		0 ~ p.ṁ + n.ṁ
+	end
+end
+
+# ╔═╡ efd7da54-0f03-4845-a06b-488c2356a103
+"Constant volume perfect-stirred reactor."
+@mtkmodel SolutionReactor begin
+	@extend SolutionChamber()
+	@parameters begin
+		ρ, [unit = u"kg/m^3"]
+		V, [unit = u"m^3"]
+	end
+	@equations begin
+		ṁ ~ p.ṁ
+		Y ~ n.Y
+		ρ * Dt(Y) ~ (ṁ / V) * (p.Y - Y)
+	end
+end
+
+# ╔═╡ 5f3e3c6d-ac7c-4cd0-9be7-539c48f848fc
+"User-defined chain of reactors."
+@mtkmodel SolutionMixer begin
+	@components begin
+		source    = SolutionSource()
+		reactor_1 = SolutionReactor()
+		reactor_2 = SolutionReactor()
+		reactor_3 = SolutionReactor()
+		sink      = SolutionSink()
+	end
+	@equations begin
+		connect(source.n, reactor_1.p)
+		connect(reactor_1.n, reactor_2.p)
+		connect(reactor_2.n, reactor_3.p)
+		connect(reactor_3.n, sink.p)
+	end
+end
+
+# ╔═╡ dd020c3e-f621-4175-9d63-867bb14ddf0e
+@mtkbuild solution_mixer = SolutionMixer()
 
 # ╔═╡ a9dc6cb2-fa1c-46b9-808f-c8706fc36e91
 let
-	@independent_variables begin
-		t 
-	end
-
-	D = Differential(t)
+	model = solution_mixer
 	
-	@connector Fluid begin
-		ṁₜ(t), [connect = Flow]
-		Yₖ(t)
-	end
-
-	@mtkmodel Reservoir begin
-	    @components begin
-	        r = Fluid()
-	    end
-		@parameters begin
-			ṁₜ
-			Yₖ
-		end
-	    @equations begin
-	        r.ṁₜ ~ ṁₜ
-			r.Yₖ ~ Yₖ
-	    end
-	end
-
-	@mtkmodel Chamber begin
-	    @components begin
-	        p = Fluid()
-	        # n = Fluid()
-	    end
-		@parameters begin
-			V
-		end
-		@variables begin
-			ṁₜ(t)
-			Yₖ(t)
-		end
-	    @equations begin
-			ṁₜ ~ p.ṁₜ
-			D(Yₖ) ~ -(ṁₜ / V) * (p.Yₖ - Yₖ)
-			
-			# n.ṁₜ ~ p.ṁₜ
-			# n.Yₖ ~ Yₖ
-	    end
-	end
-
-	@mtkmodel Mixer begin
-	    @components begin
-			reservoir = Reservoir()
-			reactor_1 = Chamber()
-			# reactor_2 = Chamber()
-	    end
-	    @equations begin
-			connect(reservoir.r, reactor_1.p)
-			# connect(reactor_1.n, reactor_2.p)
-	    end
-	end
-
-	@mtkbuild model = Mixer()
-
 	u0 = [
-		model.reactor_1.Yₖ => 0.0
-		# model.reactor_2.Yₖ => 0.0
+		model.reactor_1.Y => 0.0
+		model.reactor_2.Y => 0.2
 	]
 
 	ps = [
-		model.reservoir.ṁₜ => 1.0
-		model.reservoir.Yₖ => 0.1
-		model.reactor_1.V => 1.0
-		# model.reactor_2.V => 1.0
+		# Inlet controls:
+		model.source.ṁ => 1.0
+		model.source.Y => 0.1
+
+		# Reactors parameters:
+		model.reactor_1.ρ => 1.0
+		model.reactor_1.V => 2.5
+
+		model.reactor_2.ρ => 1.0
+		model.reactor_2.V => 1.0
+
+		model.reactor_3.ρ => 1.0
+		model.reactor_3.V => 1.0
 	]
 	
 	prob = ODEProblem(model, u0, (0, 10.0), ps)
-	sol = solve(prob)
+	sol = solve(prob; saveat=0:0.01:10)
+
+	with_theme(WALLYMAKIETHEME) do
+		f = Figure(size = (650, 450))
+		ax = Axis(f[1, 1])
+	
+		lines!(ax, sol[:t], 100sol[model.reactor_1.Y]; label = "1")
+		lines!(ax, sol[:t], 100sol[model.reactor_2.Y]; label = "2")
+		lines!(ax, sol[:t], 100sol[model.reactor_3.Y]; label = "3")
+
+		hlines!(ax, 100sol[model.source.n.Y]; linestyle = :dash)
+		xlims!(ax, 0.0, 10.0)
+		ylims!(ax, 0.0, 20.0)
+	
+		ax.xlabel = "Time [s]"
+		ax.ylabel = "Mass percentage"
+		ax.xticks = 0.0:2.0:10.0
+		ax.yticks = 0.0:4.0:20.0
+		
+		axislegend(ax; position = :rb)
+		
+		f
+	end
 end
+
+# ╔═╡ 503fe098-11b4-47fb-bac1-84b6dc7a60e9
+md"""
+### Arbitrary species and closures
+"""
 
 # ╔═╡ ec643577-ae2c-4319-b942-8555a02edcd3
 
 
-# 
-# 
-# plot(sol)
-
-# ╔═╡ 2c372c1e-0025-49b5-8fc9-b819f30fde85
+# ╔═╡ 49360556-1410-441a-93a4-b62e446535e9
 
 
-# ╔═╡ be29091e-9f4d-4b6c-a483-776b8440db61
+# ╔═╡ 5d31516c-d049-468d-80a3-6c515526e403
+
+
+# ╔═╡ 8bcc998d-34a0-48a5-b0d0-b9f92be9d0ae
 
 
 # ╔═╡ c063ffbb-11f3-43b0-9c2a-fb70d08d81a7
@@ -837,10 +908,19 @@ end
 # ╟─61fb90ca-4746-4ea9-9ad6-7831270ce610
 # ╟─84262231-3269-45b4-9dca-0ab510567187
 # ╟─71a42560-2dd7-468f-a484-57a51ba01615
-# ╠═a9dc6cb2-fa1c-46b9-808f-c8706fc36e91
+# ╟─0060a8cc-2239-4b9e-9409-3a97f6be59ea
+# ╟─4799a05e-b52d-412f-8b91-49caec3313d1
+# ╟─76866712-fa1e-4beb-8739-76a02dbe89e7
+# ╟─1222ff23-a81d-4318-8ed7-550b3d1f4df3
+# ╟─efd7da54-0f03-4845-a06b-488c2356a103
+# ╟─5f3e3c6d-ac7c-4cd0-9be7-539c48f848fc
+# ╟─dd020c3e-f621-4175-9d63-867bb14ddf0e
+# ╟─a9dc6cb2-fa1c-46b9-808f-c8706fc36e91
+# ╟─503fe098-11b4-47fb-bac1-84b6dc7a60e9
 # ╠═ec643577-ae2c-4319-b942-8555a02edcd3
-# ╠═2c372c1e-0025-49b5-8fc9-b819f30fde85
-# ╠═be29091e-9f4d-4b6c-a483-776b8440db61
+# ╠═49360556-1410-441a-93a4-b62e446535e9
+# ╠═5d31516c-d049-468d-80a3-6c515526e403
+# ╠═8bcc998d-34a0-48a5-b0d0-b9f92be9d0ae
 # ╠═c063ffbb-11f3-43b0-9c2a-fb70d08d81a7
 # ╟─4565cbef-ec91-4864-8664-2c87d420e4a1
 # ╟─a0d9b9d2-5dbf-436e-8999-8a684e2b5534
