@@ -27,6 +27,7 @@ import ..WallyToolbox: molecularmass
 
 using DynamicQuantities
 using ModelingToolkit
+using Symbolics: scalarize
 
 # XXX: there are units wrong (k3) in Graf's thesis!
 @constants(begin
@@ -106,7 +107,9 @@ struct Model <: AbstractGasKinetics
     end
 end
 
-function progress_rate(T, p, C)
+function progress_rate(T, ρ, Y, W)
+    C = ρ * scalarize(@. Y / W)
+
     # Rate constants.
     k = [
         k1 * exp(-E1 / (R * T))
