@@ -417,26 +417,30 @@ graf_ops() = (
 	L = 35u"cm",
 )
 
-# ╔═╡ c2a6d64c-9af3-49ab-bbb6-8bbb2eb87386
+# ╔═╡ 0ebd63c8-b2da-4b9b-b79b-1eab0ca9718b
 function post_graf(r, sol)
-	species_names = WallyToolbox.Graf2007.NAMES
-	
 	time = sol[:t]
 	ρ = 100sol[r.ρ]
-	Xk1 = 100sol[r.Xₖ[1]]
-	Xk2 = 100sol[r.Xₖ[2]]
-	Xk3 = 100sol[r.Xₖ[3]]
-	Xk4 = 100sol[r.Xₖ[4]]
-	Xk5 = 100sol[r.Xₖ[5]]
-	Xk6 = 100sol[r.Xₖ[6]]
-	Xk7 = 100sol[r.Xₖ[7]]
+	X1 = 100sol[r.Xₖ[1]]
+	X2 = 100sol[r.Xₖ[2]]
+	X3 = 100sol[r.Xₖ[3]]
+	X4 = 100sol[r.Xₖ[4]]
+	X5 = 100sol[r.Xₖ[5]]
+	X6 = 100sol[r.Xₖ[6]]
+	X7 = 100sol[r.Xₖ[7]]
+	return post_graf(time, ρ, X1, X2, X3, X4, X5, X6, X7)
+end
+
+# ╔═╡ c2a6d64c-9af3-49ab-bbb6-8bbb2eb87386
+function post_graf(time, ρ, X1, X2, X3, X4, X5, X6, X7)
+	species_names = WallyToolbox.Graf2007.NAMES
 
 	with_theme(WALLYMAKIETHEME) do
 		f = Figure(size = (650, 450))
 		
 		ax = Axis(f[1, 1])
-		lines!(ax, time, Xk1; label = species_names[1])
-				lines!(ax, time, Xk7; label = species_names[7])
+		lines!(ax, time, X1; label = species_names[1])
+		lines!(ax, time, X7; label = species_names[7])
 		axislegend(ax; position = :rb)
 		xlims!(ax, 0, 10)
 		ylims!(ax, 0, 35)
@@ -456,8 +460,8 @@ function post_graf(r, sol)
 		ax.ylabel = "Density x 100"
 
 		ax = Axis(f[2, 1])
-		lines!(ax, time, Xk3; label = species_names[3])
-		lines!(ax, time, Xk4; label = species_names[4])
+		lines!(ax, time, X3; label = species_names[3])
+		lines!(ax, time, X4; label = species_names[4])
 		axislegend(ax; position = :rb)
 		xlims!(ax, 0, 10)
 		ylims!(ax, 0, 0.3)
@@ -467,9 +471,9 @@ function post_graf(r, sol)
 		ax.ylabel = "Mole percent"
 		
 		ax = Axis(f[2, 2])
-		lines!(ax, time, Xk2; label = species_names[2])
-		lines!(ax, time, Xk5; label = species_names[5])
-		lines!(ax, time, Xk6; label = species_names[6])
+		lines!(ax, time, X2; label = species_names[2])
+		lines!(ax, time, X5; label = species_names[5])
+		lines!(ax, time, X6; label = species_names[6])
 
 		axislegend(ax; position = :rt)
 		xlims!(ax, 0, 10)
@@ -849,12 +853,13 @@ function IdealGasMixtureFlowChain(; name, Nc, density, kinetics)
 	]
 
 	elements = [source, reactor_1, reactor_2, sink]
+	# elements = [source, reactor_1, sink]
 	
 	return compose(ODESystem(eqs, t; name), elements)
 end
 
 # ╔═╡ 6dd5cdc7-563b-4bad-b7b7-29fff6428904
-chain = let
+chain, sol_chain = let
 	@info("Creating chain of reactors...")
 
 	kin_module  = WallyToolbox.Graf2007
@@ -886,7 +891,7 @@ chain = let
 	
 		chain.reactor_2.V => V
 		chain.reactor_2.W => W
-	];
+	]
 
 	u0 = [
 		chain.reactor_1.T => ustrip(ops.T)
@@ -896,22 +901,35 @@ chain = let
 		chain.reactor_2.T => ustrip(ops.T)
 		chain.reactor_2.p => ustrip(ops.p)
 		chain.reactor_2.Y => Y0
-	];
+	]
 
 	prob = ODEProblem(chain, u0, (0.0, 10.0), ps);
+	
 	sol = solve(prob;
 		alg_hints = :stiff,
-		dtmax     = 0.01,
-		abstol    = 1.0e-09
+		# dtmax     = 0.01,
+		abstol    = 1.0e-08
 	)
 
-	# post_graf(r, sol)
-	
-	sol
-end
+	chain, sol
+end;
 
 # ╔═╡ e0db9152-5762-418e-8f4c-abdba226f7a1
-
+let
+	sol = sol_chain
+	
+	post_graf(
+		sol[:t],
+		sol[chain.reactor_1.ρ],
+		100sol[chain.reactor_1.X[1]],
+		100sol[chain.reactor_1.X[2]],
+		100sol[chain.reactor_1.X[3]],
+		100sol[chain.reactor_1.X[4]],
+		100sol[chain.reactor_1.X[5]],
+		100sol[chain.reactor_1.X[6]],
+		100sol[chain.reactor_1.X[7]]
+	)
+end
 
 # ╔═╡ 4565cbef-ec91-4864-8664-2c87d420e4a1
 md"""
@@ -1046,6 +1064,7 @@ end
 # ╟─595832e1-5647-42d4-b1fe-3cb69db0fe0d
 # ╟─67aece96-edc2-4c70-941f-cc551c9968df
 # ╟─f9482270-952f-4f5d-9ca0-89c4b7cd50ad
+# ╟─0ebd63c8-b2da-4b9b-b79b-1eab0ca9718b
 # ╟─c2a6d64c-9af3-49ab-bbb6-8bbb2eb87386
 # ╟─e8ba3f51-d103-41ca-987f-8e6a0b37c7b2
 # ╟─61fb90ca-4746-4ea9-9ad6-7831270ce610
@@ -1067,9 +1086,9 @@ end
 # ╟─c16b0f0a-02be-45b6-9935-d543fbf80dc5
 # ╟─0e6351b3-e00d-4e55-9ff1-42a4f4625d64
 # ╟─6405ee87-a1d6-4a82-94a5-703616875628
-# ╟─d4a184f7-6f2a-411b-8b1c-a54fcc2c6244
+# ╠═d4a184f7-6f2a-411b-8b1c-a54fcc2c6244
 # ╠═6dd5cdc7-563b-4bad-b7b7-29fff6428904
-# ╠═e0db9152-5762-418e-8f4c-abdba226f7a1
+# ╟─e0db9152-5762-418e-8f4c-abdba226f7a1
 # ╟─4565cbef-ec91-4864-8664-2c87d420e4a1
 # ╟─a0d9b9d2-5dbf-436e-8999-8a684e2b5534
 # ╟─78542421-ff40-4c7c-b04f-e175bcf8a171
