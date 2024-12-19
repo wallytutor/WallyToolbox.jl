@@ -706,381 +706,212 @@ md"""
 ### Arbitrary species and closures
 """
 
-# ╔═╡ 1a18597b-4c0c-48f0-810d-269985dab7a1
-@warn("DO NOT DELETE THESE DRAFTS!")
-# "A multicomponent mass flow port."
-# @connector MulticomponentFlowPort begin
-# 	@structural_parameters begin
-# 		Nc
-# 	end
-# 	@parameters begin
-# 		Yc[1:Nc] = zeros(Nc)
-# 	end
-# 	@variables begin
-# 		ṁ(t),
-# 			[unit = u"kg/s"]#, connect = Flow]
-# 		(Y(t))[1:Nc] = Yc,
-# 			[unit = u"kg/kg"]
-# 	end
-# end
-#
-# @connector MixtureFlowPort begin
-# 	@extend MulticomponentFlowPort()
-# 	@variables begin
-# 		T(t),
-# 			[unit = u"K"]
-# 		p(t),
-# 			[unit = u"Pa"]
-# 	end
-# end
-#
-# "Mixture chamber with inlet/outlet flows."
-# @mtkmodel MixtureFlowChamber begin
-# 	@structural_parameters begin
-# 		Nc
-# 	end
-# 	@components begin
-# 		ustream = MixtureFlowPort(; Nc)
-# 		dstream = MixtureFlowPort(; Nc)
-# 	end
-# 	@parameters begin
-# 		W[1:Nc],
-# 			[unit = u"kg/mol"]
-# 	end
-# 	@variables begin
-# 		ṁ(t),
-# 			[unit = u"kg/s"]
-# 		ρ(t),
-# 			[unit = u"kg/m^3"]
-# 		T(t),
-# 			[unit = u"K"]
-# 		p(t),
-# 			[unit = u"Pa"]
-# 		Y(t)[1:Nc] = 0u"kg/kg",
-# 			[unit = u"kg/kg"]
-# 		X(t)[1:Nc] = 0u"mol/mol",
-# 			[unit = u"mol/mol"]
-# 	end
-# 	@equations begin
-# 		# Mass conservation:
-# 		0 ~ ustream.ṁ + dstream.ṁ
-#
-# 		# Inherits from ustream:
-# 		ṁ ~ ustream.ṁ
-#
-# 		# Propagates dstream:
-# 		Y ~ dstream.Y
-#
-# 		# Observable for post-processing:
-# 		scalarize(X ~ mass2molefraction(Y, W))...
-# 	end
-# end
-#
-# "Constant volume mixture perfect-stirred reactor."
-# @mtkmodel MixtureFlowReactor begin
-# 	@extend MixtureFlowChamber()
-# 	@structural_parameters begin
-# 		density
-# 		kinetics
-# 	end
-# 	@parameters begin
-# 		V,
-# 			[unit = u"m^3"]
-# 	end
-# 	@variables begin
-# 		ω̇(t)[1:Nc] = 0u"mol/(m^3*s)",
-# 			[unit = u"mol/(m^3*s)"]
-# 	end
-# 	@equations begin
-# 		# Reactor equations:
-# 		scalarize(@. ρ * Dt(Y) ~ (ṁ / V) * (ustream.Y - Y) + ω̇ * W)...
-#
-# 		# System closure:
-# 		ρ ~ density(T, p, Y, W)
-# 		scalarize(ω̇ ~ kinetics(T, ρ, Y, W))...
-#	
-# 		# XXX: this should later be computed
-# 		Dt(T) ~ 0
-# 		Dt(p) ~ 0
-# 	end
-# end
+# ╔═╡ 30c4818b-823a-4ff0-b32b-58d113296819
+md"""
+After long time trying to get the current macro API to work, it became clear that `@connector` is not ready for vectorized operations. Some discussion is provided for future reference in [this thread](https://github.com/SciML/ModelingToolkit.jl/issues/1432) and [this one](https://github.com/SciML/ModelingToolkit.jl/issues/2394). At some point the code will be refactored to get the goal implementation as per the API.
 
-# ╔═╡ ec643577-ae2c-4319-b942-8555a02edcd3
-begin
-	"A multicomponent mass flow port with state variables."
-	@connector MixtureFlowPort begin
-		@structural_parameters begin
-			Nc
-		end
-		@variables begin
-			ṁ(t),
-				[unit = u"kg/s", connect = Flow]
-			T(t),
-				[unit = u"K"]
-			p(t),
-				[unit = u"Pa"]
-			Y(t)[1:Nc] = 0u"kg/kg",
-				[unit = u"kg/kg"]
-		end
+Below we provide the *function-like* implementation of reusable blocks.
+"""
+
+# ╔═╡ 5d84b945-16a2-45c3-b6d8-4719eaff8cbe
+function mixture_state(kind)
+end
+
+# ╔═╡ 87db96fa-4cd1-4e30-b082-b1ee2a3e44a9
+"A multicomponent mass flow port with state variables."
+function MixtureFlowPort(; name, Nc)
+	sts = @variables begin
+		ṁ(t)       , [unit = u"kg/s"]
+		T(t)       , [unit = u"K"]
+		p(t)       , [unit = u"Pa"]
+		Y(t)[1:Nc] , [unit = u"kg/kg"]
 	end
 
-	"Specified state and mass flow rate source."
-	@mtkmodel MixtureFlowSource begin
-		@structural_parameters begin
-			Nc
-		end
-		@components begin
-			dstream = MixtureFlowPort(; Nc)
-		end
-		@parameters begin
-			ṁ,
-				[unit = u"kg/s"]
-			T,
-				[unit = u"K"]
-			p,
-				[unit = u"Pa"]
-			Y[1:Nc],
-				[unit = u"kg/kg", tunable = false]
-		end
-		@equations begin
-			dstream.ṁ ~ -ṁ
-			dstream.T ~ T
-			dstream.p ~ p
-			scalarize(dstream.Y ~ Y)...
-		end
+	return ODESystem(Equation[], t, sts, []; name)
+end
+
+# ╔═╡ 5273fb71-b48e-4727-8ee1-14bb4e795230
+"Specified state and mass flow rate source."
+function MixtureFlowSource(; name, Nc)
+	@named dstream = MixtureFlowPort(; Nc)
+
+	@parameters begin
+		ṁ       , [unit = u"kg/s"]
+		T       , [unit = u"K"]
+		p       , [unit = u"Pa"]
+		Y[1:Nc] , [unit = u"kg/kg", tunable = false]
 	end
 
-	"Mixture flow sink for system closure."
-	@mtkmodel MixtureFlowSink begin
-		@structural_parameters begin
-			Nc
-		end
-		@components begin
-			ustream = MixtureFlowPort(; Nc)
-		end
-		@variables begin
-			ṁ(t),
-				[unit = u"kg/s"]
-			T(t),
-				[unit = u"K"]
-			p(t),
-				[unit = u"Pa"]
-			Y(t)[1:Nc] = 0u"kg/kg",
-				[unit = u"kg/kg"]
-		end
-		@equations begin
-			ustream.ṁ ~ ṁ
-			ustream.T ~ T
-			ustream.p ~ p
-			scalarize(ustream.Y ~ Y)...
-		end
+	eqs = [
+		dstream.ṁ ~ -ṁ
+		dstream.T ~ T
+		dstream.p ~ p
+		scalarize(dstream.Y ~ Y)...
+	]
+
+	return compose(ODESystem(eqs, t; name), dstream)
+end
+
+# ╔═╡ c16b0f0a-02be-45b6-9935-d543fbf80dc5
+"Mixture flow sink for system closure."
+function MixtureFlowSink(; name, Nc)
+	@named ustream = MixtureFlowPort(; Nc)
+
+	sts = @variables begin
+		ṁ(t)       , [unit = u"kg/s"]
+		T(t)       , [unit = u"K"]
+		p(t)       , [unit = u"Pa"]
+		Y(t)[1:Nc] , [unit = u"kg/kg"]
 	end
 
-	"Constant volume mixture perfect-stirred reactor."
-	@mtkmodel MixtureFlowReactor begin
-		@structural_parameters begin
-			Nc
-			density
-			kinetics
-		end
-		@components begin
-			ustream = MixtureFlowPort(; Nc)
-			dstream = MixtureFlowPort(; Nc)
-		end
-		@parameters begin
-			V,
-				[unit = u"m^3"]
-			W[1:Nc],
-				[unit = u"kg/mol"]
-		end
-		@variables begin
-			ṁ(t),
-				[unit = u"kg/s"]
-			ρ(t),
-				[unit = u"kg/m^3"]
-			T(t),
-				[unit = u"K"]
-			p(t),
-				[unit = u"Pa"]
-			Y(t)[1:Nc] = 0u"kg/kg",
-				[unit = u"kg/kg"]
-			X(t)[1:Nc] = 0u"mol/mol",
-				[unit = u"mol/mol"]
-			ω̇(t)[1:Nc] = 0u"mol/(m^3*s)",
-				[unit = u"mol/(m^3*s)"]
-		end
-		@equations begin
-			# Mass conservation:
-			0 ~ ustream.ṁ + dstream.ṁ
+	eqs = [
+		ustream.ṁ ~ ṁ
+		ustream.T ~ T
+		ustream.p ~ p
+		scalarize(ustream.Y ~ Y)...
+	]
+
+	return compose(ODESystem(eqs, t, sts, []; name), ustream)
+end
+
+# ╔═╡ 0e6351b3-e00d-4e55-9ff1-42a4f4625d64
+"Constant volume mixture perfect-stirred reactor."
+function MixtureFlowReactor(; name, Nc, density, kinetics)
+	@named ustream = MixtureFlowPort(; Nc)
+	@named dstream = MixtureFlowPort(; Nc)
+
+	ps = @parameters begin
+		V       , [unit = u"m^3"]
+		W[1:Nc] , [unit = u"kg/mol"]
+	end
 	
-			# Inherits from ustream:
-			ṁ ~ ustream.ṁ
-	
-			# Propagates dstream:
-			Y ~ dstream.Y
-			
-			# Observable for post-processing:
-			scalarize(X ~ mass2molefraction(Y, W))...
-			
-			# Reactor equations:
-			scalarize(@. ρ * Dt(Y) ~ (ṁ / V) * (ustream.Y - Y) + ω̇ * W)...
-	
-			# System closure:
-			ρ ~ density(T, p, Y, W)
-			scalarize(ω̇ ~ kinetics(T, ρ, Y, W))...
-			
-			# XXX: this should later be computed
-			Dt(T) ~ 0
-			Dt(p) ~ 0
-		end
+	sts = @variables begin
+		ṁ(t)       , [unit = u"kg/s"]
+		ρ(t)       , [unit = u"kg/m^3"]
+		T(t)       , [unit = u"K"]
+		p(t)       , [unit = u"Pa"]
+		Y(t)[1:Nc] , [unit = u"kg/kg"]
+		X(t)[1:Nc] , [unit = u"mol/mol"]
+		ω̇(t)[1:Nc] , [unit = u"mol/(m^3*s)"]
 	end
-end;
+	
+	eqs = [
+		# Mass conservation:
+		0 ~ ustream.ṁ + dstream.ṁ
 
-# ╔═╡ 6f7a0fc3-dee9-4063-91eb-57e94bad5c4f
+		# Inherits from ustream:
+		ṁ ~ dstream.ṁ
+
+		# Propagates dstream:
+		Y ~ dstream.Y
+		
+		# Observable for post-processing:
+		scalarize(X ~ mass2molefraction(Y, W))...
+		
+		# Reactor equations:
+		scalarize(@. ρ * Dt(Y) ~ (ṁ / V) * (ustream.Y - Y) + ω̇ * W)...
+
+		# System closure:
+		ρ ~ density(T, p, Y, W)
+		scalarize(ω̇ ~ kinetics(T, ρ, Y, W))...
+		
+		# XXX: this should later be computed
+		Dt(T) ~ 0
+		Dt(p) ~ 0
+	]
+
+	return compose(ODESystem(eqs, t, sts, ps; name), ustream, dstream)
+end
+
+# ╔═╡ 6405ee87-a1d6-4a82-94a5-703616875628
+"Replace `@connector` for `MixtureFlowPorts`."
+function plug(d, u)
+	return [
+		d.ṁ ~ u.ṁ
+		d.T ~ u.T
+		d.p ~ u.p
+		scalarize(d.Y ~ u.Y)...
+	]
+end
+
+# ╔═╡ d4a184f7-6f2a-411b-8b1c-a54fcc2c6244
 "User-defined chain of ideal gas reactors."
-@mtkmodel IdealGasMixtureFlowChain begin
-	@structural_parameters begin
-		Nc
-		density
-		kinetics
-	end
-	@components begin
-		source    = MixtureFlowSource(; Nc)
-		reactor_1 = MixtureFlowReactor(; Nc, density, kinetics)
-		sink      = MixtureFlowSink(; Nc)
-	end
-	@equations begin
-		connect(   source.dstream, reactor_1.ustream)
-		connect(reactor_1.dstream,      sink.ustream)
-	end
-end
-		# connect(reactor_1.dstream, reactor_2.ustream)
-		# connect(reactor_2.dstream, reactor_3.ustream)
-		# reactor_2 = MixtureFlowReactor(; Nc, density, kinetics)
-		# reactor_3 = MixtureFlowReactor(; Nc, density, kinetics)
+function IdealGasMixtureFlowChain(; name, Nc, density, kinetics)
+	@named source    = MixtureFlowSource(; Nc)
+	@named reactor_1 = MixtureFlowReactor(; Nc, density, kinetics)
+	@named reactor_2 = MixtureFlowReactor(; Nc, density, kinetics)
+	@named sink      = MixtureFlowSink(; Nc)
 
-# ╔═╡ 07fc023e-6c24-4e83-8dac-4dc881499eef
-"Ideal gas density state function."
-function ideal_gas_density(T, p, Y, W)
-	return p * meanmolecularmass(Y, W) / (R * T)
+	eqs = [	
+		plug(   source.dstream, reactor_1.ustream)
+		plug(reactor_1.dstream, reactor_2.ustream)
+		plug(reactor_2.dstream,      sink.ustream)
+	]
+
+	elements = [source, reactor_1, reactor_2, sink]
+	
+	return compose(ODESystem(eqs, t; name), elements)
 end
 
-# ╔═╡ 73425507-4f37-496b-96fa-25f47b873dd0
-chain_mix, chain_x0, chain_ps = let
-	@info("Creating model...")
+# ╔═╡ 6dd5cdc7-563b-4bad-b7b7-29fff6428904
+chain = let
+	@info("Creating chain of reactors...")
 
 	kin_module  = WallyToolbox.Graf2007
 	kin_manager = kin_module.Model()
-
-	# @named r = IdealGasMixtureFlowChain(;
-	@mtkbuild sys = IdealGasMixtureFlowChain(;
-		Nc       = length(kin_manager.names),
-		density  = ideal_gas_density,
-		kinetics = (T, ρ, Y, W) -> kin_module.progress_rate(T, ρ, Y, W)
-	)
 	
+	Nc = length(kin_manager.names)
+	
+	density(T, p, Y, W) = p * meanmolecularmass(Y, W) / (R * T)
+	kinetics(T, ρ, Y, W) = kin_module.progress_rate(T, ρ, Y, W)
+
+	@mtkbuild chain = IdealGasMixtureFlowChain(; Nc, density, kinetics)
+	@info(equations(chain))
+
 	Y0 = graf_y0(kin_manager)
 	Ys = graf_ys(kin_manager)	
 	ops = graf_ops()
-
-	x0 = [
-		sys.reactor_1.T => ustrip(ops.T)
-		sys.reactor_1.p => ustrip(ops.p)
-		sys.reactor_1.Y => Y0
-		
-		Dt(sys.reactor_1.Y)[1] => 0
-		Dt(sys.reactor_1.Y)[2] => 0
-		Dt(sys.reactor_1.Y)[3] => 0
-		Dt(sys.reactor_1.Y)[4] => 0
-		Dt(sys.reactor_1.Y)[5] => 0
-		Dt(sys.reactor_1.Y)[6] => 0
-		Dt(sys.reactor_1.Y)[7] => 0
-		Dt(sys.reactor_1.Y)[8] => 0
-		
-		# sys.reactor_2.T => ustrip(ops.T)
-		# sys.reactor_2.p => ustrip(ops.p)
-		# sys.reactor_2.Y => Y0
-		
-		# sys.reactor_3.T => ustrip(ops.T)
-		# sys.reactor_3.p => ustrip(ops.p)
-		# sys.reactor_3.Y => Y0
-
-		sys.sink.ṁ      => graf_ṁ(kin_manager, Ys, ops.Q)
-		sys.sink.T      => ustrip(ops.T)
-		sys.sink.p      => ustrip(ops.p)
-		sys.sink.Y      => Y0
-
-		# sys.source.dstream.Y => Ys
-		# sys.reactor_1.ustream.Y => Ys
-		# sys.reactor_1.dstream.Y => Ys
-		# sys.sink.ustream.Y => Ys
-	]
-
-	# TODO W should be the chain who gives these!
-	ps = [
-		sys.source.ṁ => graf_ṁ(kin_manager, Ys, ops.Q)
-		sys.source.Y => Ys
-		sys.source.T => ustrip(ops.T)
-		sys.source.p => ustrip(ops.p)
-		
-		sys.reactor_1.V => ustrip(pi * ops.R^2 * ops.L)
-		sys.reactor_1.W => kin_manager.molecular_masses
-		
-		# sys.reactor_2.V => ustrip(pi * ops.R^2 * ops.L)
-		# sys.reactor_2.W => kin_manager.molecular_masses
-		
-		# sys.reactor_3.V => ustrip(pi * ops.R^2 * ops.L)
-		# sys.reactor_3.W => kin_manager.molecular_masses
-	]
-
-	# prob = ODEProblem(sys, x0, (0.0, 10.0), ps)
 	
-	# sol = solve(prob;
-	# 	alg_hints = :stiff,
-	# 	dtmax     = 0.01,
-	# 	abstol    = 1.0e-09
-	# )
+	V = ustrip(pi * ops.R^2 * ops.L)
+	W = kin_manager.molecular_masses
+	
+	ps = [
+		chain.source.ṁ => graf_ṁ(kin_manager, Ys, ops.Q)
+		chain.source.Y => Ys
+		chain.source.T => ustrip(ops.T)
+		chain.source.p => ustrip(ops.p)
+		
+		chain.reactor_1.V => V
+		chain.reactor_1.W => W
+	
+		chain.reactor_2.V => V
+		chain.reactor_2.W => W
+	];
+
+	u0 = [
+		chain.reactor_1.T => ustrip(ops.T)
+		chain.reactor_1.p => ustrip(ops.p)
+		chain.reactor_1.Y => Y0
+	
+		chain.reactor_2.T => ustrip(ops.T)
+		chain.reactor_2.p => ustrip(ops.p)
+		chain.reactor_2.Y => Y0
+	];
+
+	prob = ODEProblem(chain, u0, (0.0, 10.0), ps);
+	sol = solve(prob;
+		alg_hints = :stiff,
+		dtmax     = 0.01,
+		abstol    = 1.0e-09
+	)
 
 	# post_graf(r, sol)
+	
+	sol
+end
 
-	sys, x0, ps
-end;
+# ╔═╡ e0db9152-5762-418e-8f4c-abdba226f7a1
 
-# ╔═╡ 3bf24123-061c-4ff2-b22d-5dd1254f338b
-# values(chain_mix.source)
-
-# ╔═╡ eec2b4ea-99b1-4636-87b3-4057b40302f8
-equations(chain_mix)
-
-# ╔═╡ 7fbcae10-6108-47c0-afd1-54277841d083
-parameters(chain_mix)
-
-# ╔═╡ 15990f21-09f9-432a-9ba4-70dae309d43c
-unknowns(chain_mix)
-
-# ╔═╡ 3340edc8-b0f9-47d4-bce1-723ca61f24b0
-chain_ps
-
-# ╔═╡ a9d86985-c6ca-4712-ac33-06b25d8d45f2
-chain_x0
-
-# ╔═╡ 9545511c-d0d5-4d3a-85e2-67a785b4f760
-# equations(chain_mix)
-
-# ╔═╡ 64e7bdba-1714-4842-a630-f90a1a7007ac
-# parameters(chain_mix.source), unknowns(chain_mix.source)
-
-# ╔═╡ f925daa5-51e7-47be-8f3b-5640083b3771
-# parameters(chain_mix.reactor_1), unknowns(chain_mix.reactor_1)
-
-# ╔═╡ 98470e24-2593-42ea-9796-1e34cdd78454
-# parameters(chain_mix.sink), unknowns(chain_mix.sink)
-
-# ╔═╡ 510bbc43-af2e-4841-928b-bc35d02d44f1
-# parameters(chain_mix), unknowns(chain_mix)
-
-# ╔═╡ 230f050f-00bd-4b3b-9c2f-d7b0ae0037e7
-# prob = ODEProblem(chain_mix, chain_x0, (0.0, 10.0), chain_ps)
 
 # ╔═╡ 4565cbef-ec91-4864-8664-2c87d420e4a1
 md"""
@@ -1201,7 +1032,7 @@ end
 # ╟─c6611b51-f83e-4c77-972d-2ff99808673b
 # ╟─6d22dc37-a583-4c80-83e3-eb3c10fa411e
 # ╟─5e252a2a-d44e-4678-83e7-83f9ebfe0ffb
-# ╠═c2b9ab8c-7b8d-49f8-afba-b2176ee5862b
+# ╟─c2b9ab8c-7b8d-49f8-afba-b2176ee5862b
 # ╟─703ff20d-f699-4720-a47c-061d3a425300
 # ╟─c4ad6410-a73f-4301-b08b-4d4fb2ef5653
 # ╟─c12d091e-4ff3-48be-8e20-f9bd4c0e3c19
@@ -1229,23 +1060,16 @@ end
 # ╟─dd020c3e-f621-4175-9d63-867bb14ddf0e
 # ╟─a9dc6cb2-fa1c-46b9-808f-c8706fc36e91
 # ╟─503fe098-11b4-47fb-bac1-84b6dc7a60e9
-# ╟─1a18597b-4c0c-48f0-810d-269985dab7a1
-# ╠═ec643577-ae2c-4319-b942-8555a02edcd3
-# ╠═6f7a0fc3-dee9-4063-91eb-57e94bad5c4f
-# ╟─07fc023e-6c24-4e83-8dac-4dc881499eef
-# ╠═73425507-4f37-496b-96fa-25f47b873dd0
-# ╠═3bf24123-061c-4ff2-b22d-5dd1254f338b
-# ╠═eec2b4ea-99b1-4636-87b3-4057b40302f8
-# ╠═7fbcae10-6108-47c0-afd1-54277841d083
-# ╠═15990f21-09f9-432a-9ba4-70dae309d43c
-# ╠═3340edc8-b0f9-47d4-bce1-723ca61f24b0
-# ╠═a9d86985-c6ca-4712-ac33-06b25d8d45f2
-# ╠═9545511c-d0d5-4d3a-85e2-67a785b4f760
-# ╠═64e7bdba-1714-4842-a630-f90a1a7007ac
-# ╠═f925daa5-51e7-47be-8f3b-5640083b3771
-# ╠═98470e24-2593-42ea-9796-1e34cdd78454
-# ╠═510bbc43-af2e-4841-928b-bc35d02d44f1
-# ╠═230f050f-00bd-4b3b-9c2f-d7b0ae0037e7
+# ╟─30c4818b-823a-4ff0-b32b-58d113296819
+# ╠═5d84b945-16a2-45c3-b6d8-4719eaff8cbe
+# ╟─87db96fa-4cd1-4e30-b082-b1ee2a3e44a9
+# ╟─5273fb71-b48e-4727-8ee1-14bb4e795230
+# ╟─c16b0f0a-02be-45b6-9935-d543fbf80dc5
+# ╟─0e6351b3-e00d-4e55-9ff1-42a4f4625d64
+# ╟─6405ee87-a1d6-4a82-94a5-703616875628
+# ╟─d4a184f7-6f2a-411b-8b1c-a54fcc2c6244
+# ╠═6dd5cdc7-563b-4bad-b7b7-29fff6428904
+# ╠═e0db9152-5762-418e-8f4c-abdba226f7a1
 # ╟─4565cbef-ec91-4864-8664-2c87d420e4a1
 # ╟─a0d9b9d2-5dbf-436e-8999-8a684e2b5534
 # ╟─78542421-ff40-4c7c-b04f-e175bcf8a171
