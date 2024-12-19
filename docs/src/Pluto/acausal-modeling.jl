@@ -57,7 +57,7 @@ begin
 	
 	NONNEGATIVE = (0.0, Inf)
 	FRACTION    = (0.0, 1.0)
-end
+end;
 
 # ╔═╡ 1473cb4b-d1a3-4724-a0de-3feb86d6238d
 function debug_validation(eqs)
@@ -376,6 +376,47 @@ md"""
 ### Arbitrary kinetics API
 """
 
+# ╔═╡ 0e52135e-f9ad-4dbb-a5ab-a747fdc6cd66
+# Initially fill reactors with N2 for Graf model.
+function graf_y0(kin; x0 = 1.0e-06)
+	X = zeros(length(kin.names))
+	X[1:end-1] .= x0
+	X[end] = 1 - sum(X[1:end-1])
+	return mole2massfraction(X, kin.molecular_masses)
+end
+
+# ╔═╡ 595832e1-5647-42d4-b1fe-3cb69db0fe0d
+# Mole fraction of acetylene (1) in system.
+function graf_ys(kin; x1 = 0.36, f1 = 0.998)
+	# Add acetylene impurities to initialization.
+	# NOTE: in reference thesis it was assumed 98% purity and acetone
+	# content of 1.8%, but that species is not available in Graf (2007).
+	X = zeros(size(kin.molecular_masses))
+	X[1] = (f1 - 0) * x1
+	X[4] = (1 - f1) * x1
+	X[end] = 1 - sum(X[1:end-1])
+
+	# Convert to mass fractions for the model.
+	return mole2massfraction(X, kin.molecular_masses)
+end
+
+# ╔═╡ 67aece96-edc2-4c70-941f-cc551c9968df
+function graf_ṁ(kin, Ys, Q)
+	M = meanmolecularmass(Ys, kin.molecular_masses)
+	ρ = P_REF * M / (GAS_CONSTANT * 273.15) * 1u"kg/m^3"
+	return ustrip((ρ * Q) |> us"kg/s")
+end
+
+# ╔═╡ f9482270-952f-4f5d-9ca0-89c4b7cd50ad
+# Case 6 of my PhD thesis
+graf_ops() = (
+	p = 5000u"Pa",
+	T = 1173.15u"K",
+	Q = 222u"cm^3/min",
+	R = 1.4u"cm",
+	L = 35u"cm",
+)
+
 # ╔═╡ c2a6d64c-9af3-49ab-bbb6-8bbb2eb87386
 function post_graf(r, sol)
 	species_names = WallyToolbox.Graf2007.NAMES
@@ -452,8 +493,9 @@ let
 	@named r = simple_psr(; ns)
 	@parameters Ẏₛ[1:ns] [unit = u"1/s", tunable = false]
 
-	C = psr_species_concentration(r)
-	ω = kinetics.progress_rate(r.T, r.p, C)
+	# C = psr_species_concentration(r)
+	# ω = kinetics.progress_rate(r.T, r.p, C)
+	ω = kinetics.progress_rate(r.T, r.ρ, r.Yₖ, r.Wₖ)
 	
 	eqs = [
 		# Fix inlet composition:
@@ -470,57 +512,23 @@ let
 	sys = compose(ODESystem(eqs, t; name = :graf), r)
 	sys = structural_simplify(sys)
 	@info(equations(sys))
+	# @info(unknowns(sys)) => Notice derivatives are listed!
 
-	# Initially filled with N2
-	Y0 = let
-		X = zeros(ns)
-		X[1:end-1] .= 1.0e-06
-		X[end] = 1 - sum(X[1:end-1])
-		mole2massfraction(X, kin.molecular_masses)
-	end
-	
-	# Source gas is 36% *C2H2*
-	Ys = let 
-	    # Mole fraction of acetylene (1) in system.
-	    x1 = 0.36
-	
-	    # Add acetylene impurities to initialization.
-	    # NOTE: in reference thesis it was assumed 98% purity and acetone
-	    # content of 1.8%, but that species is not available in Graf (2007).
-	    X = zeros(size(kin.molecular_masses))
-	    X[1] = 0.998 * x1
-	    X[4] = 0.002 * x1
-	    X[end] = 1 - sum(X[1:end-1])
-	
-	    # Convert to mass fractions for the model.
-	    mole2massfraction(X, kin.molecular_masses)
-	end
-	
 	# Case 6 of my PhD thesis
-	p = 5000u"Pa"
-	T = 1173.15u"K"
-	Q = 222u"cm^3/min"
-	
-	# Dimensions of reactor [m].
-	R = 1.4u"cm"
-	L = 35u"cm"
-	
-	# Reference mass flow rate
-	M = meanmolecularmass(Ys, kin.molecular_masses)
-	ρ = P_REF * M / (GAS_CONSTANT * 273.15) * 1u"kg/m^3"
-	V = pi * R^2 * L
-	ṁ = ustrip((ρ * Q) |> us"kg/s")
-	
+	Y0 = graf_y0(kin)
+	Ys = graf_ys(kin; x1 = 0.36)	
+	ops = graf_ops()
+
 	x0 = [
-		r.ṁ  => ṁ
-		r.p  => ustrip(p)
-		r.T  => ustrip(T)
+		r.ṁ  => graf_ṁ(kin, Ys, ops.Q)
+		r.p  => ustrip(ops.p)
+		r.T  => ustrip(ops.T)
 		r.Yₖ => Y0
 		r.Yₛ => Ys
 	]
 
 	ps = [
-		r.V  => ustrip(V)
+		r.V  => ustrip(pi * ops.R^2 * ops.L)
 		r.Wₖ => kin.molecular_masses
 		Ẏₛ   => zeros(ns)
 	]
@@ -788,11 +796,17 @@ end
 		ustream = MixtureFlowPort(Nc=Nc)
 		dstream = MixtureFlowPort(Nc=Nc)
 	end
+	@parameters begin
+		W[1:Nc],
+			[unit = u"kg/mol"]
+	end
 	@variables begin
 		ṁ(t),
 			[unit = u"kg/s"]
 		Y(t)[1:Nc] = 0u"kg/kg",
 			[unit = u"kg/kg"]
+		X(t)[1:Nc] = 0u"mol/mol",
+			[unit = u"mol/mol"]
 		ρ(t),
 			[unit = u"kg/m^3"]
 		T(t),
@@ -801,7 +815,11 @@ end
 			[unit = u"Pa"]
 	end
 	@equations begin
+		# Mass conservation:
 		0 ~ ustream.ṁ + dstream.ṁ
+
+		# Observable for post-processing:
+		scalarize(X ~ mass2molefraction(Y, W))...
 	end
 end
 
@@ -811,14 +829,15 @@ end
 	@extend MixtureFlowChamber()
 	@structural_parameters begin
 		density
+		kinetics
 	end
 	@parameters begin
 		V,
 			[unit = u"m^3"]
-
-		# XXX: this should probably be elsewhere!
-		W[1:Nc],
-			[unit = u"kg/mol"]
+	end
+	@variables begin
+		ω̇(t)[1:Nc] = 0u"mol/(m^3*s)",
+			[unit = u"mol/(m^3*s)"]
 	end
 	@equations begin
 		# Inherits from ustream:
@@ -828,21 +847,16 @@ end
 		Y ~ dstream.Y
 
 		# Reactor equations:
-		scalarize(ρ * Dt(Y) ~ (ṁ / V) * (ustream.Y - Y))...
-		ρ ~ density(T, p, Y, W)
+		scalarize(ρ * Dt(Y) ~ (ṁ / V) * (ustream.Y - Y) + ω̇ .* W)...
 
+		# System closure:
+		ρ ~ density(T, p, Y, W)
+		scalarize(ω̇ ~ kinetics(T, ρ, Y, W))...
+		
+		# XXX: this should later be computed
 		Dt(T) ~ 0
 		Dt(p) ~ 0
-		# XXX: this should later be computed
-		# T ~ ustream.T
-		# p ~ ustream.p
 	end
-end
-
-# ╔═╡ 07fc023e-6c24-4e83-8dac-4dc881499eef
-"Ideal gas density state function."
-function ideal_gas_density(T, p, Y, W)
-	return p * meanmolecularmass(Y, W) / (R * T)
 end
 
 # ╔═╡ 6f7a0fc3-dee9-4063-91eb-57e94bad5c4f
@@ -850,13 +864,15 @@ end
 @mtkmodel IdealGasMixtureFlowChain begin
 	@structural_parameters begin
 		Nc
+		density
+		kinetics
 	end
 	@components begin
-		source    = MixtureFlowSource(Nc=Nc)
-		reactor_1 = MixtureFlowReactor(Nc=Nc, density=ideal_gas_density)
-		reactor_2 = MixtureFlowReactor(Nc=Nc, density=ideal_gas_density)
-		reactor_3 = MixtureFlowReactor(Nc=Nc, density=ideal_gas_density)
-		sink      = MixtureFlowSink(Nc=Nc)
+		source    = MixtureFlowSource(; Nc)
+		reactor_1 = MixtureFlowReactor(; Nc, density, kinetics)
+		reactor_2 = MixtureFlowReactor(; Nc, density, kinetics)
+		reactor_3 = MixtureFlowReactor(; Nc, density, kinetics)
+		sink      = MixtureFlowSink(; Nc)
 	end
 	@equations begin
 		connect(   source.dstream, reactor_1.ustream)
@@ -866,15 +882,96 @@ end
 	end
 end
 
+# ╔═╡ 07fc023e-6c24-4e83-8dac-4dc881499eef
+"Ideal gas density state function."
+function ideal_gas_density(T, p, Y, W)
+	return p * meanmolecularmass(Y, W) / (R * T)
+end
+
 # ╔═╡ 73425507-4f37-496b-96fa-25f47b873dd0
-let
-	kinetics = WallyToolbox.Graf2007
+chain_mix, chain_x0, chain_ps = let
+	@info("Creating model...")
+
+	kin_module  = WallyToolbox.Graf2007
+	kin_manager = kin_module.Model()
+
+	@mtkbuild sys = IdealGasMixtureFlowChain(;
+		Nc       = length(kin_manager.names),
+		density  = ideal_gas_density,
+		kinetics = (T, ρ, Y, W) -> kin_module.progress_rate(T, ρ, Y, W)
+	)
+	# @info(equations(sys))
 	
-	kin = kinetics.Model()
-	Nc = length(kin.names)
+	Y0 = graf_y0(kin_manager)
+	Ys = graf_ys(kin_manager)	
+	ops = graf_ops()
+
+	x0 = [
+		sys.reactor_1.p => ustrip(ops.p)
+		sys.reactor_2.p => ustrip(ops.p)
+		sys.reactor_3.p => ustrip(ops.p)
+
+		sys.reactor_1.T => ustrip(ops.T)
+		sys.reactor_2.T => ustrip(ops.T)
+		sys.reactor_3.T => ustrip(ops.T)
+		
+		sys.reactor_1.Y => Y0
+		sys.reactor_2.Y => Y0
+		sys.reactor_3.Y => Y0
+
+		# Dt(sys.reactor_1.Y) => zeros(8)
+		# Dt(sys.reactor_2.Y) => zeros(8)
+		# Dt(sys.reactor_3.Y) => zeros(8)
+		
+		# sys.sink.ṁ      => graf_ṁ(kin_manager, Ys, ops.Q)
+		# sys.sink.p      => ustrip(ops.p)
+		# sys.sink.T      => ustrip(ops.T)
+		# sys.sink.Y      => Y0
+	]
+
+	ps = [
+		sys.source.ṁ => graf_ṁ(kin_manager, Ys, ops.Q)
+		sys.source.Y => Ys
+		sys.source.p => ustrip(ops.p)
+		sys.source.T => ustrip(ops.T)
+		
+		sys.reactor_1.V => ustrip(pi * ops.R^2 * ops.L)
+		sys.reactor_2.V => ustrip(pi * ops.R^2 * ops.L)
+		sys.reactor_3.V => ustrip(pi * ops.R^2 * ops.L)
+
+		# TODO it should be the chain who gives these!
+		sys.reactor_1.W => kin_manager.molecular_masses
+		sys.reactor_2.W => kin_manager.molecular_masses
+		sys.reactor_3.W => kin_manager.molecular_masses
+	]
 	
-	@mtkbuild flow_chain = IdealGasMixtureFlowChain(Nc=Nc)
+	# prob = ODEProblem(sys, x0, (0.0, 10.0), ps)
+	
+	# sol = solve(prob;
+	# 	alg_hints = :stiff,
+	# 	dtmax     = 0.01,
+	# 	abstol    = 1.0e-09
+	# )
+
+	# post_graf(r, sol)
+
+	sys, x0, ps
 end;
+
+# ╔═╡ 7fbcae10-6108-47c0-afd1-54277841d083
+parameters(chain_mix)
+
+# ╔═╡ 15990f21-09f9-432a-9ba4-70dae309d43c
+unknowns(chain_mix)
+
+# ╔═╡ 3340edc8-b0f9-47d4-bce1-723ca61f24b0
+chain_ps
+
+# ╔═╡ 9545511c-d0d5-4d3a-85e2-67a785b4f760
+
+
+# ╔═╡ 8b7cdf94-39ea-4edc-bfb0-b7efdd63e4f5
+# chain_mix
 
 # ╔═╡ c063ffbb-11f3-43b0-9c2a-fb70d08d81a7
 # 	@mtkmodel OnePort begin
@@ -891,12 +988,11 @@ end;
 # 			(Yₖ(t))[1:Ns], [unit = u"kg/kg"]
 # 			(Xₛ(t))[1:Ns], [unit = u"mol/mol"]
 # 			(Xₖ(t))[1:Ns], [unit = u"mol/mol"]
-# 			(ω̇ₖ(t))[1:Ns], [unit = u"mol/(m^3*s)"]
 # 	    end
 # 	    @equations begin
 # 	        0 ~ p.ṁ + n.ṁ
 # 	        ṁ ~ p.ṁ
-# 			# scalarize(Xₛ ~ mass2molefraction(Yₛ, Wₖ))...
+# 			# 
 # 			# scalarize(Xₖ ~ mass2molefraction(Yₖ, Wₖ))...
 # 	    end
 # 	end
@@ -1042,8 +1138,12 @@ end
 # ╟─eafe7043-b732-441b-b226-bd45b7da4ffd
 # ╟─f268e793-e3db-444d-9814-c711b3097f45
 # ╟─1ba323c3-ad6e-4083-9c75-97c4f19ba657
+# ╟─0e52135e-f9ad-4dbb-a5ab-a747fdc6cd66
+# ╟─595832e1-5647-42d4-b1fe-3cb69db0fe0d
+# ╟─67aece96-edc2-4c70-941f-cc551c9968df
+# ╟─f9482270-952f-4f5d-9ca0-89c4b7cd50ad
 # ╟─c2a6d64c-9af3-49ab-bbb6-8bbb2eb87386
-# ╠═e8ba3f51-d103-41ca-987f-8e6a0b37c7b2
+# ╟─e8ba3f51-d103-41ca-987f-8e6a0b37c7b2
 # ╟─61fb90ca-4746-4ea9-9ad6-7831270ce610
 # ╟─84262231-3269-45b4-9dca-0ab510567187
 # ╟─71a42560-2dd7-468f-a484-57a51ba01615
@@ -1058,13 +1158,18 @@ end
 # ╟─503fe098-11b4-47fb-bac1-84b6dc7a60e9
 # ╟─ec643577-ae2c-4319-b942-8555a02edcd3
 # ╟─49360556-1410-441a-93a4-b62e446535e9
-# ╟─42d983ca-93d1-4c68-9300-0c037ce0d62b
+# ╠═42d983ca-93d1-4c68-9300-0c037ce0d62b
 # ╟─b63805db-fa1a-4237-9290-45c9bd898eef
 # ╟─a6656316-c3ca-491f-8b46-738d260a7118
-# ╠═15aa86f5-55f9-4212-b22f-9de489fc050f
+# ╟─15aa86f5-55f9-4212-b22f-9de489fc050f
+# ╟─6f7a0fc3-dee9-4063-91eb-57e94bad5c4f
 # ╟─07fc023e-6c24-4e83-8dac-4dc881499eef
-# ╠═6f7a0fc3-dee9-4063-91eb-57e94bad5c4f
 # ╠═73425507-4f37-496b-96fa-25f47b873dd0
+# ╠═7fbcae10-6108-47c0-afd1-54277841d083
+# ╠═15990f21-09f9-432a-9ba4-70dae309d43c
+# ╠═3340edc8-b0f9-47d4-bce1-723ca61f24b0
+# ╠═9545511c-d0d5-4d3a-85e2-67a785b4f760
+# ╠═8b7cdf94-39ea-4edc-bfb0-b7efdd63e4f5
 # ╠═c063ffbb-11f3-43b0-9c2a-fb70d08d81a7
 # ╟─4565cbef-ec91-4864-8664-2c87d420e4a1
 # ╟─a0d9b9d2-5dbf-436e-8999-8a684e2b5534
