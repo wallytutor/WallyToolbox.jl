@@ -5,6 +5,9 @@
 # Conda (PythonCall)
 .CondaPkg/
 
+# Obsidian workspace status
+docs/.obsidian/workspace.json
+
 # Scripts
 build.ps1
 
