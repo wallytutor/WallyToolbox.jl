@@ -8,7 +8,7 @@ using InteractiveUtils
 begin
     @info("Initializing toolbox...")
     using Pkg
-    
+
     open("pluto_init.log", "w") do logs
         Pkg.activate(ENV["WALLYROOT"]; io=logs)
         Pkg.instantiate(; io=logs)
@@ -21,7 +21,7 @@ begin
 
     using PlutoLinks
     using PlutoUI: TableOfContents
-        
+
     TableOfContents()
 end
 
@@ -54,7 +54,7 @@ md"""
 # ╔═╡ a4d95b96-ad6a-4505-a452-8ad80e21b328
 begin
 	@info("Constants...")
-	
+
 	NONNEGATIVE = (0.0, Inf)
 	FRACTION    = (0.0, 1.0)
 end;
@@ -190,24 +190,24 @@ let
 	# XXX: literals are not accepted!
 	@parameters Ẏₛ[1:ns] [unit = u"1/s", tunable = false]
 	@named r1 = simple_psr(; ns)
-	
+
 	eqs = [
 		# Fix inlet composition:
 		scalarize(Dt(r1.Yₛ) ~ Ẏₛ)...
-		
+
 		# Apply equation of state:
 		r1.ρ ~ psr_density(r1)
 
 		# Apply rate equations:
 		scalarize(r1.ω̇ₖ ~ psr_kinetics(r1))...
 	]
-	
+
 	cr1 = compose(ODESystem(eqs, t; name = :cr1), r1)
 	sys = structural_simplify(cr1)
 	@info(equations(sys))
 
 	W = [0.030, 0.015]
-	
+
 	x0 = [
 		r1.ṁ => 1.0
 		r1.p => 101325
@@ -215,9 +215,9 @@ let
 		r1.Yₖ => [1, 0]
 		r1.Yₛ => [1, 0]
 	]
-	
+
 	ps = [r1.Wₖ => W, Ẏₛ => [0.0, 0.0]]
-	
+
 	prob = ODEProblem(sys, x0, (0.0, 10.0), ps)
 	sol = solve(prob)
 
@@ -227,10 +227,10 @@ let
 	Yk2 = sol[r1.Yₖ[2]]
 	Ys1 = sol[r1.Yₛ[1]]
 	Ys2 = sol[r1.Yₛ[2]]
-	
+
 	with_theme(WALLYMAKIETHEME) do
 		f = Figure(size = (650, 250))
-		
+
 		ax = Axis(f[1, 1])
 		lines!(ax, time, Yk1; label = "1")
 		lines!(ax, time, Yk2; label = "2")
@@ -240,7 +240,7 @@ let
 
 		ax.xlabel = "Time"
 		ax.ylabel = "Mass fraction"
-		
+
 		ax = Axis(f[1, 2])
 		lines!(ax, time, ρ; label = "ρ")
 		axislegend(ax)
@@ -249,7 +249,7 @@ let
 
 		ax.xlabel = "Time"
 		ax.ylabel = "Density"
-		
+
 		f
 	end
 end
@@ -267,18 +267,18 @@ let
 	@parameters Ẏₛ[1:ns] [unit = u"1/s", tunable = false]
 	@named r1 = simple_psr(; ns)
 	@named r2 = simple_psr(; ns)
-	
+
 	eqs = [
 		# Fixed conditions.
 		scalarize(Dt(r1.Yₛ) ~ Ẏₛ)...
-		
+
 		# Equation of state.
 		r1.ρ ~ psr_density(r1)
 		r2.ρ ~ psr_density(r2)
 
 		# Cascade inlet composition.
 		scalarize(r2.Yₛ ~ r1.Yₖ)
-		
+
 		# Cascade mass conservation.
 		# r2.ṁ ~ r1.ṁ FIXME
 
@@ -293,7 +293,7 @@ let
 	@info(equations(sys))
 
 	W = [0.030, 0.015]
-	
+
 	x0 = [
 		r1.ṁ => 1.0
 		r1.p => 101325
@@ -303,23 +303,23 @@ let
 		r2.ṁ => 1.0
 		r2.p => 101325
 		r2.T => 298.15
-		
+
 		r1.Yₖ => [1, 0]
 		r1.Yₛ => [1, 0]
-		
+
 		r2.Yₖ => [1, 0]
 	]
-	
+
 	ps = [r1.Wₖ => W, r2.Wₖ => W, Ẏₛ => [0.0, 0.0]]
-	
+
 	prob = ODEProblem(sys, x0, (0.0, 10.0), ps)
 	sol = solve(prob)
 
 	time = sol[:t]
-	
+
 	ρ1 = sol[r1.ρ]
 	ρ2 = sol[r2.ρ]
-	
+
 	Yk1_r1 = sol[r1.Yₖ[1]]
 	Yk2_r1 = sol[r1.Yₖ[2]]
 	Yk1_r2 = sol[r2.Yₖ[1]]
@@ -329,10 +329,10 @@ let
 	Ys2_r1 = sol[r1.Yₛ[2]]
 	Ys1_r2 = sol[r2.Yₛ[1]]
 	Ys2_r2 = sol[r2.Yₛ[2]]
-	
+
 	with_theme(WALLYMAKIETHEME) do
 		f = Figure(size = (650, 450))
-		
+
 		ax = Axis(f[1, 1])
 		lines!(ax, time, Yk1_r1; label = "1 (R1)")
 		lines!(ax, time, Yk2_r1; label = "2 (R1)")
@@ -356,7 +356,7 @@ let
 
 		ax.xlabel = "Time"
 		ax.ylabel = "Mass fraction"
-		
+
 		ax = Axis(f[2, 1:2])
 		lines!(ax, time, ρ1; label = "ρ (R1)")
 		lines!(ax, time, ρ2; label = "ρ (R2)")
@@ -366,7 +366,7 @@ let
 
 		ax.xlabel = "Time"
 		ax.ylabel = "Density"
-		
+
 		f
 	end
 end
@@ -437,7 +437,7 @@ function post_graf(time, ρ, X1, X2, X3, X4, X5, X6, X7)
 
 	with_theme(WALLYMAKIETHEME) do
 		f = Figure(size = (650, 450))
-		
+
 		ax = Axis(f[1, 1])
 		lines!(ax, time, X1; label = species_names[1])
 		lines!(ax, time, X7; label = species_names[7])
@@ -448,7 +448,7 @@ function post_graf(time, ρ, X1, X2, X3, X4, X5, X6, X7)
 		ax.yticks = 0:5:35
 		ax.xlabel = "Time"
 		ax.ylabel = "Mole percent"
-		
+
 		ax = Axis(f[1, 2])
 		lines!(ax, time, ρ; label = "ρ")
 		axislegend(ax)
@@ -469,7 +469,7 @@ function post_graf(time, ρ, X1, X2, X3, X4, X5, X6, X7)
 		ax.yticks = 0:0.05:0.3
 		ax.xlabel = "Time"
 		ax.ylabel = "Mole percent"
-		
+
 		ax = Axis(f[2, 2])
 		lines!(ax, time, X2; label = species_names[2])
 		lines!(ax, time, X5; label = species_names[5])
@@ -482,7 +482,7 @@ function post_graf(time, ρ, X1, X2, X3, X4, X5, X6, X7)
 		ax.yticks = 0:0.3:1.8
 		ax.xlabel = "Time"
 		ax.ylabel = "Mole percent"
-		
+
 		f
 	end
 end
@@ -490,21 +490,21 @@ end
 # ╔═╡ e8ba3f51-d103-41ca-987f-8e6a0b37c7b2
 let
 	kinetics = WallyToolbox.Graf2007
-	
+
 	kin = kinetics.Model()
 	ns = length(kin.names)
-	
+
 	@named r = simple_psr(; ns)
 	@parameters Ẏₛ[1:ns] [unit = u"1/s", tunable = false]
 
 	# C = psr_species_concentration(r)
 	# ω = kinetics.progress_rate(r.T, r.p, C)
 	ω = kinetics.progress_rate(r.T, r.ρ, r.Yₖ, r.Wₖ)
-	
+
 	eqs = [
 		# Fix inlet composition:
 		scalarize(Dt(r.Yₛ) ~ Ẏₛ)...
-		
+
 		# Apply equation of state:
 		r.ρ ~ psr_density(r)
 
@@ -520,7 +520,7 @@ let
 
 	# Case 6 of my PhD thesis
 	Y0 = graf_y0(kin)
-	Ys = graf_ys(kin; x1 = 0.36)	
+	Ys = graf_ys(kin; x1 = 0.36)
 	ops = graf_ops()
 
 	x0 = [
@@ -538,7 +538,7 @@ let
 	]
 
 	prob = ODEProblem(sys, x0, (0.0, 10.0), ps)
-	
+
 	sol = solve(prob;
 		alg_hints = :stiff,
 		dtmax     = 0.01,
@@ -657,7 +657,7 @@ end
 # ╔═╡ a9dc6cb2-fa1c-46b9-808f-c8706fc36e91
 let
 	model = solution_mixer
-	
+
 	u0 = [
 		model.reactor_1.Y => 0.0
 		model.reactor_2.Y => 0.2
@@ -678,14 +678,14 @@ let
 		model.reactor_3.ρ => 1.0
 		model.reactor_3.V => 1.0
 	]
-	
+
 	prob = ODEProblem(model, u0, (0, 10.0), ps)
 	sol = solve(prob; saveat=0:0.01:10)
 
 	with_theme(WALLYMAKIETHEME) do
 		f = Figure(size = (650, 450))
 		ax = Axis(f[1, 1])
-	
+
 		lines!(ax, sol[:t], 100sol[model.reactor_1.Y]; label = "1")
 		lines!(ax, sol[:t], 100sol[model.reactor_2.Y]; label = "2")
 		lines!(ax, sol[:t], 100sol[model.reactor_3.Y]; label = "3")
@@ -693,14 +693,14 @@ let
 		hlines!(ax, 100sol[model.source.n.Y]; linestyle = :dash)
 		xlims!(ax, 0.0, 10.0)
 		ylims!(ax, 0.0, 20.0)
-	
+
 		ax.xlabel = "Time [s]"
 		ax.ylabel = "Mass percentage"
 		ax.xticks = 0.0:2.0:10.0
 		ax.yticks = 0.0:4.0:20.0
-		
+
 		axislegend(ax; position = :rb)
-		
+
 		f
 	end
 end
@@ -790,16 +790,16 @@ function MixtureFlowReactor(; name, Nc, density, kinetics)
 		W[1:Nc] , [unit = u"kg/mol"]
 	end
 
-	specifics = @variables begin		
+	specifics = @variables begin
 		ρ(t)       , [unit = u"kg/m^3"]
 		X(t)[1:Nc] , [unit = u"mol/mol"]
 		ω̇(t)[1:Nc] , [unit = u"mol/(m^3*s)"]
 	end
-	
+
 	(ṁ, T, p, Y) = sts = mixture_state(:variables, Nc)
-	
+
 	append!(sts, specifics)
-	
+
 	eqs = [
 		# Mass conservation:
 		0 ~ ustream.ṁ + dstream.ṁ
@@ -809,17 +809,17 @@ function MixtureFlowReactor(; name, Nc, density, kinetics)
 
 		# Propagates dstream:
 		Y ~ dstream.Y
-		
+
 		# Observable for post-processing:
 		scalarize(X ~ mass2molefraction(Y, W))...
-		
+
 		# Reactor equations:
 		scalarize(@. ρ * Dt(Y) ~ (ṁ / V) * (ustream.Y - Y) + ω̇ * W)...
 
 		# System closure:
 		ρ ~ density(T, p, Y, W)
 		scalarize(ω̇ ~ kinetics(T, ρ, Y, W))...
-		
+
 		# XXX: this should later be computed
 		Dt(T) ~ 0
 		Dt(p) ~ 0
@@ -851,7 +851,7 @@ function IdealGasMixtureFlowChain(; name, Nc, density, kinetics)
 	@named reactor_2 = MixtureFlowReactor(; Nc, density, kinetics)
 	@named sink      = MixtureFlowSink(; Nc)
 
-	eqs = [	
+	eqs = [
 		plug(   source.dstream, reactor_1.ustream)
 		plug(reactor_1.dstream, reactor_2.ustream)
 		plug(reactor_2.dstream,      sink.ustream)
@@ -859,13 +859,13 @@ function IdealGasMixtureFlowChain(; name, Nc, density, kinetics)
 
 	elements = [source, reactor_1, reactor_2, sink]
 
-	# DEBUG:	
-	# eqs = [	
+	# DEBUG:
+	# eqs = [
 	# 	plug(   source.dstream, reactor_1.ustream)
 	# 	plug(reactor_1.dstream,      sink.ustream)
 	# ]
 	# elements = [source, reactor_1, sink]
-	
+
 	return compose(ODESystem(eqs, t; name), elements)
 end
 
@@ -875,30 +875,30 @@ chain, chain_prob = let
 
 	kin_module  = WallyToolbox.Graf2007
 	kin_manager = kin_module.Model()
-	
+
 	Nc = length(kin_manager.names)
-	
+
 	density(T, p, Y, W) = p * meanmolecularmass(Y, W) / (R * T)
 	kinetics(T, ρ, Y, W) = kin_module.progress_rate(T, ρ, Y, W)
 
 	@mtkbuild chain = IdealGasMixtureFlowChain(; Nc, density, kinetics)
 	@info(equations(chain))
 
-	Ys = graf_ys(kin_manager)	
+	Ys = graf_ys(kin_manager)
 	ops = graf_ops()
-	
+
 	V = ustrip(pi * ops.R^2 * ops.L)
 	W = kin_manager.molecular_masses
-	
+
 	ps = [
 		chain.source.ṁ => graf_ṁ(kin_manager, Ys, ops.Q)
 		chain.source.Y => Ys
 		chain.source.T => ustrip(ops.T)
 		chain.source.p => ustrip(ops.p)
-		
+
 		chain.reactor_1.V => V
 		chain.reactor_1.W => W
-	
+
 		chain.reactor_2.V => V
 		chain.reactor_2.W => W
 	]
@@ -907,7 +907,7 @@ chain, chain_prob = let
 		chain.reactor_1.T => ustrip(ops.T)
 		chain.reactor_1.p => ustrip(ops.p)
 		chain.reactor_1.Y => graf_y0(kin_manager; x0 = 1.0e-05)
-	
+
 		chain.reactor_2.T => ustrip(ops.T)
 		chain.reactor_2.p => ustrip(ops.p)
 		chain.reactor_2.Y => graf_y0(kin_manager; x0 = 1.0e-03)
@@ -920,7 +920,7 @@ end;
 # ╔═╡ a253a6a8-a422-495f-bb9a-f464796b8697
 sol_chain = let
 	alg = QNDF(; κ = 0)
-	
+
 	sol = solve(chain_prob, alg;
 		saveat = 0.0:0.1:10.0,
 		dtmax     = 0.01,
@@ -932,7 +932,7 @@ end
 # ╔═╡ e0db9152-5762-418e-8f4c-abdba226f7a1
 let
 	sol = sol_chain
-	
+
 	post_graf(
 		sol[:t],
 		100sol[chain.reactor_1.ρ],
@@ -949,7 +949,7 @@ end
 # ╔═╡ dfdac2f2-7d6d-4f5b-93d3-f07b5b22fad3
 let
 	sol = sol_chain
-	
+
 	post_graf(
 		sol[:t],
 		100sol[chain.reactor_2.ρ],
@@ -975,17 +975,51 @@ md"""
 Maybe check [this](https://github.com/SciML/ModelingToolkit.jl/issues/2674).
 """
 
-# ╔═╡ 27bfb5fd-8d2c-429f-b42c-670ba38bb24c
+# ╔═╡ 27900340-3689-4fc6-9ee8-27da411b0815
+struct MixtureState
+	data::Vector{Union{Num, Symbolics.Arr{Num}}}
 
+	function MixtureState(kind, Nc)
+		state = if kind == :variables
+			@variables begin
+				ṁ(t)       , [unit = u"kg/s"]
+				T(t)       , [unit = u"K"]
+				p(t)       , [unit = u"Pa"]
+				Y(t)[1:Nc] , [unit = u"kg/kg"]
+			end
+		else
+			@parameters begin
+				ṁ       , [unit = u"kg/s"]
+				T       , [unit = u"K"]
+				p       , [unit = u"Pa"]
+				Y[1:Nc] , [unit = u"kg/kg", tunable = false]
+			end
+		end
+
+		return new(state)
+	end
+end
+
+# ╔═╡ 6eb9817e-596e-4f01-8d4b-d7c50dacfabc
+begin
+	vs = mixture_state(:variables, 2)
+	ps = mixture_state(:parameters, 2)
+end
+
+# ╔═╡ 27bfb5fd-8d2c-429f-b42c-670ba38bb24c
+typeof.(vs)
 
 # ╔═╡ 7423848d-cf69-4c92-8f21-e86b2752fb14
-
+typeof.(ps)
 
 # ╔═╡ 70b3c27b-a307-4240-85c8-4d29f2dc984f
-
+begin
+	Vs = MixtureState(:variables, 2)
+	Ps = MixtureState(:parameters, 2)
+end
 
 # ╔═╡ 00921d44-06a4-40eb-8d06-fa72d39824da
-
+Vs.data
 
 # ╔═╡ 9ccf4ff0-2209-43b2-a8af-bc75503d68e6
 
@@ -1009,19 +1043,19 @@ function ideal_gas_law(; name, ns)
 		W,       [bounds = NONNEGATIVE, unit = u"kg/mol"]
 		Y[1:ns], [bounds = FRACTION,    unit = u"kg/kg"]
 		X[1:ns], [bounds = FRACTION,    unit = u"mol/mol"]
-	end) 
-	
+	end)
+
 	@parameters(begin
 		M[1:ns], [bounds = NONNEGATIVE, unit = u"kg/mol"]
 	end)
 
 	@constants R = GAS_CONSTANT [unit = u"J/(mol*K)"]
-	
+
 	eqs = [
 		# Ideal gas law:
 		0 ~ p * V - n * R * T
 		0 ~ ρ - p * W / (R * T)
-		
+
 		# Mean molecular mass definition:
 		0 ~ W - meanmolecularmass(Y, M)
 
@@ -1042,7 +1076,7 @@ end
 let
 	@warn("Thinking on how to get an arbitrary state equation working...")
 	@warn("It is getting better but I still need some work here...")
-	
+
 	ns = 2
 
 	@named r = ideal_gas_law(; ns)
@@ -1066,7 +1100,7 @@ let
 	sys = structural_simplify(sys)
 
 	normalized(v) = v ./ sum(v)
-	
+
 	ps = [
 		p   => 101325
 		T   => 298.15
@@ -1155,6 +1189,8 @@ end
 # ╟─dfdac2f2-7d6d-4f5b-93d3-f07b5b22fad3
 # ╟─5da89a5a-5c2c-4b78-a47d-ff40a8f1dee6
 # ╟─a4de476b-3419-445b-999c-9940f3f02b2b
+# ╠═27900340-3689-4fc6-9ee8-27da411b0815
+# ╠═6eb9817e-596e-4f01-8d4b-d7c50dacfabc
 # ╠═27bfb5fd-8d2c-429f-b42c-670ba38bb24c
 # ╠═7423848d-cf69-4c92-8f21-e86b2752fb14
 # ╠═70b3c27b-a307-4240-85c8-4d29f2dc984f
