@@ -718,19 +718,31 @@ Below we provide the *function-like* implementation of reusable blocks.
 """
 
 # ╔═╡ 5d84b945-16a2-45c3-b6d8-4719eaff8cbe
-function mixture_state(kind)
+"Shared state of any mixture element."
+function mixture_state(kind, Nc)
+	state = if kind == :variables
+		@variables begin
+			ṁ(t)       , [unit = u"kg/s"]
+			T(t)       , [unit = u"K"]
+			p(t)       , [unit = u"Pa"]
+			Y(t)[1:Nc] , [unit = u"kg/kg"]
+		end
+	else
+		@parameters begin
+			ṁ       , [unit = u"kg/s"]
+			T       , [unit = u"K"]
+			p       , [unit = u"Pa"]
+			Y[1:Nc] , [unit = u"kg/kg", tunable = false]
+		end
+	end
+
+	return state
 end
 
 # ╔═╡ 87db96fa-4cd1-4e30-b082-b1ee2a3e44a9
 "A multicomponent mass flow port with state variables."
 function MixtureFlowPort(; name, Nc)
-	sts = @variables begin
-		ṁ(t)       , [unit = u"kg/s"]
-		T(t)       , [unit = u"K"]
-		p(t)       , [unit = u"Pa"]
-		Y(t)[1:Nc] , [unit = u"kg/kg"]
-	end
-
+	sts = mixture_state(:variables, Nc)
 	return ODESystem(Equation[], t, sts, []; name)
 end
 
@@ -738,13 +750,7 @@ end
 "Specified state and mass flow rate source."
 function MixtureFlowSource(; name, Nc)
 	@named dstream = MixtureFlowPort(; Nc)
-
-	@parameters begin
-		ṁ       , [unit = u"kg/s"]
-		T       , [unit = u"K"]
-		p       , [unit = u"Pa"]
-		Y[1:Nc] , [unit = u"kg/kg", tunable = false]
-	end
+	(ṁ, T, p, Y) = mixture_state(:parameters, Nc)
 
 	eqs = [
 		dstream.ṁ ~ -ṁ
@@ -761,12 +767,7 @@ end
 function MixtureFlowSink(; name, Nc)
 	@named ustream = MixtureFlowPort(; Nc)
 
-	sts = @variables begin
-		ṁ(t)       , [unit = u"kg/s"]
-		T(t)       , [unit = u"K"]
-		p(t)       , [unit = u"Pa"]
-		Y(t)[1:Nc] , [unit = u"kg/kg"]
-	end
+	(ṁ, T, p, Y) = sts = mixture_state(:variables, Nc)
 
 	eqs = [
 		ustream.ṁ ~ ṁ
@@ -788,23 +789,23 @@ function MixtureFlowReactor(; name, Nc, density, kinetics)
 		V       , [unit = u"m^3"]
 		W[1:Nc] , [unit = u"kg/mol"]
 	end
-	
-	sts = @variables begin
-		ṁ(t)       , [unit = u"kg/s"]
+
+	specifics = @variables begin		
 		ρ(t)       , [unit = u"kg/m^3"]
-		T(t)       , [unit = u"K"]
-		p(t)       , [unit = u"Pa"]
-		Y(t)[1:Nc] , [unit = u"kg/kg"]
 		X(t)[1:Nc] , [unit = u"mol/mol"]
 		ω̇(t)[1:Nc] , [unit = u"mol/(m^3*s)"]
 	end
+	
+	(ṁ, T, p, Y) = sts = mixture_state(:variables, Nc)
+	
+	append!(sts, specifics)
 	
 	eqs = [
 		# Mass conservation:
 		0 ~ ustream.ṁ + dstream.ṁ
 
 		# Inherits from ustream:
-		ṁ ~ dstream.ṁ
+		ṁ ~ ustream.ṁ
 
 		# Propagates dstream:
 		Y ~ dstream.Y
@@ -830,8 +831,12 @@ end
 # ╔═╡ 6405ee87-a1d6-4a82-94a5-703616875628
 "Replace `@connector` for `MixtureFlowPorts`."
 function plug(d, u)
+	# Notice that the sign convention here is intended to produce models
+	# that remain compatible with a @connector (0 ~ ustream.ṁ + dstream.ṁ)
+	# because there is nothing handling the I/O directionality here as in
+	# fields with metadata `connect = Flow`.
 	return [
-		d.ṁ ~ u.ṁ
+		d.ṁ ~ -u.ṁ
 		d.T ~ u.T
 		d.p ~ u.p
 		scalarize(d.Y ~ u.Y)...
@@ -853,13 +858,19 @@ function IdealGasMixtureFlowChain(; name, Nc, density, kinetics)
 	]
 
 	elements = [source, reactor_1, reactor_2, sink]
+
+	# DEBUG:	
+	# eqs = [	
+	# 	plug(   source.dstream, reactor_1.ustream)
+	# 	plug(reactor_1.dstream,      sink.ustream)
+	# ]
 	# elements = [source, reactor_1, sink]
 	
 	return compose(ODESystem(eqs, t; name), elements)
 end
 
 # ╔═╡ 6dd5cdc7-563b-4bad-b7b7-29fff6428904
-chain, sol_chain = let
+chain, chain_prob = let
 	@info("Creating chain of reactors...")
 
 	kin_module  = WallyToolbox.Graf2007
@@ -873,7 +884,6 @@ chain, sol_chain = let
 	@mtkbuild chain = IdealGasMixtureFlowChain(; Nc, density, kinetics)
 	@info(equations(chain))
 
-	Y0 = graf_y0(kin_manager)
 	Ys = graf_ys(kin_manager)	
 	ops = graf_ops()
 	
@@ -896,23 +906,28 @@ chain, sol_chain = let
 	u0 = [
 		chain.reactor_1.T => ustrip(ops.T)
 		chain.reactor_1.p => ustrip(ops.p)
-		chain.reactor_1.Y => Y0
+		chain.reactor_1.Y => graf_y0(kin_manager; x0 = 1.0e-05)
 	
 		chain.reactor_2.T => ustrip(ops.T)
 		chain.reactor_2.p => ustrip(ops.p)
-		chain.reactor_2.Y => Y0
+		chain.reactor_2.Y => graf_y0(kin_manager; x0 = 1.0e-03)
 	]
 
-	prob = ODEProblem(chain, u0, (0.0, 10.0), ps);
-	
-	sol = solve(prob;
-		alg_hints = :stiff,
-		# dtmax     = 0.01,
-		abstol    = 1.0e-08
-	)
-
-	chain, sol
+	prob = ODEProblem(chain, u0, (0.0, 10.0), ps; jac=true)
+	chain, prob
 end;
+
+# ╔═╡ a253a6a8-a422-495f-bb9a-f464796b8697
+sol_chain = let
+	alg = QNDF(; κ = 0)
+	
+	sol = solve(chain_prob, alg;
+		saveat = 0.0:0.1:10.0,
+		dtmax     = 0.01,
+		reltol    = 1.0e-08,
+		abstol    = 1.0e-10
+	)
+end
 
 # ╔═╡ e0db9152-5762-418e-8f4c-abdba226f7a1
 let
@@ -920,7 +935,7 @@ let
 	
 	post_graf(
 		sol[:t],
-		sol[chain.reactor_1.ρ],
+		100sol[chain.reactor_1.ρ],
 		100sol[chain.reactor_1.X[1]],
 		100sol[chain.reactor_1.X[2]],
 		100sol[chain.reactor_1.X[3]],
@@ -930,6 +945,53 @@ let
 		100sol[chain.reactor_1.X[7]]
 	)
 end
+
+# ╔═╡ dfdac2f2-7d6d-4f5b-93d3-f07b5b22fad3
+let
+	sol = sol_chain
+	
+	post_graf(
+		sol[:t],
+		100sol[chain.reactor_2.ρ],
+		100sol[chain.reactor_2.X[1]],
+		100sol[chain.reactor_2.X[2]],
+		100sol[chain.reactor_2.X[3]],
+		100sol[chain.reactor_2.X[4]],
+		100sol[chain.reactor_2.X[5]],
+		100sol[chain.reactor_2.X[6]],
+		100sol[chain.reactor_2.X[7]]
+	)
+end
+
+# ╔═╡ 5da89a5a-5c2c-4b78-a47d-ff40a8f1dee6
+md"""
+### Arbitrary number of blocks
+"""
+
+# ╔═╡ a4de476b-3419-445b-999c-9940f3f02b2b
+md"""
+**TODO**
+
+Maybe check [this](https://github.com/SciML/ModelingToolkit.jl/issues/2674).
+"""
+
+# ╔═╡ 27bfb5fd-8d2c-429f-b42c-670ba38bb24c
+
+
+# ╔═╡ 7423848d-cf69-4c92-8f21-e86b2752fb14
+
+
+# ╔═╡ 70b3c27b-a307-4240-85c8-4d29f2dc984f
+
+
+# ╔═╡ 00921d44-06a4-40eb-8d06-fa72d39824da
+
+
+# ╔═╡ 9ccf4ff0-2209-43b2-a8af-bc75503d68e6
+
+
+# ╔═╡ 783a87a0-8f0a-4eb9-bc7a-031df99bae3c
+
 
 # ╔═╡ 4565cbef-ec91-4864-8664-2c87d420e4a1
 md"""
@@ -1080,15 +1142,25 @@ end
 # ╟─a9dc6cb2-fa1c-46b9-808f-c8706fc36e91
 # ╟─503fe098-11b4-47fb-bac1-84b6dc7a60e9
 # ╟─30c4818b-823a-4ff0-b32b-58d113296819
-# ╠═5d84b945-16a2-45c3-b6d8-4719eaff8cbe
+# ╟─5d84b945-16a2-45c3-b6d8-4719eaff8cbe
 # ╟─87db96fa-4cd1-4e30-b082-b1ee2a3e44a9
 # ╟─5273fb71-b48e-4727-8ee1-14bb4e795230
 # ╟─c16b0f0a-02be-45b6-9935-d543fbf80dc5
 # ╟─0e6351b3-e00d-4e55-9ff1-42a4f4625d64
 # ╟─6405ee87-a1d6-4a82-94a5-703616875628
-# ╠═d4a184f7-6f2a-411b-8b1c-a54fcc2c6244
-# ╠═6dd5cdc7-563b-4bad-b7b7-29fff6428904
+# ╟─d4a184f7-6f2a-411b-8b1c-a54fcc2c6244
+# ╟─6dd5cdc7-563b-4bad-b7b7-29fff6428904
+# ╟─a253a6a8-a422-495f-bb9a-f464796b8697
 # ╟─e0db9152-5762-418e-8f4c-abdba226f7a1
+# ╟─dfdac2f2-7d6d-4f5b-93d3-f07b5b22fad3
+# ╟─5da89a5a-5c2c-4b78-a47d-ff40a8f1dee6
+# ╟─a4de476b-3419-445b-999c-9940f3f02b2b
+# ╠═27bfb5fd-8d2c-429f-b42c-670ba38bb24c
+# ╠═7423848d-cf69-4c92-8f21-e86b2752fb14
+# ╠═70b3c27b-a307-4240-85c8-4d29f2dc984f
+# ╠═00921d44-06a4-40eb-8d06-fa72d39824da
+# ╠═9ccf4ff0-2209-43b2-a8af-bc75503d68e6
+# ╠═783a87a0-8f0a-4eb9-bc7a-031df99bae3c
 # ╟─4565cbef-ec91-4864-8664-2c87d420e4a1
 # ╟─a0d9b9d2-5dbf-436e-8999-8a684e2b5534
 # ╟─78542421-ff40-4c7c-b04f-e175bcf8a171
