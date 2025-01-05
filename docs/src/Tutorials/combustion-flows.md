@@ -96,31 +96,31 @@ nothing; # hide
 Finally we visualize the results; verification is performed against values proposed in the literature by ([[@Mujumdar2006i]]). As one can inspect below, values diverge from those evaluated from Gri-MECH 3.0 database.
 
 ```@example mean-fluid-props
-with_theme() do
-    rets = fit_gas_properties(sol)
-
-    μmuj = AirViscosityMujumdar2006()
-    kmuj = AirHeatConductivityMujumdar2006()
-
-    f, ax = plot_gas_properties(T, rets...)
-
-    lines!(ax[1], T, μmuj.(T); color = :blue)
-    lines!(ax[2], T, kmuj.(T); color = :blue)
-
-    ax[1].yticks = 1.0e-05:3.0e-05:1.0e-04
-    ax[2].yticks = 0.0:0.05:0.2
-    ax[3].yticks = 900:100:1400
-
-    xlims!(ax[1], 300, 3000)
-    xlims!(ax[2], 300, 3000)
-    xlims!(ax[3], 300, 3000)
-
-    ylims!(ax[1], 1.0e-05, 10.0e-05)
-    ylims!(ax[2], 0.0, 0.2)
-    ylims!(ax[3], 900.0, 1400)
-
-    f
-end
+#with_theme() do
+#    rets = fit_gas_properties(sol)
+#
+#    μmuj = AirViscosityMujumdar2006()
+#    kmuj = AirHeatConductivityMujumdar2006()
+#
+#    f, ax = plot_gas_properties(T, rets...)
+#
+#    lines!(ax[1], T, μmuj.(T); color = :blue)
+#    lines!(ax[2], T, kmuj.(T); color = :blue)
+#
+#    ax[1].yticks = 1.0e-05:3.0e-05:1.0e-04
+#    ax[2].yticks = 0.0:0.05:0.2
+#    ax[3].yticks = 900:100:1400
+#
+#    xlims!(ax[1], 300, 3000)
+#    xlims!(ax[2], 300, 3000)
+#    xlims!(ax[3], 300, 3000)
+#
+#    ylims!(ax[1], 1.0e-05, 10.0e-05)
+#    ylims!(ax[2], 0.0, 0.2)
+#    ylims!(ax[3], 900.0, 1400)
+#
+#    f
+# end
 ```
 
 Another application case is the fitting of flue gases properties. One often needs to simulate the post-combustion flow in a segregated manner, *i.e.* not as an integral part of the combusting system. To that end, fitting properties and simply ignoring species transport can be an alternative to speed up calculations if the physics allows to do so.

@@ -364,19 +364,6 @@ function getnameditem(data, name)
     return first(filter(s -> s["name"] == name, data))
 end
 
-function nasa7specificheat(T, c)
-    """ Molar specific heat from NASA7 polynomial [J/(mol.K)]. """
-    p = c[1]+T*(c[2]+T*(c[3]+T*(c[4]+c[5]*T)))
-    return GAS_CONSTANT * p
-end
-
-function nasa7enthapy(T, c)
-    """ Molar enthalpy from NASA7 polynomial [J/mol]. """
-    d = c[1:5] / collect(1:5)
-    p = d[1]+T*(d[2]+T*(d[3]+T*(d[4]+d[5]*T)))+c[6]/T
-    return GAS_CONSTANT * T * p
-end
-
 function getthermo(model, data, xl, xc, xh, verbose)
     """ Create specific heat and enthalpy functions for species. """
     cpname = string(model, "specificheat")
@@ -404,57 +391,6 @@ function getthermo(model, data, xl, xc, xh, verbose)
     enthalpy = verbose ? (T -> prewarning(T, hm)) : hm
     return specificheat, enthalpy
 end
-
-# function [wdot] = wdot_mak(self, z, T, Y, L)
-#     % Mass action kinetics methane combustion rate [kg/(m³.s)].
-#     k0 = 1.1e+07;
-#     Ea = 83680.0;
-
-#     X = self.mass_to_mole_fraction(Y);
-#     C = (X * self.PRESSURE ./ (self.GAS_CONSTANT .* T));
-#     k = k0 * exp(-Ea ./ (self.GAS_CONSTANT .* T));
-#     rt = k .* C(:, 1) .* C(:, 2).^0.5;
-
-#     wdot = rt * (self.mw .* self.SPECIES_COEFS);
-# endfunction
-
-# function [wdot] = wdot_ebu(self, z, T, Y, L)
-#     % Eddy break-up kinetics methane combustion rate [kg/(m³.s)].
-#     cr = 4.000e+00;
-#     bo = 4.375e+00;
-#     k0 = 1.600e+10;
-#     Ea = 1.081e+05;
-
-#     k = k0 * exp(-Ea ./ (self.GAS_CONSTANT .* T));
-#     rho = self.density_mass(T, self.PRESSURE, Y);
-#     yf = Y(:, 1);
-#     yo = Y(:, 2);
-
-#     % TODO implement this in ProjectData
-#     ke = z ./ L;
-
-#     R_ebu = (rho.^1) .* cr .* ke .* min(yf, yo ./ bo);
-#     R_arr = (rho.^2) .* yf .* yo .* k;
-
-#     rt = min(R_ebu, R_arr) / self.mw(1);
-
-#     wdot = rt * (self.mw .* self.SPECIES_COEFS);
-# endfunction
-
-# function [mu] = viscosity(self, T, Y)
-#     % Gas molecular viscosity [Pa.s].
-#     mu = 1.0e-05 * (0.1672 * sqrt(T) - 1.058);
-# endfunction
-
-# function [k] = thermal_conductivity(self, T, Y)
-#     % Gas thermal conductivity [W/(m³.K)].
-#     k = 1.581e-17;
-#     k = T .* k - 9.463e-14;
-#     k = T .* k + 2.202e-10;
-#     k = T .* k - 2.377e-07;
-#     k = T .* k + 1.709e-04;
-#     k = T .* k - 7.494e-03;
-# endfunction
 
 ################################################################################
 # SOLID PHASE MODELS

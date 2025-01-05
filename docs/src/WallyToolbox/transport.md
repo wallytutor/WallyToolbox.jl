@@ -187,12 +187,12 @@ WallyToolbox.maxwell_eff_conductivity
 
 ### Air properties
 
-For the simulation of rotary kilns, ([[@Mujumdar2006i]]) proposes some data for air properties implemented by the following interfaces. It must be noted that the thermal conductivity proposed by the authors [quickly diverges above 1500 K](../Tutorials/combustion-flows.md) and users must be aware of its implications.
+<!-- For the simulation of rotary kilns, ([[@Mujumdar2006i]]) proposes some data for air properties implemented by the following interfaces. It must be noted that the thermal conductivity proposed by the authors [quickly diverges above 1500 K](../Tutorials/combustion-flows.md) and users must be aware of its implications.
 
 ```@docs
 WallyToolbox.AirHeatConductivityMujumdar2006
 WallyToolbox.AirViscosityMujumdar2006
-```
+``` -->
 
 ## General porous media
 

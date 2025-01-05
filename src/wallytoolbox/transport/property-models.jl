@@ -9,8 +9,6 @@ export TempPolynomialFluidViscosity
 export TempFermiLikeMeltingViscosity
 
 export GranularMediumHeatConductivity
-export AirHeatConductivityMujumdar2006
-export AirViscosityMujumdar2006
 
 export constheatconductivity
 export constfluidviscosity
@@ -199,38 +197,6 @@ struct GranularMediumHeatConductivity <: AbstractMaxwellEffHeatCond
 end
 
 ##############################################################################
-# DOMAIN SPECIFIC - ROTARY KILN MUJUMDAR 2006
-##############################################################################
-
-# XXX: find a better way to avoid this global!
-const KMUJUMDAR2006 = Polynomial([-7.494e-03,  1.709e-04, -2.377e-07,
-                                   2.202e-10, -9.463e-14,  1.581e-17])
-
-"""
-Air heat conductivity for rotary kiln simulation - Mujumdar (2006).
-
-```jldoctest
-julia> k = AirHeatConductivityMujumdar2006();
-
-julia> k(300)
-0.027600315300000004
-```
-"""
-struct AirHeatConductivityMujumdar2006 <: AbstractHeatCondTemperatureDep end
-
-"""
-Air viscosity for rotary kiln simulation - Mujumdar (2006).
-
-```jldoctest
-julia> μ = AirViscosityMujumdar2006();
-
-julia> μ(300)
-1.837988950255163e-5
-```
-"""
-struct AirViscosityMujumdar2006 <: AbstractViscosityTemperatureDep end
-
-##############################################################################
 # WRAPPERS
 ##############################################################################
 
@@ -255,10 +221,6 @@ end
 (obj::GranularMediumHeatConductivity)(T) = let
     maxwell_eff_conductivity(obj.kg(T), obj.ks(T), obj.ϕ)
 end
-
-(obj::AirHeatConductivityMujumdar2006)(T) = KMUJUMDAR2006(T)
-
-(obj::AirViscosityMujumdar2006)(T) = 0.1672e-05sqrt(T) - 1.058e-05
 
 ##############################################################################
 # EOF
