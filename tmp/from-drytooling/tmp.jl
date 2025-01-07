@@ -485,12 +485,6 @@ struct MaterialPowderBed <: AbstractSolidMaterial
     end
 end
 
-# function MaterialShomate(data::Dict{Any, Any})
-#     return MaterialShomate(; a_lo = data["coefs_low"],
-#                              a_hi = data["coefs_high"],
-#                              T_ch = data["change_temperature"])
-# end
-
 function MaterialTransportProperties(data::Dict{Any, Any})
     return MaterialTransportProperties(;
         k = eval(Meta.parse(data["thermal_conductivity"])),
