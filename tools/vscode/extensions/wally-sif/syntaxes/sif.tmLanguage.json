@@ -209,6 +209,16 @@
 					"match": "\\b(BDF(\\s+)Order|Newmark(\\s+)Beta)\\b"
 				},
 				{
+					"meta": "Simulation",
+					"name": "entity.name.function",
+					"match": "\\b(Binary(\\s+)Output)\\b"
+				},
+				{
+					"meta": "Simulation",
+					"name": "entity.name.function",
+					"match": "\\b(Output(\\s+)Variable(\\s+)(\\d+))\\b"
+				},
+				{
 					"meta": "Equation",
 					"name": "entity.name.function",
 					"match": "\\b(Active(\\s+)Solvers|Concentration(\\s+)Units)\\b"
