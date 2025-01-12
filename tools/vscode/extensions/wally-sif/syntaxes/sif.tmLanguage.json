@@ -222,7 +222,7 @@
 				{
 					"meta": "Solver",
 					"name": "entity.name.function",
-					"match": "\\b(Flux(\\s+)(Coefficient|Variable)|Calculate(\\s+)Flux(\\s+)Magnitude)\\b"
+					"match": "\\b(Flux(\\s+)(Coefficient|Variable)|Calculate(\\s+)(Flux|Grad)(\\s+)Magnitude)\\b"
 				},
 				{
 					"meta": "Material",
@@ -291,7 +291,7 @@
 				{
 					"meta": "Solver (comes later because refers to other fields!)",
 					"name": "entity.name.function",
-					"match": "\\b((Solver(\\s+)(\\d+))*(Equation|Target(\\s+)Variable|Variable|Procedure|Exec(\\s+)Solver|Stabilize|Optimize Bandwidth|Steady State Convergence Tolerance|Steady State Convergence Measure|Nonlinear System Convergence Tolerance|Nonlinear System Max Iterations|Nonlinear System Newton After Iterations|Nonlinear System Newton After Tolerance|Nonlinear System Relaxation Factor|Nonlinear System Convergence Measure|Linear System Solver|Linear System Iterative Method|Linear System Max Iterations|Linear System Convergence Tolerance|BiCGstabl polynomial degree|Linear System Preconditioning|Linear System ILUT Tolerance|Linear System Abort Not Converged|Linear System Residual Output|Linear System Precondition Recompute|Filename|Polyline(\\s+)Coordinates|Polyline(\\s+)Divisions|Parameter(\\s+)(\\d+)))\\b"
+					"match": "\\b((Solver(\\s+)(\\d+))*(Equation|Target(\\s+)Variable|Variable|Procedure|Exec(\\s+)Solver|Stabilize|Optimize Bandwidth|Steady State Convergence Tolerance|Steady State Convergence Measure|Nonlinear System Convergence Tolerance|Nonlinear System Max Iterations|Nonlinear System Newton After Iterations|Nonlinear System Newton After Tolerance|Nonlinear System Relaxation Factor|Nonlinear System Convergence Measure|Linear System Solver|Linear System Iterative Method|Linear System Max Iterations|Linear System Convergence Tolerance|BiCGstabl polynomial degree|Linear System Preconditioning|Linear System ILUT Tolerance|Linear System Abort Not Converged|Linear System Residual Output|Linear System Precondition Recompute|Filename|Polyline(\\s+)Coordinates|Polyline(\\s+)Divisions|Parameter(\\s+)(\\d+)|Output(\\s+)Format))\\b"
 				},
 				{
 					"meta": "Body (comes later because refers to other fields!)",
