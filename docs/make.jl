@@ -123,11 +123,8 @@ pages = [
         ],
 
         "Computing" => [
-            "Computing/01-Scientific-Computing.md",
-            "Computing/02-General-Computing-Skills.md",
             "Computing/03-Programming-Languages.md",
             "Computing/04-Geometry-and-Preprocessing.md",
-            "Computing/05-Postprocessing.md",
             "Computing/06-Domain-Specific-Software.md",
         ],
 
