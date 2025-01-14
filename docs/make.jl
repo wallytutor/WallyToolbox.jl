@@ -116,7 +116,6 @@ pages = [
         ],
 
         "Software" =>[
-            "Software/Elmer.md",
             "Software/OpenFOAM11.md",
             "Software/Basilisk.md",
             "Software/LAMMPS.md",
