@@ -232,7 +232,12 @@
 				{
 					"meta": "Solver",
 					"name": "entity.name.function",
-					"match": "\\b(Flux(\\s+)(Coefficient|Variable)|Calculate(\\s+)(Flux|Grad)(\\s+)Magnitude)\\b"
+					"match": "\\b(Flux(\\s+)(Coefficient|Variable))\\b"
+				},
+				{
+					"meta": "Solver",
+					"name": "entity.name.function",
+					"match": "\\b(Calculate(\\s+)(Flux|Grad)(((\\s+)Magnitude)?))\\b"
 				},
 				{
 					"meta": "Material",
