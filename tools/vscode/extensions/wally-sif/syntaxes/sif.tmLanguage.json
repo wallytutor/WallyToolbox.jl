@@ -17,6 +17,9 @@
 		{
 			"include": "#fields"
 		},
+        {
+            "include": "#solver-ResultOutputSolver"
+        },
 		{
 			"include": "#sections"
 		},
@@ -327,6 +330,83 @@
 				}
 			]
 		},
+        "solver-ResultOutputSolver" : {
+            "patterns": [
+                {
+					"name": "entity.name.function",
+					"match": "\\b((Gid|Gmsh|Vtk|Vtu|Dx)(\\s+)Format)\\b"
+				},
+				{
+					"name": "entity.name.function",
+					"match": "\\b(Single(\\s+)Precision)\\b"
+				},
+				{
+					"name": "entity.name.function",
+					"match": "\\b(Eigen(\\s+)Analysis)\\b"
+				},
+				{
+					"name": "entity.name.function",
+					"match": "\\b(Number(\\s+)Of(\\s+)EigenModes)\\b"
+				},
+				{
+					"name": "entity.name.function",
+					"match": "\\b(Active(\\s+)EigenModes)\\b"
+				},
+				{
+					"name": "entity.name.function",
+					"match": "\\b((Scalar|Vector|Tensor)(\\s+)Field(\\s+)(\\d+))\\b"
+				},
+				{
+					"name": "entity.name.function",
+					"match": "\\b(Show(\\s+)Variables)\\b"
+				},
+				{
+					"name": "entity.name.function",
+					"match": "\\b(Save(\\s+)Geometry(\\s+)Ids)\\b"
+				},
+				{
+					"name": "entity.name.function",
+					"match": "\\b(Default(\\s+)(Body|BC)(\\s+)Id)\\b"
+				},
+				{
+					"name": "entity.name.function",
+					"match": "\\b(BC(\\s+)Id(\\s+)Offset)\\b"
+				},
+				{
+					"name": "entity.name.function",
+					"match": "\\b(Save(\\s+)Elemental(\\s+)Fields)\\b"
+				},
+				{
+					"name": "entity.name.function",
+					"match": "\\b(Lagrange(\\s+)Element(\\s+)Degree)\\b"
+				},
+				{
+					"name": "entity.name.function",
+					"match": "\\b(Save(\\s+)Linear(\\s+)Elements)\\b"
+				},
+				{
+					"name": "entity.name.function",
+					"match": "\\b(Discontinuous(\\s+)(Galerkin|Bodies))\\b"
+				},
+				{
+					"name": "entity.name.function",
+					"match": "\\b(Vtu(\\s+)(Part|Time)(\\s+)Collection)\\b"
+				},
+				{
+					"name": "entity.name.function",
+					"match": "\\b((Skip|Save)(\\s+)Halo(\\s+)Elements(((\\s+)Only)?))\\b"
+				},
+				{
+					"name": "entity.name.function",
+					"match": "\\b(Save(\\s+)(Bulk|Boundaries)(\\s+)Only)\\b"
+				},
+				{
+					"name": "entity.name.function",
+					"match": "\\b(Mask(\\s+)(Variable|Name|Condition))\\b"
+				}
+            ]
+        },
+
 		"fieldsbackref": {
 			"patterns": [
 				{
