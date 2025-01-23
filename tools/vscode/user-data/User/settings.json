@@ -165,6 +165,8 @@
     },
     "redhat.telemetry.enabled": false,
     "git.confirmSync": false,
-    "git.autofetch": true,
-
+    
+    "git.enabled": false,
+    "git.path": null,
+    "git.autofetch": false
 }
