@@ -165,6 +165,9 @@
     },
     "redhat.telemetry.enabled": false,
     "git.confirmSync": false,
+    "[jsonc]": {
+        "editor.defaultFormatter": "vscode.json-language-features"
+    },
     
     // "git.enabled": false,
     // "git.path": null,
