@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.20.3
+# v0.20.4
 
 using Markdown
 using InteractiveUtils
@@ -8,9 +8,10 @@ using InteractiveUtils
 begin
     @info("Initializing toolbox...")
     using Pkg
-
+	
     open("pluto_init.log", "w") do logs
-        Pkg.activate(ENV["WALLYROOT"]; io=logs)
+        root = abspath(joinpath(@__DIR__, "..", "..", ".."))
+        Pkg.activate(dirname(root); io=logs)
         Pkg.instantiate(; io=logs)
     end
 
