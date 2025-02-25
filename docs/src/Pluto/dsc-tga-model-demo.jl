@@ -1,35 +1,68 @@
 ### A Pluto.jl notebook ###
-# v0.19.45
+# v0.20.4
 
 using Markdown
 using InteractiveUtils
 
 # This Pluto notebook uses @bind for interactivity. When running this notebook outside of Pluto, the following 'mock version' of @bind gives bound variables a default value (instead of an error).
 macro bind(def, element)
+    #! format: off
     quote
         local iv = try Base.loaded_modules[Base.PkgId(Base.UUID("6e696c72-6542-2067-7265-42206c756150"), "AbstractPlutoDingetjes")].Bonds.initial_value catch; b -> missing; end
         local el = $(esc(element))
         global $(esc(def)) = Core.applicable(Base.get, el) ? Base.get(el) : iv(el)
         el
     end
+    #! format: on
+end
+
+# ╔═╡ 08f1bb01-5a39-473f-8c75-cd6ade835a77
+begin
+    @info("Initializing toolbox...")
+    using Pkg
+
+    open("pluto_init.log", "w") do logs
+        root = "D:/Kompanion/bin/pkgs/AuChimiste.jl"
+        Pkg.activate(root; io=logs)
+        Pkg.instantiate(; io=logs)
+    end
+
+    # Pkg.add("SciMLBaseMLStyleExt")
+    # Pkg.status()
+    
+    push!(LOAD_PATH, @__DIR__)
+
+    using PlutoLinks
+    using PlutoUI: TableOfContents
+	import PlutoUI as UI
+	
+    TableOfContents()
+end
+
+# ╔═╡ ebad837b-8c80-4132-8093-a0634462161c
+begin
+    @info("Required tools...")
+
+	using CairoMakie
+	using CommonSolve
+	using DifferentialEquations
+	using DocStringExtensions
+	using DynamicQuantities
+	using ModelingToolkit
+	using NumericalIntegration
+	using Printf
+	using PrettyPrinting
+	using SciMLBase
+	using Symbolics
+	using Trapz
+
+	# using WallyToolbox
 end
 
 # ╔═╡ c43baed9-a267-4cdd-9534-bf51274d2d1b
 begin
-    @info "Loading tools..."
-    import Pkg
-    Pkg.activate(Base.current_project())
-
-    using CairoMakie
-    using DifferentialEquations: solve
-    using ModelingToolkit
-    using NumericalIntegration
-    using PlutoUI
-    using PrettyPrinting
-    using Printf: @sprintf
-    using Trapz: trapz
-
-    using WallyToolbox
+	@info("Local toolbox...")
+	@revise using AuChimiste
 end
 
 # ╔═╡ ce8f4ea4-013c-4f73-9d0d-7c84cd29285d
@@ -37,8 +70,6 @@ md"""
 # Modeling DSC / TGA data
 
 Understanding the phase transformations is related energy aspects is key in any development in Materials Science. In what follows we summarize a simple modeling approach to extract detailed information from coupled DSC / TGA analyses. It can also be seen as a primer in [ModelingToolkit.jl](https://docs.sciml.ai/ModelingToolkit/stable/), the framework upon which the model is built.
-
-$(TableOfContents())
 """
 
 # ╔═╡ edd99e16-31e8-449a-b3fd-68a8824bc3d1
@@ -392,9 +423,6 @@ fig = let
     f
 end
 
-# ╔═╡ c97b4756-509b-493b-b1e0-52d2f9fd80c1
-fig
-
 # ╔═╡ e173efa6-1808-47db-a938-4ae33e3db507
 begin
     @info "Sliders configurations"
@@ -477,8 +505,9 @@ end
 
 # ╔═╡ Cell order:
 # ╟─ce8f4ea4-013c-4f73-9d0d-7c84cd29285d
-# ╟─c97b4756-509b-493b-b1e0-52d2f9fd80c1
-# ╟─c43baed9-a267-4cdd-9534-bf51274d2d1b
+# ╠═08f1bb01-5a39-473f-8c75-cd6ade835a77
+# ╠═ebad837b-8c80-4132-8093-a0634462161c
+# ╠═c43baed9-a267-4cdd-9534-bf51274d2d1b
 # ╟─edd99e16-31e8-449a-b3fd-68a8824bc3d1
 # ╟─872c6b13-c71f-45bb-9d9d-f1d239550902
 # ╟─883b9fe2-992a-4d7f-a51c-24f3c3dc26eb
