@@ -10,8 +10,6 @@ Recomenda-se o estudo do presente tutorial de forma interativa em uma longa sess
 
 Julia possui um largo ecossistema de pacotes implementado uma vasta gama de funcionalidades. Para conhecer mais não deixe de visitar [Julia Packages](https://juliapackages.com/).
 
-Antes de começar, recomendo a leitura deste [artigo](A2-Ciencia-Colaborativa-e-Julia.md).
-
 ## Seguindo os materiais
 
 Os conteúdos são majoritariamente sequenciais: exceto para os tópicos mais avançados (para aqueles que já programam em Julia), é necessário seguir os notebooks na ordem provida.
@@ -35,38 +33,6 @@ Etapas à seguir para começar os estudos:
     - Usando o botão de [Download](https://github.com/DryTooling/DryTooling.jl/archive/refs/heads/main.zip)
 
 Caso a última opção de download tenha sido a sua escolha, observe que o arquivo `.zip` não contem os elementos de *repositório git* para controle de versão, implicando que as suas modificações e notas tomadas deverão ser geridas localmente, o que não é recomendável. Para estudantes ainda não familiarizados com *git*, a opção de utilizar GitHub Desktop é a mais apropriada.
-
-## Para aonde ir depois?
-
-### Para aprender mais
-
-[Julia Academy](https://juliaacademy.com/): nesta página encontram-se cursos abertos em várias temáticas comumente abordadas com a linguagem Julia. Você encontrará cursos parcialmente equivalentes aos materiais tratados aqui, mas também vários conteúdos que não são abordados nesta introdução, especialmente em tópicos ligados a Ciência de Dados.
-
-[Introduction to Computational Thinking](https://computationalthinking.mit.edu/Fall23/): esse é provavelmente o melhor curso generalista para aplicações científicas da linguagem. O curso é ministrado inclusive pelo [Pr. Dr. Alan Edelman](https://en.wikipedia.org/wiki/Alan_Edelman) um dos criadores de Julia. Os tópicos abordados vão de tratamento de imagens, séries temporais, a resolução de equações diferenciais parciais.
-
-[*SciML Book*](https://book.sciml.ai/): este livro é o resultado dos materiais de suporte do curso *Parallel Computing and Scientific Machine Learning (SciML): Methods and Applications* no MIT. Os tópicos são suportados por vídeo aulas e entram em mais profundidade nos assuntos avançados que tratamos aqui.
-
-[Exercism Julia Track](https://exercism.org/tracks/julia): a plataforma *Exercism* propõe no percurso de Julia vários exercícios de algoritmos de nível fácil à intermediário-avançado. Minha recomendação é que essa prática venha a complementar os materiais propostos acima como forma de sedimentar o aprendizado da linguagem.
-
-[Julia Data Science](https://juliadatascience.io/): este livro complementa tópicos mais operacionais de análise de dados, especialemente técnicas básicas de Ciência de Dados, que omitimos neste curso. Um bom material complementar aos estudos.
-
-### Comunidade Julia
-
-[Julia Community Zulipchat](https://julialang.zulipchat.com/): precisando de ajuda ou buscando um projeto para contribuir? Este chat aberto da comunidade Julia é o ponto de encontro para discutir acerca dos diferenter projetos e avanços na linguagem.
-
-[Julia Packages](https://juliapackages.com/): o repositório mestre do índice de pacotes escritos na linguagem Julia ou provendo interfaces à outras ferramentas. A página contém um sistema de busca e um índice por temas.
-
-[JuliaHub](https://juliahub.com/): esta plataforma comercial provê tudo que é necessário para se passar da prototipagem à escala industrial de soluções concebidas em Julia. Atualmente é a norma em termos de escalabilidade para a linguagem.
-
-### Organizações recomendadas
-
-[SciML](https://sciml.ai/): pacotes para *Machine Learning* científico.
-
-[JuMP](https://jump.dev/): uma linguagem de optimização matemática em Julia.
-
-[JuliaData](https://github.com/JuliaData): pacotes para *Data Science* em geral.
-
-[JuliaMolSim](https://juliamolsim.github.io/): simulação de dinâmica molecular em Julia.
 
 ---
 
@@ -842,61 +808,8 @@ Ainda falta muito para se concluir a introdução à atribuição de tipos, mas 
 
 ---
 
-## Parte 5 - Laços e condicionais
 
----
 
-## Parte 6 - Funções e despacho
 
----
 
-## Parte 7 - Pacotes e ecossistema
 
----
-
-## Parte 8 - Avaliando performance
-
----
-
-## Parte 9 - Álgebra linear
-
----
-
-## Parte 10 - Expressões regulares
-
----
-
-## Parte 11 - Execução concorrente
-
----
-
-## Parte 12 - Trabalhando com arquivos
-
----
-
-## Parte 13 - Bibliotecas gráficas
-
----
-
-## Parte 14 - Gráficos para publicações
-
----
-
-## Parte 15 - Tipos e estruturas
-
----
-
-## Parte 16 - Metaprogramação
-
----
-
-## Parte 17 - Interoperação com C
-
----
-
-## Criando conteúdos
-
-- Weave
-- Franklin
-- Pluto
-- [Quarto](https://quarto.org/)
