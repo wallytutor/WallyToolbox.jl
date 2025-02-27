@@ -1,8 +1,0 @@
-[deps]
-cantera = ""
-pandas = ""
-matplotlib = ""
-pyvista = ""
-seaborn = ""
-numpy = ""
-scipy = ""

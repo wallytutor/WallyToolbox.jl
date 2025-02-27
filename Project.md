@@ -1,3 +1,6 @@
+Breaking down everything, keeping for reference:
+
+```toml
 name = "WallyToolbox"
 uuid = "969721ee-ac18-4660-9a9a-9ed720f93b3b"
 authors = ["Walter Dal'Maz Silva <walter.dalmazsilva@gmail.com>"]
@@ -83,3 +86,4 @@ Unitful = "1986cc42-f94f-5a68-af5c-568840ba703d"
 Weave = "44d3d7a6-8a23-5bf8-98c5-b353f8df5ec9"
 YAML = "ddb6d928-2868-570f-bddf-ab3f9cf99eb6"
 cuDNN = "02a925ec-e4fe-4b08-9a7e-0d78e3d38ccd"
+```

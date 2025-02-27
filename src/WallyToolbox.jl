@@ -40,7 +40,6 @@ include("wallytoolbox/internals/Documents.jl")
 include("wallytoolbox/internals/Notebook.jl")
 
 # Primary direct includes.
-include("wallytoolbox/constants.jl")
 include("wallytoolbox/utilities.jl")
 include("wallytoolbox/unstable.jl")
 
