@@ -184,3 +184,4 @@ This section contains other software to check; I don't necessarily know them and
 - [preCICE: coupling between different solutions](https://precice.org/index.html)
 - [ASALI](https://github.com/srebughini/ASALI)
 - [CSIRO](https://github.com/csiro/oss-directory)
+- [Lethe](https://chaos-polymtl.github.io/lethe/documentation/index.html)
