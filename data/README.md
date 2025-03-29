@@ -20,12 +20,6 @@ Kinetics mechanisms from several sources or authored.
 
 - [Methane_Low_Order](kinetics/Methane_Low_Order): some 1 and 2 reaction files. One reaction mechanism shall not be used in serious applications (illustration purposes only) and 2-reaction-mechanism is known to work properly only on lean combustion conditions.
 
-### Pyrolysis of Acetylene
-
-- [Norinaga_2009](kinetics/Norinaga_2009): reference detailed kinetics of acetylene pyrolysis containing 241 species.
-
-- [Dalmazsi_2017_sk41](kinetics/Dalmazsi_2017_sk41): skeletal mechanisms of 41 species obtained by large sampling of DRG simplifications from [Norinaga_2009](kinetics/Norinaga_2009).
-
 ## Thermodynamics
 
 Thermodynamic databases for CALPHAD simulations. Documentation and validation are a work in progress.
